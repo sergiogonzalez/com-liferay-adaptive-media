@@ -20,7 +20,6 @@ import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.repository.model.FileVersion;
-import com.liferay.portal.kernel.util.CharPool;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,6 +93,25 @@ public class ImageStorage {
 		}
 	}
 
+	public boolean hasContent(
+		FileVersion fileVersion,
+		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
+
+		try {
+			Path fileVersionVariantPath = getFileVersionVariantPath(
+				fileVersion, configurationEntry);
+
+			boolean b = DLStoreUtil.hasDirectory(
+				fileVersion.getCompanyId(), CompanyConstants.SYSTEM,
+				fileVersionVariantPath.toString());
+
+			return b;
+		}
+		catch (PortalException pe) {
+			throw new AdaptiveMediaRuntimeException.IOException(pe);
+		}
+	}
+
 	public void save(
 		FileVersion fileVersion,
 		ImageAdaptiveMediaConfigurationEntry configurationEntry,
@@ -133,11 +151,7 @@ public class ImageStorage {
 
 		Path basePath = getFileVersionPath(fileVersion);
 
-		String fileName =
-			configurationEntry.getUUID() + CharPool.PERIOD +
-				fileVersion.getExtension();
-
-		return basePath.resolve(fileName);
+		return basePath.resolve(configurationEntry.getUUID());
 	}
 
 }
