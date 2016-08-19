@@ -14,6 +14,7 @@
 
 package com.liferay.blogs.item.selector.web.internal;
 
+import com.liferay.adaptative.media.item.selector.AdaptativeMediaURLItemSelectorReturnType;
 import com.liferay.blogs.item.selector.criterion.BlogsItemSelectorCriterion;
 import com.liferay.blogs.item.selector.web.internal.display.context.BlogsItemSelectorViewDisplayContext;
 import com.liferay.blogs.service.BlogsEntryLocalService;
@@ -137,6 +138,7 @@ public class BlogsItemSelectorView
 		_supportedItemSelectorReturnTypes = Collections.unmodifiableList(
 			ListUtil.fromArray(
 				new ItemSelectorReturnType[] {
+					new AdaptativeMediaURLItemSelectorReturnType(),
 					new FileEntryItemSelectorReturnType(),
 					new URLItemSelectorReturnType()
 				}));
