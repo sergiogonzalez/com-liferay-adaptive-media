@@ -14,13 +14,15 @@
 
 package com.liferay.adaptive.media.image.processor.test;
 
-import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
-import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
+import com.liferay.adaptive.media.image.item.selector.FileEntryImageAdaptiveMediaURLItemSelectorReturnTypeResolver;
 import com.liferay.adaptive.media.image.test.util.DestinationReplacer;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.kernel.util.DLUtil;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -40,13 +42,10 @@ import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.util.StringPlus;
 
 import java.io.IOException;
 
 import java.util.Dictionary;
-import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -60,11 +59,11 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 /**
- * @author Adolfo Pérez
+ * @author Sergio González
  */
 @RunWith(Arquillian.class)
 @Sync
-public class ImageAdaptiveMediaProcessorTest {
+public class FileEntryImageAdaptiveMediaURLItemSelectorReturnTypeResolverTest {
 
 	@ClassRule
 	@Rule
@@ -79,8 +78,8 @@ public class ImageAdaptiveMediaProcessorTest {
 
 		_configurationAdmin = _getService(ConfigurationAdmin.class);
 		_dlAppLocalService = _getService(DLAppLocalService.class);
-		_finder = _getService(ImageAdaptiveMediaFinder.class);
-		_processor = _getService(ImageAdaptiveMediaProcessor.class);
+		_resolver = _getService(
+			FileEntryImageAdaptiveMediaURLItemSelectorReturnTypeResolver.class);
 
 		ServiceTestUtil.setUser(TestPropsValues.getUser());
 
@@ -99,78 +98,39 @@ public class ImageAdaptiveMediaProcessorTest {
 
 			final FileEntry fileEntry = _addImageFileEntry(serviceContext);
 
-			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_finder.getAdaptiveMedia(
-					queryBuilder ->
-						queryBuilder.allForFileEntry(fileEntry).done());
+			String value = _resolver.getValue(fileEntry, null);
 
-			Assert.assertEquals(_getVariantsCount(), stream.count());
-		}
-	}
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(value);
 
-	@Test
-	public void testAddingFileEntryWithNoImageCreatesNoMedia()
-		throws Exception {
+			String defaultSource = jsonObject.getString("defaultSource");
 
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+			Assert.assertEquals(
+				DLUtil.getPreviewURL(
+					fileEntry, fileEntry.getFileVersion(), null,
+					StringPool.BLANK, false, false),
+				defaultSource);
 
-			ServiceContext serviceContext =
-				ServiceContextTestUtil.getServiceContext(
-					_group, TestPropsValues.getUserId());
+			JSONArray sourcesJSONArray = jsonObject.getJSONArray("sources");
 
-			FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
+			Assert.assertEquals(4, sourcesJSONArray.length());
 
-			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_finder.getAdaptiveMedia(
-					queryBuilder ->
-						queryBuilder.allForFileEntry(fileEntry).done());
+			_assertSrcSource(
+				sourcesJSONArray.getJSONObject(0), fileEntry.getFileEntryId(),
+				"uuid0");
+			_assertSrcSource(
+				sourcesJSONArray.getJSONObject(1), fileEntry.getFileEntryId(),
+				"uuid2");
+			_assertSrcSource(
+				sourcesJSONArray.getJSONObject(2), fileEntry.getFileEntryId(),
+				"uuid1");
+			_assertSrcSource(
+				sourcesJSONArray.getJSONObject(3), fileEntry.getFileEntryId(),
+				"uuid3");
 
-			Assert.assertEquals(0, stream.count());
-		}
-	}
-
-	@Test
-	public void testCleaningFileEntryWithImageRemovesMedia() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
-
-			ServiceContext serviceContext =
-				ServiceContextTestUtil.getServiceContext(
-					_group, TestPropsValues.getUserId());
-
-			final FileEntry fileEntry = _addImageFileEntry(serviceContext);
-
-			_processor.cleanUp(fileEntry.getLatestFileVersion());
-
-			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_finder.getAdaptiveMedia(
-					queryBuilder ->
-						queryBuilder.allForFileEntry(fileEntry).done());
-
-			Assert.assertEquals(0, stream.count());
-		}
-	}
-
-	@Test
-	public void testCleaningFileEntryWithNoImageDoesNothing() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
-
-			ServiceContext serviceContext =
-				ServiceContextTestUtil.getServiceContext(
-					_group, TestPropsValues.getUserId());
-
-			final FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
-
-			_processor.cleanUp(fileEntry.getLatestFileVersion());
-
-			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_finder.getAdaptiveMedia(
-					queryBuilder ->
-						queryBuilder.allForFileEntry(fileEntry).done());
-
-			Assert.assertEquals(0, stream.count());
+			_assertAttibutes(sourcesJSONArray.getJSONObject(0), 100, 0);
+			_assertAttibutes(sourcesJSONArray.getJSONObject(1), 800, 100);
+			_assertAttibutes(sourcesJSONArray.getJSONObject(2), 1200, 800);
+			_assertAttibutes(sourcesJSONArray.getJSONObject(3), 2400, 1200);
 		}
 	}
 
@@ -182,16 +142,6 @@ public class ImageAdaptiveMediaProcessorTest {
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			StringUtil.randomString(), ContentTypes.IMAGE_JPEG,
 			_getImageBytes(), serviceContext);
-	}
-
-	private FileEntry _addNonImageFileEntry(ServiceContext serviceContext)
-		throws Exception {
-
-		return _dlAppLocalService.addFileEntry(
-			TestPropsValues.getUserId(), _group.getGroupId(),
-			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-			StringUtil.randomString(), ContentTypes.APPLICATION_OCTET_STREAM,
-			_getNonImageBytes(), serviceContext);
 	}
 
 	private void _addTestVariant() throws IOException {
@@ -207,22 +157,81 @@ public class ImageAdaptiveMediaProcessorTest {
 		}
 
 		properties.put(
-			"imageVariants", new String[] {"small:0:width=100;height=100"});
+			"imageVariants",
+			new String[] {
+				"small:uuid0:width=100;height=100",
+				"big:uuid1:width=1200;height=800",
+				"medium:uuid2:width=800;height=600",
+				"extra:uuid3:width=2400;height=1800"
+			});
 
 		configuration.update(properties);
 	}
 
-	private byte[] _getImageBytes() throws Exception {
-		return FileUtil.getBytes(
-			ImageAdaptiveMediaProcessorTest.class,
-			"/com/liferay/adaptive/media/image/processor/test/dependencies/" +
-				"image.jpg");
+	private void _assertAttibutes(
+		JSONObject sourceJSONObject, int expectedMaxWidth,
+		int expectedMinWidth) {
+
+		JSONArray attributesJSONArray = sourceJSONObject.getJSONArray(
+			"attributes");
+
+		boolean assertedMaxWidth = false;
+		boolean assertedMinWidth = false;
+
+		for (int i = 0; i < attributesJSONArray.length(); i++) {
+			JSONObject jsonObject = attributesJSONArray.getJSONObject(i);
+
+			String key = jsonObject.getString("key");
+
+			if (key.equals("max-width")) {
+				String value = jsonObject.getString("value");
+
+				Assert.assertEquals(expectedMaxWidth + "px", value);
+
+				assertedMaxWidth = true;
+			}
+			else if (key.equals("min-width")) {
+				String value = jsonObject.getString("value");
+
+				Assert.assertEquals(expectedMinWidth + "px", value);
+
+				assertedMinWidth = true;
+			}
+			else {
+				Assert.fail("Unexpected attribute found '" + key + "'");
+			}
+		}
+
+		if ((expectedMaxWidth != 0) && !assertedMaxWidth) {
+			Assert.fail(
+				"Couldn't find expected max-width of '" + expectedMaxWidth +
+					"' in '" + sourceJSONObject.toString() + "'");
+		}
+
+		if ((expectedMinWidth != 0) && !assertedMinWidth) {
+			Assert.fail(
+				"Couldn't find expected min-width of '" + expectedMinWidth +
+					"' in '" + sourceJSONObject.toString() + "'");
+		}
 	}
 
-	private byte[] _getNonImageBytes() {
-		String s = StringUtil.randomString();
+	private void _assertSrcSource(
+		JSONObject sourceJSONObject, long fileEntryId,
+		String configurationEntryUuid) {
 
-		return s.getBytes();
+		String srcSource = sourceJSONObject.getString("src");
+
+		Assert.assertTrue(
+			srcSource.startsWith(
+				"/o/adaptive-media/image/" + fileEntryId + "/" +
+					configurationEntryUuid + "/"));
+	}
+
+	private byte[] _getImageBytes() throws Exception {
+		return FileUtil.getBytes(
+			FileEntryImageAdaptiveMediaURLItemSelectorReturnTypeResolverTest.class,
+			"/com/liferay/adaptive/media/image/processor/test/dependencies/" +
+				"image.jpg");
 	}
 
 	private <T> T _getService(Class<T> clazz) {
@@ -236,32 +245,13 @@ public class ImageAdaptiveMediaProcessorTest {
 		}
 	}
 
-	private int _getVariantsCount() throws IOException {
-		Configuration configuration = _configurationAdmin.getConfiguration(
-			"com.liferay.adaptive.media.image.internal.configuration." +
-				"ImageAdaptiveMediaCompanyConfiguration",
-			null);
-
-		Dictionary<String, Object> properties = configuration.getProperties();
-
-		Object value = properties.get("imageVariants");
-
-		if (value == null) {
-			return 0;
-		}
-
-		List<String> imageVariants = StringPlus.asList(value);
-
-		return imageVariants.size();
-	}
-
 	private ConfigurationAdmin _configurationAdmin;
 	private DLAppLocalService _dlAppLocalService;
-	private ImageAdaptiveMediaFinder _finder;
 
 	@DeleteAfterTestRun
 	private Group _group;
 
-	private ImageAdaptiveMediaProcessor _processor;
+	private FileEntryImageAdaptiveMediaURLItemSelectorReturnTypeResolver
+		_resolver;
 
 }
