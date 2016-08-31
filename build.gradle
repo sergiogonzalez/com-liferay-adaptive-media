@@ -26,7 +26,7 @@ configure(subprojects.findAll {!it.childProjects}) {
 	apply plugin: "jacoco"
 
 	jacocoTestReport {
-		additionalSourceDirs = files('../adaptive-media-image-impl')
+		additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
 		sourceDirectories = files(sourceSets.main.allSource.srcDirs)
 		classDirectories =  files(sourceSets.main.output)
 
@@ -48,7 +48,7 @@ repositories {
 }
 
 task coverageReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-	additionalSourceDirs = files('../adaptive-media-image-impl')
+	additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
 	classDirectories = files(subprojects.sourceSets.main.output)
 	executionData = files(subprojects.jacocoTestReport.executionData)
 	sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
