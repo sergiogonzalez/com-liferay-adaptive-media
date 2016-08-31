@@ -26,7 +26,7 @@ configure(subprojects.findAll {!it.childProjects}) {
 	apply plugin: "jacoco"
 
 	jacocoTestReport {
-		additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+		additionalSourceDirs = files('../adaptive-media-image-impl')
 		sourceDirectories = files(sourceSets.main.allSource.srcDirs)
 		classDirectories =  files(sourceSets.main.output)
 
@@ -34,6 +34,11 @@ configure(subprojects.findAll {!it.childProjects}) {
 			html.enabled = true
 			xml.enabled = true
 		}
+
+		
+
+		executionData = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
 	}
 }
 
@@ -43,7 +48,7 @@ repositories {
 }
 
 task coverageReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-	additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+	additionalSourceDirs = files('../adaptive-media-image-impl')
 	classDirectories = files(subprojects.sourceSets.main.output)
 	executionData = files(subprojects.jacocoTestReport.executionData)
 	sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
@@ -53,11 +58,15 @@ task coverageReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 		xml.enabled = true
 	}
 
+	executionData = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
 	onlyIf = { true }
 
 	doFirst {
 		executionData = files(executionData.findAll { it.exists() })
 	}
+
+
 }
 
 tasks.coveralls {
