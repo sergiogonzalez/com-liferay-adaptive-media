@@ -34,6 +34,11 @@ configure(subprojects.findAll {!it.childProjects}) {
 			html.enabled = true
 			xml.enabled = true
 		}
+
+		
+
+		executionData = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
 	}
 }
 
@@ -53,11 +58,15 @@ task coverageReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 		xml.enabled = true
 	}
 
+	executionData = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
 	onlyIf = { true }
 
 	doFirst {
 		executionData = files(executionData.findAll { it.exists() })
 	}
+
+
 }
 
 tasks.coveralls {
