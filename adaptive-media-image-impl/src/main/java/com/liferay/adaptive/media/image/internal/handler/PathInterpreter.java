@@ -68,7 +68,8 @@ public class PathInterpreter {
 						getImageAdaptiveMediaConfigurationEntry(
 							fileVersion.getCompanyId(), configurationEntryUUID);
 
-			Map<String, String> properties = configurationEntryOptional.
+			Map<String, String> properties =
+				configurationEntryOptional.
 				map(ImageAdaptiveMediaConfigurationEntry::getProperties).
 				orElse(new HashMap<>());
 
@@ -114,7 +115,7 @@ public class PathInterpreter {
 	}
 
 	private static final Pattern _URL_PATTERN = Pattern.compile(
-		"image/(\\d+)(?:/(\\d+))?/([^/]+)/(?:[^/]+)");
+		"/image/(\\d+)(?:/(\\d+))?/([^/]+)/(?:[^/]+)");
 
 	private ImageAdaptiveMediaConfigurationHelper _configurationHelper;
 	private DLAppLocalService _dlAppLocalService;
