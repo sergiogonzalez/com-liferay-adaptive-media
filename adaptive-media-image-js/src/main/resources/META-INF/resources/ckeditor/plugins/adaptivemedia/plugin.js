@@ -1,11 +1,11 @@
 (function() {
 	var Lang = AUI().Lang;
 
-	var STR_ADAPTIVE_MEDIA_RETURN_TYPE = 'com.liferay.adaptative.media.item.selector.AdaptativeMediaURLItemSelectorReturnType';
+	var STR_ADAPTIVE_MEDIA_RETURN_TYPE = 'com.liferay.adaptive.media.image.item.selector.ImageAdaptiveMediaURLItemSelectorReturnType';
 
 	var STR_FILE_ENTRY_RETURN_TYPE = 'com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType';
 
-	var TPL_PICTURE_TAG = '<picture><!--[if IE 9]><video style="display: none;"><![endif]-->{sources}<!--[if IE 9]></video><![endif]--><img src="{defaultSrc}"></picture>';
+	var TPL_PICTURE_TAG = '<picture>{sources}<img src="{defaultSrc}"></picture>';
 
 	var TPL_SOURCE_TAG = '<source srcset="{srcset}" media="{media}">';
 
@@ -53,11 +53,11 @@
 
 					itemValue.sources.forEach(
 						function(source) {
-							var mediaText = source.attributes.reduce(
-								function(previous, current) {
-									var propertyName = Object.getOwnPropertyNames(current);
+							var propertyNames = Object.getOwnPropertyNames(source.attributes);
 
-									var value = '(' + propertyName + ':' + current[propertyName] + ')';
+							var mediaText = propertyNames.reduce(
+								function(previous, current) {
+									var value = '(' + current + ':' + source.attributes[current] + ')';
 
 									return previous ? previous + ' and ' + value : value;
 								},
