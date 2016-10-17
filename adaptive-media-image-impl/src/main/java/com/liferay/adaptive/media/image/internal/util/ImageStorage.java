@@ -21,11 +21,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import java.util.Optional;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -93,7 +96,7 @@ public class ImageStorage {
 		}
 	}
 
-	public boolean hasContent(
+	public Optional<ImageInfo> getImageInfo(
 		FileVersion fileVersion,
 		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
 
@@ -101,11 +104,18 @@ public class ImageStorage {
 			Path fileVersionVariantPath = getFileVersionVariantPath(
 				fileVersion, configurationEntry);
 
-			boolean b = DLStoreUtil.hasDirectory(
-				fileVersion.getCompanyId(), CompanyConstants.SYSTEM,
-				fileVersionVariantPath.toString());
+			if (!DLStoreUtil.hasDirectory(
+					fileVersion.getCompanyId(), CompanyConstants.SYSTEM,
+					fileVersionVariantPath.toString())) {
 
-			return b;
+				return Optional.empty();
+			}
+
+			File file = getFile(
+				fileVersion.getCompanyId(), fileVersionVariantPath);
+
+			return Optional.of(
+				new ImageInfo(fileVersion.getMimeType(), file.length()));
 		}
 		catch (PortalException pe) {
 			throw new AdaptiveMediaRuntimeException.IOException(pe);
@@ -128,6 +138,11 @@ public class ImageStorage {
 		catch (PortalException pe) {
 			throw new AdaptiveMediaRuntimeException.IOException(pe);
 		}
+	}
+
+	protected File getFile(long companyId, Path path) throws PortalException {
+		return DLStoreUtil.getFile(
+			companyId, CompanyConstants.SYSTEM, path.toString());
 	}
 
 	protected InputStream getFileAsStream(long companyId, Path path)
