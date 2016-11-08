@@ -30,6 +30,22 @@ public class AdaptiveMediaImageRootResource {
 			companyId, imageAdaptiveMediaConfigurationHelper);
 	}
 
+	@Path("/content/last/{fileEntryId}")
+	public AdaptiveMediaImageFileVersionResource getLastVersion(
+		@PathParam("fileEntryId") long fileEntryId)
+		throws PortalException {
+
+		FileEntry fileEntry;
+		try {
+			fileEntry = dlAppService.getFileEntry(fileEntryId);
+		} catch (NoSuchFileEntryException e) {
+			throw new NotFoundException();
+		}
+
+		return new AdaptiveMediaImageFileVersionResource(
+			fileEntry.getLatestFileVersion(), finder);
+	}
+
 	@Path("/content/version/{fileVersionId}")
 	public AdaptiveMediaImageFileVersionResource getVersion(
 		@PathParam("fileVersionId") long fileVersionId)
