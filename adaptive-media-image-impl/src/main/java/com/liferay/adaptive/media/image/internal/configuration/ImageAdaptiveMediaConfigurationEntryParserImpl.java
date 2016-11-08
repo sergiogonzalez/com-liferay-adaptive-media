@@ -14,6 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntryParser;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.HashMap;
@@ -57,7 +58,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true, service = ImageAdaptiveMediaConfigurationEntryParser.class
 )
-public class ImageAdaptiveMediaConfigurationEntryParser {
+public class ImageAdaptiveMediaConfigurationEntryParserImpl implements
+	ImageAdaptiveMediaConfigurationEntryParser {
 
 	/**
 	 * Returns a configuration entry parsed from the configuration line's data.
@@ -88,7 +90,14 @@ public class ImageAdaptiveMediaConfigurationEntryParser {
 				"Invalid image adaptive media configuration: " + s);
 		}
 
-		String[] attributes = _ATTRIBUTE_SEPARATOR_PATTERN.split(fields[2]);
+
+
+		return new ImageAdaptiveMediaConfigurationEntryImpl(
+			name, uuid, parseProperties(fields[2]));
+	}
+
+	public Map<String, String> parseProperties(String p) {
+		String[] attributes = _ATTRIBUTE_SEPARATOR_PATTERN.split(p);
 
 		Map<String, String> properties = new HashMap<>();
 
@@ -99,8 +108,7 @@ public class ImageAdaptiveMediaConfigurationEntryParser {
 			properties.put(keyValuePair[0], keyValuePair[1]);
 		}
 
-		return new ImageAdaptiveMediaConfigurationEntryImpl(
-			name, uuid, properties);
+		return properties;
 	}
 
 	private static final Pattern _ATTRIBUTE_SEPARATOR_PATTERN = Pattern.compile(
