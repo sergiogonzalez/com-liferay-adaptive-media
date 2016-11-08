@@ -35,6 +35,7 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 	implements ImageAdaptiveMediaQueryBuilder,
 			   ImageAdaptiveMediaQueryBuilder.FuzzySortStep,
 			   ImageAdaptiveMediaQueryBuilder.InitialStep,
+               ImageAdaptiveMediaQueryBuilder.ConfigurationStep,
 			   ImageAdaptiveMediaQueryBuilder.StrictSortStep {
 
 	public static final
@@ -121,12 +122,27 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		return _fileVersion;
 	}
 
+	public String getConfiguration() {
+		return _configuration;
+	}
+
+	public boolean hasConfiguration() {
+		return _configuration != null;
+	}
+
 	public boolean hasFileVersion() {
 		if (_fileEntry == null) {
 			return true;
 		}
 
 		return false;
+	}
+
+	@Override
+	public FinalStep forConfiguration(
+		String name) {
+		_configuration = name;
+		return this;
 	}
 
 	@Override
@@ -178,6 +194,7 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		_attributes = new LinkedHashMap<>();
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
+	private String _configuration;
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Boolean>
 		_sortCriteria = new LinkedHashMap<>();
 

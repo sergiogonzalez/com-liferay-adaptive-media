@@ -95,6 +95,19 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 		BiFunction<FileVersion, ImageAdaptiveMediaConfigurationEntry, URI>
 			uriFactory = _getURIFactory(queryBuilder);
 
+		if (queryBuilder.hasConfiguration()) {
+			return configurationEntries.stream().filter(
+				configurationEntry ->
+					configurationEntry.getUUID().equals(
+						queryBuilder.getConfiguration()) &&
+					_imageStorage.getImageInfo(fileVersion, configurationEntry)
+						.isPresent()
+			).map(
+				configurationEntry ->
+					_createMedia(
+						fileVersion, uriFactory, configurationEntry));
+		}
+
 		return configurationEntries.stream().
 			filter(
 				configurationEntry ->
