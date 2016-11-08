@@ -37,10 +37,12 @@ public class AdaptiveMediaImageConfigResource {
 
 	public AdaptiveMediaImageConfigResource(
 		long companyId,
-		ImageAdaptiveMediaConfigurationHelper imageAdaptiveMediaConfigurationHelper) {
+		ImageAdaptiveMediaConfigurationHelper
+			imageAdaptiveMediaConfigurationHelper) {
 
 		_companyId = companyId;
-		_imageAdaptiveMediaConfigurationHelper = imageAdaptiveMediaConfigurationHelper;
+		_imageAdaptiveMediaConfigurationHelper =
+			imageAdaptiveMediaConfigurationHelper;
 		_permissionChecker = PermissionThreadLocal.getPermissionChecker();
 	}
 

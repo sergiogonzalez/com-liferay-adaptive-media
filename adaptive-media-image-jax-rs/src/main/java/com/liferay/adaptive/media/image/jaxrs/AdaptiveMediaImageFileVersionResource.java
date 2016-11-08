@@ -31,7 +31,7 @@ public class AdaptiveMediaImageFileVersionResource {
 
 	@GET
 	@Path("/config/{uuid}")
-	@Produces({"image"})
+	@Produces("image")
 	public Response getConfiguration(@PathParam("uuid") String uuid)
 		throws AdaptiveMediaException, PortalException {
 
@@ -47,8 +47,8 @@ public class AdaptiveMediaImageFileVersionResource {
 			throw new NotFoundException();
 		}
 
-		return Response.status(200).type(_fileVersion.getMimeType()).
-			entity(adaptiveMedia.get().getInputStream()).build();
+		return Response.status(200).type(_fileVersion.getMimeType()).entity(
+			adaptiveMedia.get().getInputStream()).build();
 	}
 
 	private final FileVersion _fileVersion;
