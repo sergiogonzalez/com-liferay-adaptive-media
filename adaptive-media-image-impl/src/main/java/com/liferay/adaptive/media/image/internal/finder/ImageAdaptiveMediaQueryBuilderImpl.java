@@ -190,6 +190,15 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		return this;
 	}
 
+	@Override
+	public <V> FuzzySortStep withAll(
+		Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, V>, V> attributes) {
+
+		attributes.forEach(this::with);
+
+		return this;
+	}
+
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Object>
 		_attributes = new LinkedHashMap<>();
 	private FileEntry _fileEntry;

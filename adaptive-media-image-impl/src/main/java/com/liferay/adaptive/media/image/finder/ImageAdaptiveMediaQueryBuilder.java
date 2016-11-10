@@ -21,6 +21,7 @@ import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -59,6 +60,9 @@ public interface ImageAdaptiveMediaQueryBuilder
 		public <V> FuzzySortStep with(
 			AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, V> attribute,
 			V value);
+
+		public <V> FuzzySortStep withAll(
+			Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, V>, V> attributes);
 
 	}
 
