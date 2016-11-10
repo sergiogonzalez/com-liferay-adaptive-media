@@ -1,5 +1,6 @@
 package com.liferay.adaptive.media.image.jaxrs;
 
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntryParser;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
@@ -46,7 +47,7 @@ public class AdaptiveMediaImageRootResource {
 		}
 
 		return new AdaptiveMediaImageFileVersionResource(
-			fileEntry.getLatestFileVersion(), finder);
+			fileEntry.getLatestFileVersion(), finder, parser);
 	}
 
 	@Path("/content/version/{fileVersionId}")
@@ -59,11 +60,12 @@ public class AdaptiveMediaImageRootResource {
 		try {
 			fileVersion = dlAppService.getFileVersion(fileVersionId);
 		}
-		catch (NoSuchFileVersionException nsfve) {
+		catch (NoSuchFileVersionException e) {
 			throw new NotFoundException();
 		}
 
-		return new AdaptiveMediaImageFileVersionResource(fileVersion, finder);
+		return new AdaptiveMediaImageFileVersionResource(
+			fileVersion, finder, parser);
 	}
 
 	@Reference
@@ -75,5 +77,8 @@ public class AdaptiveMediaImageRootResource {
 	@Reference
 	protected ImageAdaptiveMediaConfigurationHelper
 		imageAdaptiveMediaConfigurationHelper;
+
+	@Reference
+	protected ImageAdaptiveMediaConfigurationEntryParser parser;
 
 }
