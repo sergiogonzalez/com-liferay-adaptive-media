@@ -15,6 +15,8 @@
 package com.liferay.adaptive.media.image.internal.configuration;
 
 import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 
@@ -197,8 +199,8 @@ public class ImageAdaptiveMediaConfigurationTest {
 	private final ImageAdaptiveMediaConfigurationEntryParser
 		_configurationEntryParser =
 			new ImageAdaptiveMediaConfigurationEntryParser();
-	private final ImageAdaptiveMediaConfigurationHelper _configurationHelper =
-		new ImageAdaptiveMediaConfigurationHelper();
+	private final ImageAdaptiveMediaConfigurationHelperImpl _configurationHelper =
+		new ImageAdaptiveMediaConfigurationHelperImpl();
 	private final ConfigurationProvider _configurationProvider = Mockito.mock(
 		ConfigurationProvider.class);
 

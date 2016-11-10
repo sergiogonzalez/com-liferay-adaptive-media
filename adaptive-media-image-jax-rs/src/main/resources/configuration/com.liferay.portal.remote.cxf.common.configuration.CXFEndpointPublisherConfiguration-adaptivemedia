@@ -1,0 +1,2 @@
+contextPath=/adaptive-media
+authVerifierProperties=auth.verifier.BasicAuthHeaderAuthVerifier.urls.includes=*

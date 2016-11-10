@@ -15,8 +15,9 @@
 package com.liferay.adaptive.media.image.internal.processor;
 
 import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationEntry;
-import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
+import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.internal.util.ImageStorage;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -106,8 +107,8 @@ public class ImageAdaptiveMediaProcessorImplTest {
 			true
 		);
 
-		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			new ImageAdaptiveMediaConfigurationEntry(
+		ImageAdaptiveMediaConfigurationEntryImpl configurationEntry =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
@@ -158,8 +159,8 @@ public class ImageAdaptiveMediaProcessorImplTest {
 			true
 		);
 
-		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			new ImageAdaptiveMediaConfigurationEntry(
+		ImageAdaptiveMediaConfigurationEntryImpl configurationEntry =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
@@ -187,8 +188,8 @@ public class ImageAdaptiveMediaProcessorImplTest {
 			true
 		);
 
-		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			new ImageAdaptiveMediaConfigurationEntry(
+		ImageAdaptiveMediaConfigurationEntryImpl configurationEntry =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
@@ -225,7 +226,7 @@ public class ImageAdaptiveMediaProcessorImplTest {
 		);
 
 		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			new ImageAdaptiveMediaConfigurationEntry(
+			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 

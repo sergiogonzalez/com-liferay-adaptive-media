@@ -20,11 +20,11 @@ import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
 import com.liferay.adaptive.media.finder.AdaptiveMediaFinder;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaAttributeMapping;
-import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationEntry;
-import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.processor.ImageAdaptiveMedia;
 import com.liferay.adaptive.media.image.internal.util.ImageInfo;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
@@ -94,6 +94,19 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 
 		BiFunction<FileVersion, ImageAdaptiveMediaConfigurationEntry, URI>
 			uriFactory = _getURIFactory(queryBuilder);
+
+		if (queryBuilder.hasConfiguration()) {
+			return configurationEntries.stream().filter(
+				configurationEntry ->
+					configurationEntry.getUUID().equals(
+						queryBuilder.getConfiguration()) &&
+					_imageStorage.getImageInfo(fileVersion, configurationEntry)
+						.isPresent()
+			).map(
+				configurationEntry ->
+					_createMedia(
+						fileVersion, uriFactory, configurationEntry));
+		}
 
 		return configurationEntries.stream().
 			filter(
