@@ -90,13 +90,15 @@ public class ImageAdaptiveMediaConfigurationEntryParserImpl implements
 				"Invalid image adaptive media configuration: " + s);
 		}
 
-
-
 		return new ImageAdaptiveMediaConfigurationEntryImpl(
 			name, uuid, parseProperties(fields[2]));
 	}
 
-	public Map<String, String> parseProperties(String p) {
+	public Map<String, String> parseProperties(String p) throws IllegalArgumentException {
+		if (p == null || !p.matches("(width|height)=\\d+(;(width|height)=-?\\d+)?")) {
+			throw new IllegalArgumentException();
+		}
+
 		String[] attributes = _ATTRIBUTE_SEPARATOR_PATTERN.split(p);
 
 		Map<String, String> properties = new HashMap<>();
