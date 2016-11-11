@@ -1,7 +1,6 @@
 Bundle-Name: Liferay Adaptive Media Image JAX-RS API
 Bundle-SymbolicName: com.liferay.adaptive.media.image.jaxrs
 Bundle-Version: 1.0.0
-ConfigurationPath: /configuration
 Import-Package:\
 	!com.google.gson,\
 	\
