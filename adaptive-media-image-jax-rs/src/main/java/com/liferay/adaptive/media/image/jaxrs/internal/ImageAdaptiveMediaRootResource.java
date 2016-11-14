@@ -15,7 +15,13 @@
 package com.liferay.adaptive.media.image.jaxrs.internal;
 
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
+import com.liferay.document.library.kernel.exception.NoSuchFileVersionException;
+import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.repository.model.FileVersion;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -36,6 +42,29 @@ public class ImageAdaptiveMediaRootResource {
 		return new ImageAdaptiveMediaConfigResource(
 			companyId, imageAdaptiveMediaConfigurationHelper);
 	}
+
+	@Path("/content/version/{fileVersionId}")
+	public ImageAdaptiveMediaFileVersionResource getVersion(
+			@PathParam("fileVersionId") long fileVersionId)
+		throws PortalException {
+
+		FileVersion fileVersion;
+
+		try {
+			fileVersion = dlAppService.getFileVersion(fileVersionId);
+		}
+		catch (NoSuchFileVersionException nsfve) {
+			throw new NotFoundException();
+		}
+
+		return new ImageAdaptiveMediaFileVersionResource(fileVersion, finder);
+	}
+
+	@Reference
+	protected DLAppService dlAppService;
+
+	@Reference
+	protected ImageAdaptiveMediaFinder finder;
 
 	@Reference
 	protected ImageAdaptiveMediaConfigurationHelper
