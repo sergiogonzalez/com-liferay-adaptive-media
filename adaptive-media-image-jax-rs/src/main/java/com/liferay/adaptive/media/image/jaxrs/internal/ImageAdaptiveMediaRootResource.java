@@ -63,7 +63,7 @@ public class ImageAdaptiveMediaRootResource {
 		}
 
 		return new ImageAdaptiveMediaFileVersionResource(
-			fileEntry.getLatestFileVersion(), finder, _getBaseUriBuilder());
+			fileEntry.getFileVersion(), finder, _getBaseUriBuilder());
 	}
 
 	@Path("/content/version/{fileVersionId}")
