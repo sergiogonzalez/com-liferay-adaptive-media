@@ -64,6 +64,16 @@ public final class AdaptiveMediaAttribute<T, V> {
 	}
 
 	/**
+	 * Returns a generic attribute representing the adaptive media's
+	 * origin config. This attribute can be used with any kind of media.
+	 *
+	 * @return the origin config id
+	 */
+	public static final <S> AdaptiveMediaAttribute<S, String> configId() {
+		return (AdaptiveMediaAttribute<S, String>)_CONFIG_ID;
+	}
+
+	/**
 	 * Creates a new attribute. All attributes live in the same global
 	 * namespace.
 	 *
@@ -131,6 +141,10 @@ public final class AdaptiveMediaAttribute<T, V> {
 	public String getName() {
 		return _name;
 	}
+
+	private static final AdaptiveMediaAttribute<?, String> _CONFIG_ID =
+		new AdaptiveMediaAttribute<>(
+			"config-id", (s) -> s, (s1, s2) -> Integer.MAX_VALUE);
 
 	private static final AdaptiveMediaAttribute<?, Integer> _CONTENT_LENGTH =
 		new AdaptiveMediaAttribute<>(

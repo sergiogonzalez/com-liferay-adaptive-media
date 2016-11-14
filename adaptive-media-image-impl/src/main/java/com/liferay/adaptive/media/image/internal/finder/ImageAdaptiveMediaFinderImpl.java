@@ -200,6 +200,11 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 
 		properties.put(fileNameAttribute.getName(), fileVersion.getFileName());
 
+		AdaptiveMediaAttribute<Object, String> configIdAttribute =
+			AdaptiveMediaAttribute.configId();
+
+		properties.put(configIdAttribute.getName(), configurationEntry.getUUID());
+
 		ImageAdaptiveMediaAttributeMapping attributeMapping =
 			ImageAdaptiveMediaAttributeMapping.fromProperties(properties);
 
