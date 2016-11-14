@@ -10,11 +10,13 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 /**
@@ -39,6 +41,31 @@ public class ImageAdaptiveMediaFileVersionResource {
 			_finder.getAdaptiveMedia(
 				queryBuilder -> queryBuilder.forVersion(_fileVersion).
 					forConfiguration(uuid).done());
+
+		return _getFirstAdaptiveMedia(stream);
+	}
+
+	@GET
+	@Path("/data")
+	@Produces("image")
+	public Response getData(@QueryParam("q") String query)
+		throws AdaptiveMediaException, PortalException {
+
+		try {
+			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+				_finder.getAdaptiveMedia(
+					queryBuilder -> queryBuilder.forVersion(_fileVersion).
+						done());
+
+			return _getFirstAdaptiveMedia(stream);
+		}
+		catch (IllegalArgumentException iae) {
+			throw new BadRequestException();
+		}
+	}
+
+	private Response _getFirstAdaptiveMedia(
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream) {
 
 		Optional<AdaptiveMedia<ImageAdaptiveMediaProcessor>> adaptiveMedia =
 			stream.findFirst();
