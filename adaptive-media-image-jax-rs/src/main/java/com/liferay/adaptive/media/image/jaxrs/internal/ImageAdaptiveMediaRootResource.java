@@ -45,6 +45,24 @@ public class ImageAdaptiveMediaRootResource {
 			companyId, imageAdaptiveMediaConfigurationHelper);
 	}
 
+	@Path("/content/last/{fileEntryId}")
+	public ImageAdaptiveMediaFileVersionResource getLastVersion(
+			@PathParam("fileEntryId") long fileEntryId)
+		throws PortalException {
+
+		FileEntry fileEntry;
+
+		try {
+			fileEntry = dlAppService.getFileEntry(fileEntryId);
+		}
+		catch (NoSuchFileEntryException nsfee) {
+			throw new NotFoundException();
+		}
+
+		return new ImageAdaptiveMediaFileVersionResource(
+			fileEntry.getLatestFileVersion(), finder);
+	}
+
 	@Path("/content/version/{fileVersionId}")
 	public ImageAdaptiveMediaFileVersionResource getVersion(
 			@PathParam("fileVersionId") long fileVersionId)
@@ -55,29 +73,12 @@ public class ImageAdaptiveMediaRootResource {
 		try {
 			fileVersion = dlAppService.getFileVersion(fileVersionId);
 		}
-		catch (NoSuchFileVersionException e) {
+		catch (NoSuchFileVersionException nsfve) {
 			throw new NotFoundException();
 		}
 
 		return new ImageAdaptiveMediaFileVersionResource(fileVersion, finder);
 	}
-
-	@Path("/content/last/{fileEntryId}")
-	public ImageAdaptiveMediaFileVersionResource getLastVersion(
-		@PathParam("fileEntryId") long fileEntryId)
-		throws PortalException {
-
-		FileEntry fileEntry;
-		try {
-			fileEntry = dlAppService.getFileEntry(fileEntryId);
-		} catch (NoSuchFileEntryException e) {
-			throw new NotFoundException();
-		}
-
-		return new ImageAdaptiveMediaFileVersionResource(
-			fileEntry.getLatestFileVersion(), finder);
-	}
-
 
 	@Reference
 	protected DLAppService dlAppService;
