@@ -14,6 +14,10 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.HashMap;
@@ -59,6 +63,37 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ImageAdaptiveMediaConfigurationEntryParser {
 
+	public String getConfigurationString(
+		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
+
+		StringBundler sb = new StringBundler();
+
+		sb.append(configurationEntry.getName());
+		sb.append(StringPool.COLON);
+		sb.append(configurationEntry.getUUID());
+		sb.append(StringPool.COLON);
+
+		Map<String, String> properties = configurationEntry.getProperties();
+
+		if (properties.get("height") != null) {
+			int height = GetterUtil.getInteger(properties.get("height"));
+
+			sb.append("height=" + height);
+
+			if (properties.get("width") != null) {
+				sb.append(StringPool.SEMICOLON);
+			}
+		}
+
+		if (properties.get("width") != null) {
+			int width = GetterUtil.getInteger(properties.get("width"));
+
+			sb.append("width=" + width);
+		}
+
+		return sb.toString();
+	}
+
 	/**
 	 * Returns a configuration entry parsed from the configuration line's data.
 	 *
@@ -97,7 +132,8 @@ public class ImageAdaptiveMediaConfigurationEntryParser {
 			properties.put(keyValuePair[0], keyValuePair[1]);
 		}
 
-		return new ImageAdaptiveMediaConfigurationEntry(name, uuid, properties);
+		return new ImageAdaptiveMediaConfigurationEntryImpl(
+			name, uuid, properties);
 	}
 
 	private static final Pattern _ATTRIBUTE_SEPARATOR_PATTERN = Pattern.compile(

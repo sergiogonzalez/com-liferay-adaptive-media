@@ -14,6 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
+
 import java.util.Map;
 
 import org.junit.Assert;

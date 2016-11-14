@@ -15,8 +15,9 @@
 package com.liferay.adaptive.media.image.internal.handler;
 
 import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationEntry;
-import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
+import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationHelperImpl;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -153,7 +154,7 @@ public class PathInterpreterTest {
 	private final ImageAdaptiveMediaConfigurationEntry _configurationEntry =
 		Mockito.mock(ImageAdaptiveMediaConfigurationEntry.class);
 	private final ImageAdaptiveMediaConfigurationHelper _configurationHelper =
-		Mockito.mock(ImageAdaptiveMediaConfigurationHelper.class);
+		Mockito.mock(ImageAdaptiveMediaConfigurationHelperImpl.class);
 	private final DLAppLocalService _dlAppLocalService = Mockito.mock(
 		DLAppLocalService.class);
 	private final FileEntry _fileEntry = Mockito.mock(FileEntry.class);
