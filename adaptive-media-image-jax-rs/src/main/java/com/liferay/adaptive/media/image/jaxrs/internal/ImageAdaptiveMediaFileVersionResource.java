@@ -7,7 +7,9 @@ import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ws.rs.BadRequestException;
@@ -17,7 +19,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 /**
  * @author Alejandro Hernández
@@ -25,10 +29,12 @@ import javax.ws.rs.core.Response;
 public class ImageAdaptiveMediaFileVersionResource {
 
 	public ImageAdaptiveMediaFileVersionResource(
-		FileVersion fileVersion, ImageAdaptiveMediaFinder finder) {
+		FileVersion fileVersion, ImageAdaptiveMediaFinder finder,
+		UriBuilder uriBuilder) {
 
 		_fileVersion = fileVersion;
 		_finder = finder;
+		_uriBuilder = uriBuilder;
 	}
 
 	@GET
@@ -53,15 +59,52 @@ public class ImageAdaptiveMediaFileVersionResource {
 
 		try {
 			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_finder.getAdaptiveMedia(
-					queryBuilder -> queryBuilder.forVersion(_fileVersion).
-						done());
+				_getAdaptiveMediaStream();
 
 			return _getFirstAdaptiveMedia(stream);
 		}
 		catch (IllegalArgumentException iae) {
 			throw new BadRequestException();
 		}
+	}
+
+	@GET
+	@Path("/variants")
+	@Produces({"application/json", "application/xml"})
+	public Response getVariants(@QueryParam("q") String query)
+		throws AdaptiveMediaException, PortalException {
+
+		try {
+			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+				_getAdaptiveMediaStream();
+
+			UriBuilder uriBuilder = _uriBuilder.path(
+				ImageAdaptiveMediaFileVersionResource.class,
+				"getConfiguration");
+
+			List<ImageAdaptiveMediaRepr> adaptiveMedias =
+				stream.map(adaptiveMedia -> new ImageAdaptiveMediaRepr(
+					adaptiveMedia, uriBuilder.clone(), _fileVersion.
+					getFileVersionId())).collect(Collectors.toList());
+
+			GenericEntity<List<ImageAdaptiveMediaRepr>> entity =
+				new GenericEntity<List<ImageAdaptiveMediaRepr>>(
+					adaptiveMedias) {
+				};
+
+			return Response.ok(entity).build();
+		}
+		catch (IllegalArgumentException iae) {
+			throw new BadRequestException();
+		}
+	}
+
+	private Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>>
+		_getAdaptiveMediaStream()
+		throws AdaptiveMediaException, PortalException {
+
+		return _finder.getAdaptiveMedia(
+			queryBuilder -> queryBuilder.forVersion(_fileVersion).done());
 	}
 
 	private Response _getFirstAdaptiveMedia(
@@ -80,5 +123,6 @@ public class ImageAdaptiveMediaFileVersionResource {
 
 	private final FileVersion _fileVersion;
 	private final ImageAdaptiveMediaFinder _finder;
+	private final UriBuilder _uriBuilder;
 
 }

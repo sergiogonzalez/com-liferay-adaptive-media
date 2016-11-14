@@ -26,6 +26,9 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -60,7 +63,7 @@ public class ImageAdaptiveMediaRootResource {
 		}
 
 		return new ImageAdaptiveMediaFileVersionResource(
-			fileEntry.getLatestFileVersion(), finder);
+			fileEntry.getLatestFileVersion(), finder, _getBaseUriBuilder());
 	}
 
 	@Path("/content/version/{fileVersionId}")
@@ -77,7 +80,8 @@ public class ImageAdaptiveMediaRootResource {
 			throw new NotFoundException();
 		}
 
-		return new ImageAdaptiveMediaFileVersionResource(fileVersion, finder);
+		return new ImageAdaptiveMediaFileVersionResource(
+			fileVersion, finder, _getBaseUriBuilder());
 	}
 
 	@Reference
@@ -89,5 +93,14 @@ public class ImageAdaptiveMediaRootResource {
 	@Reference
 	protected ImageAdaptiveMediaConfigurationHelper
 		imageAdaptiveMediaConfigurationHelper;
+
+	@Context
+	protected UriInfo uriInfo;
+
+	private UriBuilder _getBaseUriBuilder() {
+		return uriInfo.getBaseUriBuilder().clone().path(
+			ImageAdaptiveMediaRootResource.class).path(
+				ImageAdaptiveMediaRootResource.class, "getVersion");
+	}
 
 }
