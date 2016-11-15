@@ -95,7 +95,7 @@ public class ImageAdaptiveMediaFileVersionResource {
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Object>,
 		Object> _getAdaptiveMediaAttributes(String query) {
 
-		String pattern = "(\\w+)=(\\d+)(;(\\w+)=(\\d+))*";
+		String pattern = "([a-z]|-|_)+=(\\d+)(;(\\w+)=(\\d+))*";
 
 		if ((query == null) || !query.matches(pattern)) {
 			throw new BadRequestException();
