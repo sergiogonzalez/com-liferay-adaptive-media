@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
@@ -57,15 +56,10 @@ public class ImageAdaptiveMediaFileVersionResource {
 	public Response getData(@QueryParam("q") String query)
 		throws AdaptiveMediaException, PortalException {
 
-		try {
-			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_getAdaptiveMediaStream();
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+			_getAdaptiveMediaStream();
 
-			return _getFirstAdaptiveMedia(stream);
-		}
-		catch (IllegalArgumentException iae) {
-			throw new BadRequestException();
-		}
+		return _getFirstAdaptiveMedia(stream);
 	}
 
 	@GET
@@ -74,29 +68,21 @@ public class ImageAdaptiveMediaFileVersionResource {
 	public Response getVariants(@QueryParam("q") String query)
 		throws AdaptiveMediaException, PortalException {
 
-		try {
-			Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-				_getAdaptiveMediaStream();
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+			_getAdaptiveMediaStream();
 
-			UriBuilder uriBuilder = _uriBuilder.path(
-				ImageAdaptiveMediaFileVersionResource.class,
-				"getConfiguration");
+		UriBuilder uriBuilder = _uriBuilder.path(
+			ImageAdaptiveMediaFileVersionResource.class, "getConfiguration");
 
-			List<ImageAdaptiveMediaRepr> adaptiveMedias =
-				stream.map(adaptiveMedia -> new ImageAdaptiveMediaRepr(
-					adaptiveMedia, uriBuilder.clone(), _fileVersion.
-					getFileVersionId())).collect(Collectors.toList());
+		List<ImageAdaptiveMediaRepr> adaptiveMedias = stream.map(adaptiveMedia
+			-> new ImageAdaptiveMediaRepr(adaptiveMedia, uriBuilder.clone(),
+			_fileVersion.getFileVersionId())).collect(Collectors.toList());
 
-			GenericEntity<List<ImageAdaptiveMediaRepr>> entity =
-				new GenericEntity<List<ImageAdaptiveMediaRepr>>(
-					adaptiveMedias) {
-				};
+		GenericEntity<List<ImageAdaptiveMediaRepr>> entity =
+			new GenericEntity<List<ImageAdaptiveMediaRepr>>(adaptiveMedias) {
+			};
 
-			return Response.ok(entity).build();
-		}
-		catch (IllegalArgumentException iae) {
-			throw new BadRequestException();
-		}
+		return Response.ok(entity).build();
 	}
 
 	private Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>>
