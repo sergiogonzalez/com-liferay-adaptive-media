@@ -165,7 +165,7 @@ public final class AdaptiveMediaAttribute<T, V> {
 
 	private static final AdaptiveMediaAttribute<?, String> _CONFIG_ID =
 		new AdaptiveMediaAttribute<>(
-			"config-id", (s) -> s, (s1, s2) -> Integer.MAX_VALUE);
+			"config-id", (s) -> s, String::compareTo);
 
 	private static final AdaptiveMediaAttribute<?, Integer> _CONTENT_LENGTH =
 		new AdaptiveMediaAttribute<>(
@@ -173,11 +173,11 @@ public final class AdaptiveMediaAttribute<T, V> {
 
 	private static final AdaptiveMediaAttribute<?, String> _CONTENT_TYPE =
 		new AdaptiveMediaAttribute<>(
-			"content-type", (s) -> s, (s1, s2) -> s1.compareTo(s2));
+			"content-type", (s) -> s, String::compareTo);
 
 	private static final AdaptiveMediaAttribute<?, String> _FILE_NAME =
 		new AdaptiveMediaAttribute<>(
-			"file-name", (s) -> s, (s1, s2) -> s1.compareTo(s2));
+			"file-name", (s) -> s, String::compareTo);
 
 	private final Comparator<V> _comparator;
 	private final Function<String, V> _converter;
