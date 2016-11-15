@@ -1,17 +1,24 @@
 package com.liferay.adaptive.media.image.jaxrs.internal;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
+import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
+import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaQueryBuilder;
+import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
@@ -57,7 +64,7 @@ public class ImageAdaptiveMediaFileVersionResource {
 		throws AdaptiveMediaException, PortalException {
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-			_getAdaptiveMediaStream();
+			_getAdaptiveMediaStream(query);
 
 		return _getFirstAdaptiveMedia(stream);
 	}
@@ -69,7 +76,7 @@ public class ImageAdaptiveMediaFileVersionResource {
 		throws AdaptiveMediaException, PortalException {
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
-			_getAdaptiveMediaStream();
+			_getAdaptiveMediaStream(query);
 
 		UriBuilder uriBuilder = _uriBuilder.path(
 			ImageAdaptiveMediaFileVersionResource.class, "getConfiguration");
@@ -85,12 +92,52 @@ public class ImageAdaptiveMediaFileVersionResource {
 		return Response.ok(entity).build();
 	}
 
+	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Object>,
+		Object> _getAdaptiveMediaAttributes(String query) {
+
+		String pattern = "(\\w+)=(\\d+)(;(\\w+)=(\\d+))*";
+
+		if ((query == null) || !query.matches(pattern)) {
+			throw new BadRequestException();
+		}
+
+		String[] attributes = _ATTRIBUTE_SEPARATOR_PATTERN.split(query);
+
+		Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Object>, Object>
+			properties = new HashMap<>();
+
+		for (String attribute : attributes) {
+			String[] keyValuePair = _KEY_VALUE_SEPARATOR_PATTERN.split(
+				attribute);
+
+			if (ImageAdaptiveMediaAttribute.allowedAttributes().containsKey(
+					keyValuePair[0])) {
+
+				AdaptiveMediaAttribute adaptiveMediaAttribute =
+					ImageAdaptiveMediaAttribute.allowedAttributes().get(
+						keyValuePair[0]);
+
+				properties.put(adaptiveMediaAttribute, adaptiveMediaAttribute.
+					convert(keyValuePair[1]));
+			}
+		}
+
+		return properties;
+	}
+
 	private Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>>
-		_getAdaptiveMediaStream()
-		throws AdaptiveMediaException, PortalException {
+		_getAdaptiveMediaStream(String query) throws AdaptiveMediaException,
+		PortalException {
 
 		return _finder.getAdaptiveMedia(
-			queryBuilder -> queryBuilder.forVersion(_fileVersion).done());
+			queryBuilder -> {
+				ImageAdaptiveMediaQueryBuilder.InitialStep step =
+					queryBuilder.forVersion(_fileVersion);
+
+				_getAdaptiveMediaAttributes(query).forEach(step::with);
+
+				return step.done();
+			});
 	}
 
 	private Response _getFirstAdaptiveMedia(
@@ -106,6 +153,12 @@ public class ImageAdaptiveMediaFileVersionResource {
 		return Response.status(200).type(_fileVersion.getMimeType()).entity(
 			adaptiveMedia.get().getInputStream()).build();
 	}
+
+	private static final Pattern _ATTRIBUTE_SEPARATOR_PATTERN = Pattern.compile(
+		"\\s*;\\s*");
+
+	private static final Pattern _KEY_VALUE_SEPARATOR_PATTERN = Pattern.compile(
+		"\\s*=\\s*");
 
 	private final FileVersion _fileVersion;
 	private final ImageAdaptiveMediaFinder _finder;
