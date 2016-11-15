@@ -16,17 +16,25 @@ package com.liferay.adaptive.media.image.jaxrs.internal;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.ws.rs.core.UriBuilder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @author Alejandro Hernández
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "variant")
 public class ImageAdaptiveMediaRepr {
 
@@ -41,6 +49,17 @@ public class ImageAdaptiveMediaRepr {
 			uriBuilder.build(Long.toString(fileVersionId), adaptiveMedia.
 				getAttributeValue(AdaptiveMediaAttribute.configId()).get()).
 				toString();
+
+		_properties = new HashMap<String, Object>() { {
+			ImageAdaptiveMediaAttribute.allowedAttributes().forEach((k, v) -> {
+				Optional attributeValue = adaptiveMedia.getAttributeValue(
+					(AdaptiveMediaAttribute)v);
+
+				if (attributeValue.isPresent()) {
+					put(k, attributeValue.get());
+				}
+			});
+		}};
 	}
 
 	public Map<String, Object> getProperties() {
@@ -59,7 +78,10 @@ public class ImageAdaptiveMediaRepr {
 		_uri = uri;
 	}
 
+	@XmlAnyElement
+	@XmlJavaTypeAdapter(MapAdapter.class)
 	private Map<String, Object> _properties;
+
 	private String _uri;
 
 }
