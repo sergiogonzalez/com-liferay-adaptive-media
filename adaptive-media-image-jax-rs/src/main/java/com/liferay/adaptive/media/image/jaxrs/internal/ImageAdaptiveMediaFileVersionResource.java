@@ -81,6 +81,32 @@ public class ImageAdaptiveMediaFileVersionResource {
 		return _getImageAdaptiveMediaList(stream);
 	}
 
+	@GET
+	@Path("/variants/ordered")
+	@Produces({"application/json", "application/xml"})
+	public Response getVariantsOrdered(
+			@QueryParam("orderBy") String attribute,
+			@QueryParam("ascending") Boolean ascending)
+		throws AdaptiveMediaException, PortalException {
+
+		if ((ascending == null) ||
+			!ImageAdaptiveMediaAttribute.allowedAttributes().containsKey(
+				attribute)) {
+
+			throw new BadRequestException();
+		}
+
+		AdaptiveMediaAttribute adaptiveMediaAttribute =
+			ImageAdaptiveMediaAttribute.allowedAttributes().get(attribute);
+
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+			_finder.getAdaptiveMedia(
+				queryBuilder -> queryBuilder.forVersion(_fileVersion).orderBy(
+					adaptiveMediaAttribute, ascending).done());
+
+		return _getImageAdaptiveMediaList(stream);
+	}
+
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Object>,
 		Object> _getAdaptiveMediaAttributes(String query) {
 
