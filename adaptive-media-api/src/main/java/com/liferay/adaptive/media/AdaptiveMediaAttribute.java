@@ -17,6 +17,8 @@ package com.liferay.adaptive.media;
 import aQute.bnd.annotation.ProviderType;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -32,6 +34,25 @@ import java.util.function.Function;
  */
 @ProviderType
 public final class AdaptiveMediaAttribute<T, V> {
+
+	/**
+	 * Returns a string-attribute map containing all the name-attribute pairs
+	 * allowed to be used.
+	 *
+	 * @return the list of attributes allowed
+	 */
+	public static Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributes() {
+		return new HashMap<String, AdaptiveMediaAttribute<?, ?>>(){{
+			put(AdaptiveMediaAttribute._FILE_NAME.getName(),
+				AdaptiveMediaAttribute._FILE_NAME);
+			put(AdaptiveMediaAttribute._CONFIG_ID.getName(),
+				AdaptiveMediaAttribute._CONFIG_ID);
+			put(AdaptiveMediaAttribute._CONTENT_LENGTH.getName(),
+				AdaptiveMediaAttribute._CONTENT_LENGTH);
+			put(AdaptiveMediaAttribute._CONTENT_TYPE.getName(),
+				AdaptiveMediaAttribute._CONTENT_TYPE);
+		}};
+	}
 
 	/**
 	 * Returns a generic attribute representing the content length of the media.

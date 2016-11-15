@@ -17,10 +17,31 @@ package com.liferay.adaptive.media.image.processor;
 import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Adolfo Pérez
  */
 public final class ImageAdaptiveMediaAttribute {
+
+	/**
+	 * Returns a string-attribute map containing all the name-attribute pairs
+	 * allowed to be used.
+	 *
+	 * @return the list of attributes allowed
+	 */
+	public static Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributes() {
+		Map<String, AdaptiveMediaAttribute<?, ?>> attributes =
+			AdaptiveMediaAttribute.allowedAttributes();
+
+		attributes.put(ImageAdaptiveMediaAttribute.IMAGE_WIDTH.getName(),
+			ImageAdaptiveMediaAttribute.IMAGE_WIDTH);
+		attributes.put(ImageAdaptiveMediaAttribute.IMAGE_HEIGHT.getName(),
+			ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
+
+		return attributes;
+	}
 
 	public static final AdaptiveMediaAttribute<
 		ImageAdaptiveMediaProcessor, Integer>
