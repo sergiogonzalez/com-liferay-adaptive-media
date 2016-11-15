@@ -78,18 +78,7 @@ public class ImageAdaptiveMediaFileVersionResource {
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
 			_getAdaptiveMediaStream(query);
 
-		UriBuilder uriBuilder = _uriBuilder.path(
-			ImageAdaptiveMediaFileVersionResource.class, "getConfiguration");
-
-		List<ImageAdaptiveMediaRepr> adaptiveMedias = stream.map(adaptiveMedia
-			-> new ImageAdaptiveMediaRepr(adaptiveMedia, uriBuilder.clone(),
-			_fileVersion.getFileVersionId())).collect(Collectors.toList());
-
-		GenericEntity<List<ImageAdaptiveMediaRepr>> entity =
-			new GenericEntity<List<ImageAdaptiveMediaRepr>>(adaptiveMedias) {
-			};
-
-		return Response.ok(entity).build();
+		return _getImageAdaptiveMediaList(stream);
 	}
 
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Object>,
@@ -152,6 +141,23 @@ public class ImageAdaptiveMediaFileVersionResource {
 
 		return Response.status(200).type(_fileVersion.getMimeType()).entity(
 			adaptiveMedia.get().getInputStream()).build();
+	}
+
+	private Response _getImageAdaptiveMediaList(
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream) {
+
+		UriBuilder uriBuilder = _uriBuilder.path(
+			ImageAdaptiveMediaFileVersionResource.class, "getConfiguration");
+
+		List<ImageAdaptiveMediaRepr> adaptiveMedias = stream.map(adaptiveMedia
+			-> new ImageAdaptiveMediaRepr(adaptiveMedia, uriBuilder.clone(),
+			_fileVersion.getFileVersionId())).collect(Collectors.toList());
+
+		GenericEntity<List<ImageAdaptiveMediaRepr>> entity =
+			new GenericEntity<List<ImageAdaptiveMediaRepr>>(adaptiveMedias) {
+			};
+
+		return Response.ok(entity).build();
 	}
 
 	private static final Pattern _ATTRIBUTE_SEPARATOR_PATTERN = Pattern.compile(
