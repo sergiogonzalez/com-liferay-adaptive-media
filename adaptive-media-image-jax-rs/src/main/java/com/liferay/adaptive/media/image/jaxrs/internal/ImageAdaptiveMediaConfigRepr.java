@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * It also converts a configuration into its {@link String} representation.
  *
  * @author Alejandro Hernández
+ *
+ * @review
  */
 @XmlRootElement(name = "config")
 public class ImageAdaptiveMediaConfigRepr {

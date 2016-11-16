@@ -40,6 +40,8 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 * allowed to be used.
 	 *
 	 * @return the list of attributes allowed
+	 *
+	 * @review
 	 */
 	public static Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributes() {
 		return new HashMap<String, AdaptiveMediaAttribute<?, ?>>(){{
@@ -89,6 +91,8 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 * origin config. This attribute can be used with any kind of media.
 	 *
 	 * @return the origin config id
+	 *
+	 * @review
 	 */
 	public static final <S> AdaptiveMediaAttribute<S, String> configId() {
 		return (AdaptiveMediaAttribute<S, String>)_CONFIG_ID;

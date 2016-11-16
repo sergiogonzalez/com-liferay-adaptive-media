@@ -30,6 +30,8 @@ public final class ImageAdaptiveMediaAttribute {
 	 * allowed to be used.
 	 *
 	 * @return the list of attributes allowed
+	 *
+	 * @review
 	 */
 	public static Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributes() {
 		Map<String, AdaptiveMediaAttribute<?, ?>> attributes =
