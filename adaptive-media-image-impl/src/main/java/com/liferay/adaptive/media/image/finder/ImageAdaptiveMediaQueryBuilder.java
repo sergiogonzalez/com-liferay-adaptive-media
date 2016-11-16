@@ -45,6 +45,11 @@ public interface ImageAdaptiveMediaQueryBuilder
 
 	}
 
+	public interface ConfigurationStep {
+
+		public FinalStep forConfiguration(String name);
+	}
+
 	public interface FuzzySortStep extends FinalStep {
 
 		public <V> FuzzySortStep with(
@@ -57,7 +62,7 @@ public interface ImageAdaptiveMediaQueryBuilder
 
 	}
 
-	public interface InitialStep extends FuzzySortStep, StrictSortStep {
+	public interface InitialStep extends FuzzySortStep, StrictSortStep, ConfigurationStep {
 	}
 
 	public interface StrictSortStep extends FinalStep {
