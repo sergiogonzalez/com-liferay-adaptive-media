@@ -33,9 +33,9 @@ import java.util.Optional;
  */
 public class ImageAdaptiveMediaQueryBuilderImpl
 	implements ImageAdaptiveMediaQueryBuilder,
+			   ImageAdaptiveMediaQueryBuilder.ConfigurationStep,
 			   ImageAdaptiveMediaQueryBuilder.FuzzySortStep,
 			   ImageAdaptiveMediaQueryBuilder.InitialStep,
-               ImageAdaptiveMediaQueryBuilder.ConfigurationStep,
 			   ImageAdaptiveMediaQueryBuilder.StrictSortStep {
 
 	public static final
@@ -68,6 +68,13 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 	@Override
 	public AdaptiveMediaQuery<FileVersion, ImageAdaptiveMediaProcessor> done() {
 		return QUERY;
+	}
+
+	@Override
+	public FinalStep forConfiguration(String configurationUuid) {
+		_configurationUuid = configurationUuid;
+
+		return this;
 	}
 
 	@Override
@@ -112,6 +119,10 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		return (v1, v2) -> 0;
 	}
 
+	public String getConfigurationUuid() {
+		return _configurationUuid;
+	}
+
 	public FileVersion getFileVersion() throws PortalException {
 		if (_fileVersion != null) {
 			return _fileVersion;
@@ -122,12 +133,12 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		return _fileVersion;
 	}
 
-	public String getConfiguration() {
-		return _configuration;
-	}
-
 	public boolean hasConfiguration() {
-		return _configuration != null;
+		if (_configurationUuid != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean hasFileVersion() {
@@ -136,13 +147,6 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		}
 
 		return false;
-	}
-
-	@Override
-	public FinalStep forConfiguration(
-		String name) {
-		_configuration = name;
-		return this;
 	}
 
 	@Override
@@ -192,9 +196,9 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Object>
 		_attributes = new LinkedHashMap<>();
+	private String _configurationUuid;
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
-	private String _configuration;
 	private Map<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Boolean>
 		_sortCriteria = new LinkedHashMap<>();
 

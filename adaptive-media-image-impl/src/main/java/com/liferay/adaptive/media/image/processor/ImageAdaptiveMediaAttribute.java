@@ -25,26 +25,6 @@ import java.util.Map;
  */
 public final class ImageAdaptiveMediaAttribute {
 
-	/**
-	 * Returns a string-attribute map containing all the name-attribute pairs
-	 * allowed to be used.
-	 *
-	 * @return the list of attributes allowed
-	 *
-	 * @review
-	 */
-	public static Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributes() {
-		Map<String, AdaptiveMediaAttribute<?, ?>> attributes =
-			AdaptiveMediaAttribute.allowedAttributes();
-
-		attributes.put(ImageAdaptiveMediaAttribute.IMAGE_WIDTH.getName(),
-			ImageAdaptiveMediaAttribute.IMAGE_WIDTH);
-		attributes.put(ImageAdaptiveMediaAttribute.IMAGE_HEIGHT.getName(),
-			ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
-
-		return attributes;
-	}
-
 	public static final AdaptiveMediaAttribute<
 		ImageAdaptiveMediaProcessor, Integer>
 			IMAGE_HEIGHT = new AdaptiveMediaAttribute<>(
@@ -56,6 +36,20 @@ public final class ImageAdaptiveMediaAttribute {
 			IMAGE_WIDTH = new AdaptiveMediaAttribute<>(
 				"width", ImageAdaptiveMediaAttribute::_parseInt,
 				ImageAdaptiveMediaAttribute::_intDistance);
+
+	/**
+	 * Returns a string-attribute map containing all the name-attribute pairs
+	 * allowed to be used.
+	 *
+	 * @return the list of attributes allowed
+	 *
+	 * @review
+	 */
+	public static Map<String, AdaptiveMediaAttribute<?, ?>>
+		allowedAttributes() {
+
+		return _allowedAttributes;
+	}
 
 	private static int _intDistance(int i1, int i2) {
 		return i1 - i2;
@@ -72,6 +66,18 @@ public final class ImageAdaptiveMediaAttribute {
 	}
 
 	private ImageAdaptiveMediaAttribute() {
+	}
+
+	private static final Map<String, AdaptiveMediaAttribute<?, ?>>
+		_allowedAttributes = new HashMap<>();
+
+	static {
+		_allowedAttributes.put(
+			ImageAdaptiveMediaAttribute.IMAGE_WIDTH.getName(),
+			ImageAdaptiveMediaAttribute.IMAGE_WIDTH);
+		_allowedAttributes.put(
+			ImageAdaptiveMediaAttribute.IMAGE_HEIGHT.getName(),
+			ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 	}
 
 }

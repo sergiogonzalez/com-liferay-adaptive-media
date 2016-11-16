@@ -99,20 +99,19 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 			return configurationEntries.stream().filter(
 				configurationEntry ->
 					configurationEntry.getUUID().equals(
-						queryBuilder.getConfiguration()) &&
+						queryBuilder.getConfigurationUuid()) &&
 					_imageStorage.getImageInfo(fileVersion, configurationEntry)
 						.isPresent()
 			).map(
 				configurationEntry ->
-					_createMedia(
-						fileVersion, uriFactory, configurationEntry));
+					_createMedia(fileVersion, uriFactory, configurationEntry));
 		}
 
 		return configurationEntries.stream().
 			filter(
 				configurationEntry ->
-					_imageStorage.getImageInfo(fileVersion, configurationEntry)
-						.isPresent()).
+					_imageStorage.getImageInfo(fileVersion, configurationEntry).
+						isPresent()).
 			map(
 				configurationEntry ->
 					_createMedia(
@@ -200,10 +199,11 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 
 		properties.put(fileNameAttribute.getName(), fileVersion.getFileName());
 
-		AdaptiveMediaAttribute<Object, String> configIdAttribute =
-			AdaptiveMediaAttribute.configId();
+		AdaptiveMediaAttribute<Object, String> configurationUuidAttribute =
+			AdaptiveMediaAttribute.configurationUuid();
 
-		properties.put(configIdAttribute.getName(), configurationEntry.getUUID());
+		properties.put(
+			configurationUuidAttribute.getName(), configurationEntry.getUUID());
 
 		ImageAdaptiveMediaAttributeMapping attributeMapping =
 			ImageAdaptiveMediaAttributeMapping.fromProperties(properties);

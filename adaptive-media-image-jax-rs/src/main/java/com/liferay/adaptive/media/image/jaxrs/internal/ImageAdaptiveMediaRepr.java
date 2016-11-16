@@ -45,10 +45,10 @@ public class ImageAdaptiveMediaRepr {
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia,
 		UriBuilder uriBuilder, long fileVersionId) {
 
-		_uri =
-			uriBuilder.build(Long.toString(fileVersionId), adaptiveMedia.
-				getAttributeValue(AdaptiveMediaAttribute.configId()).get()).
-				toString();
+		_uri = uriBuilder.build(
+			Long.toString(fileVersionId),
+			adaptiveMedia.getAttributeValue(
+				AdaptiveMediaAttribute.configurationUuid()).get()).toString();
 
 		_properties = new HashMap<String, Object>() { {
 			ImageAdaptiveMediaAttribute.allowedAttributes().forEach((k, v) -> {
