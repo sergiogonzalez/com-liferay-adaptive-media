@@ -14,12 +14,21 @@
 
 package com.liferay.adaptive.media.image.jaxrs.internal;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+
+import com.liferay.adaptive.media.image.jaxrs.internal.provider.AdaptiveMediaApiQueryContextProvider;
+import com.liferay.adaptive.media.image.jaxrs.internal.provider.CompanyContextProvider;
+import com.liferay.adaptive.media.image.jaxrs.internal.provider.OrderBySelectorContextProvider;
+
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import com.liferay.portal.kernel.util.SetUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -30,11 +39,24 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = Application.class)
 public class ImageAdaptiveMediaJaxRsApplication extends Application {
 
+	public Set<Class<?>> getClasses() {
+		return new HashSet<>(
+			Arrays.asList(
+				AdaptiveMediaApiQueryContextProvider.class,
+				CompanyContextProvider.class, JacksonJsonProvider.class,
+				OrderBySelectorContextProvider.class));
+	}
+
 	public Set<Object> getSingletons() {
-		return Collections.singleton(_imageAdaptiveMediaRootResource);
+		return SetUtil.fromList(
+			Arrays.asList(_imageAdaptiveMediaRootResource, _companyContextProvider)
+		);
 	}
 
 	@Reference
 	private ImageAdaptiveMediaRootResource _imageAdaptiveMediaRootResource;
+
+	@Reference
+	private CompanyContextProvider _companyContextProvider;
 
 }

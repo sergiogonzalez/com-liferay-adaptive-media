@@ -17,6 +17,8 @@ package com.liferay.adaptive.media;
 import aQute.bnd.annotation.ProviderType;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -32,6 +34,34 @@ import java.util.function.Function;
  */
 @ProviderType
 public final class AdaptiveMediaAttribute<T, V> {
+
+	/**
+	 * Returns a string-attribute map containing all the name-attribute pairs
+	 * allowed to be used.
+	 *
+	 * @return the list of attributes allowed
+	 *
+	 * @review
+	 */
+	public static Map<String, AdaptiveMediaAttribute<?, ?>>
+		allowedAttributes() {
+
+		return _allowedAttributes;
+	}
+
+	/**
+	 * Returns a generic attribute representing the configuration uuid used to
+	 * generate the media. This attribute can be used with any kind of media.
+	 *
+	 * @return the configuration uuid
+	 *
+	 * @review
+	 */
+	public static final <S> AdaptiveMediaAttribute<S, String>
+		configurationUuid() {
+
+		return (AdaptiveMediaAttribute<S, String>)_CONFIGURATION_UUID;
+	}
 
 	/**
 	 * Returns a generic attribute representing the content length of the media.
@@ -132,17 +162,39 @@ public final class AdaptiveMediaAttribute<T, V> {
 		return _name;
 	}
 
+	private static final AdaptiveMediaAttribute<?, String> _CONFIGURATION_UUID =
+		new AdaptiveMediaAttribute<>(
+			"configuration-uuid", (s) -> s, String::compareTo);
+
 	private static final AdaptiveMediaAttribute<?, Integer> _CONTENT_LENGTH =
 		new AdaptiveMediaAttribute<>(
-			"content-length", Integer::parseInt, (i1, i2) -> i1 - i2);
+			"content-length", AdaptiveMediaAttributeConverterUtil::parseInt,
+			(i1, i2) -> i1 - i2);
 
 	private static final AdaptiveMediaAttribute<?, String> _CONTENT_TYPE =
 		new AdaptiveMediaAttribute<>(
-			"content-type", (s) -> s, (s1, s2) -> s1.compareTo(s2));
+			"content-type", (s) -> s, String::compareTo);
 
 	private static final AdaptiveMediaAttribute<?, String> _FILE_NAME =
-		new AdaptiveMediaAttribute<>(
-			"file-name", (s) -> s, (s1, s2) -> s1.compareTo(s2));
+		new AdaptiveMediaAttribute<>("file-name", (s) -> s, String::compareTo);
+
+	private static final Map<String, AdaptiveMediaAttribute<?, ?>>
+		_allowedAttributes = new HashMap<>();
+
+	static {
+		_allowedAttributes.put(
+			AdaptiveMediaAttribute._CONFIGURATION_UUID.getName(),
+			AdaptiveMediaAttribute._CONFIGURATION_UUID);
+		_allowedAttributes.put(
+			AdaptiveMediaAttribute._CONTENT_LENGTH.getName(),
+			AdaptiveMediaAttribute._CONTENT_LENGTH);
+		_allowedAttributes.put(
+			AdaptiveMediaAttribute._CONTENT_TYPE.getName(),
+			AdaptiveMediaAttribute._CONTENT_TYPE);
+		_allowedAttributes.put(
+			AdaptiveMediaAttribute._FILE_NAME.getName(),
+			AdaptiveMediaAttribute._FILE_NAME);
+	}
 
 	private final Comparator<V> _comparator;
 	private final Function<String, V> _converter;

@@ -15,9 +15,18 @@
 package com.liferay.adaptive.media.image.jaxrs.internal;
 
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
+import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.FileVersion;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -29,16 +38,65 @@ import org.osgi.service.component.annotations.Reference;
 @Path("/images")
 public class ImageAdaptiveMediaRootResource {
 
-	@Path("/configuration/{companyId}")
+	@Path("/configuration")
 	public ImageAdaptiveMediaConfigResource getConfiguration(
-		@PathParam("companyId") long companyId) {
+		@Context Company company) {
 
 		return new ImageAdaptiveMediaConfigResource(
-			companyId, imageAdaptiveMediaConfigurationHelper);
+			company.getCompanyId(), imageAdaptiveMediaConfigurationHelper);
 	}
+
+	@Path("/content/file/{fileEntryId}/version/{fileVersionTag}")
+	public ImageAdaptiveMediaFileVersionResource getFileEntryVersion(
+			@PathParam("fileEntryId") long fileEntryId,
+			@PathParam("fileVersionTag") String fileVersionTag)
+		throws PortalException {
+
+		FileEntry fileEntry = dlAppService.getFileEntry(fileEntryId);
+
+		FileVersion fileVersion;
+
+		if (fileVersionTag.equals("last")) {
+			fileVersion = fileEntry.getFileVersion();
+		}
+		else {
+			fileVersion = fileEntry.getFileVersion(fileVersionTag);
+		}
+
+		return new ImageAdaptiveMediaFileVersionResource(
+			fileVersion, finder, imageAdaptiveMediaConfigurationHelper,
+			_getBaseUriBuilder());
+	}
+
+	@Path("/content/version/{fileVersionId}")
+	public ImageAdaptiveMediaFileVersionResource getVersion(
+			@PathParam("fileVersionId") long fileVersionId)
+		throws PortalException {
+
+		FileVersion fileVersion = dlAppService.getFileVersion(fileVersionId);
+
+		return new ImageAdaptiveMediaFileVersionResource(
+			fileVersion, finder, imageAdaptiveMediaConfigurationHelper,
+			_getBaseUriBuilder());
+	}
+
+	@Reference
+	protected DLAppService dlAppService;
+
+	@Reference
+	protected ImageAdaptiveMediaFinder finder;
 
 	@Reference
 	protected ImageAdaptiveMediaConfigurationHelper
 		imageAdaptiveMediaConfigurationHelper;
+
+	@Context
+	protected UriInfo uriInfo;
+
+	private UriBuilder _getBaseUriBuilder() {
+		return uriInfo.getBaseUriBuilder().clone().path(
+			ImageAdaptiveMediaRootResource.class).path(
+				ImageAdaptiveMediaRootResource.class, "getVersion");
+	}
 
 }
