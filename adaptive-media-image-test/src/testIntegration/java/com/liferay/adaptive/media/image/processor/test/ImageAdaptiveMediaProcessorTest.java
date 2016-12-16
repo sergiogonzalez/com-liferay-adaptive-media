@@ -111,8 +111,6 @@ public class ImageAdaptiveMediaProcessorTest {
 	public void testAddingFileEntryWithNoImageCreatesNoMedia()
 		throws Exception {
 
-		Assert.assertFalse(true);
-
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				"liferay/adaptive_media_processor")) {
 
