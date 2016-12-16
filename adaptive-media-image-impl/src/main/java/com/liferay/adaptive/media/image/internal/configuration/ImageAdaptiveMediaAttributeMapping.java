@@ -115,8 +115,8 @@ public class ImageAdaptiveMediaAttributeMapping {
 		return Optional.of(attribute.convert(value));
 	}
 
-	private Map<
-		AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Optional<?>>
-		_attributes;
+	private final Map
+		<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Optional<?>>
+			_attributes;
 
 }
