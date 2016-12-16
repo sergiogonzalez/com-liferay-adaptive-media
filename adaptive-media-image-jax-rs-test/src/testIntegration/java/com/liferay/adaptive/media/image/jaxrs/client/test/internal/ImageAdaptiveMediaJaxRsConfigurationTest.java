@@ -80,6 +80,8 @@ public class ImageAdaptiveMediaJaxRsConfigurationTest {
 
 	@Test
 	public void testAddConfigurationWithoutAuthorizationReturns403() {
+		Assert.assertFalse(true);
+
 		JsonObject randomConfigurationJsonObject =
 			_getRandomConfigurationJsonObject();
 
