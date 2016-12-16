@@ -68,17 +68,17 @@ public class ImageAdaptiveMediaFileVersionResource {
 	}
 
 	@GET
-	@Path("/config/{uuid}")
+	@Path("/config/{id}")
 	@Produces("image")
 	public Response getConfiguration(
-			@PathParam("uuid") String uuid,
+			@PathParam("id") String id,
 			@DefaultValue("true") @QueryParam("original") boolean original)
 		throws AdaptiveMediaException, PortalException {
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
 			_finder.getAdaptiveMedia(
 				queryBuilder -> queryBuilder.forVersion(_fileVersion).
-					forConfiguration(uuid).done());
+					forConfiguration(id).done());
 
 		return _getFirstAdaptiveMedia(stream, original);
 	}
@@ -230,24 +230,23 @@ public class ImageAdaptiveMediaFileVersionResource {
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream) {
 
 		return stream.flatMap(
-			(adaptiveMedia) -> _getRepr(adaptiveMedia)).
-			collect(Collectors.toList());
+			(adaptiveMedia) ->
+				_getRepr(adaptiveMedia)).collect(Collectors.toList());
 	}
 
 	private Stream<ImageAdaptiveMediaRepr> _getRepr(
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia) {
 
 		Optional<ImageAdaptiveMediaRepr> imageAdaptiveMediaReprOptional =
-			_getAdaptiveMediaConfigurationEntry(adaptiveMedia).
-				flatMap(
-					configurationEntry -> {
-						Optional<String> uriOptional = _getAdaptiveMediaUri(
-							adaptiveMedia);
+			_getAdaptiveMediaConfigurationEntry(adaptiveMedia).flatMap(
+				configurationEntry -> {
+					Optional<String> uriOptional = _getAdaptiveMediaUri(
+						adaptiveMedia);
 
-						return uriOptional.map((uri) ->
-							new ImageAdaptiveMediaRepr(
-								adaptiveMedia, uri, configurationEntry));
-				});
+					return uriOptional.map((uri) ->
+						new ImageAdaptiveMediaRepr(
+							adaptiveMedia, uri, configurationEntry));
+			});
 
 		if (imageAdaptiveMediaReprOptional.isPresent()) {
 			return Stream.of(imageAdaptiveMediaReprOptional.get());
