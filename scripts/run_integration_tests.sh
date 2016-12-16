@@ -8,7 +8,7 @@ cd adaptive-media-image-test
 
 ../scripts/run.sh ../gradlew clean testIntegration 2>&1 | tee ${TEMP_FILE}
 
-cd adaptive-media-image-jax-rs-test
+cd ../adaptive-media-image-jax-rs-test
 
 ../scripts/run.sh ../gradlew clean testIntegration 2>&1 | tee ${TEMP_FILE}
 
