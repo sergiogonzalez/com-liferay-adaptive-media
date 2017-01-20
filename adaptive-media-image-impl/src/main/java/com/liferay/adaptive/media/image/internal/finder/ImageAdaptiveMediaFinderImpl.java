@@ -149,8 +149,8 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
 
 		String relativeURI = String.format(
-			"image/%d/%s/%s", fileVersion.getFileEntryId(),
-			configurationEntry.getUUID(), _encode(fileVersion.getFileName()));
+			"images/content/file/%d/version/last/config/%s",
+			fileVersion.getFileEntryId(), configurationEntry.getUUID());
 
 		return _uriResolver.resolveURI(URI.create(relativeURI));
 	}
@@ -160,9 +160,8 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
 
 		String relativeURI = String.format(
-			"image/%d/%d/%s/%s", fileVersion.getFileEntryId(),
-			fileVersion.getFileVersionId(), configurationEntry.getUUID(),
-			_encode(fileVersion.getFileName()));
+			"images/content/version/%d/config/%s",
+			fileVersion.getFileVersionId(), configurationEntry.getUUID());
 
 		return _uriResolver.resolveURI(URI.create(relativeURI));
 	}
