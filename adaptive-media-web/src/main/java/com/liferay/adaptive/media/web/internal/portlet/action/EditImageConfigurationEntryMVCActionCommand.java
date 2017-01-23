@@ -82,7 +82,7 @@ public class EditImageConfigurationEntryMVCActionCommand
 				themeDisplay.getCompanyId(), name, uuid, properties);
 	}
 
-	@Reference
+	@Reference(unbind = "-")
 	protected void setImageAdaptiveMediaConfigurationHelper(
 		ImageAdaptiveMediaConfigurationHelper
 			imageAdaptiveMediaConfigurationHelper) {
