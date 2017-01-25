@@ -26,10 +26,12 @@ import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaFinder;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.ImageAdaptiveMedia;
-import com.liferay.adaptive.media.image.internal.util.ImageInfo;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.internal.util.ImageStorage;
+import com.liferay.adaptive.media.image.model.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
+import com.liferay.adaptive.media.image.service.AdaptiveMediaImageLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
@@ -42,7 +44,6 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -101,23 +102,31 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 				configurationEntry ->
 					configurationEntry.getUUID().equals(
 						queryBuilder.getConfigurationUuid()) &&
-					_imageStorage.getImageInfo(fileVersion, configurationEntry).
-						isPresent()
+					(_imageLocalService.fetchAdaptiveMediaImage(
+						configurationEntry.getUUID(),
+						fileVersion.getFileVersionId()) != null)
 			).map(
-				configurationEntry ->
-					_createMedia(fileVersion, uriFactory, configurationEntry));
+					configurationEntry ->
+						_createMedia(
+							fileVersion, uriFactory, configurationEntry));
 		}
 
-		return configurationEntries.stream().
-			filter(
+		return configurationEntries.stream().filter(
+			configurationEntry ->
+				_imageLocalService.fetchAdaptiveMediaImage(
+					configurationEntry.getUUID(),
+					fileVersion.getFileVersionId()) !=
+					null).map(
 				configurationEntry ->
-					_imageStorage.getImageInfo(fileVersion, configurationEntry).
-						isPresent()).
-			map(
-				configurationEntry ->
-					_createMedia(
-						fileVersion, uriFactory, configurationEntry)).
-			sorted(queryBuilder.getComparator());
+					_createMedia(fileVersion, uriFactory, configurationEntry)).
+				sorted(queryBuilder.getComparator());
+	}
+
+	@Reference(unbind = "-")
+	public void setAdaptiveMediaImageLocalService(
+		AdaptiveMediaImageLocalService imageLocalService) {
+
+		_imageLocalService = imageLocalService;
 	}
 
 	@Reference(unbind = "-")
@@ -181,30 +190,42 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 		properties.put(
 			configurationUuidAttribute.getName(), configurationEntry.getUUID());
 
-		AdaptiveMediaAttribute<Object, Integer> contentLengthAttribute =
-			AdaptiveMediaAttribute.contentLength();
-
-		Optional<ImageInfo> imageInfoOptional = _imageStorage.getImageInfo(
-			fileVersion, configurationEntry);
-
-		imageInfoOptional.ifPresent(
-			imageInfo ->
-				properties.put(
-					contentLengthAttribute.getName(),
-					String.valueOf(imageInfo.getSize())));
-
-		AdaptiveMediaAttribute<Object, String> contentTypeAttribute =
-			AdaptiveMediaAttribute.contentType();
-
-		imageInfoOptional.ifPresent(
-			imageInfo ->
-				properties.put(
-					contentTypeAttribute.getName(), imageInfo.getMimeType()));
-
 		AdaptiveMediaAttribute<Object, String> fileNameAttribute =
 			AdaptiveMediaAttribute.fileName();
 
 		properties.put(fileNameAttribute.getName(), fileVersion.getFileName());
+
+		AdaptiveMediaAttribute<Object, String> contentTypeAttribute =
+			AdaptiveMediaAttribute.contentType();
+
+		properties.put(
+			contentTypeAttribute.getName(), fileVersion.getMimeType());
+
+		AdaptiveMediaImage image = _imageLocalService.fetchAdaptiveMediaImage(
+			configurationEntry.getUUID(), fileVersion.getFileVersionId());
+
+		if (image != null) {
+			AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Integer>
+				imageHeightAttribute = ImageAdaptiveMediaAttribute.IMAGE_HEIGHT;
+
+			properties.put(
+				imageHeightAttribute.getName(),
+				String.valueOf(image.getHeight()));
+
+			AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, Integer>
+				imageWidthAttribute = ImageAdaptiveMediaAttribute.IMAGE_WIDTH;
+
+			properties.put(
+				imageWidthAttribute.getName(),
+				String.valueOf(image.getWidth()));
+
+			AdaptiveMediaAttribute<Object, Integer> contentLengthAttribute =
+				AdaptiveMediaAttribute.contentLength();
+
+			properties.put(
+				contentLengthAttribute.getName(),
+				String.valueOf(image.getSize()));
+		}
 
 		ImageAdaptiveMediaAttributeMapping attributeMapping =
 			ImageAdaptiveMediaAttributeMapping.fromProperties(properties);
@@ -237,6 +258,7 @@ public class ImageAdaptiveMediaFinderImpl implements ImageAdaptiveMediaFinder {
 	}
 
 	private ImageAdaptiveMediaConfigurationHelper _configurationHelper;
+	private AdaptiveMediaImageLocalService _imageLocalService;
 	private ImageProcessor _imageProcessor;
 	private ImageStorage _imageStorage;
 	private AdaptiveMediaURIResolver _uriResolver;

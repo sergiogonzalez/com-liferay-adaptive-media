@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.util.Optional;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -85,32 +83,6 @@ public class ImageStorage {
 
 			return getFileAsStream(
 				fileVersion.getCompanyId(), fileVersionVariantPath);
-		}
-		catch (PortalException pe) {
-			throw new AdaptiveMediaRuntimeException.IOException(pe);
-		}
-	}
-
-	public Optional<ImageInfo> getImageInfo(
-		FileVersion fileVersion,
-		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
-
-		try {
-			String fileVersionVariantPath = getFileVersionVariantPath(
-				fileVersion, configurationEntry);
-
-			if (!DLStoreUtil.hasDirectory(
-					fileVersion.getCompanyId(), CompanyConstants.SYSTEM,
-					fileVersionVariantPath)) {
-
-				return Optional.empty();
-			}
-
-			File file = getFile(
-				fileVersion.getCompanyId(), fileVersionVariantPath);
-
-			return Optional.of(
-				new ImageInfo(fileVersion.getMimeType(), file.length()));
 		}
 		catch (PortalException pe) {
 			throw new AdaptiveMediaRuntimeException.IOException(pe);

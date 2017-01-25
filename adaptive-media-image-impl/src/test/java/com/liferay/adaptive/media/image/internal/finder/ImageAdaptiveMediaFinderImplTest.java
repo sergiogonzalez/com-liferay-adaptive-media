@@ -22,11 +22,12 @@ import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMediaConfigurationEntryImpl;
-import com.liferay.adaptive.media.image.internal.util.ImageInfo;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.internal.util.ImageStorage;
+import com.liferay.adaptive.media.image.model.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaProcessor;
+import com.liferay.adaptive.media.image.service.AdaptiveMediaImageLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -60,6 +61,7 @@ public class ImageAdaptiveMediaFinderImplTest {
 		_finder.setImageAdaptiveMediaConfigurationHelper(_configurationHelper);
 		_finder.setImageProcessor(_imageProcessor);
 		_finder.setImageStorage(_imageStorage);
+		_finder.setAdaptiveMediaImageLocalService(_imageLocalService);
 	}
 
 	@Test(expected = PortalException.class)
@@ -77,15 +79,15 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
-
-		Mockito.when(
 			_fileEntry.getLatestFileVersion()
 		).thenThrow(
 			PortalException.class
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -111,12 +113,6 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
-
-		Mockito.when(
 			_fileEntry.getLatestFileVersion()
 		).thenReturn(
 			_fileVersion
@@ -129,9 +125,24 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(_fileVersion, configurationEntry)
+			_fileVersion.getMimeType()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image = _mockImage(800, 900, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -147,19 +158,7 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "200"));
-
-		Mockito.when(
-			_fileVersion.getFileName()
-		).thenReturn(
-			StringUtil.randomString()
-		);
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -169,11 +168,30 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getFileName()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -192,11 +210,19 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT),
+			Optional.of(99));
+		Assert.assertEquals(
+			adaptiveMedia.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT),
 			Optional.of(100));
 
 		Assert.assertEquals(
 			adaptiveMedia.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(199));
+		Assert.assertEquals(
+			adaptiveMedia.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(200));
 	}
 
@@ -205,31 +231,19 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "200"));
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "800"));
+				MapUtil.fromArray("max-height", "100", "max-width", "800"));
 		ImageAdaptiveMediaConfigurationEntry configurationEntry3 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "400"));
+				MapUtil.fromArray("max-height", "100", "max-width", "400"));
 
 		List<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
 			Arrays.asList(
 				configurationEntry1, configurationEntry2, configurationEntry3);
-
-		Mockito.when(
-			_fileVersion.getFileName()
-		).thenReturn(
-			StringUtil.randomString()
-		);
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -239,11 +253,48 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getFileName()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(99, 799, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		AdaptiveMediaImage image3 = _mockImage(99, 399, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry3.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image3
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -263,6 +314,10 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia1.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(199));
+		Assert.assertEquals(
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(200));
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia2 =
@@ -271,6 +326,10 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia2.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(399));
+		Assert.assertEquals(
+			adaptiveMedia2.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(400));
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia3 =
@@ -279,6 +338,10 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia3.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(799));
+		Assert.assertEquals(
+			adaptiveMedia3.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(800));
 	}
 
@@ -287,31 +350,19 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "200"));
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "800"));
+				MapUtil.fromArray("max-height", "100", "max-width", "800"));
 		ImageAdaptiveMediaConfigurationEntry configurationEntry3 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "400"));
+				MapUtil.fromArray("max-height", "100", "max-width", "400"));
 
 		List<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
 			Arrays.asList(
 				configurationEntry1, configurationEntry2, configurationEntry3);
-
-		Mockito.when(
-			_fileVersion.getFileName()
-		).thenReturn(
-			StringUtil.randomString()
-		);
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -321,11 +372,48 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getFileName()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(99, 799, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		AdaptiveMediaImage image3 = _mockImage(99, 399, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry3.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image3
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -345,6 +433,10 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia1.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(799));
+		Assert.assertEquals(
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(800));
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia2 =
@@ -353,6 +445,10 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia2.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(399));
+		Assert.assertEquals(
+			adaptiveMedia2.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(400));
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia3 =
@@ -361,6 +457,10 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia3.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(199));
+		Assert.assertEquals(
+			adaptiveMedia3.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.of(200));
 	}
 
@@ -381,16 +481,16 @@ public class ImageAdaptiveMediaFinderImplTest {
 	@Test(expected = AdaptiveMediaRuntimeException.InvalidConfiguration.class)
 	public void testGetMediaConfigurationError() throws Exception {
 		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
-
-		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
 				Mockito.any(long.class))
 		).thenThrow(
 			AdaptiveMediaRuntimeException.InvalidConfiguration.class
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		_finder.getAdaptiveMedia(
@@ -405,12 +505,6 @@ public class ImageAdaptiveMediaFinderImplTest {
 				Collections.emptyMap());
 
 		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
-
-		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
 				Mockito.any(long.class))
 		).thenReturn(
@@ -418,17 +512,30 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
-		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
-		);
-
-		Mockito.when(
 			_fileVersion.getFileName()
 		).thenReturn(
 			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image = _mockImage(800, 900, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		InputStream inputStream = Mockito.mock(InputStream.class);
@@ -461,13 +568,7 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100"));
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
+				MapUtil.fromArray("max-height", "100"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -477,15 +578,30 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(_fileVersion, configurationEntry)
-		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
-		);
-
-		Mockito.when(
 			_fileVersion.getFileName()
 		).thenReturn(
 			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image = _mockImage(99, 1000, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -504,11 +620,19 @@ public class ImageAdaptiveMediaFinderImplTest {
 		Assert.assertEquals(
 			adaptiveMedia.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT),
+			Optional.of(99));
+		Assert.assertEquals(
+			adaptiveMedia.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT),
 			Optional.of(100));
 
 		Assert.assertEquals(
 			adaptiveMedia.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_WIDTH),
+			Optional.of(1000));
+		Assert.assertEquals(
+			adaptiveMedia.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH),
 			Optional.empty());
 	}
 
@@ -517,18 +641,12 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "200"));
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
 		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "200", "width", "200"));
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
+				MapUtil.fromArray("max-height", "200", "max-width", "200"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -538,17 +656,39 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.eq(_fileVersion),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
-		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
-		);
-
-		Mockito.when(
 			_fileVersion.getFileName()
 		).thenReturn(
 			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(199, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -563,20 +703,32 @@ public class ImageAdaptiveMediaFinderImplTest {
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia0 =
 			adaptiveMedias.get(0);
 
-		Optional<Integer> adaptiveMedia0Optional =
+		Optional<Integer> adaptiveMedia0HeightOptional =
 			adaptiveMedia0.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 
-		Assert.assertEquals(100, (int)adaptiveMedia0Optional.get());
+		Assert.assertEquals(99, (int)adaptiveMedia0HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia0MaxHeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(100, (int)adaptiveMedia0MaxHeightOptional.get());
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia1 =
 			adaptiveMedias.get(1);
 
-		Optional<Integer> adaptiveMedia1Optional =
+		Optional<Integer> adaptiveMedia1HeightOptional =
 			adaptiveMedia1.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 
-		Assert.assertEquals(200, (int)adaptiveMedia1Optional.get());
+		Assert.assertEquals(199, (int)adaptiveMedia1HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia1MaxHeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(200, (int)adaptiveMedia1MaxHeightOptional.get());
 	}
 
 	@Test
@@ -584,18 +736,12 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "200"));
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
 		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "200", "width", "200"));
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
+				MapUtil.fromArray("max-height", "200", "max-width", "200"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -611,11 +757,33 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getMimeType()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(199, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -630,39 +798,45 @@ public class ImageAdaptiveMediaFinderImplTest {
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia0 =
 			adaptiveMedias.get(0);
 
-		Optional<Integer> adaptiveMedia0Optional =
+		Optional<Integer> adaptiveMedia0HeightOptional =
 			adaptiveMedia0.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 
-		Assert.assertEquals(200, (int)adaptiveMedia0Optional.get());
+		Assert.assertEquals(199, (int)adaptiveMedia0HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia0MaxHeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(200, (int)adaptiveMedia0MaxHeightOptional.get());
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia1 =
 			adaptiveMedias.get(1);
 
-		Optional<Integer> adaptiveMedia1Optional =
+		Optional<Integer> adaptiveMedia1HeightOptional =
 			adaptiveMedia1.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 
-		Assert.assertEquals(100, (int)adaptiveMedia1Optional.get());
+		Assert.assertEquals(99, (int)adaptiveMedia1HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia1MaxHeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(100, (int)adaptiveMedia1MaxHeightOptional.get());
 	}
 
 	@Test
-	public void testGetMediaQueryWithConfigurationAttribute() throws Exception {
+	public void testGetMediaQueryWith200HeightAspectRatio() throws Exception {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
-				StringUtil.randomString(), "small",
-				MapUtil.fromArray("height", "100", "width", "200"));
+				StringUtil.randomString(), StringUtil.randomString(),
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
 		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
-				StringUtil.randomString(), "medium",
-				MapUtil.fromArray("height", "200", "width", "200"));
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
+				StringUtil.randomString(), StringUtil.randomString(),
+				MapUtil.fromArray("max-height", "200", "max-width", "100"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -672,17 +846,232 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.eq(_fileVersion),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getFileName()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(55, 99, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
+		);
+
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+			_finder.getAdaptiveMedia(
+				queryBuilder ->
+					queryBuilder.forVersion(_fileVersion).with(
+						ImageAdaptiveMediaAttribute.IMAGE_HEIGHT, 200).done());
+
+		List<AdaptiveMedia<ImageAdaptiveMediaProcessor>> adaptiveMedias =
+			stream.collect(Collectors.toList());
+
+		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia0 =
+			adaptiveMedias.get(0);
+
+		Optional<Integer> adaptiveMedia0HeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
+
+		Assert.assertEquals(99, (int)adaptiveMedia0HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia0MaxHeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(100, (int)adaptiveMedia0MaxHeightOptional.get());
+
+		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia1 =
+			adaptiveMedias.get(1);
+
+		Optional<Integer> adaptiveMedia1HeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
+
+		Assert.assertEquals(55, (int)adaptiveMedia1HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia1MaxHeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(200, (int)adaptiveMedia1MaxHeightOptional.get());
+	}
+
+	@Test
+	public void testGetMediaQueryWith200MaxHeightAspectRatio()
+		throws Exception {
+
+		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
+				StringUtil.randomString(), StringUtil.randomString(),
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
+
+		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
+				StringUtil.randomString(), StringUtil.randomString(),
+				MapUtil.fromArray("max-height", "200", "max-width", "100"));
+
+		Mockito.when(
+			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
+				Mockito.any(long.class))
+		).thenReturn(
+			Arrays.asList(configurationEntry1, configurationEntry2)
 		);
 
 		Mockito.when(
 			_fileVersion.getFileName()
 		).thenReturn(
 			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(55, 99, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
+		);
+
+		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
+			_finder.getAdaptiveMedia(
+				queryBuilder ->
+					queryBuilder.forVersion(_fileVersion).with(
+						ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT,
+						200).done());
+
+		List<AdaptiveMedia<ImageAdaptiveMediaProcessor>> adaptiveMedias =
+			stream.collect(Collectors.toList());
+
+		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia0 =
+			adaptiveMedias.get(0);
+
+		Optional<Integer> adaptiveMedia0HeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
+
+		Assert.assertEquals(55, (int)adaptiveMedia0HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia0MaxHeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(200, (int)adaptiveMedia0MaxHeightOptional.get());
+
+		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia1 =
+			adaptiveMedias.get(1);
+
+		Optional<Integer> adaptiveMedia1HeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
+
+		Assert.assertEquals(99, (int)adaptiveMedia1HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia1MaxHeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(100, (int)adaptiveMedia1MaxHeightOptional.get());
+	}
+
+	@Test
+	public void testGetMediaQueryWithConfigurationAttribute() throws Exception {
+		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
+				StringUtil.randomString(), "small",
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
+
+		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
+			new ImageAdaptiveMediaConfigurationEntryImpl(
+				StringUtil.randomString(), "medium",
+				MapUtil.fromArray("max-height", "200", "max-width", "200"));
+
+		Mockito.when(
+			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
+				Mockito.any(long.class))
+		).thenReturn(
+			Arrays.asList(configurationEntry1, configurationEntry2)
+		);
+
+		Mockito.when(
+			_fileVersion.getFileName()
+		).thenReturn(
+			StringUtil.randomString()
+		);
+
+		Mockito.when(
+			_fileVersion.getMimeType()
+		).thenReturn(
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(199, 199, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -711,18 +1100,12 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry1 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100"));
+				MapUtil.fromArray("max-height", "100"));
 
 		ImageAdaptiveMediaConfigurationEntry configurationEntry2 =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "200"));
-
-		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
+				MapUtil.fromArray("max-height", "200"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -738,11 +1121,33 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getMimeType()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image1 = _mockImage(99, 1000, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry1.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image1
+		);
+
+		AdaptiveMediaImage image2 = _mockImage(199, 1000, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry2.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image2
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -757,20 +1162,32 @@ public class ImageAdaptiveMediaFinderImplTest {
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia0 =
 			adaptiveMedias.get(0);
 
-		Optional<Integer> adaptiveMedia0Optional =
+		Optional<Integer> adaptiveMedia0HeightOptional =
 			adaptiveMedia0.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 
-		Assert.assertEquals(100, (int)adaptiveMedia0Optional.get());
+		Assert.assertEquals(99, (int)adaptiveMedia0HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia0MaxHeightOptional =
+			adaptiveMedia0.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(100, (int)adaptiveMedia0MaxHeightOptional.get());
 
 		AdaptiveMedia<ImageAdaptiveMediaProcessor> adaptiveMedia1 =
 			adaptiveMedias.get(1);
 
-		Optional<Integer> adaptiveMedia1Optional =
+		Optional<Integer> adaptiveMedia1HeightOptional =
 			adaptiveMedia1.getAttributeValue(
 				ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
 
-		Assert.assertEquals(200, (int)adaptiveMedia1Optional.get());
+		Assert.assertEquals(199, (int)adaptiveMedia1HeightOptional.get());
+
+		Optional<Integer> adaptiveMedia1MaxHeightOptional =
+			adaptiveMedia1.getAttributeValue(
+				ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
+
+		Assert.assertEquals(200, (int)adaptiveMedia1MaxHeightOptional.get());
 	}
 
 	@Test
@@ -803,7 +1220,7 @@ public class ImageAdaptiveMediaFinderImplTest {
 		ImageAdaptiveMediaConfigurationEntry configurationEntry =
 			new ImageAdaptiveMediaConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
-				MapUtil.fromArray("height", "100", "width", "200"));
+				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
 		Mockito.when(
 			_configurationHelper.getImageAdaptiveMediaConfigurationEntries(
@@ -813,23 +1230,30 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 
 		Mockito.when(
-			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
-		).thenReturn(
-			true
-		);
-
-		Mockito.when(
 			_fileVersion.getFileName()
 		).thenReturn(
 			StringUtil.randomString()
 		);
 
 		Mockito.when(
-			_imageStorage.getImageInfo(
-				Mockito.any(FileVersion.class),
-				Mockito.any(ImageAdaptiveMediaConfigurationEntry.class))
+			_fileVersion.getMimeType()
 		).thenReturn(
-			Optional.of(new ImageInfo("image/jpeg", 1))
+			"image/jpeg"
+		);
+
+		AdaptiveMediaImage image = _mockImage(99, 99, 1000L);
+
+		Mockito.when(
+			_imageLocalService.fetchAdaptiveMediaImage(
+				configurationEntry.getUUID(), _fileVersion.getFileVersionId())
+		).thenReturn(
+			image
+		);
+
+		Mockito.when(
+			_imageProcessor.isMimeTypeSupported(Mockito.any(String.class))
+		).thenReturn(
+			true
 		);
 
 		Stream<AdaptiveMedia<ImageAdaptiveMediaProcessor>> stream =
@@ -852,12 +1276,38 @@ public class ImageAdaptiveMediaFinderImplTest {
 		);
 	}
 
+	private AdaptiveMediaImage _mockImage(int height, int width, long size) {
+		AdaptiveMediaImage image = Mockito.mock(AdaptiveMediaImage.class);
+
+		Mockito.when(
+			image.getHeight()
+		).thenReturn(
+			height
+		);
+
+		Mockito.when(
+			image.getWidth()
+		).thenReturn(
+			width
+		);
+
+		Mockito.when(
+			image.getSize()
+		).thenReturn(
+			size
+		);
+
+		return image;
+	}
+
 	private final ImageAdaptiveMediaConfigurationHelper _configurationHelper =
 		Mockito.mock(ImageAdaptiveMediaConfigurationHelper.class);
 	private final FileEntry _fileEntry = Mockito.mock(FileEntry.class);
 	private final FileVersion _fileVersion = Mockito.mock(FileVersion.class);
 	private final ImageAdaptiveMediaFinderImpl _finder =
 		new ImageAdaptiveMediaFinderImpl();
+	private final AdaptiveMediaImageLocalService _imageLocalService =
+		Mockito.mock(AdaptiveMediaImageLocalService.class);
 	private final ImageProcessor _imageProcessor = Mockito.mock(
 		ImageProcessor.class);
 	private final ImageStorage _imageStorage = Mockito.mock(ImageStorage.class);
