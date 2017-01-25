@@ -20,8 +20,6 @@ import com.liferay.adaptive.media.image.internal.configuration.ImageAdaptiveMedi
 import com.liferay.adaptive.media.image.processor.ImageAdaptiveMediaAttribute;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageToolUtil;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.util.SetUtil;
 
@@ -50,7 +48,7 @@ public class ImageProcessor {
 		return _supportedMimeTypes.contains(mimeType);
 	}
 
-	public InputStream process(
+	public RenderedImage scaleImage(
 		FileVersion fileVersion,
 		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
 
@@ -61,25 +59,18 @@ public class ImageProcessor {
 
 			Optional<Integer> heightOptional =
 				attributeMapping.getAttributeValue(
-					ImageAdaptiveMediaAttribute.IMAGE_HEIGHT);
+					ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT);
 
 			Optional<Integer> widthOptional =
 				attributeMapping.getAttributeValue(
-					ImageAdaptiveMediaAttribute.IMAGE_WIDTH);
+					ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH);
 
 			RenderedImage renderedImage = _readImage(
 				fileVersion.getContentStream(false));
 
-			RenderedImage scaledImage = ImageToolUtil.scale(
+			return ImageToolUtil.scale(
 				renderedImage, heightOptional.orElse(0),
 				widthOptional.orElse(0));
-
-			UnsyncByteArrayOutputStream baos =
-				new UnsyncByteArrayOutputStream();
-
-			ImageToolUtil.write(scaledImage, fileVersion.getMimeType(), baos);
-
-			return new UnsyncByteArrayInputStream(baos.toByteArray());
 		}
 		catch (IOException | PortalException e) {
 			throw new AdaptiveMediaRuntimeException.IOException(e);

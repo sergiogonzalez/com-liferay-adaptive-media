@@ -85,10 +85,10 @@ public class ImageAdaptiveMediaRequestHandler
 						queryBuilder.forVersion(fileVersion).with(
 							ImageAdaptiveMediaAttribute.IMAGE_HEIGHT,
 							attributeMapping.getAttributeValue(
-								ImageAdaptiveMediaAttribute.IMAGE_HEIGHT)).with(
+								ImageAdaptiveMediaAttribute.IMAGE_MAX_HEIGHT)).with(
 							ImageAdaptiveMediaAttribute.IMAGE_WIDTH,
 							attributeMapping.getAttributeValue(
-								ImageAdaptiveMediaAttribute.IMAGE_WIDTH)).
+								ImageAdaptiveMediaAttribute.IMAGE_MAX_WIDTH)).
 							done());
 
 			return mediaStream.findFirst();
