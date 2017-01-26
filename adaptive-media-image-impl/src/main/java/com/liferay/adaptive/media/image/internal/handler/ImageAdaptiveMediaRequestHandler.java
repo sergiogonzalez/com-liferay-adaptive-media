@@ -65,6 +65,13 @@ public class ImageAdaptiveMediaRequestHandler
 			tuple -> _findAdaptiveMedia(tuple.first, tuple.second));
 	}
 
+	@Reference
+	public void setImageAdaptiveMediaConfigurationHelper(
+		ImageAdaptiveMediaConfigurationHelper configurationHelper) {
+
+		_configurationHelper = configurationHelper;
+	}
+
 	@Reference(unbind = "-")
 	public void setImageAdaptiveMediaFinder(ImageAdaptiveMediaFinder finder) {
 		_finder = finder;
@@ -73,13 +80,6 @@ public class ImageAdaptiveMediaRequestHandler
 	@Reference(unbind = "-")
 	public void setPathInterpreter(PathInterpreter pathInterpreter) {
 		_pathInterpreter = pathInterpreter;
-	}
-
-	@Reference
-	protected void setImageAdaptiveMediaConfigurationHelper(
-		ImageAdaptiveMediaConfigurationHelper configurationHelper) {
-
-		_configurationHelper = configurationHelper;
 	}
 
 	private Optional<AdaptiveMedia<ImageAdaptiveMediaProcessor>>
