@@ -79,7 +79,7 @@ public class ImageAdaptiveMediaConfigResource {
 		configRepr.setUuid(id);
 
 		try {
-			_configurationHelper.addImageAdaptiveMediaConfigurationEntry(
+			_configurationHelper.updateImageAdaptiveMediaConfigurationEntry(
 				_companyId, configRepr.getName(), id, properties);
 		}
 		catch (IOException | ImageAdaptiveMediaConfigurationException e) {
