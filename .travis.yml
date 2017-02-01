@@ -22,8 +22,16 @@ script:
   - ../bundles/tomcat-8.0.32/bin/startup.sh
   - ./scripts/run_unit_tests.sh
   - ./scripts/deploy_modules.sh
+  - ./scripts/deploy_temp_libs.sh 
+  - tail ../bundles/tomcat-8.0.32/logs/catalina.out
   - travis_wait ./scripts/wait_until_startup.sh
+  - tail ../bundles/tomcat-8.0.32/logs/catalina.out
   - ./scripts/run_integration_tests.sh
 
 after_success:
   - ./gradlew coveralls
+
+after_failure:
+ - cat ../bundles/tomcat-8.0.32/logs/catalina.out
+ - curl http://localhost:8080 -s -f -o /dev/null || echo "Website down."
+ - jps
