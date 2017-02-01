@@ -16,4 +16,5 @@ cd ../adaptive-media-image-jax-rs-test
 
 ../scripts/run.sh ../gradlew clean testIntegration 2>&1 | tee -a ${TEMP_FILE}
 
-grep 'There were failing tests' ${TEMP_FILE} && exit 1 || exit 0
+grep 'There were failing tests' ${TEMP_FILE} && exit 1 || true
+grep 'BUILD FAILED' ${TEMP_FILE} && exit 1 || exit 0
