@@ -32,3 +32,4 @@ after_success:
 
 after_failure:
   - cat ../bundles/tomcat-8.0.32/logs/catalina.out
+  - jps
