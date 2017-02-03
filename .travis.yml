@@ -22,6 +22,8 @@ script:
   - ./scripts/deploy_modules.sh
   - ./scripts/deploy_temp_libs.sh
   - ../bundles/tomcat-8.0.32/bin/startup.sh
+  - echo "HOLA\n\n\n\n\n\n"
+  - jps
   - tail ../bundles/tomcat-8.0.32/logs/catalina.out
   - travis_wait ./scripts/wait_until_startup.sh
   - tail ../bundles/tomcat-8.0.32/logs/catalina.out
@@ -32,4 +34,4 @@ after_success:
 
 after_failure:
   - cat ../bundles/tomcat-8.0.32/logs/catalina.out
-  - jps
+  - curl http://localhost:8080 -s -f -o /dev/null || echo "Website down."
