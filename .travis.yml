@@ -16,18 +16,14 @@ cache:
 
 install:
   - ./scripts/install_bundle.sh
-  - ./scripts/run.sh ./gradlew setupTestableTomcat
+  - ./gradlew setupTestableTomcat
 
 script:
   - ./scripts/deploy_modules.sh
   - ./scripts/deploy_temp_libs.sh
   - ../bundles/tomcat-8.0.32/bin/startup.sh
-  - echo "HOLA\n\n\n\n\n\n"
-  - jps
-  - tail ../bundles/tomcat-8.0.32/logs/catalina.out
   - travis_wait ./scripts/wait_until_startup.sh
-  - tail ../bundles/tomcat-8.0.32/logs/catalina.out
-  - ./scripts/run_integration_tests.sh
+  - ./gradlew testIntegration
 
 after_success:
   - ./gradlew coveralls
