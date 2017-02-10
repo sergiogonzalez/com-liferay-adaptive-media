@@ -21,8 +21,6 @@ install:
 script:
   - ./scripts/deploy_modules.sh
   - ./scripts/deploy_temp_libs.sh
-  - ../bundles/tomcat-8.0.32/bin/startup.sh
-  - travis_wait ./scripts/wait_until_startup.sh
   - ./gradlew testIntegration
 
 after_success:

@@ -39,6 +39,8 @@ configure(subprojects.findAll {!it.childProjects}) {
 	testIntegration {
 		ignoreFailures = false
 	}
+
+	stopTestableTomcat.enabled= false
 }
 
 repositories {
