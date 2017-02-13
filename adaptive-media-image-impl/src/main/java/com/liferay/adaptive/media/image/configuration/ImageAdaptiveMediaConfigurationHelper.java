@@ -31,9 +31,9 @@ import java.util.Optional;
 public interface ImageAdaptiveMediaConfigurationHelper {
 
 	public ImageAdaptiveMediaConfigurationEntry
-			addImageAdaptiveMediaConfigurationEntry(
-				long companyId, String name, String uuid,
-				Map<String, String> properties)
+	addImageAdaptiveMediaConfigurationEntry(
+		long companyId, String name, String uuid,
+		Map<String, String> properties)
 		throws ImageAdaptiveMediaConfigurationException, IOException;
 
 	public void deleteImageAdaptiveMediaConfigurationEntry(
@@ -50,5 +50,11 @@ public interface ImageAdaptiveMediaConfigurationHelper {
 	public boolean isDefaultConfiguration(long companyId);
 
 	public void resetDefaultConfiguration(long companyId);
+
+	public ImageAdaptiveMediaConfigurationEntry
+	updateImageAdaptiveMediaConfigurationEntry(
+		long companyId, String name, String uuid,
+		Map<String, String> properties)
+	throws ImageAdaptiveMediaConfigurationException, IOException;
 
 }

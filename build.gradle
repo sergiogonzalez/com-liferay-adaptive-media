@@ -35,6 +35,12 @@ configure(subprojects.findAll {!it.childProjects}) {
 			xml.enabled = true
 		}
 	}
+
+	testIntegration {
+		ignoreFailures = false
+	}
+
+	stopTestableTomcat.enabled= false
 }
 
 repositories {
@@ -58,6 +64,14 @@ task coverageReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 	doFirst {
 		executionData = files(executionData.findAll { it.exists() })
 	}
+
+	afterEvaluate {
+        	classDirectories = files(classDirectories.files.collect {
+			fileTree(dir: it,
+                    		exclude: ['*com/liferay/adaptive/media/demo*',
+                      			  '*com/liferay/adaptive/media/image/jaxrs/*'])
+        	})
+    	}
 }
 
 tasks.coveralls {
