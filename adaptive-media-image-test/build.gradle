@@ -19,3 +19,7 @@ dependencies {
 	testIntegrationCompile project(":adaptive-media-image-impl")
 	testIntegrationCompile project(":adaptive-media-image-item-selector-api")
 }
+
+liferay {
+	deployDir = new File("${projectDir}/build/testlibs")
+}
