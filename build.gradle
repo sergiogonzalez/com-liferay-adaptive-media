@@ -115,7 +115,9 @@ task runDocker(type: Exec) {
 			'-p', '5005:5005',
 			'-p', '8080:8080',
 			'-p', '8099:8099',
+			'-p', '11311:11311',
 			'-v', "${rootDir}/../bundles/deploy:/liferay/deploy",
+			'-v', "${rootDir}/docker/portal-ext.properties:/liferay/portal-ext.properties",
 			'-d',
 			'--name', "com-liferay-adaptive-media",
 			'liferay/liferay-de:20170203072957391859963-db'
