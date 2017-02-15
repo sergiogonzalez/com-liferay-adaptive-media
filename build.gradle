@@ -25,6 +25,14 @@ configure(subprojects.findAll {!it.childProjects}) {
 	apply plugin: "com.liferay.defaults.plugin"
 	apply plugin: "jacoco"
 
+	configurations {
+		runtimeLib {
+			description = 'deployable runtime libs'
+		}
+
+		compile.extendsFrom(runtimeLib)
+	}
+
 	jacocoTestReport {
 		additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
 		sourceDirectories = files(sourceSets.main.allSource.srcDirs)
