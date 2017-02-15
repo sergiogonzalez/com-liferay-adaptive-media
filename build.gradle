@@ -80,6 +80,10 @@ configure(subprojects.findAll {!it.childProjects}) {
 			fileName.replaceAll("(.*)-((\\d\\.{1})*\\d)\\.jar", "\$1.jar")
 		}
 	}
+
+	setUpTestableTomcat.enabled = false
+	startTestableTomcat.enabled = false
+	stopTestableTomcat.enabled = false
 }
 
 repositories {
