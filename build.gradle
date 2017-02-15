@@ -33,6 +33,10 @@ configure(subprojects.findAll {!it.childProjects}) {
 		compile.extendsFrom(runtimeLib)
 	}
 
+	liferay {
+		deployDir = new File("${rootDir}/../bundles/deploy")
+	}
+
 	jacocoTestReport {
 		additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
 		sourceDirectories = files(sourceSets.main.allSource.srcDirs)
@@ -74,6 +78,12 @@ configure(subprojects.findAll {!it.childProjects}) {
 repositories {
 	mavenLocal()
 	jcenter()
+}
+
+task deploy() {
+	subprojects.each {
+		dependsOn("${it.path}:deploy")
+	}
 }
 
 task deployLibs() {
