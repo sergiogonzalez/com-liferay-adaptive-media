@@ -16,14 +16,20 @@ cache:
 
 install:
   - ./scripts/install_bundle.sh
-  - ./scripts/run.sh ./gradlew setupTestableTomcat
+  - ./gradlew setupTestableTomcat
 
 script:
-  - ../bundles/tomcat-8.0.32/bin/startup.sh
-  - ./scripts/run_unit_tests.sh
+  - ./scripts/prepare_for_aspectj.sh
   - ./scripts/deploy_modules.sh
+  - ./scripts/deploy_temp_libs.sh
+  - ../bundles/tomcat-8.0.32/bin/startup.sh
   - travis_wait ./scripts/wait_until_startup.sh
-  - ./scripts/run_integration_tests.sh
+  - ./gradlew testIntegration
 
 after_success:
   - ./gradlew coveralls
+
+after_failure:
+  - cat ../bundles/tomcat-8.0.32/logs/catalina.out
+  - curl http://localhost:8080 -s -f -o /dev/null || echo "Website down."
+  - jps
