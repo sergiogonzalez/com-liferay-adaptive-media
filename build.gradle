@@ -43,6 +43,14 @@ configure(subprojects.findAll {!it.childProjects}) {
 			xml.enabled = true
 		}
 	}
+
+	test {
+		ignoreFailures = false
+	}
+
+	testIntegration {
+		ignoreFailures = false
+	}
 }
 
 repositories {
