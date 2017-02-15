@@ -98,6 +98,29 @@ task deployRuntimeLibs() {
 	}
 }
 
+task runDocker(type: Exec) {
+	dependsOn deploy
+	dependsOn deployLibs
+	dependsOn deployRuntimeLibs
+
+	def javaOpts = project.getProperty('javaOpts');
+
+	if (project.hasProperty('debug')) {
+		javaOpts += ' ' + project.getProperty('debugOpts');
+	}
+
+	commandLine 'docker', 'run',
+			'-h', "localhost",
+			'-e', "JAVA_OPTS=$javaOpts",
+			'-p', '5005:5005',
+			'-p', '8080:8080',
+			'-p', '8099:8099',
+			'-v', "${rootDir}/../bundles/deploy:/liferay/deploy",
+			'-d',
+			'--name', "com-liferay-adaptive-media",
+			'liferay/liferay-de:20170203072957391859963-db'
+}
+
 task coverageReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 	additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
 	classDirectories = files(subprojects.sourceSets.main.output)
