@@ -193,6 +193,27 @@ task loginDocker(type: Exec) {
 
 }
 
+task checkDocker() {
+	doLast {
+		def url = "http://localhost:8080";
+		println("Trying to reach " + url);
+		while (true) {
+			try {
+				print(".");
+
+				url.toURL().text;
+
+				println("Portal startup finished");
+
+				break;
+			}
+			catch (Exception e) {
+				Thread.sleep(1000);
+			}
+		}
+	}
+}
+
 task runDocker(type: Exec) {
 	dependsOn createTempDir
 	dependsOn deploy
