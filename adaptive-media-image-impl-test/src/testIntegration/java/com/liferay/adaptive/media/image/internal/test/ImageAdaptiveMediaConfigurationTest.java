@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -166,6 +167,23 @@ public class ImageAdaptiveMediaConfigurationTest {
 					TestPropsValues.getCompanyId(), "0");
 
 		Assert.assertFalse(configurationEntryOptional.isPresent());
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		ImageAdaptiveMediaConfigurationHelper configurationHelper =
+			_serviceTracker.getService();
+
+		Collection<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
+			configurationHelper.getImageAdaptiveMediaConfigurationEntries(
+				TestPropsValues.getCompanyId());
+
+		for (ImageAdaptiveMediaConfigurationEntry configurationEntry :
+				configurationEntries) {
+
+			configurationHelper.deleteImageAdaptiveMediaConfigurationEntry(
+				TestPropsValues.getCompanyId(), configurationEntry.getUUID());
+		}
 	}
 
 	private static ServiceTracker
