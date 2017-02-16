@@ -66,7 +66,7 @@ public class TiffOrientationTransformer {
 			return Optional.of(
 				exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION));
 		}
-		catch (ImageProcessingException | IOException | MetadataException e) {
+		catch (Exception e) {
 			_log.error(e, e);
 		}
 
