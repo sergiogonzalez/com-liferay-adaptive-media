@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.List;
@@ -73,8 +74,8 @@ public interface AdaptiveMediaImageLocalService extends BaseLocalService,
 
 	public AdaptiveMediaImage addAdaptiveMediaImage(
 		java.lang.String configurationUuid, long fileVersionId,
-		java.lang.String mimeType, int width, int size, int height)
-		throws PortalException;
+		java.lang.String mimeType, int width, int size, int height,
+		InputStream inputStream) throws PortalException;
 
 	/**
 	* Creates a new adaptive media image with the primary key. Does not add the adaptive media image to the database.
@@ -292,5 +293,6 @@ public interface AdaptiveMediaImageLocalService extends BaseLocalService,
 	public long dynamicQueryCount(DynamicQuery dynamicQuery,
 		Projection projection);
 
-	public void deleteAdaptiveMediaImageFileVersion(long fileVersionId);
+	public void deleteAdaptiveMediaImageFileVersion(long fileVersionId)
+		throws PortalException;
 }
