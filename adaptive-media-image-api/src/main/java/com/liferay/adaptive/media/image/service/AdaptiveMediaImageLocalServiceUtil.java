@@ -55,11 +55,12 @@ public class AdaptiveMediaImageLocalServiceUtil {
 
 	public static com.liferay.adaptive.media.image.model.AdaptiveMediaImage addAdaptiveMediaImage(
 		java.lang.String configurationUuid, long fileVersionId,
-		java.lang.String mimeType, int width, int size, int height)
+		java.lang.String mimeType, int width, int size, int height,
+		java.io.InputStream inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .addAdaptiveMediaImage(configurationUuid, fileVersionId,
-			mimeType, width, size, height);
+			mimeType, width, size, height, inputStream);
 	}
 
 	/**
@@ -330,7 +331,8 @@ public class AdaptiveMediaImageLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
-	public static void deleteAdaptiveMediaImageFileVersion(long fileVersionId) {
+	public static void deleteAdaptiveMediaImageFileVersion(long fileVersionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		getService().deleteAdaptiveMediaImageFileVersion(fileVersionId);
 	}
 

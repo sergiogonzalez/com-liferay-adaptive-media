@@ -49,10 +49,11 @@ public class AdaptiveMediaImageLocalServiceWrapper
 	@Override
 	public com.liferay.adaptive.media.image.model.AdaptiveMediaImage addAdaptiveMediaImage(
 		java.lang.String configurationUuid, long fileVersionId,
-		java.lang.String mimeType, int width, int size, int height)
+		java.lang.String mimeType, int width, int size, int height,
+		java.io.InputStream inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _adaptiveMediaImageLocalService.addAdaptiveMediaImage(configurationUuid,
-			fileVersionId, mimeType, width, size, height);
+			fileVersionId, mimeType, width, size, height, inputStream);
 	}
 
 	/**
@@ -351,7 +352,8 @@ public class AdaptiveMediaImageLocalServiceWrapper
 	}
 
 	@Override
-	public void deleteAdaptiveMediaImageFileVersion(long fileVersionId) {
+	public void deleteAdaptiveMediaImageFileVersion(long fileVersionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		_adaptiveMediaImageLocalService.deleteAdaptiveMediaImageFileVersion(fileVersionId);
 	}
 
