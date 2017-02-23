@@ -29,7 +29,6 @@ import com.liferay.registry.ServiceTracker;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,7 +46,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Sync
-public class ImageAdaptiveMediaConfigurationTest {
+public class ImageAdaptiveMediaDisableConfigurationTest {
 
 	@ClassRule
 	@Rule
@@ -92,7 +91,48 @@ public class ImageAdaptiveMediaConfigurationTest {
 	}
 
 	@Test
-	public void testAddConfigurationEntryWithExistingDisabledConfiguration()
+	public void testDisableAllConfigurationEntries() throws Exception {
+		ImageAdaptiveMediaConfigurationHelper configurationHelper =
+			_serviceTracker.getService();
+
+		Map<String, String> properties = new HashMap<>();
+
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
+
+		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "one", "1", properties);
+
+		properties = new HashMap<>();
+
+		properties.put("max-height", "200");
+		properties.put("max-width", "200");
+
+		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "two", "2", properties);
+
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1");
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "2");
+
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			firstConfigurationEntryOptional =
+				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+					TestPropsValues.getCompanyId(), "1");
+
+		_assertDisabled(firstConfigurationEntryOptional);
+
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			secondConfigurationEntryOptional =
+				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+					TestPropsValues.getCompanyId(), "2");
+
+		_assertDisabled(secondConfigurationEntryOptional);
+	}
+
+	@Test
+	public void testDisableConfigurationWithExistingDisabledConfiguration()
 		throws Exception {
 
 		ImageAdaptiveMediaConfigurationHelper configurationHelper =
@@ -117,154 +157,25 @@ public class ImageAdaptiveMediaConfigurationTest {
 		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
 			TestPropsValues.getCompanyId(), "two", "2", properties);
 
-		Collection<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
-			configurationHelper.getImageAdaptiveMediaConfigurationEntries(
-				TestPropsValues.getCompanyId(), configurationEntry -> true);
-
-		Assert.assertEquals(
-			configurationEntries.toString(), 2, configurationEntries.size());
-
-		Iterator<ImageAdaptiveMediaConfigurationEntry> iterator =
-			configurationEntries.iterator();
-
-		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			iterator.next();
-
-		Assert.assertEquals("1", configurationEntry.getUUID());
-
-		configurationEntry = iterator.next();
-
-		Assert.assertEquals("2", configurationEntry.getUUID());
-	}
-
-	@Test
-	public void testEmptyConfiguration() throws Exception {
-		ImageAdaptiveMediaConfigurationHelper configurationHelper =
-			_serviceTracker.getService();
-
-		Iterable<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
-			configurationHelper.getImageAdaptiveMediaConfigurationEntries(
-				TestPropsValues.getCompanyId());
-
-		Iterator<ImageAdaptiveMediaConfigurationEntry> iterator =
-			configurationEntries.iterator();
-
-		Assert.assertFalse(iterator.hasNext());
-	}
-
-	@Test
-	public void testExistantConfigurationEntry() throws Exception {
-		ImageAdaptiveMediaConfigurationHelper configurationHelper =
-			_serviceTracker.getService();
-
-		Map<String, String> properties = new HashMap<>();
-
-		properties.put("max-height", "100");
-		properties.put("max-width", "100");
-
-		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "2");
 
 		Optional<ImageAdaptiveMediaConfigurationEntry>
 			configurationEntryOptional =
 				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
-		Assert.assertTrue(configurationEntryOptional.isPresent());
+		_assertDisabled(configurationEntryOptional);
+
+		configurationEntryOptional =
+			configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+				TestPropsValues.getCompanyId(), "2");
+
+		_assertDisabled(configurationEntryOptional);
 	}
 
 	@Test
-	public void testGetConfigurationEntriesDoesNotReturnDisabledConfigurations()
-		throws Exception {
-
-		ImageAdaptiveMediaConfigurationHelper configurationHelper =
-			_serviceTracker.getService();
-
-		Map<String, String> properties = new HashMap<>();
-
-		properties.put("max-height", "100");
-		properties.put("max-width", "100");
-
-		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
-
-		properties = new HashMap<>();
-
-		properties.put("max-height", "200");
-		properties.put("max-width", "200");
-
-		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "two", "2", properties);
-
-		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "2");
-
-		Collection<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
-			configurationHelper.getImageAdaptiveMediaConfigurationEntries(
-				TestPropsValues.getCompanyId());
-
-		Assert.assertEquals(
-			configurationEntries.toString(), 1, configurationEntries.size());
-
-		Iterator<ImageAdaptiveMediaConfigurationEntry> iterator =
-			configurationEntries.iterator();
-
-		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			iterator.next();
-
-		Assert.assertEquals("1", configurationEntry.getUUID());
-	}
-
-	@Test
-	public void testGetConfigurationEntriesWithPredicateReturnsDisabledConfigurations()
-		throws Exception {
-
-		ImageAdaptiveMediaConfigurationHelper configurationHelper =
-			_serviceTracker.getService();
-
-		Map<String, String> properties = new HashMap<>();
-
-		properties.put("max-height", "100");
-		properties.put("max-width", "100");
-
-		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
-
-		properties = new HashMap<>();
-
-		properties.put("max-height", "200");
-		properties.put("max-width", "200");
-
-		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "two", "2", properties);
-
-		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
-			TestPropsValues.getCompanyId(), "2");
-
-		Collection<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
-			configurationHelper.getImageAdaptiveMediaConfigurationEntries(
-				TestPropsValues.getCompanyId(), configurationEntry -> true);
-
-		Assert.assertEquals(
-			configurationEntries.toString(), 2, configurationEntries.size());
-
-		Iterator<ImageAdaptiveMediaConfigurationEntry> iterator =
-			configurationEntries.iterator();
-
-		ImageAdaptiveMediaConfigurationEntry configurationEntry =
-			iterator.next();
-
-		Assert.assertEquals("1", configurationEntry.getUUID());
-
-		configurationEntry = iterator.next();
-
-		Assert.assertEquals("2", configurationEntry.getUUID());
-	}
-
-	@Test
-	public void testGetConfigurationEntryReturnsDisabledConfiguration()
-		throws Exception {
-
+	public void testDisableDisabledConfigurationEntry() throws Exception {
 		ImageAdaptiveMediaConfigurationHelper configurationHelper =
 			_serviceTracker.getService();
 
@@ -284,11 +195,20 @@ public class ImageAdaptiveMediaConfigurationTest {
 				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
-		Assert.assertTrue(configurationEntryOptional.isPresent());
+		_assertDisabled(configurationEntryOptional);
+
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1");
+
+		configurationEntryOptional =
+			configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+				TestPropsValues.getCompanyId(), "1");
+
+		_assertDisabled(configurationEntryOptional);
 	}
 
 	@Test
-	public void testNonEmptyConfiguration() throws Exception {
+	public void testDisableFirstConfigurationEntry() throws Exception {
 		ImageAdaptiveMediaConfigurationHelper configurationHelper =
 			_serviceTracker.getService();
 
@@ -300,15 +220,73 @@ public class ImageAdaptiveMediaConfigurationTest {
 		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "1", properties);
 
-		Collection<ImageAdaptiveMediaConfigurationEntry> configurationEntries =
-			configurationHelper.getImageAdaptiveMediaConfigurationEntries(
-				TestPropsValues.getCompanyId());
+		properties = new HashMap<>();
 
-		Assert.assertFalse(configurationEntries.isEmpty());
+		properties.put("max-height", "200");
+		properties.put("max-width", "200");
+
+		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "two", "2", properties);
+
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1");
+
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			firstConfigurationEntryOptional =
+				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+					TestPropsValues.getCompanyId(), "1");
+
+		_assertDisabled(firstConfigurationEntryOptional);
+
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			secondConfigurationEntryOptional =
+				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+					TestPropsValues.getCompanyId(), "2");
+
+		_assertEnabled(secondConfigurationEntryOptional);
 	}
 
 	@Test
-	public void testNonExistantConfigurationEntry() throws Exception {
+	public void testDisableSecondConfigurationEntry() throws Exception {
+		ImageAdaptiveMediaConfigurationHelper configurationHelper =
+			_serviceTracker.getService();
+
+		Map<String, String> properties = new HashMap<>();
+
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
+
+		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "one", "1", properties);
+
+		properties = new HashMap<>();
+
+		properties.put("max-height", "200");
+		properties.put("max-width", "200");
+
+		configurationHelper.addImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "two", "2", properties);
+
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "2");
+
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			firstConfigurationEntryOptional =
+				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+					TestPropsValues.getCompanyId(), "1");
+
+		_assertEnabled(firstConfigurationEntryOptional);
+
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			secondConfigurationEntryOptional =
+				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+					TestPropsValues.getCompanyId(), "2");
+
+		_assertDisabled(secondConfigurationEntryOptional);
+	}
+
+	@Test
+	public void testDisableUniqueConfigurationEntry() throws Exception {
 		ImageAdaptiveMediaConfigurationHelper configurationHelper =
 			_serviceTracker.getService();
 
@@ -323,9 +301,42 @@ public class ImageAdaptiveMediaConfigurationTest {
 		Optional<ImageAdaptiveMediaConfigurationEntry>
 			configurationEntryOptional =
 				configurationHelper.getImageAdaptiveMediaConfigurationEntry(
-					TestPropsValues.getCompanyId(), "0");
+					TestPropsValues.getCompanyId(), "1");
 
-		Assert.assertFalse(configurationEntryOptional.isPresent());
+		_assertEnabled(configurationEntryOptional);
+
+		configurationHelper.disableImageAdaptiveMediaConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1");
+
+		configurationEntryOptional =
+			configurationHelper.getImageAdaptiveMediaConfigurationEntry(
+				TestPropsValues.getCompanyId(), "1");
+
+		_assertDisabled(configurationEntryOptional);
+	}
+
+	private void _assertDisabled(
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			configurationEntryOptional) {
+
+		Assert.assertTrue(configurationEntryOptional.isPresent());
+
+		ImageAdaptiveMediaConfigurationEntry configurationEntry =
+			configurationEntryOptional.get();
+
+		Assert.assertFalse(configurationEntry.isEnabled());
+	}
+
+	private void _assertEnabled(
+		Optional<ImageAdaptiveMediaConfigurationEntry>
+			configurationEntryOptional) {
+
+		Assert.assertTrue(configurationEntryOptional.isPresent());
+
+		ImageAdaptiveMediaConfigurationEntry configurationEntry =
+			configurationEntryOptional.get();
+
+		Assert.assertTrue(configurationEntry.isEnabled());
 	}
 
 	private static ServiceTracker

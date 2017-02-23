@@ -33,7 +33,6 @@ List<ImageAdaptiveMediaConfigurationEntry> configurationEntries = (List)request.
 %>
 
 <liferay-frontend:management-bar
-	disabled="<%= configurationEntries.size() <= 0 %>"
 	includeCheckBox="<%= true %>"
 	searchContainerId="imageConfigurationEntries"
 >
@@ -47,22 +46,26 @@ List<ImageAdaptiveMediaConfigurationEntry> configurationEntries = (List)request.
 		<liferay-frontend:management-bar-display-buttons
 			disabled="<%= true %>"
 			displayViews='<%= new String[] {"list"} %>'
-			portletURL="<%= currentURLObj %>"
+			portletURL="<%= PortletURLUtil.clone(currentURLObj, liferayPortletResponse) %>"
 			selectedDisplayStyle="list"
 		/>
 	</liferay-frontend:management-bar-buttons>
 
+	<%
+	String entriesNavigation = ParamUtil.getString(request, "entriesNavigation", "all");
+	%>
+
 	<liferay-frontend:management-bar-filters>
 		<liferay-frontend:management-bar-navigation
-			disabled="<%= true %>"
-			navigationKeys='<%= new String[] {"all"} %>'
+			disabled='<%= (configurationEntries.size() <= 0) && entriesNavigation.equals("all") %>'
+			navigationKeys='<%= new String[] {"all", "enabled", "disabled"} %>'
 			navigationParam="entriesNavigation"
-			portletURL="<%= currentURLObj %>"
+			portletURL="<%= PortletURLUtil.clone(currentURLObj, liferayPortletResponse) %>"
 		/>
 	</liferay-frontend:management-bar-filters>
 
 	<liferay-frontend:management-bar-action-buttons>
-		<liferay-frontend:management-bar-button href='<%= "javascript:" + renderResponse.getNamespace() + "deleteImageConfigurationEntries();" %>' icon="times" label="delete" />
+		<liferay-frontend:management-bar-button disabled="<%= configurationEntries.size() <= 0 %>" href='<%= "javascript:" + renderResponse.getNamespace() + "deleteImageConfigurationEntries();" %>' icon="times" label="delete" />
 	</liferay-frontend:management-bar-action-buttons>
 </liferay-frontend:management-bar>
 
@@ -118,6 +121,12 @@ PortletURL portletURL = renderResponse.createRenderURL();
 					name="name"
 					orderable="<%= false %>"
 					value="<%= configurationEntry.getName() %>"
+				/>
+
+				<liferay-ui:search-container-column-text
+					name="state"
+					orderable="<%= false %>"
+					value='<%= LanguageUtil.get(request, configurationEntry.isEnabled() ? "enabled" : "disabled") %>'
 				/>
 
 				<%

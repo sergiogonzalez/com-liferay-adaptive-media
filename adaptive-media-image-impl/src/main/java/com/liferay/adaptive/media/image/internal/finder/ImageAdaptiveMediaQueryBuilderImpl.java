@@ -17,6 +17,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
+import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaQueryBuilder;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaQueryBuilder.ConfigurationStep;
 import com.liferay.adaptive.media.image.finder.ImageAdaptiveMediaQueryBuilder.FuzzySortStep;
@@ -32,6 +33,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author Adolfo Pérez
@@ -126,8 +128,27 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		return (v1, v2) -> 0;
 	}
 
-	public String getConfigurationUuid() {
-		return _configurationUuid;
+	public Predicate<ImageAdaptiveMediaConfigurationEntry>
+		getConfigurationEntryFilter() {
+
+		if (_hasConfiguration()) {
+			return configurationEntry ->
+				_configurationUuid.equals(configurationEntry.getUUID());
+		}
+
+		return configurationEntry -> true;
+	}
+
+	public ConfigurationStatus getConfigurationStatus() {
+		if (_configurationStatus != null) {
+			return _configurationStatus;
+		}
+
+		if (_hasConfiguration()) {
+			return ImageAdaptiveMediaQueryBuilder.ConfigurationStatus.ALL;
+		}
+
+		return ImageAdaptiveMediaQueryBuilder.ConfigurationStatus.ENABLED;
 	}
 
 	public FileVersion getFileVersion() throws PortalException {
@@ -138,14 +159,6 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		_fileVersion = _fileEntry.getLatestFileVersion();
 
 		return _fileVersion;
-	}
-
-	public boolean hasConfiguration() {
-		if (Validator.isNotNull(_configurationUuid)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	public boolean hasFileVersion() {
@@ -201,9 +214,32 @@ public class ImageAdaptiveMediaQueryBuilderImpl
 		return this;
 	}
 
+	@Override
+	public InitialStep withConfigurationStatus(
+		ConfigurationStatus configurationStatus) {
+
+		if (configurationStatus == null) {
+			throw new IllegalArgumentException(
+				"Configuration status cannot be null");
+		}
+
+		_configurationStatus = configurationStatus;
+
+		return this;
+	}
+
+	private boolean _hasConfiguration() {
+		if (Validator.isNotNull(_configurationUuid)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	private final Map
 		<AdaptiveMediaAttribute<ImageAdaptiveMediaProcessor, ?>, Object>
 			_attributes = new LinkedHashMap<>();
+	private ConfigurationStatus _configurationStatus;
 	private String _configurationUuid;
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;

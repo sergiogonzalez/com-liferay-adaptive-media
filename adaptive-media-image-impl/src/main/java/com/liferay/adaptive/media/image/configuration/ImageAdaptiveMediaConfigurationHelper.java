@@ -17,12 +17,14 @@ package com.liferay.adaptive.media.image.configuration;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.adaptive.media.ImageAdaptiveMediaConfigurationException;
+import com.liferay.adaptive.media.ImageAdaptiveMediaConfigurationException.InvalidStateImageAdaptiveMediaConfigurationEntryException;
 
 import java.io.IOException;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author Alejandro Hernández
@@ -38,10 +40,28 @@ public interface ImageAdaptiveMediaConfigurationHelper {
 
 	public void deleteImageAdaptiveMediaConfigurationEntry(
 			long companyId, String uuid)
+		throws InvalidStateImageAdaptiveMediaConfigurationEntryException,
+			IOException;
+
+	public void disableImageAdaptiveMediaConfigurationEntry(
+			long companyId, String uuid)
+		throws IOException;
+
+	public void enableImageAdaptiveMediaConfigurationEntry(
+			long companyId, String uuid)
+		throws IOException;
+
+	public void forceDeleteImageAdaptiveMediaConfigurationEntry(
+			long companyId, String uuid)
 		throws IOException;
 
 	public Collection<ImageAdaptiveMediaConfigurationEntry>
 		getImageAdaptiveMediaConfigurationEntries(long companyId);
+
+	public Collection<ImageAdaptiveMediaConfigurationEntry>
+		getImageAdaptiveMediaConfigurationEntries(
+			long companyId,
+			Predicate<? super ImageAdaptiveMediaConfigurationEntry> predicate);
 
 	public Optional<ImageAdaptiveMediaConfigurationEntry>
 		getImageAdaptiveMediaConfigurationEntry(
