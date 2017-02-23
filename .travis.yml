@@ -18,10 +18,10 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_script:
-  - ./gradlew runDocker -PTEST
+  - ./gradlew runDocker -PTEST -Pdocker
 
 script:
-  - ./gradlew testIntegration
+  - ./gradlew testIntegration -Pdocker
 
 after_success:
   - ./gradlew coveralls
