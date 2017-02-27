@@ -17,7 +17,6 @@ package com.liferay.adaptive.media.image.internal.processor;
 import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
-import com.liferay.adaptive.media.image.internal.processor.util.TiffOrientationTransformer;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.internal.util.RenderedImageUtil;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImage;
@@ -110,15 +109,6 @@ public final class ImageAdaptiveMediaProcessorImpl
 			fileVersion, configurationEntry);
 
 		try {
-			Optional<Integer> orientationValueOptional =
-				_tiffOrientationTransformer.getTiffOrientationValue(
-					fileVersion.getContentStream(false));
-
-			if (orientationValueOptional.isPresent()) {
-				renderedImage = _tiffOrientationTransformer.transform(
-					renderedImage, orientationValueOptional.get());
-			}
-
 			byte[] bytes = RenderedImageUtil.getRenderedImageContentStream(
 				renderedImage, fileVersion.getMimeType());
 
@@ -151,16 +141,8 @@ public final class ImageAdaptiveMediaProcessorImpl
 		_imageProcessor = imageProcessor;
 	}
 
-	@Reference(unbind = "-")
-	public void setTiffOrientationTransformer(
-		TiffOrientationTransformer tiffOrientationTransformer) {
-
-		_tiffOrientationTransformer = tiffOrientationTransformer;
-	}
-
 	private ImageAdaptiveMediaConfigurationHelper _configurationHelper;
 	private AdaptiveMediaImageLocalService _imageLocalService;
 	private ImageProcessor _imageProcessor;
-	private TiffOrientationTransformer _tiffOrientationTransformer;
 
 }
