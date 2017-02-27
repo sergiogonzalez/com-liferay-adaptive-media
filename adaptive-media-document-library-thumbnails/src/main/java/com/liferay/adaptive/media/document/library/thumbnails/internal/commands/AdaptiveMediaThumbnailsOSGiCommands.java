@@ -173,8 +173,9 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 				Collectors.toList());
 		}
 
-		return Stream.of(companyIds).map(Long::parseLong).collect(
-			Collectors.toList());
+		Stream<String> stream = Stream.of(companyIds);
+
+		return stream.map(Long::parseLong).collect(Collectors.toList());
 	}
 
 	private FileVersion _getFileVersion(String fileName)
