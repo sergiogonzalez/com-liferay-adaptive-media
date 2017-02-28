@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.adaptive.media.document.library.repository.internal.commands;
+package com.liferay.adaptive.media.document.library.thumbnails.internal.commands;
 
-import com.liferay.adaptive.media.document.library.repository.internal.util.comparator.AdaptiveMediaConfigurationPropertiesComparator;
-import com.liferay.adaptive.media.document.library.repository.internal.util.comparator.ComparatorUtil;
+import com.liferay.adaptive.media.document.library.thumbnails.internal.util.comparator.AdaptiveMediaConfigurationPropertiesComparator;
+import com.liferay.adaptive.media.document.library.thumbnails.internal.util.comparator.ComparatorUtil;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.ImageAdaptiveMediaConstants;
+import com.liferay.adaptive.media.image.model.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
@@ -117,7 +118,7 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 					if ((fileVersion == null) ||
 						!_isMimeTypeSupported(fileVersion)) {
 
-						return;
+						continue;
 					}
 
 					// See LPS-70788
@@ -173,8 +174,9 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 				Collectors.toList());
 		}
 
-		return Stream.of(companyIds).map(Long::parseLong).collect(
-			Collectors.toList());
+		Stream<String> stream = Stream.of(companyIds);
+
+		return stream.map(Long::parseLong).collect(Collectors.toList());
 	}
 
 	private FileVersion _getFileVersion(String fileName)
@@ -226,6 +228,15 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 				FileVersion fileVersion = _getFileVersion(fileName);
 
 				if (fileVersion == null) {
+					continue;
+				}
+
+				AdaptiveMediaImage adaptiveMediaImage =
+					_imageLocalService.fetchAdaptiveMediaImage(
+						configurationEntry.getUUID(),
+						fileVersion.getFileVersionId());
+
+				if (adaptiveMediaImage != null) {
 					continue;
 				}
 
