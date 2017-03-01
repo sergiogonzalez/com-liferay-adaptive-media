@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.adaptive.media.image.rest.test.internal.activator;
+package com.liferay.adaptive.media.image.rest.test.media.internal.activator;
 
 import com.liferay.adaptive.media.demo.data.creator.ImageAdaptiveMediaConfigurationDemoDataCreator;
 import com.liferay.document.library.demo.data.creator.FileEntryDemoDataCreator;
