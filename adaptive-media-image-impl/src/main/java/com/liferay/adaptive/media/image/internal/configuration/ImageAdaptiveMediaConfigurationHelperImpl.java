@@ -240,10 +240,11 @@ public class ImageAdaptiveMediaConfigurationHelperImpl
 		Stream<ImageAdaptiveMediaConfigurationEntry> configurationEntryStream =
 			_getConfigurationEntries(companyId);
 
-		return configurationEntryStream.filter(predicate).sorted(
-			Comparator.comparing(
-				ImageAdaptiveMediaConfigurationEntry::getName)).collect(
-				Collectors.toList());
+		Comparator<ImageAdaptiveMediaConfigurationEntry> comparator =
+			Comparator.comparing(ImageAdaptiveMediaConfigurationEntry::getName);
+
+		return configurationEntryStream.filter(
+			predicate).sorted(comparator).collect(Collectors.toList());
 	}
 
 	@Override
@@ -299,6 +300,18 @@ public class ImageAdaptiveMediaConfigurationHelperImpl
 		catch (IOException | SettingsException | ValidatorException e) {
 			throw new AdaptiveMediaRuntimeException.InvalidConfiguration(e);
 		}
+	}
+
+	@Override
+	public ImageAdaptiveMediaConfigurationEntry
+			updateImageAdaptiveMediaConfigurationEntry(
+				long companyId, String name, String uuid,
+				Map<String, String> properties)
+		throws ImageAdaptiveMediaConfigurationException, IOException {
+
+		forceDeleteImageAdaptiveMediaConfigurationEntry(companyId, uuid);
+		return addImageAdaptiveMediaConfigurationEntry(
+			companyId, name, uuid, properties);
 	}
 
 	@Reference(unbind = "-")
