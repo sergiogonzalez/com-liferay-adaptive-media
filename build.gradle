@@ -179,14 +179,6 @@ configure(subprojects.findAll {!it.childProjects}) {
 	apply plugin: "com.liferay.defaults.plugin"
 	apply plugin: "jacoco"
 
-	configurations {
-		runtimeLib {
-			description = 'deployable runtime libs'
-		}
-
-		compile.extendsFrom(runtimeLib)
-	}
-
 	liferay {
 		deployDir = new File("${rootDir}/../bundles/deploy")
 	}
@@ -213,17 +205,7 @@ configure(subprojects.findAll {!it.childProjects}) {
 		systemProperty "java.io.tmpdir", "${rootDir}/build/tmpdir"
 	}
 
-	task deployRuntimeLibs(type: Copy) {
-		into liferay.deployDir
-		from configurations.runtimeLib
-		rename {
-			String fileName ->
-				fileName.replaceAll("(.*)-((\\d\\.{1})*\\d)\\.jar", "\$1.jar")
-		}
-	}
-
 	runDocker.dependsOn deploy
-	runDocker.dependsOn deployRuntimeLibs
 
 	if (project.hasProperty('docker')) {
 		setUpTestableTomcat.enabled = false
