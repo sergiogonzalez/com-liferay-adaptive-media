@@ -17,6 +17,7 @@ package com.liferay.adaptive.media.image.internal.util;
 import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
 import com.liferay.adaptive.media.image.constants.ImageAdaptiveMediaConstants;
+import com.liferay.adaptive.media.image.internal.processor.util.TiffOrientationTransformer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -24,13 +25,13 @@ import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.awt.image.RenderedImage;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.Map;
 import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adolfo Pérez
@@ -49,8 +50,9 @@ public class ImageProcessor {
 		FileVersion fileVersion,
 		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
 
-		try (InputStream is = fileVersion.getContentStream(false)) {
-			RenderedImage renderedImage = RenderedImageUtil.readImage(is);
+		try {
+			RenderedImage renderedImage = _tiffOrientationTransformer.transform(
+				() -> _getInputStream(fileVersion));
 
 			Map<String, String> properties = configurationEntry.getProperties();
 
@@ -59,9 +61,21 @@ public class ImageProcessor {
 
 			return ImageToolUtil.scale(renderedImage, maxHeight, maxWidth);
 		}
-		catch (IOException | PortalException e) {
-			throw new AdaptiveMediaRuntimeException.IOException(e);
+		catch (PortalException pe) {
+			throw new AdaptiveMediaRuntimeException.IOException(pe);
 		}
 	}
+
+	private InputStream _getInputStream(FileVersion fileVersion) {
+		try {
+			return fileVersion.getContentStream(false);
+		}
+		catch (PortalException pe) {
+			throw new AdaptiveMediaRuntimeException.IOException(pe);
+		}
+	}
+
+	@Reference
+	private TiffOrientationTransformer _tiffOrientationTransformer;
 
 }
