@@ -8,11 +8,8 @@ dependencies {
 	runtimeLib group: "org.apache.aries.jmx", name: "org.apache.aries.jmx", version: "1.1.5"
 
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge", version: "1.0.7"
-	testIntegrationCompile group: "com.liferay", name: "com.liferay.registry.api", version: "1.0.0"
-	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.0.0"
 	testIntegrationCompile project(":apps:adaptive-media:adaptive-media-api")
 	testIntegrationCompile project(":apps:adaptive-media:adaptive-media-image-api")
-	testIntegrationCompile project(":apps:adaptive-media:adaptive-media-image-impl")
 }
 
 liferay {
