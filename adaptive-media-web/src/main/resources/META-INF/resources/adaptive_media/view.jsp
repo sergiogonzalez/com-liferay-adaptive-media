@@ -75,7 +75,7 @@ ImageAdaptiveMediaConfigurationHelper imageAdaptiveMediaConfigurationHelper = (I
 PortletURL portletURL = renderResponse.createRenderURL();
 %>
 
-<div class="container-fluid-1280" id="<portlet:namespace />adaptiveMediaConfiguration">
+<div class="container-fluid-1280">
 	<c:if test="<%= imageAdaptiveMediaConfigurationHelper.isDefaultConfiguration(themeDisplay.getCompanyId()) %>">
 		<div class="alert alert-info">
 			<liferay-ui:message key="this-configuration-was-not-saved-yet" />
@@ -137,9 +137,6 @@ PortletURL portletURL = renderResponse.createRenderURL();
 					cssClass="table-cell-content"
 					name="optimized-images"
 				>
-					<div class="progress">
-						<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="<%= percentage %>" class="<%= (percentage == 100) ? "progress-bar progress-bar-success" : "progress-bar" %>" role="progressbar" style="<%= "width: " + percentage + "%;" %>"><%= percentage + "%" %></div>
-					</div>
 
 					<%
 					String uuid = String.valueOf(configurationEntry.getUUID());
