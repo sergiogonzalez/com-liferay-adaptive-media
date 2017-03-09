@@ -1,7 +1,7 @@
 Bundle-Name: Liferay Adaptive Media Image REST
 Bundle-SymbolicName: com.liferay.adaptive.media.image.rest
 Bundle-Version: 1.0.0
-ConfigurationPath: /configuration
+Configuration: /configuration
 Import-Package:\
 	!com.fasterxml.jackson.*,\
 	\
