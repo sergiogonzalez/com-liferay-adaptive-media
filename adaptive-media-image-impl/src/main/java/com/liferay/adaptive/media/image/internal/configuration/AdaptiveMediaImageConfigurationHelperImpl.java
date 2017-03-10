@@ -207,10 +207,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			return;
 		}
 
-		configurationEntryOptional.ifPresent(
-			configurationEntry ->
-				_imageEntryLocalService.deleteAdaptiveMediaImageEntries(
-					companyId, configurationEntry));
+		_imageEntryLocalService.deleteAdaptiveMediaImageEntries(
+			companyId, configurationEntry.get());
 
 		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
 			getAdaptiveMediaImageConfigurationEntries(
