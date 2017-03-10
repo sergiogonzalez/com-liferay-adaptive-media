@@ -16,11 +16,11 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.commands
 
 import com.liferay.adaptive.media.document.library.thumbnails.internal.util.comparator.AdaptiveMediaConfigurationPropertiesComparator;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.util.comparator.ComparatorUtil;
-import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.ImageAdaptiveMediaConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.ImageAdaptiveMediaConstants;
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImage;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageLocalService;
+import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.document.library.kernel.util.DLPreviewableProcessor;
@@ -139,10 +139,10 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 
 	public void migrate(String... companyIds) {
 		for (long companyId : _getCompanyIds(companyIds)) {
-			Collection<ImageAdaptiveMediaConfigurationEntry>
+			Collection<AdaptiveMediaImageConfigurationEntry>
 				configurationEntries =
 					_configurationHelper.
-						getImageAdaptiveMediaConfigurationEntries(companyId);
+						getAdaptiveMediaImageConfigurationEntries(companyId);
 
 			AdaptiveMediaConfigurationPropertiesComparator<Integer>
 				widthComparator = ComparatorUtil.distanceTo(
@@ -153,11 +153,11 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 					"max-height",
 					PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT);
 
-			Optional<ImageAdaptiveMediaConfigurationEntry>
+			Optional<AdaptiveMediaImageConfigurationEntry>
 				configurationEntryOptional =
 					configurationEntries.stream().sorted(
 						Comparator.comparing(
-							ImageAdaptiveMediaConfigurationEntry::getProperties,
+							AdaptiveMediaImageConfigurationEntry::getProperties,
 							widthComparator.thenComparing(heightComparator))).
 						findFirst();
 
@@ -209,14 +209,14 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 
 	private boolean _isMimeTypeSupported(FileVersion fileVersion) {
 		Set<String> supportedMimeTypes =
-			ImageAdaptiveMediaConstants.getSupportedMimeTypes();
+			AdaptiveMediaImageConstants.getSupportedMimeTypes();
 
 		return supportedMimeTypes.contains(fileVersion.getMimeType());
 	}
 
 	private void _migrate(
 		long companyId,
-		ImageAdaptiveMediaConfigurationEntry configurationEntry) {
+		AdaptiveMediaImageConfigurationEntry configurationEntry) {
 
 		try {
 			String[] fileNames = DLStoreUtil.getFileNames(
@@ -230,12 +230,12 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 					continue;
 				}
 
-				AdaptiveMediaImage adaptiveMediaImage =
-					_imageLocalService.fetchAdaptiveMediaImage(
+				AdaptiveMediaImageEntry imageEntry =
+					_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
 						configurationEntry.getUUID(),
 						fileVersion.getFileVersionId());
 
-				if (adaptiveMediaImage != null) {
+				if (imageEntry != null) {
 					continue;
 				}
 
@@ -252,7 +252,7 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 
 				RenderedImage renderedImage = imageBag.getRenderedImage();
 
-				_imageLocalService.addAdaptiveMediaImage(
+				_imageEntryLocalService.addAdaptiveMediaImageEntry(
 					configurationEntry, fileVersion, renderedImage.getWidth(),
 					renderedImage.getHeight(),
 					new UnsyncByteArrayInputStream(bytes), bytes.length);
@@ -273,12 +273,12 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 	private CompanyLocalService _companyLocalService;
 
 	@Reference
-	private ImageAdaptiveMediaConfigurationHelper _configurationHelper;
+	private AdaptiveMediaImageConfigurationHelper _configurationHelper;
 
 	@Reference
 	private DLAppLocalService _dlAppLocalService;
 
 	@Reference
-	private AdaptiveMediaImageLocalService _imageLocalService;
+	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
 
 }
