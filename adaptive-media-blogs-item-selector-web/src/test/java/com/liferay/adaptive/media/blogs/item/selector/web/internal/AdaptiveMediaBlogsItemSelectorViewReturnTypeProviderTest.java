@@ -14,7 +14,8 @@
 
 package com.liferay.adaptive.media.blogs.item.selector.web.internal;
 
-import com.liferay.adaptive.media.image.item.selector.ImageAdaptiveMediaURLItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageURLItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorViewReturnTypeProvider;
 import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
@@ -35,8 +36,7 @@ public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
 	extends PowerMockito {
 
 	@Test
-	public void
-			testAddImageAdaptiveMediaURLItemSelectorReturnTypeWithEmptyList()
+	public void testAddAdaptiveMediaImageURLItemSelectorReturnTypeWithEmptyList()
 		throws Exception {
 
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
@@ -51,20 +51,20 @@ public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
 					supportedItemSelectorReturnTypes);
 
 		Assert.assertEquals(
-			itemSelectorReturnTypes.toString(), 1,
+			itemSelectorReturnTypes.toString(), 2,
 			itemSelectorReturnTypes.size());
 
-		ItemSelectorReturnType itemSelectorReturnType =
-			itemSelectorReturnTypes.get(0);
+		Assert.assertTrue(
+			itemSelectorReturnTypes.get(0) instanceof
+				AdaptiveMediaImageFileEntryItemSelectorReturnType);
 
 		Assert.assertTrue(
-			itemSelectorReturnType instanceof
-				ImageAdaptiveMediaURLItemSelectorReturnType);
+			itemSelectorReturnTypes.get(1) instanceof
+				AdaptiveMediaImageURLItemSelectorReturnType);
 	}
 
 	@Test
-	public void
-			testAddImageAdaptiveMediaURLItemSelectorReturnTypeWithNonEmptyList()
+	public void testAddAdaptiveMediaImageURLItemSelectorReturnTypeWithNonEmptyList()
 		throws Exception {
 
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
@@ -83,7 +83,7 @@ public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
 					supportedItemSelectorReturnTypes);
 
 		Assert.assertEquals(
-			itemSelectorReturnTypes.toString(), 3,
+			itemSelectorReturnTypes.toString(), 4,
 			itemSelectorReturnTypes.size());
 
 		Assert.assertTrue(
@@ -94,7 +94,10 @@ public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
 				URLItemSelectorReturnType);
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(2) instanceof
-				ImageAdaptiveMediaURLItemSelectorReturnType);
+				AdaptiveMediaImageFileEntryItemSelectorReturnType);
+		Assert.assertTrue(
+			itemSelectorReturnTypes.get(3) instanceof
+				AdaptiveMediaImageURLItemSelectorReturnType);
 	}
 
 }
