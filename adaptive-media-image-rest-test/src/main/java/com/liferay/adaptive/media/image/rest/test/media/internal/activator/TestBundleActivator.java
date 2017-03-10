@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- * <p>
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- * <p>
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.rest.test.media.internal.activator;
 
-import com.liferay.adaptive.media.demo.data.creator.ImageAdaptiveMediaConfigurationDemoDataCreator;
+import com.liferay.adaptive.media.demo.data.creator.AdaptiveMediaImageConfigurationDemoDataCreator;
 import com.liferay.document.library.demo.data.creator.FileEntryDemoDataCreator;
 import com.liferay.document.library.demo.data.creator.RootFolderDemoDataCreator;
 import com.liferay.portal.kernel.messaging.Destination;
@@ -39,7 +39,7 @@ public class TestBundleActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		_adaptiveMediaDemoDataCreator = _getService(
 			bundleContext,
-			ImageAdaptiveMediaConfigurationDemoDataCreator.class);
+			AdaptiveMediaImageConfigurationDemoDataCreator.class);
 
 		_fileEntryDemoDataCreator = _getService(
 			bundleContext, FileEntryDemoDataCreator.class);
@@ -101,7 +101,7 @@ public class TestBundleActivator implements BundleActivator {
 		return bundleContext.getService(serviceReference);
 	}
 
-	private ImageAdaptiveMediaConfigurationDemoDataCreator
+	private AdaptiveMediaImageConfigurationDemoDataCreator
 		_adaptiveMediaDemoDataCreator;
 	private FileEntryDemoDataCreator _fileEntryDemoDataCreator;
 	private OmniAdminUserDemoDataCreator _omniAdminUserDemoDataCreator;
