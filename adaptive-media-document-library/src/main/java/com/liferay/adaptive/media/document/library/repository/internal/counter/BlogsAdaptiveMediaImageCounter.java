@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.document.library.repository.internal.counter;
 
-import com.liferay.adaptive.media.image.constants.ImageAdaptiveMediaConstants;
+import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.counter.AdaptiveMediaImageCounter;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
@@ -37,7 +37,7 @@ public class BlogsAdaptiveMediaImageCounter
 	implements AdaptiveMediaImageCounter {
 
 	@Override
-	public int countExpectedAdaptiveMediaImages(long companyId) {
+	public int countExpectedAdaptiveMediaImageEntries(long companyId) {
 		DynamicQuery dynamicQuery = _dlFileEntryLocalService.dynamicQuery();
 
 		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
@@ -56,7 +56,7 @@ public class BlogsAdaptiveMediaImageCounter
 
 		dynamicQuery.add(
 			mimeTypeProperty.in(
-				ImageAdaptiveMediaConstants.getSupportedMimeTypes()));
+				AdaptiveMediaImageConstants.getSupportedMimeTypes()));
 
 		return (int)_dlFileEntryLocalService.dynamicQueryCount(dynamicQuery);
 	}
