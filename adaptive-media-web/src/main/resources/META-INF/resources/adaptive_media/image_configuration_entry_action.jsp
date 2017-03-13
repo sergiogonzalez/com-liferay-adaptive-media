@@ -23,19 +23,17 @@ AdaptiveMediaImageConfigurationEntry configurationEntry = (AdaptiveMediaImageCon
 
 boolean optimizeImagesEnabled = true;
 
-List<BackgroundTask> reindexSingleBackgroundTasks = BackgroundTaskManagerUtil.getBackgroundTasks(CompanyConstants.SYSTEM, OptimizeImagesSingleConfigurationBackgroundTaskExecutor.class.getName(), BackgroundTaskConstants.STATUS_IN_PROGRESS);
+List<BackgroundTask> optimizeImageSigleBackgroundTasks = (List<BackgroundTask>)request.getAttribute("view.jsp-optimizeImageSigleBackgroundTasks");
 
-if (!reindexSingleBackgroundTasks.isEmpty()) {
-	for (BackgroundTask reindexSingleBackgroundTask : reindexSingleBackgroundTasks) {
-		Map<String, Serializable> taskContextMap = reindexSingleBackgroundTask.getTaskContextMap();
+for (BackgroundTask optimizeImageSigleBackgroundTask : optimizeImageSigleBackgroundTasks) {
+	Map<String, Serializable> taskContextMap = optimizeImageSigleBackgroundTask.getTaskContextMap();
 
-		String configurationEntryUuid = (String)taskContextMap.get("configurationEntryUuid");
+	String configurationEntryUuid = (String)taskContextMap.get("configurationEntryUuid");
 
-		if (configurationEntryUuid.equals(configurationEntry.getUUID())) {
-			optimizeImagesEnabled = false;
+	if (configurationEntryUuid.equals(configurationEntry.getUUID())) {
+		optimizeImagesEnabled = false;
 
-			break;
-		}
+		break;
 	}
 }
 %>
@@ -83,9 +81,19 @@ if (!reindexSingleBackgroundTasks.isEmpty()) {
 			<portlet:param name="entryUuid" value="<%= String.valueOf(configurationEntry.getUUID()) %>" />
 		</portlet:actionURL>
 
+		<%
+		String onClick = renderResponse.getNamespace() + "optimizeRemaining('" + configurationEntry.getUUID() + "', '" + optimizeImagesURL.toString() + "');";
+
+		int percentage = AdaptiveMediaImageEntryLocalServiceUtil.getPercentage(themeDisplay.getCompanyId(), configurationEntry.getUUID());
+
+		String cssClass = (!configurationEntry.isEnabled() || percentage == 100) ? "disabled" : "";
+		%>
+
 		<liferay-ui:icon
+			cssClass="<%= cssClass %>"
 			message="optimize-remaining"
-			url="<%= optimizeImagesURL %>"
+			onClick="<%= onClick %>"
+			url="javascript:;"
 		/>
 
 		<portlet:actionURL name="/adaptive_media/delete_image_configuration_entry" var="deleteImageConfigurationEntryURL">

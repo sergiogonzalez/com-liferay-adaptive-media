@@ -75,7 +75,7 @@ AdaptiveMediaImageConfigurationHelper adaptiveMediaImageConfigurationHelper = (A
 PortletURL portletURL = renderResponse.createRenderURL();
 %>
 
-<div class="container-fluid-1280">
+<div class="container-fluid-1280" id="<portlet:namespace />adaptiveMediaConfiguration">
 	<c:if test="<%= adaptiveMediaImageConfigurationHelper.isDefaultConfiguration(themeDisplay.getCompanyId()) %>">
 		<div class="alert alert-info">
 			<liferay-ui:message key="this-configuration-was-not-saved-yet" />
@@ -86,6 +86,20 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 	<%
 	int optimizeImagesAllConfigurationsBackgroundTasksCount = BackgroundTaskManagerUtil.getBackgroundTasksCount(CompanyConstants.SYSTEM, OptimizeImagesAllConfigurationsBackgroundTaskExecutor.class.getName(), false);
+
+	List<BackgroundTask> optimizeImageSigleBackgroundTasks = BackgroundTaskManagerUtil.getBackgroundTasks(CompanyConstants.SYSTEM, OptimizeImagesSingleConfigurationBackgroundTaskExecutor.class.getName(), BackgroundTaskConstants.STATUS_IN_PROGRESS);
+
+	request.setAttribute("view.jsp-optimizeImageSigleBackgroundTasks", optimizeImageSigleBackgroundTasks);
+
+	List<String> currentBackgroundTaskConfigurationEntryUuids = new ArrayList<>();
+
+	for (BackgroundTask optimizeImageSigleBackgroundTask : optimizeImageSigleBackgroundTasks) {
+		Map<String, Serializable> taskContextMap = optimizeImageSigleBackgroundTask.getTaskContextMap();
+
+		String configurationEntryUuid = (String)taskContextMap.get("configurationEntryUuid");
+
+		currentBackgroundTaskConfigurationEntryUuids.add(configurationEntryUuid);
+	}
 	%>
 
 	<aui:form action="<%= deleteImageConfigurationEntryURL.toString() %>" method="post" name="fm">
@@ -137,9 +151,36 @@ PortletURL portletURL = renderResponse.createRenderURL();
 					cssClass="table-cell-content"
 					name="optimized-images"
 				>
-					<div class="progress">
-						<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="<%= percentage %>" class="<%= (percentage == 100) ? "progress-bar progress-bar-success" : "progress-bar" %>" role="progressbar" style="<%= "width: " + percentage + "%;" %>"><%= percentage + "%" %></div>
-					</div>
+
+					<%
+					String rowId = row.getRowId();
+					String uuid = String.valueOf(configurationEntry.getUUID());
+					%>
+
+					<div id="<portlet:namespace />OptimizeRemaining_<%= rowId %>"></div>
+
+					<portlet:resourceURL id="/adaptive_media/optimized_images_percentage" var="optimizedImagesPercentageURL">
+						<portlet:param name="entryUuid" value="<%= uuid %>" />
+					</portlet:resourceURL>
+
+					<aui:script require="adaptive-media-web/adaptive_media/js/AdaptiveMediaProgress.es">
+						var component = Liferay.component(
+							'<portlet:namespace />OptimizeRemaining<%= uuid %>',
+							new adaptiveMediaWebAdaptive_mediaJsAdaptiveMediaProgressEs.default(
+								{
+									namespace: '<portlet:namespace />',
+									percentage: <%= percentage %>,
+									percentageUrl: '<%= optimizedImagesPercentageURL.toString() %>',
+									uuid: '<%= uuid %>'
+								},
+								<portlet:namespace />OptimizeRemaining_<%= rowId %>
+							)
+						);
+
+						<c:if test="<%= (optimizeImagesAllConfigurationsBackgroundTasksCount > 0) || currentBackgroundTaskConfigurationEntryUuids.contains(uuid) %>">
+							component.startProgress();
+						</c:if>
+					</aui:script>
 				</liferay-ui:search-container-column-text>
 
 				<%
@@ -177,6 +218,12 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 			submitForm(form);
 		}
+	}
+
+	function <portlet:namespace />optimizeRemaining(uuid, backgroundTaskUrl) {
+		var component = Liferay.component('<portlet:namespace />OptimizeRemaining' + uuid);
+
+		component.startProgress(backgroundTaskUrl);
 	}
 </aui:script>
 
