@@ -308,6 +308,10 @@ public interface AdaptiveMediaImageEntryLocalService extends BaseLocalService,
 	public void deleteAdaptiveMediaImageEntries(long companyId,
 		AdaptiveMediaImageConfigurationEntry configurationEntry);
 
+	public void deleteAdaptiveMediaImageEntryFileVersion(
+		java.lang.String configurationUuid, long fileVersionId)
+		throws PortalException;
+
 	public void deleteAdaptiveMediaImageEntryFileVersion(long fileVersionId)
 		throws PortalException;
 }
