@@ -380,6 +380,14 @@ public class AdaptiveMediaImageEntryLocalServiceWrapper
 	}
 
 	@Override
+	public void deleteAdaptiveMediaImageEntryFileVersion(
+		java.lang.String configurationUuid, long fileVersionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_adaptiveMediaImageEntryLocalService.deleteAdaptiveMediaImageEntryFileVersion(configurationUuid,
+			fileVersionId);
+	}
+
+	@Override
 	public void deleteAdaptiveMediaImageEntryFileVersion(long fileVersionId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_adaptiveMediaImageEntryLocalService.deleteAdaptiveMediaImageEntryFileVersion(fileVersionId);
