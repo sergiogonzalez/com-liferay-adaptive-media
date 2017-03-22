@@ -37,26 +37,54 @@ public class AdaptiveMediaImageConfigurationException extends Exception {
 	}
 
 	/**
-	 * This exception is raised when a configuration with the same uuid already exists.
+	 * This exception is raised when a configuration with the same name already exists.
 	 */
 	public static final class
-		DuplicateAdaptiveMediaImageConfigurationException
+		DuplicateAdaptiveMediaImageConfigurationNameException
 			extends AdaptiveMediaImageConfigurationException {
 
-		public DuplicateAdaptiveMediaImageConfigurationException() {
+		public DuplicateAdaptiveMediaImageConfigurationNameException() {
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationException(String s) {
+		public DuplicateAdaptiveMediaImageConfigurationNameException(String s) {
 			super(s);
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationException(
+		public DuplicateAdaptiveMediaImageConfigurationNameException(
 			String s, Throwable throwable) {
 
 			super(s, throwable);
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationException(
+		public DuplicateAdaptiveMediaImageConfigurationNameException(
+			Throwable throwable) {
+
+			super(throwable);
+		}
+
+	}
+
+	/**
+	 * This exception is raised when a configuration with the same uuid already exists.
+	 */
+	public static final class
+		DuplicateAdaptiveMediaImageConfigurationUuidException
+			extends AdaptiveMediaImageConfigurationException {
+
+		public DuplicateAdaptiveMediaImageConfigurationUuidException() {
+		}
+
+		public DuplicateAdaptiveMediaImageConfigurationUuidException(String s) {
+			super(s);
+		}
+
+		public DuplicateAdaptiveMediaImageConfigurationUuidException(
+			String s, Throwable throwable) {
+
+			super(s, throwable);
+		}
+
+		public DuplicateAdaptiveMediaImageConfigurationUuidException(
 			Throwable throwable) {
 
 			super(throwable);
@@ -87,6 +115,29 @@ public class AdaptiveMediaImageConfigurationException extends Exception {
 
 	}
 
+	/**
+	 * This exception is raised when the name of the configuration is not valid.
+	 */
+	public static final class InvalidNameException
+		extends AdaptiveMediaImageConfigurationException {
+
+		public InvalidNameException() {
+		}
+
+		public InvalidNameException(String s) {
+			super(s);
+		}
+
+		public InvalidNameException(String s, Throwable throwable) {
+			super(s, throwable);
+		}
+
+		public InvalidNameException(Throwable throwable) {
+			super(throwable);
+		}
+
+	}
+
 	public static final class
 		InvalidStateAdaptiveMediaImageConfigurationException
 			extends AdaptiveMediaImageConfigurationException {
@@ -107,6 +158,29 @@ public class AdaptiveMediaImageConfigurationException extends Exception {
 		public InvalidStateAdaptiveMediaImageConfigurationException(
 			Throwable throwable) {
 
+			super(throwable);
+		}
+
+	}
+
+	/**
+	 * This exception is raised when the uuid of the configuration is not valid.
+	 */
+	public static final class InvalidUuidException
+		extends AdaptiveMediaImageConfigurationException {
+
+		public InvalidUuidException() {
+		}
+
+		public InvalidUuidException(String s) {
+			super(s);
+		}
+
+		public InvalidUuidException(String s, Throwable throwable) {
+			super(s, throwable);
+		}
+
+		public InvalidUuidException(Throwable throwable) {
 			super(throwable);
 		}
 

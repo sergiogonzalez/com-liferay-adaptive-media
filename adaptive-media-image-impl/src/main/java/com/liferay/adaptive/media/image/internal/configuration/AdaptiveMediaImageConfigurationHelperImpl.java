@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
@@ -63,15 +64,18 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 				Map<String, String> properties)
 		throws AdaptiveMediaImageConfigurationException, IOException {
 
+		_checkName(name);
+		_checkProperties(properties);
+
 		String normalizedUuid = FriendlyURLNormalizerUtil.normalize(uuid);
 
-		_checkProperties(properties);
+		_checkUuid(normalizedUuid);
 
 		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
 			getAdaptiveMediaImageConfigurationEntries(
 				companyId, configurationEntry -> true);
 
-		_checkDuplicates(configurationEntries, normalizedUuid);
+		_checkDuplicates(configurationEntries, name, normalizedUuid);
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
 			configurationEntries.stream().filter(
@@ -319,9 +323,12 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 				Map<String, String> properties)
 		throws AdaptiveMediaImageConfigurationException, IOException {
 
+		_checkName(name);
+		_checkProperties(properties);
+
 		String normalizedUuid = FriendlyURLNormalizerUtil.normalize(newUuid);
 
-		_checkProperties(properties);
+		_checkUuid(normalizedUuid);
 
 		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
 			getAdaptiveMediaImageConfigurationEntries(
@@ -343,7 +350,7 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			oldConfigurationEntryOptional.get();
 
 		if (!oldUuid.equals(normalizedUuid)) {
-			_checkDuplicates(configurationEntries, normalizedUuid);
+			_checkDuplicates(configurationEntries, name, normalizedUuid);
 		}
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
@@ -374,18 +381,38 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 	private void _checkDuplicates(
 			Collection<AdaptiveMediaImageConfigurationEntry>
 				configurationEntries,
-			String uuid)
+			String name, String uuid)
 		throws AdaptiveMediaImageConfigurationException {
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
-			duplicateConfigurationEntryOptional =
+			duplicateNameConfigurationEntryOptional =
+				configurationEntries.stream().filter(
+					configurationEntry -> configurationEntry.getName().equals(
+						name)).findFirst();
+
+		if (duplicateNameConfigurationEntryOptional.isPresent()) {
+			throw new AdaptiveMediaImageConfigurationException.
+				DuplicateAdaptiveMediaImageConfigurationNameException();
+		}
+
+		Optional<AdaptiveMediaImageConfigurationEntry>
+			duplicateUuidConfigurationEntryOptional =
 				configurationEntries.stream().filter(
 					configurationEntry -> configurationEntry.getUUID().equals(
 						uuid)).findFirst();
 
-		if (duplicateConfigurationEntryOptional.isPresent()) {
+		if (duplicateUuidConfigurationEntryOptional.isPresent()) {
 			throw new AdaptiveMediaImageConfigurationException.
-				DuplicateAdaptiveMediaImageConfigurationException();
+				DuplicateAdaptiveMediaImageConfigurationUuidException();
+		}
+	}
+
+	private void _checkName(String name)
+		throws AdaptiveMediaImageConfigurationException {
+
+		if (Validator.isNull(name)) {
+			throw new AdaptiveMediaImageConfigurationException.
+				InvalidNameException();
 		}
 	}
 
@@ -406,6 +433,15 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			throw new
 				AdaptiveMediaImageConfigurationException.
 					InvalidWidthException();
+		}
+	}
+
+	private void _checkUuid(String uuid)
+		throws AdaptiveMediaImageConfigurationException {
+
+		if (Validator.isNull(uuid)) {
+			throw new AdaptiveMediaImageConfigurationException.
+				InvalidUuidException();
 		}
 	}
 
