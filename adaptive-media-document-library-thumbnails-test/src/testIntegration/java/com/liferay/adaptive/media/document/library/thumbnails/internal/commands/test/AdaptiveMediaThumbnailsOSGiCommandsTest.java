@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.commands
 
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.DestinationReplacer;
+import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.PropsValuesReplacer;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
@@ -70,6 +71,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
@@ -103,6 +106,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		_finder = registry.getService(_finderServiceReference);
 
 		_disableAdaptiveMediaThumbnails();
+		_disableDocumentLibraryAdaptiveMedia();
 	}
 
 	@AfterClass
@@ -112,6 +116,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		registry.ungetService(_configurationHelperServiceReference);
 		registry.ungetService(_finderServiceReference);
 
+		_enableDocumentLibraryAdaptiveMedia();
 		_enableAdaptiveMediaThumbnails();
 	}
 
@@ -127,14 +132,8 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 			_company.getCompanyId(), _user.getUserId(),
 			GroupConstants.DEFAULT_PARENT_GROUP_ID);
 
-		Map<String, String> properties = new HashMap<>();
-
-		properties.put("max-height", "100");
-		properties.put("max-width", "100");
-
-		_configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION,
-			_THUMBNAIL_CONFIGURATION, properties);
+		_addConfiguration(100, 100);
+		_addConfiguration(300, 300);
 
 		_serviceContext = ServiceContextTestUtil.getServiceContext(
 			_group, _user.getUserId());
@@ -145,7 +144,10 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	@After
 	public void tearDown() throws Exception {
 		_configurationHelper.forceDeleteAdaptiveMediaImageConfigurationEntry(
-			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION);
+			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 100);
+
+		_configurationHelper.forceDeleteAdaptiveMediaImageConfigurationEntry(
+			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 300);
 
 		FileVersion latestFileVersion = _pngFileEntry.getFileVersion();
 
@@ -220,7 +222,11 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public void testMigrateOnlyProcessesImages() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_ADAPTIVE_MEDIA_PROCESSOR)) {
+				_ADAPTIVE_MEDIA_PROCESSOR);
+			PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
+				"DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT", 100);
+			PropsValuesReplacer propsValuesReplacer2 = new PropsValuesReplacer(
+				"DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH", 100)) {
 
 			FileEntry pdfFileEntry = _addPDFFileEntry();
 			FileEntry pngFileEntry = _addPNGFileEntry();
@@ -228,7 +234,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 			_migrate();
 
 			Assert.assertEquals(0, _getAdaptiveMediaCount(pdfFileEntry));
-			Assert.assertEquals(1, _getAdaptiveMediaCount(pngFileEntry));
+			Assert.assertEquals(2, _getAdaptiveMediaCount(pngFileEntry));
 		}
 	}
 
@@ -260,6 +266,25 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		promise.getValue();
 	}
 
+	private static void _disableDocumentLibraryAdaptiveMedia()
+		throws BundleException {
+
+		Bundle bundle = FrameworkUtil.getBundle(
+			AdaptiveMediaThumbnailsOSGiCommandsTest.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		for (Bundle curBundle : bundleContext.getBundles()) {
+			if (_BUNDLE_SYMBOLIC_NAME.equals(curBundle.getSymbolicName())) {
+				if (curBundle.getState() == Bundle.ACTIVE) {
+					curBundle.stop();
+				}
+
+				break;
+			}
+		}
+	}
+
 	private static void _enableAdaptiveMediaThumbnails() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
@@ -282,6 +307,36 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 			componentDescriptionDTO);
 
 		promise.getValue();
+	}
+
+	private static void _enableDocumentLibraryAdaptiveMedia()
+		throws BundleException {
+
+		Bundle bundle = FrameworkUtil.getBundle(
+			AdaptiveMediaThumbnailsOSGiCommandsTest.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		for (Bundle curBundle : bundleContext.getBundles()) {
+			if (_BUNDLE_SYMBOLIC_NAME.equals(curBundle.getSymbolicName())) {
+				if (curBundle.getState() != Bundle.ACTIVE) {
+					curBundle.start();
+				}
+
+				break;
+			}
+		}
+	}
+
+	private void _addConfiguration(int width, int height) throws Exception {
+		Map<String, String> properties = new HashMap<>();
+
+		properties.put("max-height", String.valueOf(height));
+		properties.put("max-width", String.valueOf(width));
+
+		_configurationHelper.addAdaptiveMediaImageConfigurationEntry(
+			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + width,
+			_THUMBNAIL_CONFIGURATION + width, properties);
 	}
 
 	private FileEntry _addPDFFileEntry() throws Exception {
@@ -309,8 +364,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	private long _getAdaptiveMediaCount(FileEntry fileEntry) throws Exception {
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> stream =
 			_finder.getAdaptiveMedia(
-				queryBuilder -> queryBuilder.forFileEntry(fileEntry).
-					forConfiguration(_THUMBNAIL_CONFIGURATION).done());
+				queryBuilder -> queryBuilder.allForFileEntry(fileEntry).done());
 
 		return stream.count();
 	}
@@ -350,6 +404,9 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 	private static final String _ADAPTIVE_MEDIA_PROCESSOR =
 		"liferay/adaptive_media_processor";
+
+	private static final String _BUNDLE_SYMBOLIC_NAME =
+		"com.liferay.adaptive.media.document.library";
 
 	private static final String _COMMAND_CLASS_NAME =
 		"com.liferay.adaptive.media.document.library.thumbnails.internal." +
