@@ -18,7 +18,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_script:
-  - ./gradlew runDocker -Pdocker
+  - travis_wait ./gradlew runDocker -Pdocker
 
 script:
   - ./gradlew test testIntegration -Pdocker
