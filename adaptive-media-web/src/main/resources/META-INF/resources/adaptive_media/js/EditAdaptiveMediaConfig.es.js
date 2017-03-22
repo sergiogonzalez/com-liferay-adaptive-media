@@ -46,6 +46,39 @@ class EditAdaptiveMediaConfig extends PortletBase {
 
 		this.nameInput = nameInput;
 
+		let maxWidthInput = this.one('#maxWidth');
+		let maxHeightInput = this.one('#maxHeight');
+
+		if (maxWidthInput) {
+			this.eventHandler_.add(maxWidthInput.addEventListener('input', (event) => {
+				this.validateDimensions_(true);
+			}));
+
+			this.eventHandler_.add(maxWidthInput.addEventListener('blur', (event) => {
+				this.validateDimensions_(true);
+			}));
+		}
+
+		if (maxHeightInput) {
+			this.eventHandler_.add(maxHeightInput.addEventListener('input', (event) => {
+				this.validateDimensions_(true);
+			}));
+
+			this.eventHandler_.add(maxHeightInput.addEventListener('blur', (event) => {
+				this.validateDimensions_(true);
+			}));
+		}
+
+		this.maxWidthInput = maxWidthInput;
+
+		this.maxHeightInput = maxHeightInput;
+
+		Liferay.on('form:registered', (event) => {
+			if (event.formName === this.ns('fm')) {
+				this.validateDimensions_(false);
+			}
+		});
+
 		this.newUuidInput = this.one('#newUuid');
 	}
 
@@ -62,15 +95,23 @@ class EditAdaptiveMediaConfig extends PortletBase {
 	 * if the "Automatic" option is selected
 	 */
 	updateUuid() {
-		var newUuidInput = this.newUuidInput;
+		let newUuidInput = this.newUuidInput;
 
-		var uuidEmpty = !newUuidInput.value;
+		let uuidEmpty = !newUuidInput.value;
 
 		if (this.isAutomaticUuid_() && (uuidEmpty || this._originalUuidChanged)) {
 			newUuidInput.value = Liferay.Util.normalizeFriendlyURL(this.nameInput.value);
 		}
 
 		this._originalUuidChanged = true;
+	}
+
+	/**
+	 * Returns if the "Automatic" check is selected
+	 * @return {Boolean} whether the "Automatic" radiobutton is checked or not.
+	 */
+	isAutomaticUuid_() {
+		return this.one('input:checked', '#idOptions').value === 'true';
 	}
 
 	/**
@@ -97,11 +138,32 @@ class EditAdaptiveMediaConfig extends PortletBase {
 	}
 
 	/**
-	 * Returns if the "Automatic" check is selected
-	 * @return {Boolean} whether the "Automatic" radiobutton is checked or not.
+	 * Checks if max-widht or max-height has a value.
+	 *
+	 * @param  {Boolean} validateFields whether the dimensions values
+	 * have to be validated or not.
+	 *
+	 * @protected
 	 */
-	isAutomaticUuid_() {
-		return this.one('input:checked', '#idOptions').value === 'true';
+	validateDimensions_(validateFields) {
+		let form = Liferay.Form.get(this.ns('fm'));
+
+		let nsMaxWidth = this.ns('maxWidth');
+		let nsMaxHeight = this.ns('maxHeight');
+
+		if (this.maxWidthInput.value || this.maxHeightInput.value) {
+			form.removeRule(nsMaxWidth, 'required');
+			form.removeRule(nsMaxHeight, 'required');
+		}
+		else {
+			form.addRule(nsMaxWidth, 'required');
+			form.addRule(nsMaxHeight, 'required');
+
+			if (validateFields) {
+				form.formValidator.validateField(nsMaxWidth);
+				form.formValidator.validateField(nsMaxHeight);
+			}
+		}
 	}
 }
 

@@ -38,8 +38,7 @@ if (configurationEntry != null) {
 
 <div class="container-fluid-1280">
 	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.DuplicateAdaptiveMediaImageConfigurationException.class %>" message="there-is-already-a-configuration-with-the-same-id" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidHeightException.class %>" message="please-enter-a-max-height-value-larger-than-0" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidWidthException.class %>" message="please-enter-a-max-width-value-larger-than-0" />
+	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidWidthOrHeightException.class %>" message="please-enter-a-max-width-or-max-height-value-larger-than-0" />
 
 	<portlet:actionURL name="/adaptive_media/edit_image_configuration_entry" var="editImageConfigurationEntryURL">
 		<portlet:param name="mvcRenderCommandName" value="/adaptive_media/edit_image_configuration_entry" />
@@ -51,11 +50,16 @@ if (configurationEntry != null) {
 
 		<aui:fieldset-group markupView="lexicon">
 			<aui:fieldset>
-				<c:if test="<%= !configurationEntryEditable %>">
-					<div class="alert alert-info">
-						<liferay-ui:message key="this-resolution-has-already-optimized-images" />
-					</div>
-				</c:if>
+				<div class="alert alert-info">
+					<c:choose>
+						<c:when test="<%= configurationEntryEditable %>">
+							<liferay-ui:message key="at-least-one-dimension-value-is-required" />
+						</c:when>
+						<c:otherwise>
+							<liferay-ui:message key="this-resolution-has-already-optimized-images" />
+						</c:otherwise>
+					</c:choose>
+				</div>
 
 				<div class="row">
 					<div class="col-md-6">
@@ -65,11 +69,15 @@ if (configurationEntry != null) {
 
 				<div class="row">
 					<div class="col-md-3">
-						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-width-px" name="maxWidth" required="<%= true %>" value='<%= (properties != null) ? properties.get("max-width") : StringPool.BLANK %>' />
+						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-width-px" name="maxWidth" value='<%= (properties != null) ? properties.get("max-width") : StringPool.BLANK %>' >
+							<aui:validator name="number" />
+						</aui:input>
 					</div>
 
 					<div class="col-md-3">
-						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-height-px" name="maxHeight" required="<%= true %>" value='<%= (properties != null) ? properties.get("max-height") : StringPool.BLANK %>' />
+						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-height-px" name="maxHeight" value='<%= (properties != null) ? properties.get("max-height") : StringPool.BLANK %>' >
+							<aui:validator name="number" />
+						</aui:input>
 					</div>
 				</div>
 
