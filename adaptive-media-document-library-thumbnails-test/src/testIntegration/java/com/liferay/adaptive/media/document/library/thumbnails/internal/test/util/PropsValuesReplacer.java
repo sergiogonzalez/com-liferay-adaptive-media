@@ -15,6 +15,7 @@
 package com.liferay.adaptive.media.document.library.thumbnails.internal.test.util;
 
 import com.liferay.portal.kernel.util.ReflectionUtil;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.lang.reflect.Field;
@@ -25,6 +26,10 @@ import java.lang.reflect.Field;
 public class PropsValuesReplacer implements AutoCloseable {
 
 	public PropsValuesReplacer(String name, Object value) throws Exception {
+		_name = name;
+
+		PropsUtil.set(name, String.valueOf(value));
+
 		_field = ReflectionUtil.getDeclaredField(PropsValues.class, name);
 
 		_oldValue = _field.get(null);
@@ -34,12 +39,15 @@ public class PropsValuesReplacer implements AutoCloseable {
 
 	@Override
 	public void close() throws Exception {
+		PropsUtil.set(_name, String.valueOf(_oldValue));
+
 		_field.set(null, _oldValue);
 
 		ReflectionUtil.unfinalField(_field);
 	}
 
 	private final Field _field;
+	private final String _name;
 	private final Object _oldValue;
 
 }
