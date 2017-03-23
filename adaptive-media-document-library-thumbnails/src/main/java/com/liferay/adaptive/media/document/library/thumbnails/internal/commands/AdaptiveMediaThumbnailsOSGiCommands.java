@@ -14,8 +14,6 @@
 
 package com.liferay.adaptive.media.document.library.thumbnails.internal.commands;
 
-import com.liferay.adaptive.media.document.library.thumbnails.internal.util.comparator.AdaptiveMediaConfigurationPropertiesComparator;
-import com.liferay.adaptive.media.document.library.thumbnails.internal.util.comparator.ComparatorUtil;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
@@ -43,13 +41,12 @@ import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -82,15 +79,23 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 				int companyTotal = 0;
 
 				for (String fileName : fileNames) {
-					FileVersion fileVersion = _getFileVersion(fileName);
 
-					if ((fileVersion == null) ||
-						!_isMimeTypeSupported(fileVersion)) {
+					// See LPS-70788
 
-						continue;
+					String actualFileName = StringUtil.replace(
+						fileName, "//", StringPool.SLASH);
+
+					for (ThumbnailConfiguration thumbnailConfiguration :
+							_thumbnailConfigurations) {
+
+						FileVersion fileVersion = _getFileVersion(
+							thumbnailConfiguration.getFileVersionId(
+								actualFileName));
+
+						if (fileVersion != null) {
+							companyTotal += 1;
+						}
 					}
-
-					companyTotal += 1;
 				}
 
 				System.out.printf("%d\t\t%d%n", companyId, companyTotal);
@@ -113,22 +118,25 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 					DLPreviewableProcessor.THUMBNAIL_PATH);
 
 				for (String fileName : fileNames) {
-					FileVersion fileVersion = _getFileVersion(fileName);
-
-					if ((fileVersion == null) ||
-						!_isMimeTypeSupported(fileVersion)) {
-
-						continue;
-					}
 
 					// See LPS-70788
 
 					String actualFileName = StringUtil.replace(
 						fileName, "//", StringPool.SLASH);
 
-					DLStoreUtil.deleteFile(
-						companyId, DLPreviewableProcessor.REPOSITORY_ID,
-						actualFileName);
+					for (ThumbnailConfiguration thumbnailConfiguration :
+							_thumbnailConfigurations) {
+
+						FileVersion fileVersion = _getFileVersion(
+							thumbnailConfiguration.getFileVersionId(
+								actualFileName));
+
+						if (fileVersion != null) {
+							DLStoreUtil.deleteFile(
+								companyId, DLPreviewableProcessor.REPOSITORY_ID,
+								actualFileName);
+						}
+					}
 				}
 			}
 			catch (Exception e) {
@@ -144,25 +152,46 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 					_configurationHelper.
 						getAdaptiveMediaImageConfigurationEntries(companyId);
 
-			AdaptiveMediaConfigurationPropertiesComparator<Integer>
-				widthComparator = ComparatorUtil.distanceTo(
-					"max-width", PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH);
+			if (!_isValidConfigurationEntries(configurationEntries)) {
+				System.out.println(
+					"No valid Adaptive Media configuration found. Please " +
+						"refer to the upgrade documentation for the details.");
 
-			AdaptiveMediaConfigurationPropertiesComparator<Integer>
-				heightComparator = ComparatorUtil.distanceTo(
-					"max-height",
-					PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT);
+				return;
+			}
 
-			Optional<AdaptiveMediaImageConfigurationEntry>
-				configurationEntryOptional =
-					configurationEntries.stream().sorted(
-						Comparator.comparing(
-							AdaptiveMediaImageConfigurationEntry::getProperties,
-							widthComparator.thenComparing(heightComparator))).
-						findFirst();
+			try {
+				String[] fileNames = DLStoreUtil.getFileNames(
+					companyId, DLPreviewableProcessor.REPOSITORY_ID,
+					DLPreviewableProcessor.THUMBNAIL_PATH);
 
-			configurationEntryOptional.ifPresent(configurationEntry ->
-				_migrate(companyId, configurationEntry));
+				for (String fileName : fileNames) {
+
+					// See LPS-70788
+
+					String actualFileName = StringUtil.replace(
+						fileName, "//", StringPool.SLASH);
+
+					for (ThumbnailConfiguration thumbnailConfiguration :
+							_thumbnailConfigurations) {
+
+						Optional<AdaptiveMediaImageConfigurationEntry>
+							configurationEntryOptional =
+								thumbnailConfiguration.
+									selectMatchingConfigurationEntry(
+										configurationEntries);
+
+						configurationEntryOptional.ifPresent(
+							configurationEntry ->
+								_migrate(
+									actualFileName, configurationEntry,
+									thumbnailConfiguration));
+					}
+				}
+			}
+			catch (PortalException pe) {
+				_log.error(pe);
+			}
 		}
 	}
 
@@ -178,17 +207,13 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 			Collectors.toList());
 	}
 
-	private FileVersion _getFileVersion(String fileName)
+	private FileVersion _getFileVersion(long fileVersionId)
 		throws PortalException {
 
 		try {
-			Matcher matcher = _FILE_NAME_PATTERN.matcher(fileName);
-
-			if (!matcher.matches()) {
+			if (fileVersionId == 0) {
 				return null;
 			}
-
-			long fileVersionId = Long.parseLong(matcher.group(1));
 
 			FileVersion fileVersion = _dlAppLocalService.getFileVersion(
 				fileVersionId);
@@ -200,8 +225,7 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 			return fileVersion;
 		}
 		catch (PortalException pe) {
-			_log.error(
-				"Couldn't get fileVersion for thumbnail " + fileName, pe);
+			_log.error(pe);
 
 			return null;
 		}
@@ -214,60 +238,81 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 		return supportedMimeTypes.contains(fileVersion.getMimeType());
 	}
 
+	private boolean _isValidConfigurationEntries(
+		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries) {
+
+		Stream<ThumbnailConfiguration> stream = Arrays.stream(
+			_thumbnailConfigurations);
+
+		return stream.anyMatch(
+			thumbnailConfiguration ->
+				configurationEntries.stream().anyMatch(
+					thumbnailConfiguration::matches));
+	}
+
 	private void _migrate(
-		long companyId,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		String fileName,
+		AdaptiveMediaImageConfigurationEntry configurationEntry,
+		ThumbnailConfiguration thumbnailConfiguration) {
 
 		try {
-			String[] fileNames = DLStoreUtil.getFileNames(
-				companyId, DLPreviewableProcessor.REPOSITORY_ID,
-				DLPreviewableProcessor.THUMBNAIL_PATH);
+			FileVersion fileVersion = _getFileVersion(
+				thumbnailConfiguration.getFileVersionId(fileName));
 
-			for (String fileName : fileNames) {
-				FileVersion fileVersion = _getFileVersion(fileName);
-
-				if (fileVersion == null) {
-					continue;
-				}
-
-				AdaptiveMediaImageEntry imageEntry =
-					_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-						configurationEntry.getUUID(),
-						fileVersion.getFileVersionId());
-
-				if (imageEntry != null) {
-					continue;
-				}
-
-				// See LPS-70788
-
-				String actualFileName = StringUtil.replace(
-					fileName, "//", StringPool.SLASH);
-
-				byte[] bytes = DLStoreUtil.getFileAsBytes(
-					fileVersion.getCompanyId(),
-					DLPreviewableProcessor.REPOSITORY_ID, actualFileName);
-
-				ImageBag imageBag = ImageToolUtil.read(bytes);
-
-				RenderedImage renderedImage = imageBag.getRenderedImage();
-
-				_imageEntryLocalService.addAdaptiveMediaImageEntry(
-					configurationEntry, fileVersion, renderedImage.getWidth(),
-					renderedImage.getHeight(),
-					new UnsyncByteArrayInputStream(bytes), bytes.length);
+			if (fileVersion == null) {
+				return;
 			}
+
+			AdaptiveMediaImageEntry imageEntry =
+				_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
+					configurationEntry.getUUID(),
+					fileVersion.getFileVersionId());
+
+			if (imageEntry != null) {
+				return;
+			}
+
+			byte[] bytes = DLStoreUtil.getFileAsBytes(
+				fileVersion.getCompanyId(),
+				DLPreviewableProcessor.REPOSITORY_ID, fileName);
+
+			ImageBag imageBag = ImageToolUtil.read(bytes);
+
+			RenderedImage renderedImage = imageBag.getRenderedImage();
+
+			_imageEntryLocalService.addAdaptiveMediaImageEntry(
+				configurationEntry, fileVersion, renderedImage.getWidth(),
+				renderedImage.getHeight(),
+				new UnsyncByteArrayInputStream(bytes), bytes.length);
 		}
 		catch (IOException | PortalException e) {
 			_log.error(e);
 		}
 	}
 
-	private static final Pattern _FILE_NAME_PATTERN = Pattern.compile(
-		".*/\\d+/\\d+/\\d+/(\\d+)\\..+$");
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		AdaptiveMediaThumbnailsOSGiCommands.class);
+
+	private static final ThumbnailConfiguration[] _thumbnailConfigurations = {
+		new ThumbnailConfiguration(
+			PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH,
+			PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT,
+			Pattern.compile(
+				DLPreviewableProcessor.THUMBNAIL_PATH +
+					"\\d+/\\d+/\\d+(?:/(\\d+))?(?:\\..+)?$")),
+		new ThumbnailConfiguration(
+			PropsValues.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH,
+			PropsValues.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT,
+			Pattern.compile(
+				DLPreviewableProcessor.THUMBNAIL_PATH +
+					"\\d+/\\d+/\\d+(?:/(\\d+))?-1(?:\\..+)?$")),
+		new ThumbnailConfiguration(
+			PropsValues.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_WIDTH,
+			PropsValues.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_HEIGHT,
+			Pattern.compile(
+				DLPreviewableProcessor.THUMBNAIL_PATH +
+					"\\d+/\\d+/\\d+(?:/(\\d+))?-2(?:\\..+)?$"))
+	};
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
