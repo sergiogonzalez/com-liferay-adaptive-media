@@ -15,18 +15,32 @@
 package com.liferay.adaptive.media.image.internal.configuration;
 
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.util.HttpImpl;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import org.mockito.MockitoAnnotations;
 
 /**
  * @author Adolfo Pérez
  */
 public class AdaptiveMediaImageConfigurationEntryParserTest {
+
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+
+		HttpUtil httpUtil = new HttpUtil();
+
+		httpUtil.setHttp(new HttpImpl());
+	}
 
 	@Test
 	public void testDisabledValidString() {
@@ -63,6 +77,22 @@ public class AdaptiveMediaImageConfigurationEntryParserTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testEmptyUUID() {
 		_configurationEntryParser.parse("test::max-height=100;max-width=200");
+	}
+
+	@Test
+	public void testEncodedName() {
+		AdaptiveMediaImageConfigurationEntry configurationEntry =
+			_configurationEntryParser.parse(
+				"test%3A%3B:12345:max-height=100;max-width=200");
+
+		Assert.assertEquals("test:;", configurationEntry.getName());
+		Assert.assertEquals("12345", configurationEntry.getUUID());
+
+		Map<String, String> properties = configurationEntry.getProperties();
+
+		Assert.assertEquals("100", properties.get("max-height"));
+		Assert.assertEquals("200", properties.get("max-width"));
+		Assert.assertEquals(properties.toString(), 2, properties.size());
 	}
 
 	@Test
