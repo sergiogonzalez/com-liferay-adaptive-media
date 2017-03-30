@@ -69,18 +69,46 @@ if (configurationEntry != null) {
 				<div class="row">
 					<div class="col-md-6">
 						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" required="<%= true %>" value="<%= (configurationEntry != null) ? configurationEntry.getName() : StringPool.BLANK %>" />
+
+						<aui:input name="description" type="textarea" value="<%= (configurationEntry != null) ? configurationEntry.getDescription() : StringPool.BLANK %>" />
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-md-3">
-						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-width-px" name="maxWidth" value='<%= (properties != null) ? properties.get("max-width") : StringPool.BLANK %>'>
+
+						<%
+						String maxWidth = StringPool.BLANK;
+
+						if (properties != null) {
+							String curMaxWidth = properties.get("max-width");
+
+							if (!curMaxWidth.equals("0")) {
+								maxWidth = curMaxWidth;
+							}
+						}
+						%>
+
+						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-width-px" name="maxWidth" type="number" value="<%= maxWidth %>">
 							<aui:validator name="number" />
 						</aui:input>
 					</div>
 
 					<div class="col-md-3">
-						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-height-px" name="maxHeight" value='<%= (properties != null) ? properties.get("max-height") : StringPool.BLANK %>'>
+
+						<%
+						String maxHeight = StringPool.BLANK;
+
+						if (properties != null) {
+							String curMaxHeight = properties.get("max-height");
+
+							if (!curMaxHeight.equals("0")) {
+								maxHeight = curMaxHeight;
+							}
+						}
+						%>
+
+						<aui:input disabled="<%= !configurationEntryEditable %>" label="max-height-px" name="maxHeight" type="number" value="<%= maxHeight %>">
 							<aui:validator name="number" />
 						</aui:input>
 					</div>

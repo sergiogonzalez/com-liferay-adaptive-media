@@ -15,6 +15,7 @@
 package com.liferay.adaptive.media.image.internal.configuration;
 
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,17 +29,42 @@ public class AdaptiveMediaImageConfigurationEntryImpl
 	public AdaptiveMediaImageConfigurationEntryImpl(
 		String name, String uuid, Map<String, String> properties) {
 
-		this(name, uuid, properties, true);
+		this(name, StringPool.BLANK, uuid, properties, true);
 	}
 
 	public AdaptiveMediaImageConfigurationEntryImpl(
-		String name, String uuid, Map<String, String> properties,
-		boolean enabled) {
+		String name, String description, String uuid,
+		Map<String, String> properties, boolean enabled) {
 
 		_name = name;
+		_description = description;
 		_uuid = uuid;
 		_properties = properties;
 		_enabled = enabled;
+	}
+
+	@Override
+	public String getDescription() {
+		return _description;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof AdaptiveMediaImageConfigurationEntryImpl)) {
+			return false;
+		}
+
+		AdaptiveMediaImageConfigurationEntryImpl other =
+			(AdaptiveMediaImageConfigurationEntryImpl)obj;
+
+		if (_name.equals(other._name) && _uuid.equals(other._uuid) &&
+			(_enabled == other._enabled) &&
+			_properties.equals(other._properties)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -57,10 +83,23 @@ public class AdaptiveMediaImageConfigurationEntryImpl
 	}
 
 	@Override
+	public int hashCode() {
+		int hash =
+			_name.hashCode() ^ _uuid.hashCode() ^ Boolean.hashCode(_enabled);
+
+		for (Map.Entry<String, String> entry : _properties.entrySet()) {
+			hash ^= entry.hashCode();
+		}
+
+		return hash;
+	}
+
+	@Override
 	public boolean isEnabled() {
 		return _enabled;
 	}
 
+	private final String _description;
 	private final boolean _enabled;
 	private final String _name;
 	private final Map<String, String> _properties;

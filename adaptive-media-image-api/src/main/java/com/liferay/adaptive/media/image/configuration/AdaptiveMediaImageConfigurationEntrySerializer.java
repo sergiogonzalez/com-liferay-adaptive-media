@@ -14,21 +14,14 @@
 
 package com.liferay.adaptive.media.image.configuration;
 
-import java.util.Map;
-
 /**
- * @author Alejandro Hernández
+ * @author Adolfo Pérez
  */
-public interface AdaptiveMediaImageConfigurationEntry {
+public interface AdaptiveMediaImageConfigurationEntrySerializer {
 
-	public String getDescription();
+	public AdaptiveMediaImageConfigurationEntry deserialize(String s);
 
-	public String getName();
-
-	public Map<String, String> getProperties();
-
-	public String getUUID();
-
-	public boolean isEnabled();
+	public String serialize(
+		AdaptiveMediaImageConfigurationEntry configurationEntry);
 
 }

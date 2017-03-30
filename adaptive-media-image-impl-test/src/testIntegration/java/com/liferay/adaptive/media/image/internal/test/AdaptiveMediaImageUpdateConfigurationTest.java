@@ -50,6 +50,45 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 			new LiferayIntegrationTestRule(),
 			SynchronousDestinationTestRule.INSTANCE);
 
+	@Test
+	public void testUpdateConfigurationEntryWithBlankDescription()
+		throws Exception {
+
+		AdaptiveMediaImageConfigurationHelper configurationHelper =
+			serviceTracker.getService();
+
+		Map<String, String> properties = new HashMap<>();
+
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
+
+		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
+			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
+				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
+
+		properties = new HashMap<>();
+
+		properties.put("max-height", "200");
+		properties.put("max-width", "200");
+
+		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1", "one", StringPool.BLANK, "1",
+			configurationEntry1.getProperties());
+
+		Optional<AdaptiveMediaImageConfigurationEntry>
+			configurationEntryOptional =
+				configurationHelper.getAdaptiveMediaImageConfigurationEntry(
+					TestPropsValues.getCompanyId(), "1");
+
+		Assert.assertTrue(configurationEntryOptional.isPresent());
+
+		AdaptiveMediaImageConfigurationEntry configurationEntry =
+			configurationEntryOptional.get();
+
+		Assert.assertEquals(
+			StringPool.BLANK, configurationEntry.getDescription());
+	}
+
 	@Test(
 		expected = AdaptiveMediaImageConfigurationException.InvalidNameException.class
 	)
@@ -64,7 +103,7 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
@@ -72,7 +111,7 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", StringPool.BLANK, "1",
+			TestPropsValues.getCompanyId(), "1", StringPool.BLANK, "desc", "1",
 			configurationEntry1.getProperties());
 	}
 
@@ -90,7 +129,7 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
@@ -98,8 +137,72 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "two", StringPool.BLANK,
-			configurationEntry1.getProperties());
+			TestPropsValues.getCompanyId(), "1", "two", "desc",
+			StringPool.BLANK, configurationEntry1.getProperties());
+	}
+
+	@Test
+	public void testUpdateConfigurationEntryWithColonSemicolonDescription()
+		throws Exception {
+
+		AdaptiveMediaImageConfigurationHelper configurationHelper =
+			serviceTracker.getService();
+
+		Map<String, String> properties = new HashMap<>();
+
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
+
+		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
+
+		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1", "one", "desc:;desc", "1",
+			properties);
+
+		Optional<AdaptiveMediaImageConfigurationEntry>
+			configurationEntryOptional =
+				configurationHelper.getAdaptiveMediaImageConfigurationEntry(
+					TestPropsValues.getCompanyId(), "1");
+
+		Assert.assertTrue(configurationEntryOptional.isPresent());
+
+		AdaptiveMediaImageConfigurationEntry configurationEntry =
+			configurationEntryOptional.get();
+
+		Assert.assertEquals("desc:;desc", configurationEntry.getDescription());
+	}
+
+	@Test
+	public void testUpdateConfigurationEntryWithColonSemicolonName()
+		throws Exception {
+
+		AdaptiveMediaImageConfigurationHelper configurationHelper =
+			serviceTracker.getService();
+
+		Map<String, String> properties = new HashMap<>();
+
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
+
+		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
+
+		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), "1", "one:;one", "desc", "1",
+			properties);
+
+		Optional<AdaptiveMediaImageConfigurationEntry>
+			configurationEntryOptional =
+				configurationHelper.getAdaptiveMediaImageConfigurationEntry(
+					TestPropsValues.getCompanyId(), "1");
+
+		Assert.assertTrue(configurationEntryOptional.isPresent());
+
+		AdaptiveMediaImageConfigurationEntry configurationEntry =
+			configurationEntryOptional.get();
+
+		Assert.assertEquals("one:;one", configurationEntry.getName());
 	}
 
 	@Test
@@ -115,14 +218,15 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "200");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			configurationEntryOptional =
@@ -154,14 +258,15 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "200");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			configurationEntryOptional =
@@ -195,14 +300,15 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "-10");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 	}
 
 	@Test(
@@ -220,14 +326,15 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "-10");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 	}
 
 	@Test(
@@ -245,14 +352,15 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "Invalid");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 	}
 
 	@Test(
@@ -270,14 +378,15 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "Invalid");
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 	}
 
 	@Test(
@@ -295,12 +404,13 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "100");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "one", "1", properties);
+			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one", "1", properties);
+			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
+			properties);
 	}
 
 	@Test
@@ -315,7 +425,7 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		configurationHelper.disableAdaptiveMediaImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), configurationEntry.getUUID());
@@ -328,7 +438,7 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		assertDisabled(configurationEntryOptional);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one-bis", "1-bis",
+			TestPropsValues.getCompanyId(), "1", "one-bis", "desc-bis", "1-bis",
 			configurationEntry.getProperties());
 
 		configurationEntryOptional =
@@ -345,6 +455,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 			configurationEntryOptional.get();
 
 		Assert.assertEquals("one-bis", actualConfigurationEntry.getName());
+		Assert.assertEquals(
+			"desc-bis", actualConfigurationEntry.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry.getProperties();
@@ -369,7 +481,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -377,10 +490,10 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "two", "2", properties);
+			TestPropsValues.getCompanyId(), "two", "twodesc", "2", properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "two", "1",
+			TestPropsValues.getCompanyId(), "1", "two", "twodesc", "1",
 			configurationEntry1.getProperties());
 	}
 
@@ -398,7 +511,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -406,10 +520,10 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "two", "2", properties);
+			TestPropsValues.getCompanyId(), "two", "twodesc", "2", properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "two-bis", "2",
+			TestPropsValues.getCompanyId(), "1", "two-bis", "twodesc", "2",
 			configurationEntry1.getProperties());
 	}
 
@@ -425,7 +539,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -434,10 +549,11 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry2 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "two", "2", properties);
+				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
+				properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "1", "one-bis", "1",
+			TestPropsValues.getCompanyId(), "1", "one-bis", "onedesc-bis", "1",
 			configurationEntry1.getProperties());
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
@@ -453,6 +569,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 			actualConfigurationEntry1Optional.get();
 
 		Assert.assertEquals("one-bis", actualConfigurationEntry1.getName());
+		Assert.assertEquals(
+			"onedesc-bis", actualConfigurationEntry1.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry1.getProperties();
@@ -476,6 +594,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry2.getName(), actualConfigurationEntry2.getName());
+		Assert.assertEquals(
+			configurationEntry2.getDescription(),
+			actualConfigurationEntry2.getDescription());
 
 		Map<String, String> actualConfigurationEntry2Properties =
 			actualConfigurationEntry2.getProperties();
@@ -498,7 +619,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -507,7 +629,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry2 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "two", "2", properties);
+				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -516,8 +639,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), configurationEntry1.getUUID(),
-			configurationEntry1.getName(), configurationEntry1.getUUID(),
-			properties);
+			configurationEntry1.getName(), configurationEntry1.getDescription(),
+			configurationEntry1.getUUID(), properties);
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			actualConfigurationEntry1Optional =
@@ -533,6 +656,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry1.getName(), actualConfigurationEntry1.getName());
+		Assert.assertEquals(
+			configurationEntry1.getDescription(),
+			actualConfigurationEntry1.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry1.getProperties();
@@ -556,6 +682,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry2.getName(), actualConfigurationEntry2.getName());
+		Assert.assertEquals(
+			configurationEntry2.getDescription(),
+			actualConfigurationEntry2.getDescription());
 
 		Map<String, String> actualConfigurationEntry2Properties =
 			actualConfigurationEntry2.getProperties();
@@ -578,7 +707,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -587,11 +717,13 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry2 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "two", "2", properties);
+				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
+				properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", configurationEntry1.getName(),
-			"1-bis", configurationEntry1.getProperties());
+			configurationEntry1.getDescription(), "1-bis",
+			configurationEntry1.getProperties());
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			nonExistantConfigurationEntry1Optional =
@@ -614,6 +746,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry1.getName(), actualConfigurationEntry1.getName());
+		Assert.assertEquals(
+			configurationEntry1.getDescription(),
+			actualConfigurationEntry1.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry1.getProperties();
@@ -637,6 +772,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry2.getName(), actualConfigurationEntry2.getName());
+		Assert.assertEquals(
+			configurationEntry2.getDescription(),
+			actualConfigurationEntry2.getDescription());
 
 		Map<String, String> actualConfigurationEntry2Properties =
 			actualConfigurationEntry2.getProperties();
@@ -661,10 +799,11 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "2", "two", "2",
+			TestPropsValues.getCompanyId(), "2", "two", "twodesc", "2",
 			configurationEntry1.getProperties());
 	}
 
@@ -680,7 +819,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -689,10 +829,11 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry2 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "two", "2", properties);
+				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
+				properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), "2", "two-bis", "2",
+			TestPropsValues.getCompanyId(), "2", "two-bis", "twodesc-bis", "2",
 			configurationEntry2.getProperties());
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
@@ -708,6 +849,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 			actualConfigurationEntry2Optional.get();
 
 		Assert.assertEquals("two-bis", actualConfigurationEntry2.getName());
+		Assert.assertEquals(
+			"twodesc-bis", actualConfigurationEntry2.getDescription());
 
 		Map<String, String> actualConfigurationEntry2Properties =
 			actualConfigurationEntry2.getProperties();
@@ -731,6 +874,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry1.getName(), actualConfigurationEntry1.getName());
+		Assert.assertEquals(
+			configurationEntry1.getDescription(),
+			actualConfigurationEntry1.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry1.getProperties();
@@ -755,7 +901,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -764,7 +911,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry2 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "two", "2", properties);
+				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -773,8 +921,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), configurationEntry2.getUUID(),
-			configurationEntry2.getName(), configurationEntry2.getUUID(),
-			properties);
+			configurationEntry2.getName(), configurationEntry2.getDescription(),
+			configurationEntry2.getUUID(), properties);
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			actualConfigurationEntry2Optional =
@@ -790,6 +938,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry2.getName(), actualConfigurationEntry2.getName());
+		Assert.assertEquals(
+			configurationEntry2.getDescription(),
+			actualConfigurationEntry2.getDescription());
 
 		Map<String, String> actualConfigurationEntry2Properties =
 			actualConfigurationEntry2.getProperties();
@@ -813,6 +964,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry1.getName(), actualConfigurationEntry1.getName());
+		Assert.assertEquals(
+			configurationEntry1.getDescription(),
+			actualConfigurationEntry1.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry1.getProperties();
@@ -835,7 +989,8 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry1 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "1", properties);
+				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
+				properties);
 
 		properties = new HashMap<>();
 
@@ -844,11 +999,13 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry2 =
 			configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "two", "2", properties);
+				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
+				properties);
 
 		configurationHelper.updateAdaptiveMediaImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "2", configurationEntry2.getName(),
-			"2-bis", configurationEntry2.getProperties());
+			configurationEntry2.getDescription(), "2-bis",
+			configurationEntry2.getProperties());
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			nonExistantConfigurationEntry2Optional =
@@ -871,6 +1028,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry2.getName(), actualConfigurationEntry2.getName());
+		Assert.assertEquals(
+			configurationEntry2.getDescription(),
+			actualConfigurationEntry2.getDescription());
 
 		Map<String, String> actualConfigurationEntry2Properties =
 			actualConfigurationEntry2.getProperties();
@@ -894,6 +1054,9 @@ public class AdaptiveMediaImageUpdateConfigurationTest
 
 		Assert.assertEquals(
 			configurationEntry1.getName(), actualConfigurationEntry1.getName());
+		Assert.assertEquals(
+			configurationEntry1.getDescription(),
+			actualConfigurationEntry1.getDescription());
 
 		Map<String, String> actualConfigurationEntry1Properties =
 			actualConfigurationEntry1.getProperties();
