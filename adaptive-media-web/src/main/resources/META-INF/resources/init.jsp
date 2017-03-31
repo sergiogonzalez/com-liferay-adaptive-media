@@ -27,7 +27,6 @@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.adaptive.media.AdaptiveMediaImageConfigurationException" %><%@
 page import="com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry" %><%@
-page import="com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper" %><%@
 page import="com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalServiceUtil" %><%@
 page import="com.liferay.adaptive.media.web.internal.background.task.OptimizeImagesAllConfigurationsBackgroundTaskExecutor" %><%@
 page import="com.liferay.adaptive.media.web.internal.background.task.OptimizeImagesSingleConfigurationBackgroundTaskExecutor" %><%@
@@ -41,6 +40,7 @@ page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
 page import="com.liferay.portal.kernel.model.CompanyConstants" %><%@
 page import="com.liferay.portal.kernel.portlet.PortletURLUtil" %><%@
+page import="com.liferay.portal.kernel.servlet.SessionMessages" %><%@
 page import="com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@

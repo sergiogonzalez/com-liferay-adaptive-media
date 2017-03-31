@@ -73,8 +73,6 @@ List<AdaptiveMediaImageConfigurationEntry> configurationEntries = (List)request.
 </liferay-frontend:management-bar>
 
 <%
-AdaptiveMediaImageConfigurationHelper adaptiveMediaImageConfigurationHelper = (AdaptiveMediaImageConfigurationHelper)request.getAttribute(AdaptiveMediaWebKeys.IMAGE_ADAPTIVE_MEDIA_CONFIGURATION_HELPER);
-
 PortletURL portletURL = renderResponse.createRenderURL();
 %>
 
@@ -89,11 +87,20 @@ PortletURL portletURL = renderResponse.createRenderURL();
 	</liferay-frontend:sidebar-panel>
 
 	<div class="sidenav-content">
-		<c:if test="<%= adaptiveMediaImageConfigurationHelper.isDefaultConfiguration(themeDisplay.getCompanyId()) %>">
-			<div class="alert alert-info">
-				<liferay-ui:message key="this-configuration-was-not-saved-yet" />
-			</div>
-		</c:if>
+		<liferay-util:include page="/adaptive_media/success_messages.jsp" servletContext="<%= application %>" />
+
+		<c:choose>
+			<c:when test='<%= SessionMessages.contains(request, "configurationEntryUpdated") %>'>
+
+				<%
+				AdaptiveMediaImageConfigurationEntry configurationEntry = (AdaptiveMediaImageConfigurationEntry)SessionMessages.get(request, "configurationEntryUpdated");
+				%>
+
+				<div class="alert alert-success">
+					<liferay-ui:message arguments="<%= configurationEntry.getName() %>" key="x-saved-successfully" translateArguments="<%= false %>" />
+				</div>
+			</c:when>
+		</c:choose>
 
 		<portlet:actionURL name="/adaptive_media/delete_image_configuration_entry" var="deleteImageConfigurationEntryURL" />
 
