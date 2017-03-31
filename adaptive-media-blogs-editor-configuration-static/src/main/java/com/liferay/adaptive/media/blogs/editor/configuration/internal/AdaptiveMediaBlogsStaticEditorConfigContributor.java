@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.blogs.editor.configuration.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageURLItemSelectorReturnType;
 import com.liferay.blogs.item.selector.criterion.BlogsItemSelectorCriterion;
 import com.liferay.blogs.web.constants.BlogsPortletKeys;
 import com.liferay.item.selector.ItemSelector;
@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -41,18 +42,18 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Sergio González
+ * @author Alejandro Tardín
  */
 @Component(
 	property = {
 		"editor.config.key=contentEditor", "editor.name=alloyeditor",
 		"editor.name=ckeditor", "javax.portlet.name=" + BlogsPortletKeys.BLOGS,
 		"javax.portlet.name=" + BlogsPortletKeys.BLOGS_ADMIN,
-		"service.ranking:Integer=101"
+		"service.ranking:Integer=100"
 	},
 	service = EditorConfigContributor.class
 )
-public class DynamicAdaptiveMediaBlogsEditorConfigContributor
+public class AdaptiveMediaBlogsStaticEditorConfigContributor
 	extends BaseEditorConfigContributor {
 
 	@Override
@@ -61,16 +62,11 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 		ThemeDisplay themeDisplay,
 		RequestBackedPortletURLFactory requestBackedPortletURLFactory) {
 
-		String allowedContent = jsonObject.getString("allowedContent");
+		String extraPlugins = jsonObject.getString("extraPlugins");
 
-		if (Validator.isNotNull(allowedContent)) {
-			allowedContent += StringPool.SPACE + _IMG_TAG_RULE;
+		if (StringUtil.contains(extraPlugins, "adaptivemedia")) {
+			return;
 		}
-		else {
-			allowedContent = _IMG_TAG_RULE;
-		}
-
-		jsonObject.put("allowedContent", allowedContent);
 
 		String itemSelectorURL = jsonObject.getString(
 			"filebrowserImageBrowseLinkUrl");
@@ -92,7 +88,7 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 				itemSelectorCriterion instanceof ImageItemSelectorCriterion ||
 				itemSelectorCriterion instanceof UploadItemSelectorCriterion) {
 
-				addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+				addAdaptiveMediaImageURLItemSelectorReturnType(
 					itemSelectorCriterion);
 
 				adaptiveMediaImageURLItemSelectorReturnTypeAdded = true;
@@ -102,8 +98,6 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 		if (!adaptiveMediaImageURLItemSelectorReturnTypeAdded) {
 			return;
 		}
-
-		String extraPlugins = jsonObject.getString("extraPlugins");
 
 		if (Validator.isNotNull(extraPlugins)) {
 			extraPlugins = extraPlugins + ",adaptivemedia";
@@ -126,6 +120,9 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 			"filebrowserImageBrowseLinkUrl", itemSelectorPortletURL.toString());
 		jsonObject.put(
 			"filebrowserImageBrowseUrl", itemSelectorPortletURL.toString());
+
+		_allowTagRule(jsonObject, _PICTURE_TAG_RULE);
+		_allowTagRule(jsonObject, _IMG_TAG_RULE);
 	}
 
 	@Reference(unbind = "-")
@@ -133,14 +130,14 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 		_itemSelector = itemSelector;
 	}
 
-	protected void addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+	protected void addAdaptiveMediaImageURLItemSelectorReturnType(
 		ItemSelectorCriterion itemSelectorCriterion) {
 
 		List<ItemSelectorReturnType> desiredItemSelectorReturnTypes =
 			new ArrayList<>();
 
 		desiredItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageFileEntryItemSelectorReturnType());
+			new AdaptiveMediaImageURLItemSelectorReturnType());
 		desiredItemSelectorReturnTypes.addAll(
 			itemSelectorCriterion.getDesiredItemSelectorReturnTypes());
 
@@ -148,7 +145,23 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 			desiredItemSelectorReturnTypes);
 	}
 
+	private void _allowTagRule(JSONObject jsonObject, String tagRule) {
+		String allowedContent = jsonObject.getString("allowedContent");
+
+		if (Validator.isNotNull(allowedContent)) {
+			allowedContent += StringPool.SPACE + tagRule;
+		}
+		else {
+			allowedContent = tagRule;
+		}
+
+		jsonObject.put("allowedContent", allowedContent);
+	}
+
 	private static final String _IMG_TAG_RULE = "img[*](*);";
+
+	private static final String _PICTURE_TAG_RULE =
+		"picture[*](*); source[*](*);";
 
 	private ItemSelector _itemSelector;
 

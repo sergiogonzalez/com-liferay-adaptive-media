@@ -53,7 +53,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 /**
  * @author Alejandro Tardín
  */
-public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
+public class AdaptiveMediaBlogsStaticEditorConfigContributorTest
 	extends PowerMockito {
 
 	@Before
@@ -79,11 +79,11 @@ public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
 			Collections.<ItemSelectorReturnType>singletonList(
 				new URLItemSelectorReturnType()));
 
-		StaticAdaptiveMediaBlogsEditorConfigContributor
-			staticAdaptiveMediaBlogsEditorConfigContributor =
-				new StaticAdaptiveMediaBlogsEditorConfigContributor();
+		AdaptiveMediaBlogsStaticEditorConfigContributor
+			adaptiveMediaBlogsStaticEditorConfigContributor =
+				new AdaptiveMediaBlogsStaticEditorConfigContributor();
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.
+		adaptiveMediaBlogsStaticEditorConfigContributor.
 			addAdaptiveMediaImageURLItemSelectorReturnType(
 				blogsItemSelectorCriterion);
 
@@ -179,14 +179,14 @@ public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
 			Collections.<ItemSelectorCriterion>emptyList()
 		);
 
-		StaticAdaptiveMediaBlogsEditorConfigContributor
-			staticAdaptiveMediaBlogsEditorConfigContributor =
-				new StaticAdaptiveMediaBlogsEditorConfigContributor();
+		AdaptiveMediaBlogsStaticEditorConfigContributor
+			adaptiveMediaBlogsStaticEditorConfigContributor =
+				new AdaptiveMediaBlogsStaticEditorConfigContributor();
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsStaticEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.
+		adaptiveMediaBlogsStaticEditorConfigContributor.
 			populateConfigJSONObject(
 				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
 				_requestBackedPortletURLFactory);
@@ -245,14 +245,14 @@ public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		StaticAdaptiveMediaBlogsEditorConfigContributor
-			staticAdaptiveMediaBlogsEditorConfigContributor =
-				new StaticAdaptiveMediaBlogsEditorConfigContributor();
+		AdaptiveMediaBlogsStaticEditorConfigContributor
+			adaptiveMediaBlogsStaticEditorConfigContributor =
+				new AdaptiveMediaBlogsStaticEditorConfigContributor();
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsStaticEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.
+		adaptiveMediaBlogsStaticEditorConfigContributor.
 			populateConfigJSONObject(
 				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
 				_requestBackedPortletURLFactory);
@@ -275,11 +275,11 @@ public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		StaticAdaptiveMediaBlogsEditorConfigContributor
-			staticAdaptiveMediaBlogsEditorConfigContributor =
-				new StaticAdaptiveMediaBlogsEditorConfigContributor();
+		AdaptiveMediaBlogsStaticEditorConfigContributor
+			adaptiveMediaBlogsStaticEditorConfigContributor =
+				new AdaptiveMediaBlogsStaticEditorConfigContributor();
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.
+		adaptiveMediaBlogsStaticEditorConfigContributor.
 			populateConfigJSONObject(
 				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
 				_requestBackedPortletURLFactory);
@@ -388,14 +388,14 @@ public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
 		expectedJSONObject.put(
 			"filebrowserImageBrowseUrl", itemSelectorPortletURL.toString());
 
-		StaticAdaptiveMediaBlogsEditorConfigContributor
-			staticAdaptiveMediaBlogsEditorConfigContributor =
-				new StaticAdaptiveMediaBlogsEditorConfigContributor();
+		AdaptiveMediaBlogsStaticEditorConfigContributor
+			adaptiveMediaBlogsStaticEditorConfigContributor =
+				new AdaptiveMediaBlogsStaticEditorConfigContributor();
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsStaticEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.
+		adaptiveMediaBlogsStaticEditorConfigContributor.
 			populateConfigJSONObject(
 				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
 				_requestBackedPortletURLFactory);
@@ -456,14 +456,14 @@ public class StaticAdaptiveMediaBlogsEditorConfigContributorTest
 		expectedJSONObject.put(
 			"filebrowserImageBrowseUrl", itemSelectorPortletURL.toString());
 
-		StaticAdaptiveMediaBlogsEditorConfigContributor
-			staticAdaptiveMediaBlogsEditorConfigContributor =
-				new StaticAdaptiveMediaBlogsEditorConfigContributor();
+		AdaptiveMediaBlogsStaticEditorConfigContributor
+			adaptiveMediaBlogsStaticEditorConfigContributor =
+				new AdaptiveMediaBlogsStaticEditorConfigContributor();
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsStaticEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		staticAdaptiveMediaBlogsEditorConfigContributor.
+		adaptiveMediaBlogsStaticEditorConfigContributor.
 			populateConfigJSONObject(
 				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
 				_requestBackedPortletURLFactory);
