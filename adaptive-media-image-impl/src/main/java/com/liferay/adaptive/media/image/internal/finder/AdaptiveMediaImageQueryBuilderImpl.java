@@ -132,8 +132,8 @@ public class AdaptiveMediaImageQueryBuilderImpl
 		getConfigurationEntryFilter() {
 
 		if (_hasConfiguration()) {
-			return configurationEntry ->
-				_configurationUuid.equals(configurationEntry.getUUID());
+			return configurationEntry -> _configurationUuid.equals(
+				configurationEntry.getUUID());
 		}
 
 		return configurationEntry -> true;
@@ -145,10 +145,14 @@ public class AdaptiveMediaImageQueryBuilderImpl
 		}
 
 		if (_hasConfiguration()) {
-			return AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ALL;
+			return AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ANY;
 		}
 
 		return AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+	}
+
+	public String getConfigurationUuid() {
+		return _configurationUuid;
 	}
 
 	public FileVersion getFileVersion() throws PortalException {
@@ -171,22 +175,24 @@ public class AdaptiveMediaImageQueryBuilderImpl
 
 	@Override
 	public <V> StrictSortStep orderBy(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute,
-		boolean asc) {
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+			adaptiveMediaAttribute,
+		AdaptiveMediaImageQueryBuilder.SortOrder sortOrder) {
 
-		if (attribute == null) {
+		if (adaptiveMediaAttribute == null) {
 			throw new IllegalArgumentException(
 				"Adaptive media attribute cannot be null");
 		}
 
-		_sortCriteria.put(attribute, asc);
+		_sortCriteria.put(adaptiveMediaAttribute, sortOrder);
 
 		return this;
 	}
 
 	@Override
 	public <V> FuzzySortStep with(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute,
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+			adaptiveMediaAttribute,
 		Optional<V> valueOptional) {
 
 		if (valueOptional == null) {
@@ -194,14 +200,16 @@ public class AdaptiveMediaImageQueryBuilderImpl
 				"Adaptive media attribute value optional cannot be null");
 		}
 
-		valueOptional.ifPresent(value -> _attributes.put(attribute, value));
+		valueOptional.ifPresent(
+			value -> _attributes.put(adaptiveMediaAttribute, value));
 
 		return this;
 	}
 
 	@Override
 	public <V> FuzzySortStep with(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute,
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+			adaptiveMediaAttribute,
 		V value) {
 
 		if (value == null) {
@@ -209,7 +217,7 @@ public class AdaptiveMediaImageQueryBuilderImpl
 				"Adaptive media attribute value cannot be null");
 		}
 
-		_attributes.put(attribute, value);
+		_attributes.put(adaptiveMediaAttribute, value);
 
 		return this;
 	}
@@ -244,7 +252,7 @@ public class AdaptiveMediaImageQueryBuilderImpl
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
 	private final Map
-		<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Boolean>
+		<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, SortOrder>
 			_sortCriteria = new LinkedHashMap<>();
 
 }

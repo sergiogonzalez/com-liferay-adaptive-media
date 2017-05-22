@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
@@ -35,11 +36,17 @@ public class AdaptiveMediaAttributeComparatorTest {
 
 	@Before
 	public void setUp() {
-		Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Boolean>
-			attributes = new HashMap<>();
+		Map<
+			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>,
+			AdaptiveMediaImageQueryBuilder.SortOrder>
+				attributes = new HashMap<>();
 
-		attributes.put(AdaptiveMediaAttribute.contentLength(), true);
-		attributes.put(AdaptiveMediaAttribute.fileName(), false);
+		attributes.put(
+			AdaptiveMediaAttribute.contentLength(),
+			AdaptiveMediaImageQueryBuilder.SortOrder.ASC);
+		attributes.put(
+			AdaptiveMediaAttribute.fileName(),
+			AdaptiveMediaImageQueryBuilder.SortOrder.DESC);
 
 		_multiAttributeComparator = new AdaptiveMediaAttributeComparator(
 			attributes);
@@ -136,15 +143,19 @@ public class AdaptiveMediaAttributeComparatorTest {
 	}
 
 	private <S, T> AdaptiveMedia<AdaptiveMediaImageProcessor> _createMedia(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, S> attribute1,
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, S>
+			adaptiveMediaAttribute1,
 		S value1,
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, T> attribute2,
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, T>
+			adaptiveMediaAttribute2,
 		T value2) {
 
 		Map<String, String> properties = new HashMap<>();
 
-		properties.put(attribute1.getName(), String.valueOf(value1));
-		properties.put(attribute2.getName(), String.valueOf(value2));
+		properties.put(
+			adaptiveMediaAttribute1.getName(), String.valueOf(value1));
+		properties.put(
+			adaptiveMediaAttribute2.getName(), String.valueOf(value2));
 
 		AdaptiveMediaImageAttributeMapping attributeMapping =
 			AdaptiveMediaImageAttributeMapping.fromProperties(properties);
@@ -153,13 +164,14 @@ public class AdaptiveMediaAttributeComparatorTest {
 	}
 
 	private <T> AdaptiveMedia<AdaptiveMediaImageProcessor> _createMedia(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, T> attribute,
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, T>
+			adaptiveMediaAttribute,
 		T value) {
 
 		AdaptiveMediaImageAttributeMapping attributeMapping =
 			AdaptiveMediaImageAttributeMapping.fromProperties(
 				Collections.singletonMap(
-					attribute.getName(), String.valueOf(value)));
+					adaptiveMediaAttribute.getName(), String.valueOf(value)));
 
 		return new AdaptiveMediaImage(() -> null, attributeMapping, null);
 	}

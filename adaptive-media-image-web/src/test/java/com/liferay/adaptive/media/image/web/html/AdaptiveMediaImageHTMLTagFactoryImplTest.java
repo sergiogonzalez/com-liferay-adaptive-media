@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.web.html;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.mediaquery.MediaQueryProvider;
@@ -22,8 +21,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,25 +42,31 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class AdaptiveMediaImageHTMLTagFactoryImplTest {
 
 	@Before
-	public void setUp() throws AdaptiveMediaException, PortalException {
+	public void setUp() throws PortalException {
 		_adaptiveMediaImageHTMLTagFactory.setMediaQueryProvider(
 			_mediaQueryProvider);
+
+		Mockito.when(
+			_fileEntry.getFileEntryId()
+		).thenReturn(
+			1234L
+		);
 	}
 
 	@Test
 	public void testCreatesAPictureTag() throws Exception {
 		_addMediaQueries(_createMediaQuery(1989, "adaptiveURL"));
 
+		String originalImgTag =
+			"<img src=\"originalURL\" data-fileEntryId=\"1234\"/>";
+
 		StringBundler expectedSB = new StringBundler(5);
 
-		expectedSB.append("<picture>");
+		expectedSB.append("<picture data-fileEntryId=\"1234\">");
 		expectedSB.append("<source media=\"(max-width:1989px)\" ");
 		expectedSB.append("srcset=\"adaptiveURL\"/>");
 		expectedSB.append("<img src=\"originalURL\"/>");
 		expectedSB.append("</picture>");
-
-		String originalImgTag =
-			"<img src=\"originalURL\" data-fileEntryId=\"1234\"/>";
 
 		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);
@@ -75,13 +82,33 @@ public class AdaptiveMediaImageHTMLTagFactoryImplTest {
 			_createMediaQuery(1986, "adaptiveURL1"),
 			_createMediaQuery(1989, "adaptiveURL2"));
 
+		String originalImgTag =
+			"<img src=\"originalURL\" data-fileEntryId=\"1234\"/>";
+
 		StringBundler expectedSB = new StringBundler(8);
 
-		expectedSB.append("<picture>");
+		expectedSB.append("<picture data-fileEntryId=\"1234\">");
 		expectedSB.append("<source media=\"(max-width:1986px)\" ");
 		expectedSB.append("srcset=\"adaptiveURL1\"/>");
 		expectedSB.append("<source media=\"(max-width:1989px)\" ");
 		expectedSB.append("srcset=\"adaptiveURL2\"/>");
+		expectedSB.append("<img src=\"originalURL\"/>");
+		expectedSB.append("</picture>");
+
+		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+			originalImgTag, _fileEntry);
+
+		Assert.assertEquals(expectedSB.toString(), pictureTag);
+	}
+
+	@Test
+	public void testNoSourceIsCreatedIfNoConditionIsPresent() throws Exception {
+		_addMediaQueries(
+			new MediaQuery(Collections.emptyList(), StringUtil.randomString()));
+
+		StringBundler expectedSB = new StringBundler(8);
+
+		expectedSB.append("<picture data-fileEntryId=\"1234\">");
 		expectedSB.append("<img src=\"originalURL\"/>");
 		expectedSB.append("</picture>");
 
@@ -121,11 +148,10 @@ public class AdaptiveMediaImageHTMLTagFactoryImplTest {
 
 		StringBundler expectedSB = new StringBundler(6);
 
-		expectedSB.append("<picture>");
+		expectedSB.append("<picture data-fileEntryId=\"1234\">");
 		expectedSB.append("<source media=\"(max-width:1989px)\" ");
-		expectedSB.append("srcset=\"adaptiveURL\"/><img ");
-		expectedSB.append(CharPool.NEW_LINE);
-		expectedSB.append("src=\"adaptable\"/>");
+		expectedSB.append("srcset=\"adaptiveURL\"/>");
+		expectedSB.append("<img \nsrc=\"adaptable\"/>");
 		expectedSB.append("</picture>");
 
 		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
@@ -138,16 +164,16 @@ public class AdaptiveMediaImageHTMLTagFactoryImplTest {
 	public void testTheAttributeIsCaseInsensitive() throws Exception {
 		_addMediaQueries(_createMediaQuery(1989, "adaptiveURL"));
 
+		String originalImgTag =
+			"<img src=\"originalURL\" datA-fileENTryID=\"1234\"/>";
+
 		StringBundler expectedSB = new StringBundler(5);
 
-		expectedSB.append("<picture>");
+		expectedSB.append("<picture data-fileEntryId=\"1234\">");
 		expectedSB.append("<source media=\"(max-width:1989px)\" ");
 		expectedSB.append("srcset=\"adaptiveURL\"/>");
 		expectedSB.append("<img src=\"originalURL\"/>");
 		expectedSB.append("</picture>");
-
-		String originalImgTag =
-			"<img src=\"originalURL\" datA-fileENTryID=\"1234\"/>";
 
 		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);

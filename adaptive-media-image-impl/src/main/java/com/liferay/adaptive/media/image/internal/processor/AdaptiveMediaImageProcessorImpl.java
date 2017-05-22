@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
@@ -57,7 +57,7 @@ public final class AdaptiveMediaImageProcessorImpl
 			}
 
 			_imageEntryLocalService.deleteAdaptiveMediaImageEntryFileVersion(
-				fileVersion.getFileVersionId());
+				fileVersion);
 		}
 		catch (PortalException pe) {
 			throw new AdaptiveMediaRuntimeException.IOException(pe);
@@ -74,8 +74,9 @@ public final class AdaptiveMediaImageProcessorImpl
 			_configurationHelper.getAdaptiveMediaImageConfigurationEntries(
 				fileVersion.getCompanyId());
 
-		configurationEntries.forEach(configurationEntry ->
-			process(fileVersion, configurationEntry.getUUID()));
+		configurationEntries.forEach(
+			configurationEntry -> process(
+				fileVersion, configurationEntry.getUUID()));
 	}
 
 	@Override

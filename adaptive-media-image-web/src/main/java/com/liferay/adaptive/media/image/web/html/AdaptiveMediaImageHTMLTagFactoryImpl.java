@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.web.html;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.image.html.AdaptiveMediaImageHTMLTagFactory;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
@@ -43,7 +42,7 @@ public class AdaptiveMediaImageHTMLTagFactoryImpl
 
 	@Override
 	public String create(String originalImgTag, FileEntry fileEntry)
-		throws AdaptiveMediaException, PortalException {
+		throws PortalException {
 
 		List<String> sourceElements = _getSourceElements(fileEntry);
 
@@ -53,7 +52,9 @@ public class AdaptiveMediaImageHTMLTagFactoryImpl
 
 		StringBundler sb = new StringBundler(3 + sourceElements.size());
 
-		sb.append("<picture>");
+		sb.append("<picture data-fileEntryId=\"");
+		sb.append(fileEntry.getFileEntryId());
+		sb.append("\">");
 
 		sourceElements.forEach(sb::append);
 
@@ -102,28 +103,27 @@ public class AdaptiveMediaImageHTMLTagFactoryImpl
 	private String _getSourceElement(MediaQuery mediaQuery) {
 		StringBundler sb = new StringBundler(8);
 
-		sb.append("<source");
-
 		Optional<String> mediaQueryStringOptional = _getMediaQueryString(
 			mediaQuery);
 
 		mediaQueryStringOptional.ifPresent(
 			mediaQueryString -> {
-				sb.append(" media=\"");
+				sb.append("<source ");
+				sb.append("media=\"");
 				sb.append(mediaQueryString);
+				sb.append("\" ");
+				sb.append("srcset=\"");
+				sb.append(mediaQuery.getSrc());
 				sb.append("\"");
-			});
+				sb.append("/>");
 
-		sb.append(" srcset=\"");
-		sb.append(mediaQuery.getSrc());
-		sb.append("\"");
-		sb.append("/>");
+			});
 
 		return sb.toString();
 	}
 
 	private List<String> _getSourceElements(FileEntry fileEntry)
-		throws AdaptiveMediaException, PortalException {
+		throws PortalException {
 
 		List<MediaQuery> mediaQueries = _mediaQueryProvider.getMediaQueries(
 			fileEntry);

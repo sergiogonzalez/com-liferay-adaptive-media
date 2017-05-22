@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
-import com.liferay.adaptive.media.AdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
@@ -180,15 +180,6 @@ public class EditImageConfigurationEntryMVCActionCommand
 		}
 	}
 
-	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper) {
-
-		_adaptiveMediaImageConfigurationHelper =
-			adaptiveMediaImageConfigurationHelper;
-	}
-
 	private AdaptiveMediaImageConfigurationEntry
 			_addHighResolutionConfigurationEntry(
 				long companyId,
@@ -259,6 +250,7 @@ public class EditImageConfigurationEntryMVCActionCommand
 		return false;
 	}
 
+	@Reference
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 

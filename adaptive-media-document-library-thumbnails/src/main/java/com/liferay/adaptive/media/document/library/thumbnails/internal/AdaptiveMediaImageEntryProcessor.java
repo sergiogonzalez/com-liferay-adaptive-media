@@ -16,7 +16,6 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.AdaptiveMediaAttribute;
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
@@ -26,6 +25,8 @@ import com.liferay.document.library.kernel.util.DLProcessor;
 import com.liferay.document.library.kernel.util.ImageProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.xml.Element;
@@ -122,7 +123,7 @@ public class AdaptiveMediaImageEntryProcessor
 			_getThumbnailAdaptiveMedia(fileVersion);
 
 		return stream.findFirst().flatMap(mediaMedia ->
-			mediaMedia.getAttributeValue(
+			mediaMedia.getValueOptional(
 				AdaptiveMediaAttribute.contentLength())).orElse(0);
 	}
 
@@ -151,7 +152,11 @@ public class AdaptiveMediaImageEntryProcessor
 
 			return false;
 		}
-		catch (AdaptiveMediaException | PortalException e) {
+		catch (PortalException pe) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(pe);
+			}
+
 			return false;
 		}
 	}
@@ -198,14 +203,18 @@ public class AdaptiveMediaImageEntryProcessor
 
 	private Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 			_getThumbnailAdaptiveMedia(FileVersion fileVersion)
-		throws AdaptiveMediaException, PortalException {
+		throws PortalException {
 
-		return _adaptiveMediaImageFinder.getAdaptiveMedia(queryBuilder ->
-			queryBuilder.forVersion(fileVersion).with(
+		return _adaptiveMediaImageFinder.getAdaptiveMediaStream(queryBuilder ->
+			queryBuilder.forVersion(
+				fileVersion
+			).with(
 				AdaptiveMediaImageAttribute.IMAGE_WIDTH,
-				PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH).with(
+				PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH
+			).with(
 				AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
-				PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT).done());
+				PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT
+			).done());
 	}
 
 	private boolean _isMimeTypeSupported(String mimeType) {
@@ -214,6 +223,9 @@ public class AdaptiveMediaImageEntryProcessor
 
 		return supportedMimeTypes.contains(mimeType);
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		AdaptiveMediaImageEntryProcessor.class);
 
 	@Reference
 	private AdaptiveMediaImageFinder _adaptiveMediaImageFinder;

@@ -14,9 +14,9 @@
 
 package com.liferay.adaptive.media.demo.data.creator.internal;
 
-import com.liferay.adaptive.media.AdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.demo.data.creator.AdaptiveMediaImageConfigurationDemoDataCreator;
 import com.liferay.adaptive.media.demo.data.creator.DemoAdaptiveMediaImageConfigurationVariant;
+import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.portal.kernel.log.Log;
@@ -103,13 +103,6 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 		}
 	}
 
-	@Reference(unbind = "-")
-	public void setConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper configurationHelper) {
-
-		_configurationHelper = configurationHelper;
-	}
-
 	private void _addConfigurationUuid(long companyId, String uuid) {
 		_configurationIds.computeIfAbsent(
 			companyId, k -> new CopyOnWriteArrayList<>());
@@ -122,7 +115,9 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		AdaptiveMediaImageConfigurationDemoDataCreatorImpl.class);
 
+	@Reference
 	private AdaptiveMediaImageConfigurationHelper _configurationHelper;
+
 	private final Map<Long, List<String>> _configurationIds = new HashMap<>();
 
 }

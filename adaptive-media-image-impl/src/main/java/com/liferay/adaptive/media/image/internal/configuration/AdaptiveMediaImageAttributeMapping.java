@@ -52,26 +52,26 @@ public class AdaptiveMediaImageAttributeMapping {
 
 		attributes.put(
 			AdaptiveMediaAttribute.configurationUuid(),
-			_getAttributeValue(
+			_getValueOptional(
 				properties, AdaptiveMediaAttribute.configurationUuid()));
 		attributes.put(
 			AdaptiveMediaAttribute.contentLength(),
-			_getAttributeValue(
+			_getValueOptional(
 				properties, AdaptiveMediaAttribute.contentLength()));
 		attributes.put(
 			AdaptiveMediaAttribute.contentType(),
-			_getAttributeValue(
+			_getValueOptional(
 				properties, AdaptiveMediaAttribute.contentType()));
 		attributes.put(
 			AdaptiveMediaAttribute.fileName(),
-			_getAttributeValue(properties, AdaptiveMediaAttribute.fileName()));
+			_getValueOptional(properties, AdaptiveMediaAttribute.fileName()));
 		attributes.put(
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
-			_getAttributeValue(
+			_getValueOptional(
 				properties, AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
 		attributes.put(
 			AdaptiveMediaImageAttribute.IMAGE_WIDTH,
-			_getAttributeValue(
+			_getValueOptional(
 				properties, AdaptiveMediaImageAttribute.IMAGE_WIDTH));
 
 		return new AdaptiveMediaImageAttributeMapping(attributes);
@@ -81,18 +81,20 @@ public class AdaptiveMediaImageAttributeMapping {
 	 * Returns an {@link Optional} instance that contains the value of the
 	 * attribute (if any) in this mapping.
 	 *
-	 * @param  attribute a non <code>null</code> attribute
+	 * @param  adaptiveMediaAttribute a non <code>null</code> attribute
 	 * @return A non-<code>null</code> optional that will contain the
 	 *         (non-<code>null</code>) value (if any)
+	 * @review
 	 */
-	public <V> Optional<V> getAttributeValue(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute) {
+	public <V> Optional<V> getValueOptional(
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+			adaptiveMediaAttribute) {
 
-		if (attribute == null) {
+		if (adaptiveMediaAttribute == null) {
 			throw new IllegalArgumentException("attribute cannot be null");
 		}
 
-		return (Optional<V>)_attributes.get(attribute);
+		return (Optional<V>)_attributes.get(adaptiveMediaAttribute);
 	}
 
 	protected AdaptiveMediaImageAttributeMapping(
@@ -102,17 +104,18 @@ public class AdaptiveMediaImageAttributeMapping {
 		_attributes = attributes;
 	}
 
-	private static <V> Optional<V> _getAttributeValue(
+	private static <V> Optional<V> _getValueOptional(
 		Map<String, String> properties,
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute) {
+		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+			adaptiveMediaAttribute) {
 
-		String value = properties.get(attribute.getName());
+		String value = properties.get(adaptiveMediaAttribute.getName());
 
 		if (value == null) {
 			return Optional.empty();
 		}
 
-		return Optional.of(attribute.convert(value));
+		return Optional.of(adaptiveMediaAttribute.convert(value));
 	}
 
 	private final Map

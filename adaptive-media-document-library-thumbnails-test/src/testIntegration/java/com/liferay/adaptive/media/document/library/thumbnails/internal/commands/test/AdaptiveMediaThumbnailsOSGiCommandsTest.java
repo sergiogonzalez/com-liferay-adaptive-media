@@ -154,8 +154,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		FileVersion latestFileVersion = _pngFileEntry.getFileVersion();
 
 		AdaptiveMediaImageEntryLocalServiceUtil.
-			deleteAdaptiveMediaImageEntryFileVersion(
-				latestFileVersion.getFileVersionId());
+			deleteAdaptiveMediaImageEntryFileVersion(latestFileVersion);
 
 		GroupLocalServiceUtil.deleteGroup(_group);
 
@@ -383,8 +382,10 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 	private long _getAdaptiveMediaCount(FileEntry fileEntry) throws Exception {
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> stream =
-			_finder.getAdaptiveMedia(
-				queryBuilder -> queryBuilder.allForFileEntry(fileEntry).done());
+			_finder.getAdaptiveMediaStream(queryBuilder ->
+				queryBuilder.allForFileEntry(
+					fileEntry
+				).done());
 
 		return stream.count();
 	}

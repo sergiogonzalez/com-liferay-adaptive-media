@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.exception.DuplicateAdaptiveMediaImageEntryException;
@@ -70,7 +70,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		Mockito.verify(
 			_imageEntryLocalService
 		).deleteAdaptiveMediaImageEntryFileVersion(
-			_fileVersion.getFileVersionId()
+			_fileVersion
 		);
 	}
 
@@ -87,7 +87,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		).when(
 			_imageEntryLocalService
 		).deleteAdaptiveMediaImageEntryFileVersion(
-			Mockito.anyInt()
+			Mockito.any(FileVersion.class)
 		);
 
 		_processor.cleanUp(_fileVersion);
@@ -106,7 +106,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		).when(
 			_imageEntryLocalService
 		).deleteAdaptiveMediaImageEntryFileVersion(
-			Mockito.anyInt()
+			Mockito.any(FileVersion.class)
 		);
 
 		_processor.cleanUp(_fileVersion);
@@ -125,7 +125,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		Mockito.verify(
 			_imageEntryLocalService, Mockito.never()
 		).deleteAdaptiveMediaImageEntryFileVersion(
-			_fileVersion.getFileVersionId()
+			_fileVersion
 		);
 	}
 

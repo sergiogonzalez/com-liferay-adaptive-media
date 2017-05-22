@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.internal.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.internal.messaging.AdaptiveMediaDestinationNames;
 import com.liferay.adaptive.media.internal.messaging.AdaptiveMediaProcessorCommand;
 import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
@@ -60,9 +59,7 @@ public final class AdaptiveMediaAsyncProcessorImpl<M, T>
 	}
 
 	@Override
-	public void triggerCleanUp(M model, String modelId)
-		throws AdaptiveMediaException, PortalException {
-
+	public void triggerCleanUp(M model, String modelId) throws PortalException {
 		if (Validator.isNotNull(modelId)) {
 			_modelIds.putIfAbsent(
 				AdaptiveMediaProcessorCommand.CLEAN_UP,
@@ -99,19 +96,18 @@ public final class AdaptiveMediaAsyncProcessorImpl<M, T>
 			message.put("modelId", modelId);
 		}
 
-		TransactionCommitCallbackUtil.registerCallback(() -> {
-			_messageBus.sendMessage(
-				AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR,
-				message);
+		TransactionCommitCallbackUtil.registerCallback(
+			() -> {
+				_messageBus.sendMessage(
+					AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR,
+					message);
 
-			return null;
-		});
+				return null;
+			});
 	}
 
 	@Override
-	public void triggerProcess(M model, String modelId)
-		throws AdaptiveMediaException, PortalException {
-
+	public void triggerProcess(M model, String modelId) throws PortalException {
 		if (Validator.isNotNull(modelId)) {
 			_modelIds.putIfAbsent(
 				AdaptiveMediaProcessorCommand.PROCESS,
@@ -148,13 +144,14 @@ public final class AdaptiveMediaAsyncProcessorImpl<M, T>
 			message.put("modelId", modelId);
 		}
 
-		TransactionCommitCallbackUtil.registerCallback(() -> {
-			_messageBus.sendMessage(
-				AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR,
-				message);
+		TransactionCommitCallbackUtil.registerCallback(
+			() -> {
+				_messageBus.sendMessage(
+					AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR,
+					message);
 
-			return null;
-		});
+				return null;
+			});
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

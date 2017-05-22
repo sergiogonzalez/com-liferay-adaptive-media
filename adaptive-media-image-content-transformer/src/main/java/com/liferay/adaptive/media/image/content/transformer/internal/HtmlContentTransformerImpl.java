@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.content.transformer.internal;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.content.transformer.ContentTransformer;
 import com.liferay.adaptive.media.content.transformer.ContentTransformerContentType;
 import com.liferay.adaptive.media.content.transformer.constants.ContentTransformerContentTypes;
@@ -44,8 +43,10 @@ public class HtmlContentTransformerImpl implements ContentTransformer<String> {
 	}
 
 	@Override
-	public String transform(String html)
-		throws AdaptiveMediaException, PortalException {
+	public String transform(String html) throws PortalException {
+		if (html == null) {
+			return null;
+		}
 
 		StringBuffer sb = new StringBuffer(html.length());
 
@@ -83,7 +84,7 @@ public class HtmlContentTransformerImpl implements ContentTransformer<String> {
 	}
 
 	private static final Pattern _IMG_PATTERN = Pattern.compile(
-		"<img .*?\\s*data-fileEntryId=\"(\\d+)\".*?/>",
+		"<img [^>]*?\\s*data-fileEntryId=\"(\\d+)\".*?/>",
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 	private AdaptiveMediaImageHTMLTagFactory _adaptiveMediaImageHTMLTagFactory;

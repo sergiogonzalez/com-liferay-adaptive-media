@@ -14,9 +14,7 @@
 
 package com.liferay.adaptive.media.image.service.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.counter.AdaptiveMediaImageCounter;
 import com.liferay.adaptive.media.image.exception.DuplicateAdaptiveMediaImageEntryException;
@@ -37,6 +35,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -62,7 +61,6 @@ import org.osgi.framework.FrameworkUtil;
  *
  * @review
  */
-@ProviderType
 public class AdaptiveMediaImageEntryLocalServiceImpl
 	extends AdaptiveMediaImageEntryLocalServiceBaseImpl {
 
@@ -164,21 +162,19 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 * it also deletes the bytes from the file store.
 	 * </p>
 	 *
-	 * @param  fileVersionId the primary key of the file version
+	 * @param  fileVersion the FileVersion
 	 * @throws PortalException if the file version cannot be found
 	 *
 	 * @review
 	 */
 	@Override
-	public void deleteAdaptiveMediaImageEntryFileVersion(long fileVersionId)
+	public void deleteAdaptiveMediaImageEntryFileVersion(
+			FileVersion fileVersion)
 		throws PortalException {
-
-		FileVersion fileVersion = dlAppLocalService.getFileVersion(
-			fileVersionId);
 
 		List<AdaptiveMediaImageEntry> imageEntries =
 			adaptiveMediaImageEntryPersistence.findByFileVersionId(
-				fileVersionId);
+				fileVersion.getFileVersionId());
 
 		for (AdaptiveMediaImageEntry imageEntry : imageEntries) {
 			try {
@@ -191,6 +187,38 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 				_log.error(amreioe);
 			}
 		}
+	}
+
+	/**
+	 * Deletes adaptive media images generated for a file version under a
+	 * particular configuration.
+	 *
+	 * <p>
+	 * This method deletes the adaptive media image entry from the database and
+	 * it also deletes the bytes from the file store.
+	 * </p>
+	 *
+	 * @param  configurationUuid the configuration UUID
+	 * @param  fileVersionId the primary key of the file version
+	 * @throws PortalException if the file version cannot be found
+	 *
+	 * @review
+	 */
+	@Override
+	public void deleteAdaptiveMediaImageEntryFileVersion(
+			String configurationUuid, long fileVersionId)
+		throws PortalException {
+
+		FileVersion fileVersion = dlAppLocalService.getFileVersion(
+			fileVersionId);
+
+		AdaptiveMediaImageEntry imageEntry =
+			adaptiveMediaImageEntryPersistence.findByC_F(
+				configurationUuid, fileVersionId);
+
+		adaptiveMediaImageEntryPersistence.remove(imageEntry);
+
+		imageStorage.delete(fileVersion, imageEntry.getConfigurationUuid());
 	}
 
 	@Override
@@ -282,10 +310,15 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 		Collection<AdaptiveMediaImageCounter> imageCounters =
 			_serviceTrackerMap.values();
 
-		return imageCounters.stream().mapToInt(
+		Stream<AdaptiveMediaImageCounter> adaptiveMediaImageCounterStream =
+			imageCounters.stream();
+
+		return adaptiveMediaImageCounterStream.mapToInt(
 			adaptiveMediaImageCounter ->
 				adaptiveMediaImageCounter.
-					countExpectedAdaptiveMediaImageEntries(companyId)).sum();
+					countExpectedAdaptiveMediaImageEntries(
+						companyId)
+		).sum();
 	}
 
 	/**
