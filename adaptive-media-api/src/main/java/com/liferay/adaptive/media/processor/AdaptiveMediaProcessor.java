@@ -16,7 +16,6 @@ package com.liferay.adaptive.media.processor;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**
@@ -42,7 +41,7 @@ public interface AdaptiveMediaProcessor<M, T> {
 	 * @param  model the model for which all generated media is deleted
 	 * @throws PortalException
 	 */
-	public void cleanUp(M model) throws AdaptiveMediaException, PortalException;
+	public void cleanUp(M model) throws PortalException;
 
 	/**
 	 * Generates the media for the model. Some implementations might not
@@ -52,6 +51,6 @@ public interface AdaptiveMediaProcessor<M, T> {
 	 * @throws PortalException if an error occurred while calling any Liferay
 	 *         services
 	 */
-	public void process(M model) throws AdaptiveMediaException, PortalException;
+	public void process(M model) throws PortalException;
 
 }

@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.internal.messaging;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.processor.AdaptiveMediaProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 
@@ -28,7 +27,7 @@ public enum AdaptiveMediaProcessorCommand {
 		@Override
 		protected <M> void execute(
 				AdaptiveMediaProcessor<M, ?> processor, M model, String modelId)
-			throws AdaptiveMediaException, PortalException {
+			throws PortalException {
 
 			processor.cleanUp(model);
 		}
@@ -40,7 +39,7 @@ public enum AdaptiveMediaProcessorCommand {
 		@Override
 		protected <M> void execute(
 				AdaptiveMediaProcessor<M, ?> processor, M model, String modelId)
-			throws AdaptiveMediaException, PortalException {
+			throws PortalException {
 
 			processor.process(model);
 		}
@@ -49,6 +48,6 @@ public enum AdaptiveMediaProcessorCommand {
 
 	protected abstract <M> void execute(
 			AdaptiveMediaProcessor<M, ?> processor, M model, String modelId)
-		throws AdaptiveMediaException, PortalException;
+		throws PortalException;
 
 }

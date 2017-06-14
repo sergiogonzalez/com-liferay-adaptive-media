@@ -15,7 +15,6 @@
 package com.liferay.adaptive.media.finder;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.util.function.Function;
@@ -53,8 +52,8 @@ public interface AdaptiveMediaFinder
 	 * @throws PortalException if an error occurred while calling any Liferay
 	 *         service
 	 */
-	public Stream<AdaptiveMedia<T>> getAdaptiveMedia(
+	public Stream<AdaptiveMedia<T>> getAdaptiveMediaStream(
 			Function<B, AdaptiveMediaQuery<M, T>> queryBuilderFunction)
-		throws AdaptiveMediaException, PortalException;
+		throws PortalException;
 
 }

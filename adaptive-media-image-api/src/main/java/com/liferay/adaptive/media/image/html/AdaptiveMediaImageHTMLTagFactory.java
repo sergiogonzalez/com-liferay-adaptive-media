@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.html;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 
@@ -24,6 +23,6 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 public interface AdaptiveMediaImageHTMLTagFactory {
 
 	public String create(String originalImgTag, FileEntry fileEntry)
-		throws AdaptiveMediaException, PortalException;
+		throws PortalException;
 
 }

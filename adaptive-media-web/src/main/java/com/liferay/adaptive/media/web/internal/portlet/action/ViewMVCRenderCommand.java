@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Predicate;
 
 import javax.portlet.RenderRequest;
@@ -51,27 +50,14 @@ public class ViewMVCRenderCommand implements MVCRenderCommand {
 	public String render(
 		RenderRequest renderRequest, RenderResponse renderResponse) {
 
-		Collection<AdaptiveMediaImageConfigurationEntry>
-			configurationEntriesCollection =
-				_getAdaptiveMediaImageConfigurationEntries(renderRequest);
-
-		List<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			new ArrayList<>(configurationEntriesCollection);
+		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
+			_getAdaptiveMediaImageConfigurationEntries(renderRequest);
 
 		renderRequest.setAttribute(
 			AdaptiveMediaWebKeys.CONFIGURATION_ENTRIES_LIST,
-			configurationEntries);
+			new ArrayList<>(configurationEntries));
 
 		return "/adaptive_media/view.jsp";
-	}
-
-	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper) {
-
-		_adaptiveMediaImageConfigurationHelper =
-			adaptiveMediaImageConfigurationHelper;
 	}
 
 	private Collection<AdaptiveMediaImageConfigurationEntry>
@@ -101,6 +87,7 @@ public class ViewMVCRenderCommand implements MVCRenderCommand {
 				themeDisplay.getCompanyId(), predicate);
 	}
 
+	@Reference
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 

@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.web.internal.servlet;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.AdaptiveMediaAttribute;
-import com.liferay.adaptive.media.AdaptiveMediaException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaException;
 import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
 import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -56,10 +56,11 @@ import org.osgi.service.component.annotations.Reference;
 public class AdaptiveMediaServlet extends HttpServlet {
 
 	@Reference(unbind = "-")
-	public void setRequestHandlerLocator(
-		AdaptiveMediaRequestHandlerLocator requestHandlerLocator) {
+	public void setAdaptiveMediaRequestHandlerLocator(
+		AdaptiveMediaRequestHandlerLocator adaptiveMediaRequestHandlerLocator) {
 
-		_requestHandlerLocator = requestHandlerLocator;
+		_adaptiveMediaRequestHandlerLocator =
+			adaptiveMediaRequestHandlerLocator;
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class AdaptiveMediaServlet extends HttpServlet {
 
 		try {
 			AdaptiveMediaRequestHandler requestHandler =
-				_requestHandlerLocator.locateForPattern(
+				_adaptiveMediaRequestHandlerLocator.locateForPattern(
 					_getRequestHandlerPattern(request));
 
 			if (requestHandler == null) {
@@ -82,21 +83,23 @@ public class AdaptiveMediaServlet extends HttpServlet {
 			Optional<AdaptiveMedia<?>> adaptiveMediaOptional =
 				requestHandler.handleRequest(request);
 
-			AdaptiveMedia<?> media = adaptiveMediaOptional.orElseThrow(
+			AdaptiveMedia<?> adaptiveMedia = adaptiveMediaOptional.orElseThrow(
 				AdaptiveMediaException.AdaptiveMediaNotFound::new);
 
-			Optional<Integer> contentLengthOptional = media.getAttributeValue(
-				AdaptiveMediaAttribute.contentLength());
+			Optional<Integer> contentLengthOptional =
+				adaptiveMedia.getValueOptional(
+					AdaptiveMediaAttribute.contentLength());
 
 			Integer contentLength = contentLengthOptional.orElse(0);
 
-			Optional<String> contentTypeOptional = media.getAttributeValue(
-				AdaptiveMediaAttribute.contentType());
+			Optional<String> contentTypeOptional =
+				adaptiveMedia.getValueOptional(
+					AdaptiveMediaAttribute.contentType());
 
 			String contentType = contentTypeOptional.orElse(
 				ContentTypes.APPLICATION_OCTET_STREAM);
 
-			Optional<String> fileNameOptional = media.getAttributeValue(
+			Optional<String> fileNameOptional = adaptiveMedia.getValueOptional(
 				AdaptiveMediaAttribute.fileName());
 
 			String fileName = fileNameOptional.orElse(null);
@@ -105,13 +108,13 @@ public class AdaptiveMediaServlet extends HttpServlet {
 
 			if (download) {
 				ServletResponseUtil.sendFile(
-					request, response, fileName, media.getInputStream(),
+					request, response, fileName, adaptiveMedia.getInputStream(),
 					contentLength, contentType,
 					HttpHeaders.CONTENT_DISPOSITION_ATTACHMENT);
 			}
 			else {
 				ServletResponseUtil.sendFile(
-					request, response, fileName, media.getInputStream(),
+					request, response, fileName, adaptiveMedia.getInputStream(),
 					contentLength, contentType);
 			}
 		}
@@ -157,6 +160,7 @@ public class AdaptiveMediaServlet extends HttpServlet {
 	private static final Pattern _REQUEST_HANDLER_PATTERN = Pattern.compile(
 		"^/([^/]*)");
 
-	private AdaptiveMediaRequestHandlerLocator _requestHandlerLocator;
+	private AdaptiveMediaRequestHandlerLocator
+		_adaptiveMediaRequestHandlerLocator;
 
 }

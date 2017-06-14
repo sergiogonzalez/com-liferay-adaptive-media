@@ -74,19 +74,13 @@ if (ListUtil.isNotEmpty(selectedConfigurationEntries)) {
 							<%= HtmlUtil.escape(configurationEntry.getName()) %>
 						</dd>
 						<dt class="h5">
-							<liferay-ui:message key="description" />
-						</dt>
-						<dd class="h6 sidebar-caption">
-							<%= HtmlUtil.escape(configurationEntry.getDescription()) %>
-						</dd>
-						<dt class="h5">
 							<liferay-ui:message key="state" />
 						</dt>
 						<dd class="h6 sidebar-caption">
 							<%= configurationEntry.isEnabled() ? LanguageUtil.get(request, "enabled") : LanguageUtil.get(request, "disabled") %>
 						</dd>
 						<dt class="h5">
-							<liferay-ui:message key="optimized-images" />
+							<liferay-ui:message key="adapted-images" />
 						</dt>
 						<dd class="h6 sidebar-caption">
 							<%= AdaptiveMediaImageEntryLocalServiceUtil.getAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId(), configurationEntry.getUUID()) + "/" + AdaptiveMediaImageEntryLocalServiceUtil.getExpectedAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId()) %>
@@ -123,6 +117,12 @@ if (ListUtil.isNotEmpty(selectedConfigurationEntries)) {
 						</dt>
 						<dd class="h6 sidebar-caption">
 							<%= HtmlUtil.escape(configurationEntry.getUUID()) %>
+						</dd>
+						<dt class="h5">
+							<liferay-ui:message key="description" />
+						</dt>
+						<dd class="h6 sidebar-caption">
+							<%= HtmlUtil.escape(configurationEntry.getDescription()) %>
 						</dd>
 					</c:when>
 					<c:when test="<%= (selectedConfigurationEntriesSize > 1) %>">

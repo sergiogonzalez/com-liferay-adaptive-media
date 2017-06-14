@@ -165,42 +165,42 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 					<liferay-ui:search-container-column-text
 						cssClass="table-cell-content"
-						name="optimized-images"
+						name="adapted-images"
 					>
 
 						<%
 						String rowId = row.getRowId();
 						String uuid = String.valueOf(configurationEntry.getUUID());
 
-						int optimizedImages = AdaptiveMediaImageEntryLocalServiceUtil.getAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId(), configurationEntry.getUUID());
+						int adaptedImages = AdaptiveMediaImageEntryLocalServiceUtil.getAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId(), configurationEntry.getUUID());
 
 						int totalImages = AdaptiveMediaImageEntryLocalServiceUtil.getExpectedAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId());
 						%>
 
-						<div id="<portlet:namespace />OptimizeRemaining_<%= rowId %>"></div>
+						<div id="<portlet:namespace />AdaptRemaining_<%= rowId %>"></div>
 
-						<portlet:resourceURL id="/adaptive_media/optimized_images_percentage" var="optimizedImagesPercentageURL">
+						<portlet:resourceURL id="/adaptive_media/adapted_images_percentage" var="adaptedImagesPercentageURL">
 							<portlet:param name="entryUuid" value="<%= uuid %>" />
 						</portlet:resourceURL>
 
 						<aui:script require="adaptive-media-web/adaptive_media/js/AdaptiveMediaProgress.es">
 							var component = Liferay.component(
-								'<portlet:namespace />OptimizeRemaining<%= uuid %>',
+								'<portlet:namespace />AdaptRemaining<%= uuid %>',
 								new adaptiveMediaWebAdaptive_mediaJsAdaptiveMediaProgressEs.default(
 									{
+										adaptedImages: <%= adaptedImages %>,
 										disabled: <%= !configurationEntry.isEnabled() %>,
 										namespace: '<portlet:namespace />',
-										optimizedImages: <%= optimizedImages %>,
-										percentageUrl: '<%= optimizedImagesPercentageURL.toString() %>',
+										percentageUrl: '<%= adaptedImagesPercentageURL.toString() %>',
 										totalImages: <%= totalImages %>,
 										uuid: '<%= uuid %>'
 									},
-									<portlet:namespace />OptimizeRemaining_<%= rowId %>
+									<portlet:namespace />AdaptRemaining_<%= rowId %>
 								)
 							);
 
 							<c:if test="<%= ((optimizeImagesAllConfigurationsBackgroundTasksCount > 0) && configurationEntry.isEnabled()) || currentBackgroundTaskConfigurationEntryUuids.contains(uuid) %>">
-								component.startProgress();
+								setTimeout(() => component.startProgress(), 0);
 							</c:if>
 						</aui:script>
 					</liferay-ui:search-container-column-text>
@@ -229,11 +229,9 @@ PortletURL portletURL = renderResponse.createRenderURL();
 						value='<%= maxHeight.equals("0") ? LanguageUtil.get(request, "auto") : maxHeight + "px" %>'
 					/>
 
-					<c:if test="<%= optimizeImagesAllConfigurationsBackgroundTasksCount == 0 %>">
-						<liferay-ui:search-container-column-jsp
-							path="/adaptive_media/image_configuration_entry_action.jsp"
-						/>
-					</c:if>
+					<liferay-ui:search-container-column-jsp
+						path="/adaptive_media/image_configuration_entry_action.jsp"
+					/>
 				</liferay-ui:search-container-row>
 
 				<liferay-ui:search-iterator displayStyle="list" markupView="lexicon" />
@@ -251,8 +249,8 @@ PortletURL portletURL = renderResponse.createRenderURL();
 		}
 	}
 
-	function <portlet:namespace />optimizeRemaining(uuid, backgroundTaskUrl) {
-		var component = Liferay.component('<portlet:namespace />OptimizeRemaining' + uuid);
+	function <portlet:namespace />adaptRemaining(uuid, backgroundTaskUrl) {
+		var component = Liferay.component('<portlet:namespace />AdaptRemaining' + uuid);
 
 		component.startProgress(backgroundTaskUrl);
 	}

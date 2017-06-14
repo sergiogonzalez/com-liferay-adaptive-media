@@ -67,15 +67,6 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 			"/adaptive_media/info_panel.jsp");
 	}
 
-	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper) {
-
-		_adaptiveMediaImageConfigurationHelper =
-			adaptiveMediaImageConfigurationHelper;
-	}
-
 	private List<AdaptiveMediaImageConfigurationEntry>
 		_getAdaptiveMediaImageConfigurationEntries(
 			ResourceRequest resourceRequest) {
@@ -83,14 +74,12 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		Collection<AdaptiveMediaImageConfigurationEntry>
-			configurationEntriesCollection =
-				_adaptiveMediaImageConfigurationHelper.
-					getAdaptiveMediaImageConfigurationEntries(
-						themeDisplay.getCompanyId(),
-						configurationEntry -> true);
+		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
+			_adaptiveMediaImageConfigurationHelper.
+				getAdaptiveMediaImageConfigurationEntries(
+					themeDisplay.getCompanyId(), configurationEntry -> true);
 
-		return new ArrayList<>(configurationEntriesCollection);
+		return new ArrayList<>(configurationEntries);
 	}
 
 	private List<AdaptiveMediaImageConfigurationEntry>
@@ -120,6 +109,7 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 		return configurationEntries;
 	}
 
+	@Reference
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 

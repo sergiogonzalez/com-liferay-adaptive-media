@@ -69,22 +69,12 @@ public class EnableImageConfigurationEntryMVCActionCommand
 						adaptiveMediaImageConfigurationEntryUuid);
 
 		configurationEntryOptional.ifPresent(
-			configurationEntry -> {
-				SessionMessages.add(
-					actionRequest, "configurationEntryEnabled",
-					configurationEntry);
-			});
+			configurationEntry -> SessionMessages.add(
+				actionRequest, "configurationEntryEnabled",
+				configurationEntry));
 	}
 
-	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper) {
-
-		_adaptiveMediaImageConfigurationHelper =
-			adaptiveMediaImageConfigurationHelper;
-	}
-
+	@Reference
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 

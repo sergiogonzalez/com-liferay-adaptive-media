@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.mediaquery;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 
@@ -26,6 +25,6 @@ import java.util.List;
 public interface MediaQueryProvider {
 
 	public List<MediaQuery> getMediaQueries(FileEntry fileEntry)
-		throws AdaptiveMediaException, PortalException;
+		throws PortalException;
 
 }

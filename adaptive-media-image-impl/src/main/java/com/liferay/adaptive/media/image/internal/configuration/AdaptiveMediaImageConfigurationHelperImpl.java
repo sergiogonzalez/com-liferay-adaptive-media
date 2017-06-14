@@ -14,38 +14,47 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
-import com.liferay.adaptive.media.AdaptiveMediaImageConfigurationException;
-import com.liferay.adaptive.media.AdaptiveMediaImageConfigurationException.InvalidStateAdaptiveMediaImageConfigurationException;
-import com.liferay.adaptive.media.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException.InvalidStateAdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.messaging.AdaptiveMediaImageDestinationNames;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.portal.kernel.messaging.Destination;
+import com.liferay.portal.kernel.messaging.DestinationConfiguration;
+import com.liferay.portal.kernel.messaging.DestinationFactory;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.ModifiableSettings;
 import com.liferay.portal.kernel.settings.PortletPreferencesSettings;
 import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsException;
 import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -80,10 +89,11 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		_checkDuplicatesUuid(configurationEntries, normalizedUuid);
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			configurationEntries.stream().filter(
-				configurationEntry ->
-					!configurationEntry.getUUID().equals(normalizedUuid)).
-				collect(Collectors.toList());
+			new ArrayList<>(configurationEntries);
+
+		updatedConfigurationEntries.removeIf(
+			configurationEntry -> normalizedUuid.equals(
+				configurationEntry.getUUID()));
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry =
 			new AdaptiveMediaImageConfigurationEntryImpl(
@@ -92,6 +102,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		updatedConfigurationEntries.add(configurationEntry);
 
 		_updateConfiguration(companyId, updatedConfigurationEntries);
+
+		_triggerConfigurationEvent(configurationEntry);
 
 		return configurationEntry;
 	}
@@ -145,10 +157,11 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 				companyId, curConfigurationEntry -> true);
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			configurationEntries.stream().filter(
-				curConfigurationEntry ->
-					!uuid.equals(curConfigurationEntry.getUUID())).collect(
-				Collectors.toList());
+			new ArrayList<>(configurationEntries);
+
+		updatedConfigurationEntries.removeIf(
+			curConfigurationEntry -> uuid.equals(
+				curConfigurationEntry.getUUID()));
 
 		AdaptiveMediaImageConfigurationEntry newConfigurationEntry =
 			new AdaptiveMediaImageConfigurationEntryImpl(
@@ -160,6 +173,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		updatedConfigurationEntries.add(newConfigurationEntry);
 
 		_updateConfiguration(companyId, updatedConfigurationEntries);
+
+		_triggerConfigurationEvent(configurationEntry);
 	}
 
 	@Override
@@ -187,10 +202,11 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 				companyId, curConfigurationEntry -> true);
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			configurationEntries.stream().filter(
-				curConfigurationEntry ->
-					!uuid.equals(curConfigurationEntry.getUUID())).collect(
-				Collectors.toList());
+			new ArrayList<>(configurationEntries);
+
+		updatedConfigurationEntries.removeIf(
+			curConfigurationEntry -> uuid.equals(
+				curConfigurationEntry.getUUID()));
 
 		AdaptiveMediaImageConfigurationEntry newConfigurationEntry =
 			new AdaptiveMediaImageConfigurationEntryImpl(
@@ -202,6 +218,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		updatedConfigurationEntries.add(newConfigurationEntry);
 
 		_updateConfiguration(companyId, updatedConfigurationEntries);
+
+		_triggerConfigurationEvent(configurationEntry);
 	}
 
 	@Override
@@ -217,20 +235,26 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			return;
 		}
 
-		_imageEntryLocalService.deleteAdaptiveMediaImageEntries(
-			companyId, configurationEntryOptional.get());
+		AdaptiveMediaImageConfigurationEntry configurationEntry =
+			configurationEntryOptional.get();
+
+		_adaptiveMediaImageEntryLocalService.deleteAdaptiveMediaImageEntries(
+			companyId, configurationEntry);
 
 		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
 			getAdaptiveMediaImageConfigurationEntries(
 				companyId, curConfigurationEntry -> true);
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			configurationEntries.stream().filter(
-				curConfigurationEntry ->
-					!uuid.equals(curConfigurationEntry.getUUID())).collect(
-				Collectors.toList());
+			new ArrayList<>(configurationEntries);
+
+		updatedConfigurationEntries.removeIf(
+			curConfigurationEntry -> uuid.equals(
+				curConfigurationEntry.getUUID()));
 
 		_updateConfiguration(companyId, updatedConfigurationEntries);
+
+		_triggerConfigurationEvent(configurationEntry);
 	}
 
 	@Override
@@ -241,10 +265,12 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			_getConfigurationEntries(companyId);
 
 		return configurationEntryStream.filter(
-			configurationEntry -> configurationEntry.isEnabled()).sorted(
-				Comparator.comparing(
-					AdaptiveMediaImageConfigurationEntry::getName)).collect(
-				Collectors.toList());
+			AdaptiveMediaImageConfigurationEntry::isEnabled
+		).sorted(
+			Comparator.comparing(AdaptiveMediaImageConfigurationEntry::getName)
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	@Override
@@ -256,15 +282,13 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
 			_getConfigurationEntries(companyId);
 
-		Comparator<AdaptiveMediaImageConfigurationEntry> comparator =
-			Comparator.comparing(AdaptiveMediaImageConfigurationEntry::getName);
-
-		Stream<AdaptiveMediaImageConfigurationEntry>
-			adaptiveMediaImageConfigurationEntryStream =
-				configurationEntryStream.filter(predicate);
-
-		return adaptiveMediaImageConfigurationEntryStream.sorted(comparator).
-			collect(Collectors.toList());
+		return configurationEntryStream.filter(
+			predicate
+		).sorted(
+			Comparator.comparing(AdaptiveMediaImageConfigurationEntry::getName)
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	@Override
@@ -277,7 +301,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 		return configurationEntryStream.filter(
 			configurationEntry -> configurationEntryUUID.equals(
-				configurationEntry.getUUID())).findFirst();
+				configurationEntry.getUUID())
+		).findFirst();
 	}
 
 	@Override
@@ -298,20 +323,21 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			getAdaptiveMediaImageConfigurationEntries(
 				companyId, configurationEntry -> true);
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			oldConfigurationEntryOptional =
-				configurationEntries.stream().filter(
-					configurationEntry -> configurationEntry.getUUID().equals(
-						oldUuid)).findFirst();
+		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
+			configurationEntries.stream();
 
-		if (!oldConfigurationEntryOptional.isPresent()) {
-			throw new AdaptiveMediaImageConfigurationException.
-				NoSuchAdaptiveMediaImageConfigurationException(
-					"{uuid=" + oldUuid + "}");
-		}
+		Optional<AdaptiveMediaImageConfigurationEntry>
+			oldConfigurationEntryOptional = configurationEntryStream.filter(
+				configurationEntry -> oldUuid.equals(
+					configurationEntry.getUUID())
+			).findFirst();
 
 		AdaptiveMediaImageConfigurationEntry oldConfigurationEntry =
-			oldConfigurationEntryOptional.get();
+			oldConfigurationEntryOptional.orElseThrow(
+				() ->
+					new AdaptiveMediaImageConfigurationException.
+						NoSuchAdaptiveMediaImageConfigurationException(
+							"{uuid=" + oldUuid + "}"));
 
 		if (!name.equals(oldConfigurationEntry.getName())) {
 			_checkDuplicatesName(configurationEntries, name);
@@ -322,10 +348,10 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		}
 
 		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			configurationEntries.stream().filter(
-				configurationEntry ->
-					!configurationEntry.getUUID().equals(oldUuid)).collect(
-				Collectors.toList());
+			new ArrayList<>(configurationEntries);
+
+		updatedConfigurationEntries.removeIf(
+			configurationEntry -> oldUuid.equals(configurationEntry.getUUID()));
 
 		AdaptiveMediaImageConfigurationEntry configurationEntry =
 			new AdaptiveMediaImageConfigurationEntryImpl(
@@ -336,7 +362,33 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 		_updateConfiguration(companyId, updatedConfigurationEntries);
 
+		_triggerConfigurationEvent(
+			new AdaptiveMediaImageConfigurationEntry[] {
+				oldConfigurationEntry, configurationEntry
+			});
+
 		return configurationEntry;
+	}
+
+	@Activate
+	protected void activate() {
+		DestinationConfiguration destinationConfiguration =
+			new DestinationConfiguration(
+				DestinationConfiguration.DESTINATION_TYPE_SYNCHRONOUS,
+				AdaptiveMediaImageDestinationNames.
+					ADAPTIVE_MEDIA_IMAGE_CONFIGURATION);
+
+		Destination destination = _destinationFactory.createDestination(
+			destinationConfiguration);
+
+		_messageBus.addDestination(destination);
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_messageBus.removeDestination(
+			AdaptiveMediaImageDestinationNames.
+				ADAPTIVE_MEDIA_IMAGE_CONFIGURATION);
 	}
 
 	@Reference(unbind = "-")
@@ -346,17 +398,28 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		_configurationEntryParser = configurationEntryParser;
 	}
 
+	private static final boolean _isPositiveNumber(String s) {
+		Matcher matcher = _positiveNumberPattern.matcher(s);
+
+		return matcher.matches();
+	}
+
 	private void _checkDuplicatesName(
 			Collection<AdaptiveMediaImageConfigurationEntry>
 				configurationEntries,
 			String name)
 		throws AdaptiveMediaImageConfigurationException {
 
+		Stream<AdaptiveMediaImageConfigurationEntry>
+			adaptiveMediaImageConfigurationEntryStream =
+				configurationEntries.stream();
+
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			duplicateNameConfigurationEntryOptional =
-				configurationEntries.stream().filter(
-					configurationEntry -> configurationEntry.getName().equals(
-						name)).findFirst();
+				adaptiveMediaImageConfigurationEntryStream.filter(
+					configurationEntry -> name.equals(
+						configurationEntry.getName())
+				).findFirst();
 
 		if (duplicateNameConfigurationEntryOptional.isPresent()) {
 			throw new AdaptiveMediaImageConfigurationException.
@@ -370,11 +433,16 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			String uuid)
 		throws AdaptiveMediaImageConfigurationException {
 
+		Stream<AdaptiveMediaImageConfigurationEntry>
+			adaptiveMediaImageConfigurationEntryStream =
+				configurationEntries.stream();
+
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			duplicateUuidConfigurationEntryOptional =
-				configurationEntries.stream().filter(
-					configurationEntry -> configurationEntry.getUUID().equals(
-						uuid)).findFirst();
+				adaptiveMediaImageConfigurationEntryStream.filter(
+					configurationEntry -> uuid.equals(
+						configurationEntry.getUUID())
+				).findFirst();
 
 		if (duplicateUuidConfigurationEntryOptional.isPresent()) {
 			throw new AdaptiveMediaImageConfigurationException.
@@ -395,46 +463,28 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		throws AdaptiveMediaImageConfigurationException {
 
 		String maxHeightString = properties.get("max-height");
-		long maxHeight = GetterUtil.getLong(properties.get("max-height"));
 
-		if (Validator.isNotNull(maxHeightString)) {
-			if (!Validator.isNumber(maxHeightString)) {
-				throw new
-					AdaptiveMediaImageConfigurationException.
-						InvalidHeightException();
-			}
+		if (Validator.isNotNull(maxHeightString) &&
+			!_isPositiveNumber(maxHeightString)) {
 
-			if (maxHeight < 0) {
-				throw new
-					AdaptiveMediaImageConfigurationException.
-						InvalidHeightException();
-			}
+			throw new AdaptiveMediaImageConfigurationException.
+				InvalidHeightException();
 		}
 
 		String maxWidthString = properties.get("max-width");
-		long maxWidth = GetterUtil.getLong(properties.get("max-width"));
 
-		if (Validator.isNotNull(maxWidthString)) {
-			if (!Validator.isNumber(maxWidthString)) {
-				throw new
-					AdaptiveMediaImageConfigurationException.
-						InvalidWidthException();
-			}
+		if (Validator.isNotNull(maxWidthString) &&
+			!_isPositiveNumber(maxWidthString)) {
 
-			if (maxWidth < 0) {
-				throw new
-					AdaptiveMediaImageConfigurationException.
-						InvalidWidthException();
-			}
+			throw new AdaptiveMediaImageConfigurationException.
+				InvalidWidthException();
 		}
 
-		if ((Validator.isNull(maxHeightString) &&
-			 Validator.isNull(maxWidthString)) ||
-			((maxHeight <= 0) && (maxWidth <= 0))) {
+		if (Validator.isNull(maxHeightString) &&
+			Validator.isNull(maxWidthString)) {
 
-			throw new
-				AdaptiveMediaImageConfigurationException.
-					RequiredWidthOrHeightException();
+			throw new AdaptiveMediaImageConfigurationException.
+				RequiredWidthOrHeightException();
 		}
 	}
 
@@ -456,29 +506,21 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 					companyId,
 					AdaptiveMediaImageCompanyConfiguration.class.getName()));
 
-			String[] nullableImageVariants = _getNullableImageVariants(
-				settings);
+			Optional<String[]> nullableImageVariants =
+				_getNullableImageVariants(settings);
 
-			if (nullableImageVariants != null) {
-				return Stream.of(nullableImageVariants).map(
-					_configurationEntryParser::parse);
-			}
+			String[] imageVariants = nullableImageVariants.orElseGet(
+				() -> settings.getValues("imageVariants", new String[0]));
 
-			String[] imageVariants = settings.getValues("imageVariants", null);
-
-			if (ArrayUtil.isEmpty(imageVariants)) {
-				return Stream.empty();
-			}
-
-			return
-				Stream.of(imageVariants).map(_configurationEntryParser::parse);
+			return Stream.of(imageVariants).map(
+				_configurationEntryParser::parse);
 		}
 		catch (SettingsException se) {
 			throw new AdaptiveMediaRuntimeException.InvalidConfiguration(se);
 		}
 	}
 
-	private String[] _getNullableImageVariants(Settings settings) {
+	private Optional<String[]> _getNullableImageVariants(Settings settings) {
 		PortletPreferencesSettings portletPreferencesSettings =
 			(PortletPreferencesSettings)settings;
 
@@ -487,7 +529,18 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 		Map<String, String[]> map = portletPreferences.getMap();
 
-		return map.get("imageVariants");
+		return Optional.ofNullable(map.get("imageVariants"));
+	}
+
+	private void _triggerConfigurationEvent(Object payload) {
+		Message message = new Message();
+
+		message.setPayload(payload);
+
+		_messageBus.sendMessage(
+			AdaptiveMediaImageDestinationNames.
+				ADAPTIVE_MEDIA_IMAGE_CONFIGURATION,
+			message);
 	}
 
 	private void _updateConfiguration(
@@ -504,9 +557,14 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			ModifiableSettings modifiableSettings =
 				settings.getModifiableSettings();
 
-			List<String> imageVariants = configurationEntries.stream().map(
-				_configurationEntryParser::getConfigurationString).collect(
-					Collectors.toList());
+			Stream<AdaptiveMediaImageConfigurationEntry>
+				configurationEntryStream = configurationEntries.stream();
+
+			List<String> imageVariants = configurationEntryStream.map(
+				_configurationEntryParser::getConfigurationString
+			).collect(
+				Collectors.toList()
+			);
 
 			modifiableSettings.setValues(
 				"imageVariants",
@@ -519,10 +577,20 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		}
 	}
 
+	private static final Pattern _positiveNumberPattern = Pattern.compile(
+		"\\d*[1-9]\\d*");
+
+	@Reference
+	private AdaptiveMediaImageEntryLocalService
+		_adaptiveMediaImageEntryLocalService;
+
 	private AdaptiveMediaImageConfigurationEntryParser
 		_configurationEntryParser;
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
+	private DestinationFactory _destinationFactory;
+
+	@Reference
+	private MessageBus _messageBus;
 
 }

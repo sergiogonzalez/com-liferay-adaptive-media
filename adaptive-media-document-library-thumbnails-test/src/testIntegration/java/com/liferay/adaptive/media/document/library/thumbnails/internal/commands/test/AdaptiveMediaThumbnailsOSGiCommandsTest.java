@@ -98,14 +98,16 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public static void setUpClass() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_configurationHelperServiceReference = registry.getServiceReference(
-			AdaptiveMediaImageConfigurationHelper.class);
-		_finderServiceReference = registry.getServiceReference(
-			AdaptiveMediaImageFinder.class);
+		_adaptiveMediaImageConfigurationHelperServiceReference =
+			registry.getServiceReference(
+				AdaptiveMediaImageConfigurationHelper.class);
+		_adaptiveMediaImageFinderServiceReference =
+			registry.getServiceReference(AdaptiveMediaImageFinder.class);
 
-		_configurationHelper = registry.getService(
-			_configurationHelperServiceReference);
-		_finder = registry.getService(_finderServiceReference);
+		_adaptiveMediaImageConfigurationHelper = registry.getService(
+			_adaptiveMediaImageConfigurationHelperServiceReference);
+		_adaptiveMediaImageFinder = registry.getService(
+			_adaptiveMediaImageFinderServiceReference);
 
 		_disableAdaptiveMediaThumbnails();
 		_disableDocumentLibraryAdaptiveMedia();
@@ -115,8 +117,9 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public static void tearDownClass() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
-		registry.ungetService(_configurationHelperServiceReference);
-		registry.ungetService(_finderServiceReference);
+		registry.ungetService(
+			_adaptiveMediaImageConfigurationHelperServiceReference);
+		registry.ungetService(_adaptiveMediaImageFinderServiceReference);
 
 		_enableDocumentLibraryAdaptiveMedia();
 		_enableAdaptiveMediaThumbnails();
@@ -145,17 +148,18 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 	@After
 	public void tearDown() throws Exception {
-		_configurationHelper.forceDeleteAdaptiveMediaImageConfigurationEntry(
-			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 100);
+		_adaptiveMediaImageConfigurationHelper.
+			forceDeleteAdaptiveMediaImageConfigurationEntry(
+				_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 100);
 
-		_configurationHelper.forceDeleteAdaptiveMediaImageConfigurationEntry(
-			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 300);
+		_adaptiveMediaImageConfigurationHelper.
+			forceDeleteAdaptiveMediaImageConfigurationEntry(
+				_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 300);
 
 		FileVersion latestFileVersion = _pngFileEntry.getFileVersion();
 
 		AdaptiveMediaImageEntryLocalServiceUtil.
-			deleteAdaptiveMediaImageEntryFileVersion(
-				latestFileVersion.getFileVersionId());
+			deleteAdaptiveMediaImageEntryFileVersion(latestFileVersion);
 
 		GroupLocalServiceUtil.deleteGroup(_group);
 
@@ -354,9 +358,10 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		properties.put("max-height", String.valueOf(height));
 		properties.put("max-width", String.valueOf(width));
 
-		_configurationHelper.addAdaptiveMediaImageConfigurationEntry(
-			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + width,
-			StringPool.BLANK, _THUMBNAIL_CONFIGURATION + width, properties);
+		_adaptiveMediaImageConfigurationHelper.
+			addAdaptiveMediaImageConfigurationEntry(
+				_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + width,
+				StringPool.BLANK, _THUMBNAIL_CONFIGURATION + width, properties);
 	}
 
 	private FileEntry _addPDFFileEntry() throws Exception {
@@ -382,11 +387,13 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	}
 
 	private long _getAdaptiveMediaCount(FileEntry fileEntry) throws Exception {
-		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> stream =
-			_finder.getAdaptiveMedia(
-				queryBuilder -> queryBuilder.allForFileEntry(fileEntry).done());
+		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
+			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+				queryBuilder -> queryBuilder.allForFileEntry(
+					fileEntry
+				).done());
 
-		return stream.count();
+		return adaptiveMediaStream.count();
 	}
 
 	private byte[] _getFileContents(String fileName) throws Exception {
@@ -438,12 +445,13 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 	private static final String _THUMBNAIL_CONFIGURATION = "thumbnail";
 
-	private static AdaptiveMediaImageConfigurationHelper _configurationHelper;
+	private static AdaptiveMediaImageConfigurationHelper
+		_adaptiveMediaImageConfigurationHelper;
 	private static ServiceReference<AdaptiveMediaImageConfigurationHelper>
-		_configurationHelperServiceReference;
-	private static AdaptiveMediaImageFinder _finder;
+		_adaptiveMediaImageConfigurationHelperServiceReference;
+	private static AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
 	private static ServiceReference<AdaptiveMediaImageFinder>
-		_finderServiceReference;
+		_adaptiveMediaImageFinderServiceReference;
 
 	private Company _company;
 	private Group _group;

@@ -14,6 +14,7 @@
 
 package com.liferay.adaptive.media;
 
+import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.portal.kernel.security.RandomUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -31,20 +32,24 @@ public class AdaptiveMediaAttributeTest {
 
 	@Test
 	public void testAllPublicAttributesAreSupported() {
-		Collection<AdaptiveMediaAttribute<?, ?>> publicAttributes =
+		Collection<AdaptiveMediaAttribute<?, ?>> adaptiveMediaAttributes =
 			Arrays.asList(
 				AdaptiveMediaAttribute.configurationUuid(),
 				AdaptiveMediaAttribute.contentLength(),
 				AdaptiveMediaAttribute.contentType(),
 				AdaptiveMediaAttribute.fileName());
 
-		Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributesMap =
-			AdaptiveMediaAttribute.allowedAttributes();
+		Map<String, AdaptiveMediaAttribute<?, ?>>
+			allowedAdaptiveMediaAttributesMap =
+				AdaptiveMediaAttribute.allowedAttributes();
 
-		Collection<AdaptiveMediaAttribute<?, ?>> allowedAttributes =
-			allowedAttributesMap.values();
+		Collection<AdaptiveMediaAttribute<?, ?>>
+			allowedAdaptiveMediaAttributes =
+				allowedAdaptiveMediaAttributesMap.values();
 
-		Assert.assertTrue(allowedAttributes.containsAll(publicAttributes));
+		Assert.assertTrue(
+			allowedAdaptiveMediaAttributes.containsAll(
+				adaptiveMediaAttributes));
 	}
 
 	@Test

@@ -67,11 +67,13 @@ public class EditImageConfigurationEntryMVCRenderCommand
 			AdaptiveMediaImageConfigurationEntry configurationEntry =
 				configurationEntryOptional.get();
 
-			int imageEntriesCount =
-				_imageEntryLocalService.getAdaptiveMediaImageEntriesCount(
-					themeDisplay.getCompanyId(), configurationEntry.getUUID());
+			int entriesCount =
+				_adaptiveMediaImageEntryLocalService.
+					getAdaptiveMediaImageEntriesCount(
+						themeDisplay.getCompanyId(),
+						configurationEntry.getUUID());
 
-			if (imageEntriesCount != 0) {
+			if (entriesCount != 0) {
 				configurationEntryEditable = false;
 			}
 		}
@@ -87,19 +89,12 @@ public class EditImageConfigurationEntryMVCRenderCommand
 		return "/adaptive_media/edit_image_configuration_entry.jsp";
 	}
 
-	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper) {
-
-		_adaptiveMediaImageConfigurationHelper =
-			adaptiveMediaImageConfigurationHelper;
-	}
-
+	@Reference
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
+	private AdaptiveMediaImageEntryLocalService
+		_adaptiveMediaImageEntryLocalService;
 
 }

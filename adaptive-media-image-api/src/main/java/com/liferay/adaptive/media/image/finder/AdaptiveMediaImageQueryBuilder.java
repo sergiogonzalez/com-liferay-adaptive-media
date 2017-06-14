@@ -42,8 +42,8 @@ public interface AdaptiveMediaImageQueryBuilder
 
 	public enum ConfigurationStatus {
 
-		ALL(configurationEntry -> true),
-		ENABLED(configurationEntry -> configurationEntry.isEnabled()),
+		ANY(configurationEntry -> true),
+		ENABLED(AdaptiveMediaImageConfigurationEntry::isEnabled),
 		DISABLED(configurationEntry -> !configurationEntry.isEnabled());
 
 		public Predicate<AdaptiveMediaImageConfigurationEntry> getPredicate() {
@@ -56,7 +56,8 @@ public interface AdaptiveMediaImageQueryBuilder
 			_predicate = predicate;
 		}
 
-		private final Predicate _predicate;
+		private final Predicate<AdaptiveMediaImageConfigurationEntry>
+			_predicate;
 
 	}
 
@@ -79,11 +80,13 @@ public interface AdaptiveMediaImageQueryBuilder
 	public interface FuzzySortStep extends FinalStep {
 
 		public <V> FuzzySortStep with(
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute,
+			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+				adaptiveMediaAttribute,
 			Optional<V> valueOptional);
 
 		public <V> FuzzySortStep with(
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute,
+			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+				adaptiveMediaAttribute,
 			V value);
 
 	}
@@ -92,11 +95,36 @@ public interface AdaptiveMediaImageQueryBuilder
 		extends ConfigurationStep, FuzzySortStep, StrictSortStep {
 	}
 
+	public enum SortOrder {
+
+		ASC {
+
+			@Override
+			public int getSortValue(int value) {
+				return value;
+			}
+
+		},
+
+		DESC {
+
+			@Override
+			public int getSortValue(int value) {
+				return -value;
+			}
+
+		};
+
+		public abstract int getSortValue(int value);
+
+	}
+
 	public interface StrictSortStep extends FinalStep {
 
 		public <V> StrictSortStep orderBy(
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V> attribute,
-			boolean asc);
+			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
+				adaptiveMediaAttribute,
+			SortOrder sortOrder);
 
 	}
 

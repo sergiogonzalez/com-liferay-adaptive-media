@@ -16,7 +16,11 @@ package com.liferay.adaptive.media.image.internal.test;
 
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.messaging.AdaptiveMediaImageDestinationNames;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
@@ -25,7 +29,9 @@ import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.After;
@@ -70,18 +76,21 @@ public abstract class BaseAdaptiveMediaImageConfigurationTestCase {
 	protected static void deleteAllConfigurationEntries()
 		throws IOException, PortalException {
 
-		AdaptiveMediaImageConfigurationHelper configurationHelper =
-			serviceTracker.getService();
+		AdaptiveMediaImageConfigurationHelper
+			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
 		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			configurationHelper.getAdaptiveMediaImageConfigurationEntries(
-				TestPropsValues.getCompanyId(), configurationEntry -> true);
+			adaptiveMediaImageConfigurationHelper.
+				getAdaptiveMediaImageConfigurationEntries(
+					TestPropsValues.getCompanyId(), configurationEntry -> true);
 
 		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
 				configurationEntries) {
 
-			configurationHelper.forceDeleteAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), configurationEntry.getUUID());
+			adaptiveMediaImageConfigurationHelper.
+				forceDeleteAdaptiveMediaImageConfigurationEntry(
+					TestPropsValues.getCompanyId(),
+					configurationEntry.getUUID());
 		}
 	}
 
@@ -109,8 +118,41 @@ public abstract class BaseAdaptiveMediaImageConfigurationTestCase {
 		Assert.assertTrue(configurationEntry.isEnabled());
 	}
 
+	protected List<Message> collectConfigurationMessages(
+			CheckedRunnable runnable)
+		throws Exception {
+
+		String destinationName =
+			AdaptiveMediaImageDestinationNames.
+				ADAPTIVE_MEDIA_IMAGE_CONFIGURATION;
+
+		List<Message> messages = new ArrayList<>();
+
+		MessageListener messageListener = messages::add;
+
+		MessageBusUtil.registerMessageListener(
+			destinationName, messageListener);
+
+		try {
+			runnable.run();
+		}
+		finally {
+			MessageBusUtil.unregisterMessageListener(
+				destinationName, messageListener);
+		}
+
+		return messages;
+	}
+
 	protected static ServiceTracker
 		<AdaptiveMediaImageConfigurationHelper,
 			AdaptiveMediaImageConfigurationHelper> serviceTracker;
+
+	@FunctionalInterface
+	protected interface CheckedRunnable {
+
+		public void run() throws Exception;
+
+	}
 
 }

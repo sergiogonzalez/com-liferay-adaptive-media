@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.content.transformer.internal;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.content.transformer.ContentTransformer;
 import com.liferay.adaptive.media.content.transformer.ContentTransformerContentType;
 import com.liferay.adaptive.media.content.transformer.constants.ContentTransformerContentTypes;
@@ -22,6 +21,7 @@ import com.liferay.adaptive.media.image.html.AdaptiveMediaImageHTMLTagFactory;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,8 +44,16 @@ public class HtmlContentTransformerImpl implements ContentTransformer<String> {
 	}
 
 	@Override
-	public String transform(String html)
-		throws AdaptiveMediaException, PortalException {
+	public String transform(String html) throws PortalException {
+		if (html == null) {
+			return null;
+		}
+
+		String lowerCaseHtml = StringUtil.toLowerCase(html);
+
+		if (!lowerCaseHtml.contains("data-fileentryid")) {
+			return html;
+		}
 
 		StringBuffer sb = new StringBuffer(html.length());
 
@@ -78,12 +86,12 @@ public class HtmlContentTransformerImpl implements ContentTransformer<String> {
 	}
 
 	@Reference(unbind = "-")
-	protected void setDlAppLocalService(DLAppLocalService dlAppLocalService) {
+	protected void setDLAppLocalService(DLAppLocalService dlAppLocalService) {
 		_dlAppLocalService = dlAppLocalService;
 	}
 
 	private static final Pattern _IMG_PATTERN = Pattern.compile(
-		"<img .*?\\s*data-fileEntryId=\"(\\d+)\".*?/>",
+		"<img [^>]*?\\s*data-fileEntryId=\"(\\d+)\".*?/>",
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 	private AdaptiveMediaImageHTMLTagFactory _adaptiveMediaImageHTMLTagFactory;

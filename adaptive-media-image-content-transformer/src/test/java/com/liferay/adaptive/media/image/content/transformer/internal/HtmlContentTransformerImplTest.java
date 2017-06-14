@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.content.transformer.internal;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.content.transformer.constants.ContentTransformerContentTypes;
 import com.liferay.adaptive.media.image.html.AdaptiveMediaImageHTMLTagFactory;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -42,14 +41,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class HtmlContentTransformerImplTest {
 
 	@Before
-	public void setUp() throws AdaptiveMediaException, PortalException {
+	public void setUp() throws PortalException {
 		Mockito.when(
 			_dlAppLocalService.getFileEntry(1989L)
 		).thenReturn(
 			_fileEntry
 		);
 
-		_htmlContentTransformer.setDlAppLocalService(_dlAppLocalService);
+		_htmlContentTransformer.setDLAppLocalService(_dlAppLocalService);
 		_htmlContentTransformer.setAdaptiveMediaImageHTMLTagFactory(
 			_adaptiveMediaImageHTMLTagFactory);
 	}
@@ -93,6 +92,25 @@ public class HtmlContentTransformerImplTest {
 	}
 
 	@Test
+	public void testReplacesAnAdaptableImgAfterANonAdaptableOne()
+		throws Exception {
+
+		Mockito.when(
+			_adaptiveMediaImageHTMLTagFactory.create(
+				"<img data-fileEntryId=\"1989\" src=\"adaptable\"/>",
+				_fileEntry)
+		).thenReturn(
+			"<whatever></whatever>"
+		);
+
+		Assert.assertEquals(
+			"<img src=\"not-adaptable\"/><whatever></whatever>",
+			_htmlContentTransformer.transform(
+				"<img src=\"not-adaptable\"/>" +
+					"<img data-fileEntryId=\"1989\" src=\"adaptable\"/>"));
+	}
+
+	@Test
 	public void testReplacesTheAdaptableImagesWithTheAdaptiveTag()
 		throws Exception {
 
@@ -125,6 +143,11 @@ public class HtmlContentTransformerImplTest {
 			_htmlContentTransformer.transform(
 				"<img data-fileEntryId=\"1989\" src=\"adaptable\"/>" +
 					"<img data-fileEntryId=\"1989\" src=\"adaptable\"/>"));
+	}
+
+	@Test
+	public void testReturnsNullForNullContent() throws Exception {
+		Assert.assertNull(_htmlContentTransformer.transform(null));
 	}
 
 	@Test

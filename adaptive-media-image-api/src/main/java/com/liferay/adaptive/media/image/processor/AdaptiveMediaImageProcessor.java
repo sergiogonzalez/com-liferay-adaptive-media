@@ -14,7 +14,6 @@
 
 package com.liferay.adaptive.media.image.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaException;
 import com.liferay.adaptive.media.processor.AdaptiveMediaProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -26,6 +25,6 @@ public interface AdaptiveMediaImageProcessor
 	extends AdaptiveMediaProcessor<FileVersion, AdaptiveMediaImageProcessor> {
 
 	public void process(FileVersion fileVersion, String configurationEntryUuid)
-		throws AdaptiveMediaException, PortalException;
+		throws PortalException;
 
 }

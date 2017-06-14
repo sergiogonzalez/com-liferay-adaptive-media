@@ -65,6 +65,8 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolver
 
 		JSONObject fileEntryJSONObject = JSONFactoryUtil.createJSONObject();
 
+		fileEntryJSONObject.put("fileEntryId", fileEntry.getFileEntryId());
+
 		String previewURL = DLUtil.getPreviewURL(
 			fileEntry, fileEntry.getFileVersion(), themeDisplay,
 			StringPool.BLANK, false, false);
@@ -76,9 +78,13 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolver
 		List<MediaQuery> mediaQueries = _mediaQueryProvider.getMediaQueries(
 			fileEntry);
 
-		Stream<MediaQuery> stream = mediaQueries.stream();
+		Stream<MediaQuery> mediaQueryStream = mediaQueries.stream();
 
-		stream.map(this::_getSourceJSONObject).forEach(sourcesArray::put);
+		mediaQueryStream.map(
+			this::_getSourceJSONObject
+		).forEach(
+			sourcesArray::put
+		);
 
 		fileEntryJSONObject.put("sources", sourcesArray);
 
