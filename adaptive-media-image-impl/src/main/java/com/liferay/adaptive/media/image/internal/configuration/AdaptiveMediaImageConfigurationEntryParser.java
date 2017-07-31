@@ -62,14 +62,13 @@ import org.osgi.service.component.annotations.Component;
  * </li>
  * <li>
  * <code>enabled</code> is a boolean value (<code>true</code> or
- * <code>false</code>). If not <code>true</code> the configuration will be
+ * <code>false</code>). If <code>false</code> the configuration will be
  * ignored when processing images. If not specified, the default value is
  * <code>true</code>.
  * </li>
  * </ul>
  *
  * @author Adolfo Pérez
- * @review
  */
 @Component(
 	immediate = true, service = AdaptiveMediaImageConfigurationEntryParser.class
