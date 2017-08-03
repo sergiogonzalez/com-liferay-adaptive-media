@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.content.transformer;
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**
- * Transforms the original content to include Adaptive Media.
- * This logic is invoked before the content is rendered.
+ * Transforms the original content to include Adaptive Media. This logic is
+ * invoked before the content is rendered.
  *
  * <p>
  * Implementations of this interface must specify the {@link

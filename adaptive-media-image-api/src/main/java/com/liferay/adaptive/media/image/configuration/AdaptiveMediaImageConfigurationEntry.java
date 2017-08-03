@@ -21,7 +21,7 @@ import java.util.Map;
  * adaptive media images. Image configuration entries are company scoped.
  *
  * <p>
- * It is recommended that you use {@link AdaptiveMediaImageConfigurationHelper} 
+ * It is recommended that you use {@link AdaptiveMediaImageConfigurationHelper}
  * to manage and fetch image configuration entries.
  * </p>
  *
@@ -44,8 +44,8 @@ public interface AdaptiveMediaImageConfigurationEntry {
 	public String getName();
 
 	/**
-	 * Returns a set of properties that communicate how adaptive media images should be 
-	 * generated for the image configuration entry.
+	 * Returns a set of properties that communicate how adaptive media images
+	 * should be generated for the image configuration entry.
 	 *
 	 * @return a set of properties for the image configuration entry
 	 */
@@ -59,11 +59,12 @@ public interface AdaptiveMediaImageConfigurationEntry {
 	public String getUUID();
 
 	/**
-	 * Returns <code>true</code> if the image configuration entry is enabled and 
+	 * Returns <code>true</code> if the image configuration entry is enabled and
 	 * used to generate adaptive media images.
 	 *
 	 * @return <code>true</code> if the image configuration entry is enabled and
-	 *         used to generate adaptive media images; <code>false</code> otherwise
+	 *         used to generate adaptive media images; <code>false</code>
+	 *         otherwise
 	 */
 	public boolean isEnabled();
 

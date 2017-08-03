@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * Manages and fetches an {@link AdaptiveMediaImageConfigurationEntry}. This 
- * interface is the preferred mechanism to interact with image configuration 
+ * Manages and fetches an {@link AdaptiveMediaImageConfigurationEntry}. This
+ * interface is the preferred mechanism to interact with image configuration
  * entries.
  *
  * @author Alejandro Hernández
@@ -103,10 +103,10 @@ public interface AdaptiveMediaImageConfigurationHelper {
 		throws IOException;
 
 	/**
-	 * Deletes an existing image configuration entry, even if it is
-	 * enabled. This should be a last resort. If possible, an image configuration 
-	 * should be disabled before deleting. If there is no image configuration
-	 * entry with the specified UUID, no operation is performed.
+	 * Deletes an existing image configuration entry, even if it is enabled.
+	 * This should be a last resort. If possible, an image configuration should
+	 * be disabled before deleting. If there is no image configuration entry
+	 * with the specified UUID, no operation is performed.
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  uuid the image configuration entry's UUID
@@ -128,8 +128,8 @@ public interface AdaptiveMediaImageConfigurationHelper {
 		getAdaptiveMediaImageConfigurationEntries(long companyId);
 
 	/**
-	 * Returns a collection of image configuration entries filtered by the 
-	 * given predicate for a company.
+	 * Returns a collection of image configuration entries filtered by the given
+	 * predicate for a company.
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  predicate the predicate used to filter the collection
@@ -141,7 +141,7 @@ public interface AdaptiveMediaImageConfigurationHelper {
 			Predicate<? super AdaptiveMediaImageConfigurationEntry> predicate);
 
 	/**
-	 * Returns an optional image configuration entry for the given company and 
+	 * Returns an optional image configuration entry for the given company and
 	 * image configuration entry UUID.
 	 *
 	 * @param  companyId the primary key of the company
