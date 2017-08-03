@@ -76,8 +76,8 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 *         the file store
 	 * @param  size the adaptive media image's size
 	 * @return the adaptive media image
-	 * @throws PortalException if an adaptive media image already existed for
-	 *         the file version and configuration
+	 * @throws PortalException if an adaptive media image already exists for the
+	 *         file version and configuration
 	 */
 	@Override
 	public AdaptiveMediaImageEntry addAdaptiveMediaImageEntry(

@@ -48,14 +48,15 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 	*
 	* @param configurationEntry the configuration used to create the adaptive
 	media image
-	* @param fileVersion the file version used to create the adaptive media image
+	* @param fileVersion the file version used to create the adaptive media
+	image
 	* @param width the adaptive media image's width
 	* @param height the adaptive media image's height
 	* @param inputStream the adaptive media image's input stream to store in
 	the file store
 	* @param size the adaptive media image's size
 	* @return the adaptive media image
-	* @throws PortalException if an adaptive media image already existed for the
+	* @throws PortalException if an adaptive media image already exists for the
 	file version and configuration
 	*/
 	public static com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry addAdaptiveMediaImageEntry(
@@ -247,10 +248,10 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 	}
 
 	/**
-	* Returns the total number of adaptive media images that are expected to be in
-	* a company once they are generated. The number of adaptive media images
-	* could be less if there are images that haven't generated the
-	* adaptive media image yet.
+	* Returns the total number of adaptive media images that are expected to be
+	* in a company once they are generated. The number of adaptive media images
+	* could be less if there are images that haven't generated the adaptive
+	* media image yet.
 	*
 	* @param companyId the primary key of the company
 	* @return the number of expected adaptive media images for a company
@@ -427,8 +428,8 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 
 	/**
 	* Deletes all the adaptive media images generated for the configuration in
-	* the company. This method deletes both the adaptive media image entry from the database
-	* and the bytes from the file store.
+	* the company. This method deletes both the adaptive media image entry from
+	* the database and the bytes from the file store.
 	*
 	* @param companyId the primary key of the company
 	* @param configurationEntry the configuration used to create the adaptive
@@ -442,8 +443,8 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 
 	/**
 	* Deletes all the adaptive media images generated for a file version. This
-	* method deletes both the adaptive media image entry from the database
-	* and the bytes from the file store.
+	* method deletes both the adaptive media image entry from the database and
+	* the bytes from the file store.
 	*
 	* @param fileVersion the file version
 	* @throws PortalException if the file version was not found
@@ -456,8 +457,8 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 
 	/**
 	* Deletes adaptive media images generated for a file version under a given
-	* configuration. This method deletes both the adaptive media image entry from the database
-	* and the bytes from the file store.
+	* configuration. This method deletes both the adaptive media image entry
+	* from the database and the bytes from the file store.
 	*
 	* @param configurationUuid the configuration UUID
 	* @param fileVersionId the primary key of the file version
