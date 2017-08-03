@@ -30,31 +30,31 @@ import java.util.Map;
 public interface AdaptiveMediaImageConfigurationEntry {
 
 	/**
-	 * Returns the description of the image configuration entry.
+	 * Returns the image configuration entry's description.
 	 *
-	 * @return the description of the image configuration entry.
+	 * @return the image configuration entry's description
 	 */
 	public String getDescription();
 
 	/**
-	 * Returns the name of the image configuration entry.
+	 * Returns the image configuration entry's name.
 	 *
-	 * @return the name of the image configuration entry.
+	 * @return the image configuration entry's name
 	 */
 	public String getName();
 
 	/**
-	 * Returns a set of properties that tell how adaptive media images should be 
+	 * Returns a set of properties that communicate how adaptive media images should be 
 	 * generated for the image configuration entry.
 	 *
-	 * @return a set of properties for the image configuration entry.
+	 * @return a set of properties for the image configuration entry
 	 */
 	public Map<String, String> getProperties();
 
 	/**
-	 * Returns the unique identifier for the image configuration entry.
+	 * Returns the image configuration entry's unique identifier.
 	 *
-	 * @return the unique identifier for the image configuration entry.
+	 * @return the image configuration entry's unique identifier
 	 */
 	public String getUUID();
 
@@ -63,7 +63,7 @@ public interface AdaptiveMediaImageConfigurationEntry {
 	 * used to generate adaptive media images.
 	 *
 	 * @return <code>true</code> if the image configuration entry is enabled and
-	 *         used to generate adaptive media images.
+	 *         used to generate adaptive media images; <code>false</code> otherwise
 	 */
 	public boolean isEnabled();
 

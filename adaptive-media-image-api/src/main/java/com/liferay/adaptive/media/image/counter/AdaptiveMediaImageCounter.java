@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.counter;
 /**
  * Provides an interface that returns the number of images that can use Adaptive
  * Media for a particular use case. The number of images returned must include 
- * the images that are already adapted and the images that have not been adapted.
+ * the images that are already adapted and the ones that are not adapted.
  *
  * <p>
  * This interface should be implemented by applications that store images and
@@ -42,7 +42,7 @@ public interface AdaptiveMediaImageCounter {
 	 * generated yet.
 	 *
 	 * @return the number of images in the application that should have an
-	 *         adaptive media image in a particular company.
+	 *         adaptive media image in a particular company
 	 */
 	public int countExpectedAdaptiveMediaImageEntries(long companyId);
 

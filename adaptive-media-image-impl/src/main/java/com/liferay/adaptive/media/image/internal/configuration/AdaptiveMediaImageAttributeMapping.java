@@ -83,7 +83,7 @@ public class AdaptiveMediaImageAttributeMapping {
 	 * attribute (if any) in this mapping.
 	 *
 	 * @param  adaptiveMediaAttribute a non <code>null</code> attribute
-	 * @return A non-<code>null</code> optional that contains the
+	 * @return a non-<code>null</code> optional that contains the
 	 *         (non-<code>null</code>) value (if any)
 	 */
 	public <V> Optional<V> getValueOptional(

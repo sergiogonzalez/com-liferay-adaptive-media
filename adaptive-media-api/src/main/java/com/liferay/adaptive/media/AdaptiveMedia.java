@@ -54,8 +54,8 @@ public interface AdaptiveMedia<T> {
 	 * This method always returns a non-<code>null</code> optional.
 	 *
 	 * @param  adaptiveMediaAttribute the adaptive media attribute
-	 * @return the attribute value wrapped in an {@link Optional}. If no value 
-	 *         exist, an {@link Optional#EMPTY} is returned.
+	 * @return the attribute value wrapped in an {@link Optional}. If no value
+	 *         exists, an {@link Optional#EMPTY} is returned.
 	 */
 	public <V> Optional<V> getValueOptional(
 		AdaptiveMediaAttribute<T, V> adaptiveMediaAttribute);

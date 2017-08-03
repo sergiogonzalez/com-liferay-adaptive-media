@@ -23,8 +23,8 @@ import com.liferay.portal.kernel.exception.PortalException;
  * Generates a specific type of media asynchronously.
  *
  * <p>
- * Delegates the generation of the media in {@link AdaptiveMediaProcessor} by 
- * invoking it in an asynchronous manner.
+ * This processor delegates the generation of the media in {@link
+ * AdaptiveMediaProcessor} by invoking it in an asynchronous manner.
  * </p>
  *
  * <p>
@@ -43,30 +43,27 @@ public interface AdaptiveMediaAsyncProcessor<M, T> {
 	 *
 	 * @param command the command that is pending execution on the model
 	 * @param modelId the model ID to remove from the queue
-	 *
 	 */
 	public void cleanQueue(
 		AdaptiveMediaProcessorCommand command, String modelId);
 
 	/**
-	 * Asynchronously removes any generated media from the specified model.
+	 * Asynchronously removes any generated media from the model.
 	 *
-	 * @param  model the model to remove all generated media from
-	 * @param  modelId the model ID for the model
+	 * @param  model the model from which to remove all generated media
+	 * @param  modelId the model's ID
 	 * @throws PortalException if an error occurred while calling any Liferay
 	 *         services
-	 *
 	 */
 	public void triggerCleanUp(M model, String modelId) throws PortalException;
 
 	/**
 	 * Asynchronously generates the media for the model.
 	 *
-	 * @param  model the model
-	 * @param  modelId the model ID for the model
+	 * @param  model the model for which media is generated
+	 * @param  modelId the model's ID
 	 * @throws PortalException if an error occurred while calling any Liferay
 	 *         services
-	 *
 	 */
 	public void triggerProcess(M model, String modelId) throws PortalException;
 

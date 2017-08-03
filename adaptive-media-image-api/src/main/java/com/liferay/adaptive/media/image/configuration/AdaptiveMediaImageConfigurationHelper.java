@@ -40,16 +40,16 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * Adds a new image configuration entry.
 	 *
 	 * @param  companyId the primary key of the company
-	 * @param  name the unique name of the image configuration entry.
-	 * @param  description the description of the image configuration entry
+	 * @param  name the image configuration entry's unique name
+	 * @param  description the image configuration entry's description
 	 * @param  uuid the image configuration entry's UUID
 	 * @param  properties a set of properties with additional information about
 	 *         how the adaptive media image will be generated
 	 * @return the image configuration entry
 	 * @throws AdaptiveMediaImageConfigurationException if there was an issue
-	 *         with the values of the new configuration entry.
+	 *         with the values of the new configuration entry
 	 * @throws IOException if there was an issue when persisting the new image
-	 *         configuration entry in the store.
+	 *         configuration entry in the store
 	 */
 	public AdaptiveMediaImageConfigurationEntry
 			addAdaptiveMediaImageConfigurationEntry(
@@ -58,19 +58,16 @@ public interface AdaptiveMediaImageConfigurationHelper {
 		throws AdaptiveMediaImageConfigurationException, IOException;
 
 	/**
-	 * Deletes an existing and disabled image configuration entry.
-	 *
-	 * <p>
-	 * If no image configuration entry matches the specified UUID, no operation is 
-	 * done.
-	 * </p>
+	 * Deletes an existing and disabled image configuration entry. If no image
+	 * configuration entry matches the specified UUID, no operation is
+	 * performed.
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  uuid the image configuration entry's UUID
 	 * @throws InvalidStateAdaptiveMediaImageConfigurationException if the image
-	 *         configuration entry to delete was not disabled.
+	 *         configuration entry to delete was not disabled
 	 * @throws IOException if there was an issue when deleting the image
-	 *         configuration entry from the store.
+	 *         configuration entry from the store
 	 */
 	public void deleteAdaptiveMediaImageConfigurationEntry(
 			long companyId, String uuid)
@@ -78,34 +75,28 @@ public interface AdaptiveMediaImageConfigurationHelper {
 			IOException;
 
 	/**
-	 * Disables an existing and enabled image configuration entry.
-	 *
-	 * <p>
-	 * If there is no image configuration entry with the specified UUID or it is
-	 * already disabled, no operation is done.
-	 * </p>
+	 * Disables an existing and enabled image configuration entry. If there is
+	 * no image configuration entry with the specified UUID or it is already
+	 * disabled, no operation is performed.
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  uuid the image configuration entry's UUID
 	 * @throws IOException if there was an issue when updating the image
-	 *         configuration entry from the store.
+	 *         configuration entry from the store
 	 */
 	public void disableAdaptiveMediaImageConfigurationEntry(
 			long companyId, String uuid)
 		throws IOException;
 
 	/**
-	 * Enables an existing and disabled image configuration entry.
-	 *
-	 * <p>
-	 * If there is no image configuration entry with the specified UUID or it is
-	 * already enabled, no operation is done.
-	 * </p>
+	 * Enables an existing and disabled image configuration entry. If there is
+	 * no image configuration entry with the specified UUID or it is already
+	 * enabled, no operation is performed.
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  uuid the image configuration entry's UUID
 	 * @throws IOException if there was an issue when updating the image
-	 *         configuration entry from the store.
+	 *         configuration entry from the store
 	 */
 	public void enableAdaptiveMediaImageConfigurationEntry(
 			long companyId, String uuid)
@@ -114,17 +105,13 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	/**
 	 * Deletes an existing image configuration entry, even if it is
 	 * enabled. This should be a last resort. If possible, an image configuration 
-	 * should be disabled before deleting.
-	 *
-	 * <p>
-	 * If there is no image configuration entry with the specified UUID, no
-	 * operation is done.
-	 * </p>
+	 * should be disabled before deleting. If there is no image configuration
+	 * entry with the specified UUID, no operation is performed.
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  uuid the image configuration entry's UUID
 	 * @throws IOException if there was an issue when deleting the image
-	 *         configuration entry from the store.
+	 *         configuration entry from the store
 	 */
 	public void forceDeleteAdaptiveMediaImageConfigurationEntry(
 			long companyId, String uuid)
@@ -170,16 +157,16 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  oldUuid the image configuration entry's UUID to update
-	 * @param  name the new name for the image configuration entry
-	 * @param  description the new description for the image configuration entry
-	 * @param  newUuid the new UUID for the image configuration entry
+	 * @param  name the new image configuration entry's name
+	 * @param  description the new image configuration entry's description
+	 * @param  newUuid the new image configuration entry's UUID
 	 * @param  properties the new set of properties with additional information
 	 *         about how the adaptive media image will be generated
 	 * @return the updated image configuration entry
 	 * @throws AdaptiveMediaImageConfigurationException if there was an issue
-	 *         with the values of the new configuration entry.
+	 *         with the values of the new configuration entry
 	 * @throws IOException if there was an issue when persisting the new image
-	 *         configuration entry in the store.
+	 *         configuration entry in the store
 	 */
 	public AdaptiveMediaImageConfigurationEntry
 			updateAdaptiveMediaImageConfigurationEntry(
