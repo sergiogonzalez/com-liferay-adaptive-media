@@ -42,9 +42,7 @@ public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 	public BlogsEntry create(ServiceContext serviceContext) throws Exception {
 		BlogsEntry blogsEntry = _blogsEntryLocalService.addEntry(
 			serviceContext.getUserId(), "Adaptive Media Performance Blog Entry",
-			_getContent(
-				serviceContext.getUserId(), serviceContext.getScopeGroupId()),
-			serviceContext);
+			_getContent(serviceContext), serviceContext);
 
 		_blogEntries.add(blogsEntry);
 
@@ -61,21 +59,21 @@ public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 		}
 	}
 
-	private FileEntry _createFile(long userId, long groupId, String name)
+	private FileEntry _createFile(String name, ServiceContext serviceContext)
 		throws Exception {
 
 		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
-			userId, groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, name,
-			"image/jpeg", FileUtil.getBytes(getClass(), name),
-			new ServiceContext());
+			serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, name, "image/jpeg",
+			FileUtil.getBytes(getClass(), name), serviceContext);
 
 		_fileEntries.add(fileEntry);
 
 		return fileEntry;
 	}
 
-	private String _getContent(long userId, long groupId) throws Exception {
-		FileEntry image1 = _createFile(userId, groupId, "image.jpg");
+	private String _getContent(ServiceContext serviceContext) throws Exception {
+		FileEntry image1 = _createFile("image.jpg", serviceContext);
 
 		String previewURL = DLUtil.getPreviewURL(
 			image1, image1.getFileVersion(), null, StringPool.BLANK, false,
