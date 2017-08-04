@@ -16,7 +16,13 @@ package com.liferay.adaptive.media.performance.internal;
 
 import com.liferay.portal.instance.lifecycle.BasePortalInstanceLifecycleListener;
 import com.liferay.portal.instance.lifecycle.PortalInstanceLifecycleListener;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.site.demo.data.creator.SiteDemoDataCreator;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -31,10 +37,18 @@ public class AdaptiveMediaPerformanceDemo
 
 	@Override
 	public void portalInstanceRegistered(Company company) throws Exception {
-		_adaptiveMediaImagePerformanceConfigurationDemoDataCreator.create(
-			company.getCompanyId());
+		Group group = _siteDemoDataCreator.create(
+			company.getCompanyId(), "Adaptive Media Performance Testing");
+
+		ServiceContext serviceContext = _getServiceContext(group);
+
+		_adaptiveMediaImagePerformanceLayoutDemoDataCreator.create(
+			serviceContext);
 
 		_adaptiveMediaImagePerformanceBlogsEntryDemoDataCreator.create(
+			serviceContext);
+
+		_adaptiveMediaImagePerformanceConfigurationDemoDataCreator.create(
 			company.getCompanyId());
 	}
 
@@ -42,6 +56,23 @@ public class AdaptiveMediaPerformanceDemo
 	protected void deactivate() throws Exception {
 		_adaptiveMediaImagePerformanceConfigurationDemoDataCreator.delete();
 		_adaptiveMediaImagePerformanceBlogsEntryDemoDataCreator.delete();
+		_adaptiveMediaImagePerformanceLayoutDemoDataCreator.delete();
+		_siteDemoDataCreator.delete();
+	}
+
+	private ServiceContext _getServiceContext(Group group)
+		throws PortalException {
+
+		User user = _userLocalService.getDefaultUser(group.getCompanyId());
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+		serviceContext.setScopeGroupId(group.getGroupId());
+		serviceContext.setUserId(user.getUserId());
+
+		return serviceContext;
 	}
 
 	@Reference
@@ -51,5 +82,15 @@ public class AdaptiveMediaPerformanceDemo
 	@Reference
 	private AdaptiveMediaImagePerformanceConfigurationDemoDataCreator
 		_adaptiveMediaImagePerformanceConfigurationDemoDataCreator;
+
+	@Reference
+	private AdaptiveMediaImagePerformanceLayoutDemoDataCreator
+		_adaptiveMediaImagePerformanceLayoutDemoDataCreator;
+
+	@Reference
+	private SiteDemoDataCreator _siteDemoDataCreator;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

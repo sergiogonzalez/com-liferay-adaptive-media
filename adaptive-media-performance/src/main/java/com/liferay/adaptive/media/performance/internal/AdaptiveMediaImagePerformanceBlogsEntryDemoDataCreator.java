@@ -16,16 +16,14 @@ package com.liferay.adaptive.media.performance.internal;
 
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.service.BlogsEntryLocalService;
+import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.util.DLUtil;
-import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.users.admin.demo.data.creator.BasicUserDemoDataCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,16 +39,12 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 
-	public BlogsEntry create(long companyId) throws Exception {
-		User user = _basicUserDemoDataCreator.create(
-			companyId, "user1@liferay.com");
-
-		Group guestGroup = _groupLocalService.getGroup(companyId, "Guest");
-
+	public BlogsEntry create(ServiceContext serviceContext) throws Exception {
 		BlogsEntry blogsEntry = _blogsEntryLocalService.addEntry(
-			user.getUserId(), "Adaptive Media Performance Blog Entry",
-			_getContent(user, guestGroup),
-			_getServiceContext(guestGroup.getGroupId()));
+			serviceContext.getUserId(), "Adaptive Media Performance Blog Entry",
+			_getContent(
+				serviceContext.getUserId(), serviceContext.getScopeGroupId()),
+			serviceContext);
 
 		_blogEntries.add(blogsEntry);
 
@@ -65,25 +59,23 @@ public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 		for (FileEntry fileEntry : _fileEntries) {
 			_dlAppLocalService.deleteFileEntry(fileEntry.getFileEntryId());
 		}
-
-		_basicUserDemoDataCreator.delete();
 	}
 
 	private FileEntry _createFile(long userId, long groupId, String name)
 		throws Exception {
 
 		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
-			userId, groupId, 0, name, "image/jpeg",
-			FileUtil.getBytes(getClass(), name), new ServiceContext());
+			userId, groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, name,
+			"image/jpeg", FileUtil.getBytes(getClass(), name),
+			new ServiceContext());
 
 		_fileEntries.add(fileEntry);
 
 		return fileEntry;
 	}
 
-	private String _getContent(User user, Group guestGroup) throws Exception {
-		FileEntry image1 = _createFile(
-			user.getUserId(), guestGroup.getGroupId(), "image.jpg");
+	private String _getContent(long userId, long groupId) throws Exception {
+		FileEntry image1 = _createFile(userId, groupId, "image.jpg");
 
 		String previewURL = DLUtil.getPreviewURL(
 			image1, image1.getFileVersion(), null, StringPool.BLANK, false,
@@ -92,19 +84,6 @@ public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 		return "<img data-fileEntryId=\"" + image1.getFileEntryId() +
 			"\" src=\"" + previewURL + "\">";
 	}
-
-	private ServiceContext _getServiceContext(long groupId) {
-		ServiceContext serviceContext = new ServiceContext();
-
-		serviceContext.setAddGroupPermissions(true);
-		serviceContext.setAddGuestPermissions(true);
-		serviceContext.setScopeGroupId(groupId);
-
-		return serviceContext;
-	}
-
-	@Reference
-	private BasicUserDemoDataCreator _basicUserDemoDataCreator;
 
 	private final List<BlogsEntry> _blogEntries = new ArrayList<>();
 
