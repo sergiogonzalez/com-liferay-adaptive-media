@@ -14,8 +14,11 @@
 
 package com.liferay.adaptive.media.performance.internal;
 
+import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+
+import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,6 +43,8 @@ public class AdaptiveMediaImagePerformanceConfigurationDemoDataCreator {
 			long companyId)
 		throws Exception {
 
+		_processOriginalEntries(companyId);
+
 		return Arrays.asList(
 			_create(companyId, "Thumbnails", 300, 300),
 			_create(companyId, "Mobile", 320, 480),
@@ -62,6 +67,8 @@ public class AdaptiveMediaImagePerformanceConfigurationDemoDataCreator {
 				uuids.remove(uuid);
 			}
 		}
+
+		_restoreOriginalEntries();
 	}
 
 	private void _addConfigurationUuid(long companyId, String uuid) {
@@ -95,10 +102,44 @@ public class AdaptiveMediaImagePerformanceConfigurationDemoDataCreator {
 		return configurationEntry;
 	}
 
+	private void _processOriginalEntries(long companyId) throws IOException {
+		Collection<AdaptiveMediaImageConfigurationEntry> originalEntries =
+			_adaptiveMediaImageConfigurationHelper.
+				getAdaptiveMediaImageConfigurationEntries(companyId);
+
+		for (AdaptiveMediaImageConfigurationEntry entry : originalEntries) {
+			_adaptiveMediaImageConfigurationHelper.
+				forceDeleteAdaptiveMediaImageConfigurationEntry(
+					companyId, entry.getUUID());
+		}
+
+		_originalEntriesMap.put(companyId, originalEntries);
+	}
+
+	private void _restoreOriginalEntries()
+		throws AdaptiveMediaImageConfigurationException, IOException {
+
+		for (Long companyId : _originalEntriesMap.keySet()) {
+			Collection<AdaptiveMediaImageConfigurationEntry> entries =
+				_originalEntriesMap.get(companyId);
+
+			for (AdaptiveMediaImageConfigurationEntry entry : entries) {
+				_adaptiveMediaImageConfigurationHelper.
+					addAdaptiveMediaImageConfigurationEntry(
+						companyId, entry.getName(), entry.getDescription(),
+						entry.getUUID(), entry.getProperties());
+			}
+
+			_originalEntriesMap.remove(companyId);
+		}
+	}
+
 	@Reference
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 
 	private final Map<Long, List<String>> _configurationIds = new HashMap<>();
+	private final Map<Long, Collection<AdaptiveMediaImageConfigurationEntry>>
+		_originalEntriesMap = new HashMap<>();
 
 }
