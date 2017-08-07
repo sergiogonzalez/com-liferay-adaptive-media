@@ -19,6 +19,7 @@ import com.liferay.blogs.service.BlogsEntryLocalService;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.util.DLUtil;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -62,9 +63,13 @@ public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 	private FileEntry _createFile(String name, ServiceContext serviceContext)
 		throws Exception {
 
+		String fileName = PortletFileRepositoryUtil.getUniqueFileName(
+			serviceContext.getScopeGroupId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, name);
+
 		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
 			serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, name, "image/jpeg",
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, fileName, "image/jpeg",
 			FileUtil.getBytes(getClass(), name), serviceContext);
 
 		_fileEntries.add(fileEntry);
@@ -73,14 +78,24 @@ public class AdaptiveMediaImagePerformanceBlogsEntryDemoDataCreator {
 	}
 
 	private String _getContent(ServiceContext serviceContext) throws Exception {
-		FileEntry image1 = _createFile("image.jpg", serviceContext);
+		int numberOfImages = 50;
 
+		StringBuilder sb = new StringBuilder(numberOfImages);
+
+		for (int i = 0; i < numberOfImages; i++) {
+			sb.append(_getImgTag(_createFile("image.jpg", serviceContext)));
+		}
+
+		return sb.toString();
+	}
+
+	private String _getImgTag(FileEntry fileEntry) throws Exception {
 		String previewURL = DLUtil.getPreviewURL(
-			image1, image1.getFileVersion(), null, StringPool.BLANK, false,
-			true);
+			fileEntry, fileEntry.getFileVersion(), null, StringPool.BLANK,
+			false, true);
 
-		return "<img data-fileEntryId=\"" + image1.getFileEntryId() +
-			"\" src=\"" + previewURL + "\">";
+		return "<img data-fileEntryId=\"" + fileEntry.getFileEntryId() +
+			"\" src=\"" + previewURL + "\"/>";
 	}
 
 	private final List<BlogsEntry> _blogEntries = new ArrayList<>();
