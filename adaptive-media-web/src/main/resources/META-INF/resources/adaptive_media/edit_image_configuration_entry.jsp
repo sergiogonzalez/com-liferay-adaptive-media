@@ -55,6 +55,8 @@ if (configurationEntry != null) {
 
 		<aui:fieldset-group markupView="lexicon">
 			<aui:fieldset>
+				<div class="error-wrapper"></div>
+
 				<c:if test="<%= !configurationEntryEditable %>">
 					<div class="alert alert-info">
 						<liferay-ui:message key="the-images-for-this-resolution-are-already-adapted" />
