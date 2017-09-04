@@ -77,6 +77,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		_checkName(name);
 		_checkProperties(properties);
 
+		_normalizeProperties(properties);
+
 		String normalizedUuid = FriendlyURLNormalizerUtil.normalize(uuid);
 
 		_checkUuid(normalizedUuid);
@@ -316,6 +318,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		_checkName(name);
 		_checkProperties(properties);
 
+		_normalizeProperties(properties);
+
 		String normalizedUuid = FriendlyURLNormalizerUtil.normalize(newUuid);
 
 		_checkUuid(normalizedUuid);
@@ -545,6 +549,25 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		Map<String, String[]> map = portletPreferences.getMap();
 
 		return Optional.ofNullable(map.get("imageVariants"));
+	}
+
+	private void _normalizeProperties(Map<String, String> properties) {
+		String maxHeightString = properties.get("max-height");
+		String maxWidthString = properties.get("max-width");
+
+		if (Validator.isNotNull(maxHeightString) &&
+			Validator.isNotNull(maxWidthString)) {
+
+			return;
+		}
+
+		if (Validator.isNull(maxHeightString)) {
+			properties.put("max-height", "0");
+		}
+
+		if (Validator.isNull(maxWidthString)) {
+			properties.put("max-width", "0");
+		}
 	}
 
 	private void _triggerConfigurationEvent(Object payload) {

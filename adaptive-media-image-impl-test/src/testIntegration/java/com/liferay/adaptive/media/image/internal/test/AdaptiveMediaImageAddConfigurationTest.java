@@ -114,7 +114,7 @@ public class AdaptiveMediaImageAddConfigurationTest
 		Map<String, String> actualProperties =
 			configurationEntry.getProperties();
 
-		Assert.assertEquals("", actualProperties.get("max-height"));
+		Assert.assertEquals("0", actualProperties.get("max-height"));
 		Assert.assertEquals("100", actualProperties.get("max-width"));
 	}
 
@@ -203,7 +203,7 @@ public class AdaptiveMediaImageAddConfigurationTest
 			configurationEntry.getProperties();
 
 		Assert.assertEquals("100", actualProperties.get("max-height"));
-		Assert.assertEquals("", actualProperties.get("max-width"));
+		Assert.assertEquals("0", actualProperties.get("max-width"));
 	}
 
 	@Test(
@@ -400,7 +400,7 @@ public class AdaptiveMediaImageAddConfigurationTest
 			configurationEntry.getProperties();
 
 		Assert.assertEquals("100", actualProperties.get("max-height"));
-		Assert.assertNull(actualProperties.get("max-width"));
+		Assert.assertEquals("0", actualProperties.get("max-width"));
 	}
 
 	@Test
@@ -430,7 +430,7 @@ public class AdaptiveMediaImageAddConfigurationTest
 		Map<String, String> actualProperties =
 			configurationEntry.getProperties();
 
-		Assert.assertNull(actualProperties.get("max-height"));
+		Assert.assertEquals("0", actualProperties.get("max-height"));
 		Assert.assertEquals("100", actualProperties.get("max-width"));
 	}
 
