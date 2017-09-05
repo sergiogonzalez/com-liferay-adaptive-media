@@ -108,15 +108,15 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Assert.assertEquals(
 			"adaptivemedia", jsonObject.getString("extraPlugins"));
@@ -165,15 +165,15 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Assert.assertEquals(
 			"ae_placeholder,ae_selectionregion,ae_uicore,adaptivemedia",
@@ -185,7 +185,7 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 		throws Exception {
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		JournalItemSelectorCriterion blogsItemSelectorCriterion =
@@ -230,12 +230,12 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
 
@@ -254,12 +254,12 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
 
@@ -279,12 +279,12 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
 
@@ -307,15 +307,15 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector, Mockito.never()
@@ -352,15 +352,15 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector, Mockito.never()
@@ -419,15 +419,15 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector
@@ -480,15 +480,15 @@ public class AdaptiveMediaJournalEditorConfigContributorTest
 			originalJSONObject.toJSONString());
 
 		AdaptiveMediaJournalEditorConfigContributor
-            adaptiveMediaJournalEditorConfigContributor =
+			adaptiveMediaJournalEditorConfigContributor =
 				new AdaptiveMediaJournalEditorConfigContributor();
 
 		adaptiveMediaJournalEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
 		adaptiveMediaJournalEditorConfigContributor.populateConfigJSONObject(
-            jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-            _requestBackedPortletURLFactory);
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector
