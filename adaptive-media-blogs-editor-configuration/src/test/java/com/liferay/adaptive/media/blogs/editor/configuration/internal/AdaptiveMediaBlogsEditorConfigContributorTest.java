@@ -12,16 +12,16 @@
  * details.
  */
 
-package com.liferay.adaptive.media.journal.editor.configuration.internal;
+package com.liferay.adaptive.media.blogs.editor.configuration.internal;
 
 import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
+import com.liferay.blogs.item.selector.criterion.BlogsItemSelectorCriterion;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
 import com.liferay.item.selector.criteria.audio.criterion.AudioItemSelectorCriterion;
 import com.liferay.item.selector.criteria.file.criterion.FileItemSelectorCriterion;
-import com.liferay.journal.item.selector.criterion.JournalItemSelectorCriterion;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -52,7 +52,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 /**
  * @author Sergio González
  */
-public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
+public class AdaptiveMediaBlogsEditorConfigContributorTest
 	extends PowerMockito {
 
 	@Before
@@ -107,17 +107,16 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Assert.assertEquals(
 			"adaptivemedia", jsonObject.getString("extraPlugins"));
@@ -165,17 +164,16 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Assert.assertEquals(
 			"ae_placeholder,ae_selectionregion,ae_uicore,adaptivemedia",
@@ -186,18 +184,18 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 	public void testAddAdaptiveMediaImageFileEntryItemSelectorReturnType()
 		throws Exception {
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		JournalItemSelectorCriterion blogsItemSelectorCriterion =
-			new JournalItemSelectorCriterion();
+		BlogsItemSelectorCriterion blogsItemSelectorCriterion =
+			new BlogsItemSelectorCriterion();
 
 		blogsItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
+		adaptiveMediaBlogsEditorConfigContributor.
 			addAdaptiveMediaImageFileEntryItemSelectorReturnType(
 				blogsItemSelectorCriterion);
 
@@ -207,19 +205,12 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		Assert.assertEquals(
 			desiredItemSelectorReturnTypes.toString(), 2,
 			desiredItemSelectorReturnTypes.size());
-
-		ItemSelectorReturnType itemSelectorReturnType0 =
-			desiredItemSelectorReturnTypes.get(0);
-
 		Assert.assertTrue(
-			itemSelectorReturnType0 instanceof
+			desiredItemSelectorReturnTypes.get(0) instanceof
 				AdaptiveMediaImageFileEntryItemSelectorReturnType);
-
-		ItemSelectorReturnType itemSelectorReturnType1 =
-			desiredItemSelectorReturnTypes.get(1);
-
 		Assert.assertTrue(
-			itemSelectorReturnType1 instanceof FileEntryItemSelectorReturnType);
+			desiredItemSelectorReturnTypes.get(1) instanceof
+				FileEntryItemSelectorReturnType);
 	}
 
 	@Test
@@ -231,14 +222,13 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
 
@@ -256,44 +246,15 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
-
-		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
-
-		JSONAssert.assertEquals(
-			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
-	}
-
-	@Test
-	public void testImgIsNotAddedToAllowedContentIfEverythingWasAlreadyAllowed()
-		throws Exception {
-
-		JSONObject originalJSONObject = JSONFactoryUtil.createJSONObject();
-
-		originalJSONObject.put("allowedContent", true);
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			originalJSONObject.toJSONString());
-
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
-
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		JSONObject expectedJSONObject = JSONFactoryUtil.createJSONObject();
-
-		expectedJSONObject.put("allowedContent", true);
 
 		JSONAssert.assertEquals(
 			expectedJSONObject.toJSONString(), jsonObject.toJSONString(), true);
@@ -311,17 +272,16 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector, Mockito.never()
@@ -357,17 +317,16 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector, Mockito.never()
@@ -425,17 +384,16 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector
@@ -487,17 +445,16 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			originalJSONObject.toJSONString());
 
-		DynamicAdaptiveMediaJournalEditorConfigContributor
-			dynamicAdaptiveMediaJournalEditorConfigContributor =
-				new DynamicAdaptiveMediaJournalEditorConfigContributor();
+		AdaptiveMediaBlogsEditorConfigContributor
+			adaptiveMediaBlogsEditorConfigContributor =
+				new AdaptiveMediaBlogsEditorConfigContributor();
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.setItemSelector(
+		adaptiveMediaBlogsEditorConfigContributor.setItemSelector(
 			_itemSelector);
 
-		dynamicAdaptiveMediaJournalEditorConfigContributor.
-			populateConfigJSONObject(
-				jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
-				_requestBackedPortletURLFactory);
+		adaptiveMediaBlogsEditorConfigContributor.populateConfigJSONObject(
+			jsonObject, _inputEditorTaglibAttributes, _themeDisplay,
+			_requestBackedPortletURLFactory);
 
 		Mockito.verify(
 			_itemSelector
@@ -527,8 +484,8 @@ public class DynamicAdaptiveMediaJournalEditorConfigContributorTest
 	private List<ItemSelectorCriterion>
 		_getBlogsItemSelectorCriterionFileEntryItemSelectorReturnType() {
 
-		JournalItemSelectorCriterion blogsItemSelectorCriterion =
-			new JournalItemSelectorCriterion();
+		BlogsItemSelectorCriterion blogsItemSelectorCriterion =
+			new BlogsItemSelectorCriterion();
 
 		blogsItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			Collections.<ItemSelectorReturnType>singletonList(

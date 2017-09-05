@@ -85,7 +85,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testExportContentWithDynamicReferenceDoesNotEscape()
+	public void testExportContentWithReferenceDoesNotEscape()
 		throws Exception {
 
 		String content = "&<img data-fileentryid=\"1\" src=\"url\" />&";
@@ -131,7 +131,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testExportImportContentWithDynamicReference() throws Exception {
+	public void testExportImportContentWithReference() throws Exception {
 		String prefix = StringUtil.randomString();
 		String suffix = StringUtil.randomString();
 
@@ -147,7 +147,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testExportImportContentWithDynamicReferenceContainingMoreAttributes()
+	public void testExportImportContentWithReferenceContainingMoreAttributes()
 		throws Exception {
 
 		String prefix = StringUtil.randomString();
@@ -166,7 +166,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testExportImportContentWithMultipleDynamicReferences()
+	public void testExportImportContentWithMultipleReferences()
 		throws Exception {
 
 		String prefix = StringUtil.randomString();
@@ -263,7 +263,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testImportContentIgnoresInvalidDynamicReferences()
+	public void testImportContentIgnoresInvalidReferences()
 		throws Exception {
 
 		String content = "<img export-import-path=\"PATH_1\" />";
@@ -316,7 +316,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test(expected = NoSuchFileEntryException.class)
-	public void testValidateContentFailsWhenInvalidDynamicReferences()
+	public void testValidateContentFailsWhenInvalidReferences()
 		throws Exception {
 
 		String content = "<img data-fileentryid=\"0\" src=\"PATH_1\" />";
@@ -354,7 +354,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testValidateContentSucceedsWhenAllDynamicReferencesAreValid()
+	public void testValidateContentSucceedsWhenAllReferencesAreValid()
 		throws Exception {
 
 		String content = "<img data-fileentryid=\"1\" src=\"PATH_1\" />";

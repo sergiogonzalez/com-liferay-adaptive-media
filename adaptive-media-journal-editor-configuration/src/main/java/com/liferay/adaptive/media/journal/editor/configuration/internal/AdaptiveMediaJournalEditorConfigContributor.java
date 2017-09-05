@@ -12,17 +12,17 @@
  * details.
  */
 
-package com.liferay.adaptive.media.blogs.editor.configuration.internal.dynamic;
+package com.liferay.adaptive.media.journal.editor.configuration.internal;
 
 import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
-import com.liferay.blogs.item.selector.criterion.BlogsItemSelectorCriterion;
-import com.liferay.blogs.web.constants.BlogsPortletKeys;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.criteria.file.criterion.FileItemSelectorCriterion;
 import com.liferay.item.selector.criteria.image.criterion.ImageItemSelectorCriterion;
 import com.liferay.item.selector.criteria.upload.criterion.UploadItemSelectorCriterion;
+import com.liferay.journal.constants.JournalPortletKeys;
+import com.liferay.journal.item.selector.criterion.JournalItemSelectorCriterion;
 import com.liferay.portal.kernel.editor.configuration.BaseEditorConfigContributor;
 import com.liferay.portal.kernel.editor.configuration.EditorConfigContributor;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -45,14 +45,13 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = {
-		"editor.config.key=contentEditor", "editor.name=alloyeditor",
-		"editor.name=ckeditor", "javax.portlet.name=" + BlogsPortletKeys.BLOGS,
-		"javax.portlet.name=" + BlogsPortletKeys.BLOGS_ADMIN,
+		"editor.name=alloyeditor", "editor.name=ckeditor",
+		"javax.portlet.name=" + JournalPortletKeys.JOURNAL,
 		"service.ranking:Integer=101"
 	},
 	service = EditorConfigContributor.class
 )
-public class DynamicAdaptiveMediaBlogsEditorConfigContributor
+public class AdaptiveMediaJournalEditorConfigContributor
 	extends BaseEditorConfigContributor {
 
 	@Override
@@ -86,9 +85,9 @@ public class DynamicAdaptiveMediaBlogsEditorConfigContributor
 		for (ItemSelectorCriterion itemSelectorCriterion :
 				itemSelectorCriteria) {
 
-			if (itemSelectorCriterion instanceof BlogsItemSelectorCriterion ||
-				itemSelectorCriterion instanceof FileItemSelectorCriterion ||
+			if (itemSelectorCriterion instanceof FileItemSelectorCriterion ||
 				itemSelectorCriterion instanceof ImageItemSelectorCriterion ||
+				itemSelectorCriterion instanceof JournalItemSelectorCriterion ||
 				itemSelectorCriterion instanceof UploadItemSelectorCriterion) {
 
 				addAdaptiveMediaImageFileEntryItemSelectorReturnType(
