@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.internal.url;
 import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
-import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
+import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
 import java.io.UnsupportedEncodingException;
@@ -34,8 +34,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Tardín
  */
 @Component(immediate = true)
-public class AdaptiveMediaImageURLFactoryImpl
-	implements AdaptiveMediaImageURLFactory {
+public class AMImageURLFactoryImpl implements AMImageURLFactory {
 
 	@Override
 	public URI createFileEntryURL(

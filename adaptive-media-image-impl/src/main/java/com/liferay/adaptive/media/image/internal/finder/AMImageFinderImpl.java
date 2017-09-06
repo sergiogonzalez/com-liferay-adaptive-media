@@ -29,7 +29,7 @@ import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
-import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
+import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
@@ -121,17 +121,15 @@ public class AMImageFinderImpl implements AMImageFinder {
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageURLFactory(
-		AdaptiveMediaImageURLFactory adaptiveMediaImageURLFactory) {
-
-		_adaptiveMediaImageURLFactory = adaptiveMediaImageURLFactory;
-	}
-
-	@Reference(unbind = "-")
 	public void setAMImageConfigurationHelper(
 		AMImageConfigurationHelper amImageConfigurationHelper) {
 
 		_amImageConfigurationHelper = amImageConfigurationHelper;
+	}
+
+	@Reference(unbind = "-")
+	public void setAMImageURLFactory(AMImageURLFactory amImageURLFactory) {
+		_amImageURLFactory = amImageURLFactory;
 	}
 
 	@Reference(unbind = "-")
@@ -209,10 +207,10 @@ public class AMImageFinderImpl implements AMImageFinder {
 		_getURIFactory(AMImageQueryBuilderImpl amImageQueryBuilderImpl) {
 
 		if (amImageQueryBuilderImpl.hasFileVersion()) {
-			return _adaptiveMediaImageURLFactory::createFileVersionURL;
+			return _amImageURLFactory::createFileVersionURL;
 		}
 
-		return _adaptiveMediaImageURLFactory::createFileEntryURL;
+		return _amImageURLFactory::createFileEntryURL;
 	}
 
 	private boolean _hasAdaptiveMedia(
@@ -231,8 +229,8 @@ public class AMImageFinderImpl implements AMImageFinder {
 		return true;
 	}
 
-	private AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory;
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
+	private AMImageURLFactory _amImageURLFactory;
 	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
 	private ImageProcessor _imageProcessor;
 

@@ -36,7 +36,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author Alejandro Tardín
  */
 @RunWith(MockitoJUnitRunner.class)
-public class AdaptiveMediaImageURLFactoryImplTest {
+public class AMImageURLFactoryImplTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,13 +64,13 @@ public class AdaptiveMediaImageURLFactoryImplTest {
 			invocation -> URI.create("prefix/" + invocation.getArguments()[0])
 		);
 
-		_adaptiveMediaImageURLFactory.setAdaptiveMediaURIResolver(
+		_amImageURLFactory.setAdaptiveMediaURIResolver(
 			_adaptiveMediaURIResolver);
 	}
 
 	@Test
 	public void testCreatesURLForFileEntry() throws Exception {
-		URI uri = _adaptiveMediaImageURLFactory.createFileEntryURL(
+		URI uri = _amImageURLFactory.createFileEntryURL(
 			_fileVersion, _amImageConfigurationEntry);
 
 		Assert.assertEquals("prefix/image/1/theUuid/fileName", uri.toString());
@@ -78,7 +78,7 @@ public class AdaptiveMediaImageURLFactoryImplTest {
 
 	@Test
 	public void testCreatesURLForFileVersion() throws Exception {
-		URI uri = _adaptiveMediaImageURLFactory.createFileVersionURL(
+		URI uri = _amImageURLFactory.createFileVersionURL(
 			_fileVersion, _amImageConfigurationEntry);
 
 		Assert.assertEquals(
@@ -87,14 +87,13 @@ public class AdaptiveMediaImageURLFactoryImplTest {
 
 	private static final String _UUID = "theUuid";
 
-	private final AdaptiveMediaImageURLFactoryImpl
-		_adaptiveMediaImageURLFactory = new AdaptiveMediaImageURLFactoryImpl();
-
 	@Mock
 	private AdaptiveMediaURIResolver _adaptiveMediaURIResolver;
 
 	private final AMImageConfigurationEntry _amImageConfigurationEntry =
 		new AMImageConfigurationEntryImpl("small", _UUID, new HashMap<>());
+	private final AMImageURLFactoryImpl _amImageURLFactory =
+		new AMImageURLFactoryImpl();
 
 	@Mock
 	private FileVersion _fileVersion;
