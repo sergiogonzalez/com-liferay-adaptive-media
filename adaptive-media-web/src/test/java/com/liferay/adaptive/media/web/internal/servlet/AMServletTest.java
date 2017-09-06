@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.web.internal.servlet;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
-import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
+import com.liferay.adaptive.media.handler.AMRequestHandler;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -38,7 +38,7 @@ public class AMServletTest {
 	@Before
 	public void setUp() {
 		_amServlet.setAdaptiveMediaRequestHandlerLocator(
-			_adaptiveMediaRequestHandlerLocator);
+			_amRequestHandlerLocator);
 	}
 
 	@Test
@@ -50,14 +50,13 @@ public class AMServletTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandlerLocator.locateForPattern(
-				Mockito.anyString())
+			_amRequestHandlerLocator.locateForPattern(Mockito.anyString())
 		).thenReturn(
-			_adaptiveMediaRequestHandler
+			_amRequestHandler
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandler.handleRequest(_request)
+			_amRequestHandler.handleRequest(_request)
 		).thenThrow(
 			new IllegalArgumentException()
 		);
@@ -80,14 +79,13 @@ public class AMServletTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandlerLocator.locateForPattern(
-				Mockito.anyString())
+			_amRequestHandlerLocator.locateForPattern(Mockito.anyString())
 		).thenReturn(
-			_adaptiveMediaRequestHandler
+			_amRequestHandler
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandler.handleRequest(_request)
+			_amRequestHandler.handleRequest(_request)
 		).thenReturn(
 			Optional.empty()
 		);
@@ -110,14 +108,13 @@ public class AMServletTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandlerLocator.locateForPattern(
-				Mockito.anyString())
+			_amRequestHandlerLocator.locateForPattern(Mockito.anyString())
 		).thenReturn(
-			_adaptiveMediaRequestHandler
+			_amRequestHandler
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandler.handleRequest(_request)
+			_amRequestHandler.handleRequest(_request)
 		).thenThrow(
 			AdaptiveMediaException.AdaptiveMediaNotFound.class
 		);
@@ -140,14 +137,13 @@ public class AMServletTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandlerLocator.locateForPattern(
-				Mockito.anyString())
+			_amRequestHandlerLocator.locateForPattern(Mockito.anyString())
 		).thenReturn(
-			_adaptiveMediaRequestHandler
+			_amRequestHandler
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandler.handleRequest(_request)
+			_amRequestHandler.handleRequest(_request)
 		).thenThrow(
 			new ServletException(new PrincipalException())
 		);
@@ -170,8 +166,7 @@ public class AMServletTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaRequestHandlerLocator.locateForPattern(
-				Mockito.anyString())
+			_amRequestHandlerLocator.locateForPattern(Mockito.anyString())
 		).thenReturn(
 			null
 		);
@@ -185,11 +180,10 @@ public class AMServletTest {
 		);
 	}
 
-	private final AdaptiveMediaRequestHandler<?> _adaptiveMediaRequestHandler =
-		Mockito.mock(AdaptiveMediaRequestHandler.class);
-	private final AdaptiveMediaRequestHandlerLocator
-		_adaptiveMediaRequestHandlerLocator = Mockito.mock(
-			AdaptiveMediaRequestHandlerLocator.class);
+	private final AMRequestHandler<?> _amRequestHandler = Mockito.mock(
+		AMRequestHandler.class);
+	private final AMRequestHandlerLocator _amRequestHandlerLocator =
+		Mockito.mock(AMRequestHandlerLocator.class);
 	private final AMServlet _amServlet = new AMServlet();
 	private final HttpServletRequest _request = Mockito.mock(
 		HttpServletRequest.class);

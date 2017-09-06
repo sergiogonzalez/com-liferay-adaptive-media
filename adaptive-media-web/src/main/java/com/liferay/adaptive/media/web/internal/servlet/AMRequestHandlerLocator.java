@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.servlet;
 
-import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
+import com.liferay.adaptive.media.handler.AMRequestHandler;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 
@@ -26,13 +26,13 @@ import org.osgi.service.component.annotations.Deactivate;
 /**
  * @author Adolfo Pérez
  */
-@Component(immediate = true, service = AdaptiveMediaRequestHandlerLocator.class)
-public class AdaptiveMediaRequestHandlerLocator {
+@Component(immediate = true, service = AMRequestHandlerLocator.class)
+public class AMRequestHandlerLocator {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, AdaptiveMediaRequestHandler.class,
+			bundleContext, AMRequestHandler.class,
 			"(adaptive.media.handler.pattern=*)",
 			(serviceReference, emitter) -> emitter.emit(
 				(String)serviceReference.getProperty(
@@ -44,11 +44,10 @@ public class AdaptiveMediaRequestHandlerLocator {
 		_serviceTrackerMap.close();
 	}
 
-	public AdaptiveMediaRequestHandler locateForPattern(String pattern) {
+	public AMRequestHandler locateForPattern(String pattern) {
 		return _serviceTrackerMap.getService(pattern);
 	}
 
-	private ServiceTrackerMap<String, AdaptiveMediaRequestHandler>
-		_serviceTrackerMap;
+	private ServiceTrackerMap<String, AMRequestHandler> _serviceTrackerMap;
 
 }

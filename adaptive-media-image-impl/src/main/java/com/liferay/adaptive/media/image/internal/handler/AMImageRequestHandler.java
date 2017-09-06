@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.internal.handler;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
+import com.liferay.adaptive.media.handler.AMRequestHandler;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
@@ -55,10 +55,10 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true, property = "adaptive.media.handler.pattern=image",
-	service = AdaptiveMediaRequestHandler.class
+	service = AMRequestHandler.class
 )
-public class AdaptiveMediaImageRequestHandler
-	implements AdaptiveMediaRequestHandler<AMImageProcessor> {
+public class AMImageRequestHandler
+	implements AMRequestHandler<AMImageProcessor> {
 
 	@Override
 	public Optional<AdaptiveMedia<AMImageProcessor>> handleRequest(
@@ -342,7 +342,7 @@ public class AdaptiveMediaImageRequestHandler
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaImageRequestHandler.class);
+		AMImageRequestHandler.class);
 
 	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
 	private AMImageConfigurationHelper _amImageConfigurationHelper;

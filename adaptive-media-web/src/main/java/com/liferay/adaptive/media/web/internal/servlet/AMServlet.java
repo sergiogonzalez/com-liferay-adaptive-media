@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.web.internal.servlet;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
-import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
+import com.liferay.adaptive.media.handler.AMRequestHandler;
 import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
@@ -57,10 +57,9 @@ public class AMServlet extends HttpServlet {
 
 	@Reference(unbind = "-")
 	public void setAdaptiveMediaRequestHandlerLocator(
-		AdaptiveMediaRequestHandlerLocator adaptiveMediaRequestHandlerLocator) {
+		AMRequestHandlerLocator amRequestHandlerLocator) {
 
-		_adaptiveMediaRequestHandlerLocator =
-			adaptiveMediaRequestHandlerLocator;
+		_amRequestHandlerLocator = amRequestHandlerLocator;
 	}
 
 	@Override
@@ -69,11 +68,11 @@ public class AMServlet extends HttpServlet {
 		throws IOException, ServletException {
 
 		try {
-			AdaptiveMediaRequestHandler requestHandler =
-				_adaptiveMediaRequestHandlerLocator.locateForPattern(
+			AMRequestHandler amRequestHandler =
+				_amRequestHandlerLocator.locateForPattern(
 					_getRequestHandlerPattern(request));
 
-			if (requestHandler == null) {
+			if (amRequestHandler == null) {
 				response.sendError(
 					HttpServletResponse.SC_NOT_FOUND, request.getRequestURI());
 
@@ -81,7 +80,7 @@ public class AMServlet extends HttpServlet {
 			}
 
 			Optional<AdaptiveMedia<?>> adaptiveMediaOptional =
-				requestHandler.handleRequest(request);
+				amRequestHandler.handleRequest(request);
 
 			AdaptiveMedia<?> adaptiveMedia = adaptiveMediaOptional.orElseThrow(
 				AdaptiveMediaException.AdaptiveMediaNotFound::new);
@@ -160,7 +159,6 @@ public class AMServlet extends HttpServlet {
 	private static final Pattern _REQUEST_HANDLER_PATTERN = Pattern.compile(
 		"^/([^/]*)");
 
-	private AdaptiveMediaRequestHandlerLocator
-		_adaptiveMediaRequestHandlerLocator;
+	private AMRequestHandlerLocator _amRequestHandlerLocator;
 
 }

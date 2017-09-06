@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaRequestHandler<T> {
+public interface AMRequestHandler<T> {
 
 	/**
 	 * Returns the requested {@link AdaptiveMedia} instance wrapped in an {@link
