@@ -18,8 +18,8 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.document.library.kernel.model.DLProcessorConstants;
 import com.liferay.document.library.kernel.util.DLProcessor;
 import com.liferay.document.library.kernel.util.ImageProcessor;
@@ -49,10 +49,9 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true, property = {"service.ranking:Integer=100"},
-	service = {AdaptiveMediaImageEntryProcessor.class, DLProcessor.class}
+	service = {AMImageEntryProcessor.class, DLProcessor.class}
 )
-public class AdaptiveMediaImageEntryProcessor
-	implements DLProcessor, ImageProcessor {
+public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -109,11 +108,11 @@ public class AdaptiveMediaImageEntryProcessor
 	public InputStream getThumbnailAsStream(FileVersion fileVersion, int index)
 		throws Exception {
 
-		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
+		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_getThumbnailAdaptiveMedia(fileVersion);
 
-		Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			adaptiveMediaOptional = adaptiveMediaStream.findFirst();
+		Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+			adaptiveMediaStream.findFirst();
 
 		return adaptiveMediaOptional.map(
 			AdaptiveMedia::getInputStream
@@ -126,11 +125,11 @@ public class AdaptiveMediaImageEntryProcessor
 	public long getThumbnailFileSize(FileVersion fileVersion, int index)
 		throws Exception {
 
-		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
+		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_getThumbnailAdaptiveMedia(fileVersion);
 
-		Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			adaptiveMediaOptional = adaptiveMediaStream.findFirst();
+		Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+			adaptiveMediaStream.findFirst();
 
 		return adaptiveMediaOptional.flatMap(
 			mediaMedia -> mediaMedia.getValueOptional(
@@ -153,11 +152,11 @@ public class AdaptiveMediaImageEntryProcessor
 	@Override
 	public boolean hasImages(FileVersion fileVersion) {
 		try {
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _getThumbnailAdaptiveMedia(fileVersion);
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_getThumbnailAdaptiveMedia(fileVersion);
 
-			Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaOptional = adaptiveMediaStream.findFirst();
+			Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+				adaptiveMediaStream.findFirst();
 
 			if (adaptiveMediaOptional.isPresent()) {
 				return true;
@@ -214,7 +213,7 @@ public class AdaptiveMediaImageEntryProcessor
 		FileVersion sourceFileVersion, FileVersion destinationFileVersion) {
 	}
 
-	private Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
+	private Stream<AdaptiveMedia<AMImageProcessor>>
 			_getThumbnailAdaptiveMedia(FileVersion fileVersion)
 		throws PortalException {
 
@@ -240,7 +239,7 @@ public class AdaptiveMediaImageEntryProcessor
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaImageEntryProcessor.class);
+		AMImageEntryProcessor.class);
 
 	@Reference
 	private AMImageFinder _amImageFinder;

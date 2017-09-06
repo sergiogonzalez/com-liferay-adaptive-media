@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.internal.processor;
 
 import com.liferay.adaptive.media.internal.constants.AMDestinationNames;
-import com.liferay.adaptive.media.internal.messaging.AdaptiveMediaProcessorCommand;
+import com.liferay.adaptive.media.internal.messaging.AMProcessorCommand;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -43,16 +43,16 @@ public final class AMAsyncProcessorImpl<M, T>
 
 	@Override
 	public void cleanQueue(
-		AdaptiveMediaProcessorCommand command, String modelId) {
+		AMProcessorCommand amProcessorCommand, String modelId) {
 
-		List<String> commandModelIds = _modelIds.get(command);
+		List<String> commandModelIds = _modelIds.get(amProcessorCommand);
 
 		commandModelIds.remove(modelId);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				"Cleaned queue for model id " + modelId + " and command " +
-					command);
+					amProcessorCommand);
 		}
 	}
 
@@ -60,11 +60,10 @@ public final class AMAsyncProcessorImpl<M, T>
 	public void triggerCleanUp(M model, String modelId) throws PortalException {
 		if (Validator.isNotNull(modelId)) {
 			_modelIds.putIfAbsent(
-				AdaptiveMediaProcessorCommand.CLEAN_UP,
-				new CopyOnWriteArrayList<>());
+				AMProcessorCommand.CLEAN_UP, new CopyOnWriteArrayList<>());
 
 			List<String> cleanUpModelIds = _modelIds.get(
-				AdaptiveMediaProcessorCommand.CLEAN_UP);
+				AMProcessorCommand.CLEAN_UP);
 
 			if (cleanUpModelIds.contains(modelId)) {
 				if (_log.isInfoEnabled()) {
@@ -88,7 +87,7 @@ public final class AMAsyncProcessorImpl<M, T>
 
 		message.put("className", _clazz.getName());
 		message.put("model", model);
-		message.put("command", AdaptiveMediaProcessorCommand.CLEAN_UP);
+		message.put("command", AMProcessorCommand.CLEAN_UP);
 
 		if (Validator.isNotNull(modelId)) {
 			message.put("modelId", modelId);
@@ -107,11 +106,10 @@ public final class AMAsyncProcessorImpl<M, T>
 	public void triggerProcess(M model, String modelId) throws PortalException {
 		if (Validator.isNotNull(modelId)) {
 			_modelIds.putIfAbsent(
-				AdaptiveMediaProcessorCommand.PROCESS,
-				new CopyOnWriteArrayList<>());
+				AMProcessorCommand.PROCESS, new CopyOnWriteArrayList<>());
 
 			List<String> processModelIds = _modelIds.get(
-				AdaptiveMediaProcessorCommand.PROCESS);
+				AMProcessorCommand.PROCESS);
 
 			if (processModelIds.contains(modelId)) {
 				if (_log.isInfoEnabled()) {
@@ -135,7 +133,7 @@ public final class AMAsyncProcessorImpl<M, T>
 
 		message.put("className", _clazz.getName());
 		message.put("model", model);
-		message.put("command", AdaptiveMediaProcessorCommand.PROCESS);
+		message.put("command", AMProcessorCommand.PROCESS);
 
 		if (Validator.isNotNull(modelId)) {
 			message.put("modelId", modelId);
@@ -153,8 +151,8 @@ public final class AMAsyncProcessorImpl<M, T>
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMAsyncProcessorImpl.class);
 
-	private static final Map<AdaptiveMediaProcessorCommand, List<String>>
-		_modelIds = new ConcurrentHashMap<>();
+	private static final Map<AMProcessorCommand, List<String>> _modelIds =
+		new ConcurrentHashMap<>();
 
 	private final Class<M> _clazz;
 	private final MessageBus _messageBus;

@@ -24,8 +24,8 @@ import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -58,10 +58,10 @@ import org.osgi.service.component.annotations.Reference;
 	service = AdaptiveMediaRequestHandler.class
 )
 public class AdaptiveMediaImageRequestHandler
-	implements AdaptiveMediaRequestHandler<AdaptiveMediaImageProcessor> {
+	implements AdaptiveMediaRequestHandler<AMImageProcessor> {
 
 	@Override
-	public Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>> handleRequest(
+	public Optional<AdaptiveMedia<AMImageProcessor>> handleRequest(
 			HttpServletRequest request)
 		throws IOException, ServletException {
 
@@ -70,7 +70,7 @@ public class AdaptiveMediaImageRequestHandler
 
 		return interpretedPathOptional.flatMap(
 			tuple -> {
-				Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
+				Optional<AdaptiveMedia<AMImageProcessor>>
 					adaptiveMediaOptional = _findAdaptiveMedia(
 						tuple.first, tuple.second);
 
@@ -106,7 +106,7 @@ public class AdaptiveMediaImageRequestHandler
 		_pathInterpreter = pathInterpreter;
 	}
 
-	private AdaptiveMedia<AdaptiveMediaImageProcessor>
+	private AdaptiveMedia<AMImageProcessor>
 			_createRawAdaptiveMedia(FileVersion fileVersion)
 		throws PortalException {
 
@@ -144,10 +144,9 @@ public class AdaptiveMediaImageRequestHandler
 			null);
 	}
 
-	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-		_findAdaptiveMedia(
-			FileVersion fileVersion,
-			AdaptiveMediaImageAttributeMapping attributeMapping) {
+	private Optional<AdaptiveMedia<AMImageProcessor>> _findAdaptiveMedia(
+		FileVersion fileVersion,
+		AdaptiveMediaImageAttributeMapping attributeMapping) {
 
 		try {
 			Optional<AMImageConfigurationEntry>
@@ -169,9 +168,8 @@ public class AdaptiveMediaImageRequestHandler
 			AMImageConfigurationEntry amImageConfigurationEntry =
 				amImageConfigurationEntryOptional.get();
 
-			Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaOptional = _findExactAdaptiveMedia(
-					fileVersion, amImageConfigurationEntry);
+			Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+				_findExactAdaptiveMedia(fileVersion, amImageConfigurationEntry);
 
 			if (adaptiveMediaOptional.isPresent()) {
 				return adaptiveMediaOptional;
@@ -191,10 +189,9 @@ public class AdaptiveMediaImageRequestHandler
 		}
 	}
 
-	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-		_findClosestAdaptiveMedia(
-			FileVersion fileVersion,
-			AMImageConfigurationEntry amImageConfigurationEntry) {
+	private Optional<AdaptiveMedia<AMImageProcessor>> _findClosestAdaptiveMedia(
+		FileVersion fileVersion,
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		Map<String, String> properties =
 			amImageConfigurationEntry.getProperties();
@@ -206,8 +203,8 @@ public class AdaptiveMediaImageRequestHandler
 			properties.get("max-height"));
 
 		try {
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 						fileVersion
 					).with(
@@ -227,10 +224,9 @@ public class AdaptiveMediaImageRequestHandler
 		}
 	}
 
-	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			_findExactAdaptiveMedia(
-				FileVersion fileVersion,
-				AMImageConfigurationEntry amImageConfigurationEntry)
+	private Optional<AdaptiveMedia<AMImageProcessor>> _findExactAdaptiveMedia(
+			FileVersion fileVersion,
+			AMImageConfigurationEntry amImageConfigurationEntry)
 		throws PortalException {
 
 		return _amImageFinder.getAdaptiveMediaStream(amImageQueryBuilder ->
@@ -242,7 +238,7 @@ public class AdaptiveMediaImageRequestHandler
 		).findFirst();
 	}
 
-	private Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>>
+	private Comparator<AdaptiveMedia<AMImageProcessor>>
 		_getComparator(Integer configurationWidth) {
 
 		return Comparator.comparingInt(
@@ -250,7 +246,7 @@ public class AdaptiveMediaImageRequestHandler
 	}
 
 	private Integer _getDistance(
-		int width, AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia) {
+		int width, AdaptiveMedia<AMImageProcessor> adaptiveMedia) {
 
 		Optional<Integer> imageWidthOptional = adaptiveMedia.getValueOptional(
 			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
@@ -316,8 +312,7 @@ public class AdaptiveMediaImageRequestHandler
 	}
 
 	private void _processAdaptiveMediaImage(
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia,
-		FileVersion fileVersion,
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia, FileVersion fileVersion,
 		AdaptiveMediaImageAttributeMapping attributeMapping) {
 
 		Optional<String> adaptiveMediaConfigurationUuidOptional =

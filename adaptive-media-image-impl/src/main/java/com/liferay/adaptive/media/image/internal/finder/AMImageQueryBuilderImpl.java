@@ -23,7 +23,7 @@ import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.Configuration
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.FuzzySortStep;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.InitialStep;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.StrictSortStep;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -42,10 +42,9 @@ public class AMImageQueryBuilderImpl
 	implements AMImageQueryBuilder, ConfigurationStep, FuzzySortStep,
 			   InitialStep, StrictSortStep {
 
-	public static final
-		AMQuery<FileVersion, AdaptiveMediaImageProcessor> AM_QUERY =
-			new AMQuery<FileVersion, AdaptiveMediaImageProcessor>() {
-			};
+	public static final AMQuery<FileVersion, AMImageProcessor> AM_QUERY =
+		new AMQuery<FileVersion, AMImageProcessor>() {
+		};
 
 	@Override
 	public InitialStep allForFileEntry(FileEntry fileEntry) {
@@ -70,7 +69,7 @@ public class AMImageQueryBuilderImpl
 	}
 
 	@Override
-	public AMQuery<FileVersion, AdaptiveMediaImageProcessor> done() {
+	public AMQuery<FileVersion, AMImageProcessor> done() {
 		return AM_QUERY;
 	}
 
@@ -108,21 +107,17 @@ public class AMImageQueryBuilderImpl
 		return this;
 	}
 
-	public Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Object>
-		getAMAttributes() {
-
-		return _attributes;
+	public Map<AMAttribute<AMImageProcessor, ?>, Object> getAMAttributes() {
+		return _amAttributes;
 	}
 
-	public Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-		getComparator() {
-
+	public Comparator<AdaptiveMedia<AMImageProcessor>> getComparator() {
 		if (!_sortCriteria.isEmpty()) {
 			return new AMAttributeComparator(_sortCriteria);
 		}
 
-		if (!_attributes.isEmpty()) {
-			return new AdaptiveMediaPropertyDistanceComparator(_attributes);
+		if (!_amAttributes.isEmpty()) {
+			return new AdaptiveMediaPropertyDistanceComparator(_amAttributes);
 		}
 
 		return (v1, v2) -> 0;
@@ -173,7 +168,7 @@ public class AMImageQueryBuilderImpl
 
 	@Override
 	public <V> StrictSortStep orderBy(
-		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
+		AMAttribute<AMImageProcessor, V> amAttribute,
 		AMImageQueryBuilder.SortOrder sortOrder) {
 
 		if (amAttribute == null) {
@@ -188,7 +183,7 @@ public class AMImageQueryBuilderImpl
 
 	@Override
 	public <V> FuzzySortStep with(
-		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
+		AMAttribute<AMImageProcessor, V> amAttribute,
 		Optional<V> valueOptional) {
 
 		if (valueOptional == null) {
@@ -196,21 +191,21 @@ public class AMImageQueryBuilderImpl
 				"Adaptive media attribute value optional cannot be null");
 		}
 
-		valueOptional.ifPresent(value -> _attributes.put(amAttribute, value));
+		valueOptional.ifPresent(value -> _amAttributes.put(amAttribute, value));
 
 		return this;
 	}
 
 	@Override
 	public <V> FuzzySortStep with(
-		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute, V value) {
+		AMAttribute<AMImageProcessor, V> amAttribute, V value) {
 
 		if (value == null) {
 			throw new IllegalArgumentException(
 				"Adaptive media attribute value cannot be null");
 		}
 
-		_attributes.put(amAttribute, value);
+		_amAttributes.put(amAttribute, value);
 
 		return this;
 	}
@@ -237,15 +232,13 @@ public class AMImageQueryBuilderImpl
 		return false;
 	}
 
-	private final Map
-		<AMAttribute<AdaptiveMediaImageProcessor, ?>, Object>
-			_attributes = new LinkedHashMap<>();
+	private final Map<AMAttribute<AMImageProcessor, ?>, Object> _amAttributes =
+		new LinkedHashMap<>();
 	private ConfigurationStatus _configurationStatus;
 	private String _configurationUuid;
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
-	private final Map
-		<AMAttribute<AdaptiveMediaImageProcessor, ?>, SortOrder>
-			_sortCriteria = new LinkedHashMap<>();
+	private final Map<AMAttribute<AMImageProcessor, ?>, SortOrder>
+		_sortCriteria = new LinkedHashMap<>();
 
 }

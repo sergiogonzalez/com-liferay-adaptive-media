@@ -19,7 +19,7 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.web.constants.OptimizeImagesBackgroundTaskConstants;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
@@ -152,7 +152,7 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 					FileEntry fileEntry = new LiferayFileEntry(dlFileEntry);
 
 					try {
-						_adaptiveMediaImageProcessor.process(
+						_amImageProcessor.process(
 							fileEntry.getFileVersion(), configurationEntryUuid);
 
 						_sendStatusMessage(
@@ -201,13 +201,13 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 		DLAMImageOptimizer.class);
 
 	@Reference
-	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
-
-	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference(target = "(adaptive.media.key=document-library)")
 	private AMImageCounter _amImageCounter;
+
+	@Reference
+	private AMImageProcessor _amImageProcessor;
 
 	@Reference
 	private BackgroundTaskStatusMessageSender

@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.processor;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.adaptive.media.internal.messaging.AdaptiveMediaProcessorCommand;
+import com.liferay.adaptive.media.internal.messaging.AMProcessorCommand;
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**
@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.exception.PortalException;
  *
  * <p>
  * This processor delegates the generation of the media in {@link
- * AdaptiveMediaProcessor} by invoking it in an asynchronous manner.
+ * AMProcessor} by invoking it in an asynchronous manner.
  * </p>
  *
  * <p>
@@ -41,11 +41,11 @@ public interface AMAsyncProcessor<M, T> {
 	/**
 	 * Removes the specified model from the given commmand's queue of execution.
 	 *
-	 * @param command the command that is pending execution on the model
+	 * @param amProcessorCommand the command that is pending execution on the model
 	 * @param modelId the model ID to remove from the queue
 	 */
 	public void cleanQueue(
-		AdaptiveMediaProcessorCommand command, String modelId);
+		AMProcessorCommand amProcessorCommand, String modelId);
 
 	/**
 	 * Asynchronously removes any generated media from the model.

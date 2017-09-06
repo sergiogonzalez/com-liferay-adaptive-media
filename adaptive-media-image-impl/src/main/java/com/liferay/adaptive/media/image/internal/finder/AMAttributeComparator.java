@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,18 +28,16 @@ import java.util.Optional;
  * @author Sergio González
  */
 public class AMAttributeComparator
-	implements Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>> {
+	implements Comparator<AdaptiveMedia<AMImageProcessor>> {
 
-	public AMAttributeComparator(
-		AMAttribute<AdaptiveMediaImageProcessor, ?> amAttribute) {
-
+	public AMAttributeComparator(AMAttribute<AMImageProcessor, ?> amAttribute) {
 		this(
 			Collections.singletonMap(
 				amAttribute, AMImageQueryBuilder.SortOrder.ASC));
 	}
 
 	public AMAttributeComparator(
-		AMAttribute<AdaptiveMediaImageProcessor, ?> amAttribute,
+		AMAttribute<AMImageProcessor, ?> amAttribute,
 		AMImageQueryBuilder.SortOrder sortOrder) {
 
 		this(Collections.singletonMap(amAttribute, sortOrder));
@@ -47,7 +45,7 @@ public class AMAttributeComparator
 
 	public AMAttributeComparator(
 		Map
-			<AMAttribute<AdaptiveMediaImageProcessor, ?>,
+			<AMAttribute<AMImageProcessor, ?>,
 				AMImageQueryBuilder.SortOrder> sortCriteria) {
 
 		_sortCriteria = (Map)sortCriteria;
@@ -55,15 +53,15 @@ public class AMAttributeComparator
 
 	@Override
 	public int compare(
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1,
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2) {
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1,
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2) {
 
 		for (Map.Entry
-				<AMAttribute<AdaptiveMediaImageProcessor, Object>,
+				<AMAttribute<AMImageProcessor, Object>,
 					AMImageQueryBuilder.SortOrder> sortCriterion :
 						_sortCriteria.entrySet()) {
 
-			AMAttribute<AdaptiveMediaImageProcessor, Object> amAttribute =
+			AMAttribute<AMImageProcessor, Object> amAttribute =
 				sortCriterion.getKey();
 
 			Optional<?> value1Optional = adaptiveMedia1.getValueOptional(
@@ -92,8 +90,7 @@ public class AMAttributeComparator
 	}
 
 	private final Map
-		<AMAttribute<
-			AdaptiveMediaImageProcessor, Object>,
-				AMImageQueryBuilder.SortOrder> _sortCriteria;
+		<AMAttribute<AMImageProcessor, Object>, AMImageQueryBuilder.SortOrder>
+			_sortCriteria;
 
 }

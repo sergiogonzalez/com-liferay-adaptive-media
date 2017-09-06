@@ -19,7 +19,7 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class AMAttributeComparatorTest {
 	@Before
 	public void setUp() {
 		Map<
-			AMAttribute<AdaptiveMediaImageProcessor, ?>,
+			AMAttribute<AMImageProcessor, ?>,
 				AMImageQueryBuilder.SortOrder> amAttributes = new HashMap<>();
 
 		amAttributes.put(
@@ -52,14 +52,12 @@ public class AMAttributeComparatorTest {
 
 	@Test
 	public void testSortDifferentMediaByMultipleAttributes() {
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1 =
-			_createMedia(
-				AMAttribute.getContentLengthAMAttribute(), 10,
-				AMAttribute.getFileNameAMAttribute(), "zzz");
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
-			_createMedia(
-				AMAttribute.getContentLengthAMAttribute(), 10,
-				AMAttribute.getFileNameAMAttribute(), "aaa");
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10,
+			AMAttribute.getFileNameAMAttribute(), "zzz");
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10,
+			AMAttribute.getFileNameAMAttribute(), "aaa");
 
 		int result = _multiAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
@@ -69,14 +67,12 @@ public class AMAttributeComparatorTest {
 
 	@Test
 	public void testSortDifferentMediaByMultipleAttributesInverse() {
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1 =
-			_createMedia(
-				AMAttribute.getContentLengthAMAttribute(), 10,
-				AMAttribute.getFileNameAMAttribute(), "zzz");
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
-			_createMedia(
-				AMAttribute.getContentLengthAMAttribute(), 10,
-				AMAttribute.getFileNameAMAttribute(), "aaa");
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10,
+			AMAttribute.getFileNameAMAttribute(), "zzz");
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10,
+			AMAttribute.getFileNameAMAttribute(), "aaa");
 
 		int result = _multiAMAttributeComparator.compare(
 			adaptiveMedia2, adaptiveMedia1);
@@ -86,10 +82,10 @@ public class AMAttributeComparatorTest {
 
 	@Test
 	public void testSortDifferentMediaByOneAttribute() {
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1 =
-			_createMedia(AMAttribute.getContentLengthAMAttribute(), 10);
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
-			_createMedia(AMAttribute.getContentLengthAMAttribute(), 20);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 20);
 
 		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
@@ -99,10 +95,10 @@ public class AMAttributeComparatorTest {
 
 	@Test
 	public void testSortDifferentMediaByOneAttributeInverse() {
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1 =
-			_createMedia(AMAttribute.getContentLengthAMAttribute(), 10);
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
-			_createMedia(AMAttribute.getContentLengthAMAttribute(), 20);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 20);
 
 		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia2, adaptiveMedia1);
@@ -112,14 +108,12 @@ public class AMAttributeComparatorTest {
 
 	@Test
 	public void testSortEqualMediaByMultipleAttributes() {
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1 =
-			_createMedia(
-				AMAttribute.getContentLengthAMAttribute(), 10,
-				AMAttribute.getFileNameAMAttribute(), "aaa");
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
-			_createMedia(
-				AMAttribute.getContentLengthAMAttribute(), 10,
-				AMAttribute.getFileNameAMAttribute(), "aaa");
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10,
+			AMAttribute.getFileNameAMAttribute(), "aaa");
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10,
+			AMAttribute.getFileNameAMAttribute(), "aaa");
 
 		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
@@ -129,10 +123,10 @@ public class AMAttributeComparatorTest {
 
 	@Test
 	public void testSortEqualMediaByOneAttribute() {
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1 =
-			_createMedia(AMAttribute.getContentLengthAMAttribute(), 10);
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
-			_createMedia(AMAttribute.getContentLengthAMAttribute(), 10);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2 = _createMedia(
+			AMAttribute.getContentLengthAMAttribute(), 10);
 
 		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
@@ -140,9 +134,9 @@ public class AMAttributeComparatorTest {
 		Assert.assertEquals(0, result);
 	}
 
-	private <S, T> AdaptiveMedia<AdaptiveMediaImageProcessor> _createMedia(
-		AMAttribute<AdaptiveMediaImageProcessor, S> amAttribute1, S value1,
-		AMAttribute<AdaptiveMediaImageProcessor, T> amAttribute2, T value2) {
+	private <S, T> AdaptiveMedia<AMImageProcessor> _createMedia(
+		AMAttribute<AMImageProcessor, S> amAttribute1, S value1,
+		AMAttribute<AMImageProcessor, T> amAttribute2, T value2) {
 
 		Map<String, String> properties = new HashMap<>();
 
@@ -155,8 +149,8 @@ public class AMAttributeComparatorTest {
 		return new AdaptiveMediaImage(() -> null, attributeMapping, null);
 	}
 
-	private <T> AdaptiveMedia<AdaptiveMediaImageProcessor> _createMedia(
-		AMAttribute<AdaptiveMediaImageProcessor, T> amAttribute, T value) {
+	private <T> AdaptiveMedia<AMImageProcessor> _createMedia(
+		AMAttribute<AMImageProcessor, T> amAttribute, T value) {
 
 		AdaptiveMediaImageAttributeMapping attributeMapping =
 			AdaptiveMediaImageAttributeMapping.fromProperties(

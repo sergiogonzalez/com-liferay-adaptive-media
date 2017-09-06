@@ -30,7 +30,7 @@ import com.liferay.portal.kernel.exception.PortalException;
  * @author Adolfo Pérez
  */
 @ProviderType
-public interface AdaptiveMediaProcessor<M, T> {
+public interface AMProcessor<M, T> {
 
 	/**
 	 * Completely removes any generated media for the model.

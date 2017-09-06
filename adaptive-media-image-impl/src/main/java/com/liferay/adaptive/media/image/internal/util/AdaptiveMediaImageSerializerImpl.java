@@ -19,8 +19,8 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -45,7 +45,7 @@ public class AdaptiveMediaImageSerializerImpl
 	implements AdaptiveMediaImageSerializer {
 
 	@Override
-	public AdaptiveMedia<AdaptiveMediaImageProcessor> deserialize(
+	public AdaptiveMedia<AMImageProcessor> deserialize(
 		String s, Supplier<InputStream> inputStreamSupplier) {
 
 		try {
@@ -80,7 +80,7 @@ public class AdaptiveMediaImageSerializerImpl
 	}
 
 	@Override
-	public String serialize(AdaptiveMedia<AdaptiveMediaImageProcessor> media) {
+	public String serialize(AdaptiveMedia<AMImageProcessor> media) {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		jsonObject.put("uri", media.getURI());
