@@ -113,15 +113,10 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 				_amImageEntryLocalService.deleteAMImageEntry(
 					amImageEntry.getAmImageEntryId());
 			}
-		}
-		catch (PortalException pe) {
-			throw new AMRuntimeException.IOException(pe);
-		}
 
-		RenderedImage renderedImage = _imageProcessor.scaleImage(
-			fileVersion, amImageConfigurationEntry);
+			RenderedImage renderedImage = _imageProcessor.scaleImage(
+				fileVersion, amImageConfigurationEntry);
 
-		try {
 			byte[] bytes = RenderedImageUtil.getRenderedImageContentStream(
 				renderedImage, fileVersion.getMimeType());
 
