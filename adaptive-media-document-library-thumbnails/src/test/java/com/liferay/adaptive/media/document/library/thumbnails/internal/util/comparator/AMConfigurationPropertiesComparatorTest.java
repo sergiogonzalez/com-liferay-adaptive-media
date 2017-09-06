@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaConfigurationPropertiesComparatorTest {
+public class AMConfigurationPropertiesComparatorTest {
 
 	@Test
 	public void testCompareEqualConfigurationProperties() {
@@ -34,11 +34,14 @@ public class AdaptiveMediaConfigurationPropertiesComparatorTest {
 		Map<String, String> properties2 = MapUtil.fromArray(
 			"property", "value");
 
-		Comparator<Map<String, String>> comparator =
-			new AdaptiveMediaConfigurationPropertiesComparator<>(
+		Comparator<Map<String, String>> amConfigurationPropertiesComparator =
+			new AMConfigurationPropertiesComparator<>(
 				"property", s -> s, String::compareTo);
 
-		Assert.assertEquals(0, comparator.compare(properties1, properties2));
+		Assert.assertEquals(
+			0,
+			amConfigurationPropertiesComparator.compare(
+				properties1, properties2));
 	}
 
 	@Test
@@ -48,11 +51,14 @@ public class AdaptiveMediaConfigurationPropertiesComparatorTest {
 		Map<String, String> properties2 = MapUtil.fromArray(
 			"property", "value2");
 
-		Comparator<Map<String, String>> comparator =
-			new AdaptiveMediaConfigurationPropertiesComparator<>(
+		Comparator<Map<String, String>> amConfigurationPropertiesComparator =
+			new AMConfigurationPropertiesComparator<>(
 				"property", s -> s, String::compareTo);
 
-		Assert.assertEquals(-1, comparator.compare(properties1, properties2));
+		Assert.assertEquals(
+			-1,
+			amConfigurationPropertiesComparator.compare(
+				properties1, properties2));
 	}
 
 }
