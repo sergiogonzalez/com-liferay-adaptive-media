@@ -33,11 +33,11 @@ import org.mockito.Mockito;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaServletTest {
+public class AMServletTest {
 
 	@Before
 	public void setUp() {
-		_servlet.setAdaptiveMediaRequestHandlerLocator(
+		_amServlet.setAdaptiveMediaRequestHandlerLocator(
 			_adaptiveMediaRequestHandlerLocator);
 	}
 
@@ -62,7 +62,7 @@ public class AdaptiveMediaServletTest {
 			new IllegalArgumentException()
 		);
 
-		_servlet.doGet(_request, _response);
+		_amServlet.doGet(_request, _response);
 
 		Mockito.verify(
 			_response
@@ -92,7 +92,7 @@ public class AdaptiveMediaServletTest {
 			Optional.empty()
 		);
 
-		_servlet.doGet(_request, _response);
+		_amServlet.doGet(_request, _response);
 
 		Mockito.verify(
 			_response
@@ -122,7 +122,7 @@ public class AdaptiveMediaServletTest {
 			AdaptiveMediaException.AdaptiveMediaNotFound.class
 		);
 
-		_servlet.doGet(_request, _response);
+		_amServlet.doGet(_request, _response);
 
 		Mockito.verify(
 			_response
@@ -152,7 +152,7 @@ public class AdaptiveMediaServletTest {
 			new ServletException(new PrincipalException())
 		);
 
-		_servlet.doGet(_request, _response);
+		_amServlet.doGet(_request, _response);
 
 		Mockito.verify(
 			_response
@@ -176,7 +176,7 @@ public class AdaptiveMediaServletTest {
 			null
 		);
 
-		_servlet.doGet(_request, _response);
+		_amServlet.doGet(_request, _response);
 
 		Mockito.verify(
 			_response
@@ -190,10 +190,10 @@ public class AdaptiveMediaServletTest {
 	private final AdaptiveMediaRequestHandlerLocator
 		_adaptiveMediaRequestHandlerLocator = Mockito.mock(
 			AdaptiveMediaRequestHandlerLocator.class);
+	private final AMServlet _amServlet = new AMServlet();
 	private final HttpServletRequest _request = Mockito.mock(
 		HttpServletRequest.class);
 	private final HttpServletResponse _response = Mockito.mock(
 		HttpServletResponse.class);
-	private final AdaptiveMediaServlet _servlet = new AdaptiveMediaServlet();
 
 }

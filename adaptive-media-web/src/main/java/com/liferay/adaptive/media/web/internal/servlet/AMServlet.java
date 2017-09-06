@@ -47,13 +47,13 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"osgi.http.whiteboard.servlet.name=com.liferay.adaptive.media.web.internal.servlet.AdaptiveMediaServlet",
+		"osgi.http.whiteboard.servlet.name=com.liferay.adaptive.media.web.internal.servlet.AMServlet",
 		"osgi.http.whiteboard.servlet.pattern=/" + AMWebConstants.SERVLET_PATH + "/*",
 		"servlet.init.httpMethods=GET,HEAD"
 	},
 	service = Servlet.class
 )
-public class AdaptiveMediaServlet extends HttpServlet {
+public class AMServlet extends HttpServlet {
 
 	@Reference(unbind = "-")
 	public void setAdaptiveMediaRequestHandlerLocator(
