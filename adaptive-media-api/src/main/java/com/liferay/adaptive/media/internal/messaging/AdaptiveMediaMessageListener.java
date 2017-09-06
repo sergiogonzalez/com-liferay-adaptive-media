@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.internal.messaging;
 
 import com.liferay.adaptive.media.internal.constants.AdaptiveMediaDestinationNames;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
+import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.adaptive.media.processor.AdaptiveMediaProcessor;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
@@ -89,7 +89,7 @@ public class AdaptiveMediaMessageListener extends BaseMessageListener {
 		}
 
 		AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
-			_asyncProcessorLocator.locateForClass(FileVersion.class);
+			_amAsyncProcessorLocator.locateForClass(FileVersion.class);
 
 		amAsyncProcessor.cleanQueue(command, modelId);
 	}
@@ -98,7 +98,7 @@ public class AdaptiveMediaMessageListener extends BaseMessageListener {
 		AdaptiveMediaMessageListener.class);
 
 	@Reference(unbind = "-")
-	private AdaptiveMediaAsyncProcessorLocator _asyncProcessorLocator;
+	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
 
 	private ServiceTrackerMap<String, List<AdaptiveMediaProcessor>>
 		_serviceTrackerMap;

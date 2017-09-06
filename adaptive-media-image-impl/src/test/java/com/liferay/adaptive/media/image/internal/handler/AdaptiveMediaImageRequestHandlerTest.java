@@ -31,7 +31,7 @@ import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
+import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -68,13 +68,12 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		Mockito.doReturn(
 			_amAsyncProcessor
 		).when(
-			_adaptiveMediaAsyncProcessorLocator
+			_amAsyncProcessorLocator
 		).locateForClass(
 			FileVersion.class
 		);
 
-		_requestHandler.setAsyncProcessorLocator(
-			_adaptiveMediaAsyncProcessorLocator);
+		_requestHandler.setAMAsyncProcessorLocator(_amAsyncProcessorLocator);
 		_requestHandler.setAdaptiveMediaImageFinder(_adaptiveMediaImageFinder);
 		_requestHandler.setPathInterpreter(_pathInterpreter);
 		_requestHandler.setAdaptiveMediaImageConfigurationHelper(
@@ -517,9 +516,6 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		);
 	}
 
-	private final AdaptiveMediaAsyncProcessorLocator
-		_adaptiveMediaAsyncProcessorLocator = Mockito.mock(
-			AdaptiveMediaAsyncProcessorLocator.class);
 	private final AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper = Mockito.mock(
 			AdaptiveMediaImageConfigurationHelper.class);
@@ -527,6 +523,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		Mockito.mock(AdaptiveMediaImageFinder.class);
 	private final AMAsyncProcessor<FileVersion, ?> _amAsyncProcessor =
 		Mockito.mock(AMAsyncProcessor.class);
+	private final AMAsyncProcessorLocator _amAsyncProcessorLocator =
+		Mockito.mock(AMAsyncProcessorLocator.class);
 	private FileVersion _fileVersion;
 	private final PathInterpreter _pathInterpreter = Mockito.mock(
 		PathInterpreter.class);
