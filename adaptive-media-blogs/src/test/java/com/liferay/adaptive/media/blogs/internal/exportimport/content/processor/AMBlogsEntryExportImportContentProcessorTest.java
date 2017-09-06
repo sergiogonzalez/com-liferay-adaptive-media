@@ -44,17 +44,18 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @PrepareForTest(ExportImportPathUtil.class)
 @RunWith(PowerMockRunner.class)
-public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
+public class AMBlogsEntryExportImportContentProcessorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		_blogsExportImportContentProcessor.setDLAppLocalService(
+		_amBlogsEntryExportImportContentProcessor.setDLAppLocalService(
 			_dlAppLocalService);
-		_blogsExportImportContentProcessor.setExportImportContentProcessor(
-			_exportImportContentProcessor);
-		_blogsExportImportContentProcessor.setAdaptiveMediaImageHTMLTagFactory(
-			_adaptiveMediaImageHTMLTagFactory);
-		_blogsExportImportContentProcessor.
+		_amBlogsEntryExportImportContentProcessor.
+			setExportImportContentProcessor(_exportImportContentProcessor);
+		_amBlogsEntryExportImportContentProcessor.
+			setAdaptiveMediaImageHTMLTagFactory(
+				_adaptiveMediaImageHTMLTagFactory);
+		_amBlogsEntryExportImportContentProcessor.
 			setAdaptiveMediaEmbeddedReferenceSetFactory(
 				_adaptiveMediaEmbeddedReferenceSetFactory);
 
@@ -93,11 +94,13 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 		_makeOverridenProcessorReturn(content);
 
 		Assert.assertEquals(
-			_blogsExportImportContentProcessor.replaceExportContentReferences(
-				_portletDataContext, _blogsEntry, content, false, false),
-			_blogsExportImportContentProcessor.replaceExportContentReferences(
-				_portletDataContext, Mockito.mock(BlogsEntry.class), content,
-				false, true));
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _blogsEntry, content, false, false),
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, Mockito.mock(BlogsEntry.class),
+					content, false, true));
 	}
 
 	@Test
@@ -107,10 +110,12 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 		_makeOverridenProcessorReturn(content);
 
 		Assert.assertEquals(
-			_blogsExportImportContentProcessor.replaceExportContentReferences(
-				_portletDataContext, _blogsEntry, content, false, false),
-			_blogsExportImportContentProcessor.replaceExportContentReferences(
-				_portletDataContext, _blogsEntry, content, false, true));
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _blogsEntry, content, false, false),
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _blogsEntry, content, false, true));
 	}
 
 	@Test
@@ -122,10 +127,12 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 		_makeOverridenProcessorReturn(content);
 
 		Assert.assertEquals(
-			_blogsExportImportContentProcessor.replaceExportContentReferences(
-				_portletDataContext, _blogsEntry, content, false, false),
-			_blogsExportImportContentProcessor.replaceExportContentReferences(
-				_portletDataContext, _blogsEntry, content, false, true));
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _blogsEntry, content, false, false),
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _blogsEntry, content, false, true));
 	}
 
 	@Test
@@ -275,8 +282,9 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 		);
 
 		String replacedContent =
-			_blogsExportImportContentProcessor.replaceImportContentReferences(
-				_portletDataContext, _blogsEntry, content);
+			_amBlogsEntryExportImportContentProcessor.
+				replaceImportContentReferences(
+					_portletDataContext, _blogsEntry, content);
 
 		Assert.assertEquals(content, replacedContent);
 	}
@@ -290,8 +298,9 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 		_makeOverridenProcessorReturn(content);
 
 		String replacedContent =
-			_blogsExportImportContentProcessor.replaceImportContentReferences(
-				_portletDataContext, _blogsEntry, content);
+			_amBlogsEntryExportImportContentProcessor.
+				replaceImportContentReferences(
+					_portletDataContext, _blogsEntry, content);
 
 		Assert.assertEquals(content, replacedContent);
 	}
@@ -305,8 +314,9 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 		_makeOverridenProcessorReturn(content);
 
 		String replacedContent =
-			_blogsExportImportContentProcessor.replaceImportContentReferences(
-				_portletDataContext, _blogsEntry, content);
+			_amBlogsEntryExportImportContentProcessor.
+				replaceImportContentReferences(
+					_portletDataContext, _blogsEntry, content);
 
 		Assert.assertEquals(content, replacedContent);
 	}
@@ -317,7 +327,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 
 		String content = "<img data-fileentryid=\"0\" src=\"PATH_1\" />";
 
-		_blogsExportImportContentProcessor.validateContentReferences(
+		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
 			1, content);
 	}
 
@@ -327,7 +337,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 
 		String content = "<picture data-fileentryid=\"0\"></picture>";
 
-		_blogsExportImportContentProcessor.validateContentReferences(
+		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
 			1, content);
 	}
 
@@ -345,7 +355,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 			Mockito.anyLong(), Mockito.anyString()
 		);
 
-		_blogsExportImportContentProcessor.validateContentReferences(
+		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
 			1, content);
 	}
 
@@ -355,7 +365,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 
 		String content = "<img data-fileentryid=\"1\" src=\"PATH_1\" />";
 
-		_blogsExportImportContentProcessor.validateContentReferences(
+		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
 			1, content);
 	}
 
@@ -373,7 +383,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 			Mockito.anyLong()
 		);
 
-		_blogsExportImportContentProcessor.validateContentReferences(
+		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
 			1, content);
 	}
 
@@ -437,7 +447,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	private String _export(String content) throws Exception {
 		_makeOverridenProcessorReturn(content);
 
-		return _blogsExportImportContentProcessor.
+		return _amBlogsEntryExportImportContentProcessor.
 			replaceExportContentReferences(
 				_portletDataContext, _blogsEntry, content, false, false);
 	}
@@ -445,7 +455,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	private String _import(String exportedContent) throws Exception {
 		_makeOverridenProcessorReturn(exportedContent);
 
-		return _blogsExportImportContentProcessor.
+		return _amBlogsEntryExportImportContentProcessor.
 			replaceImportContentReferences(
 				_portletDataContext, _blogsEntry, exportedContent);
 	}
@@ -491,10 +501,10 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessorTest {
 	private final AdaptiveMediaImageHTMLTagFactory
 		_adaptiveMediaImageHTMLTagFactory = Mockito.mock(
 			AdaptiveMediaImageHTMLTagFactory.class);
+	private final AMBlogsEntryExportImportContentProcessor
+		_amBlogsEntryExportImportContentProcessor =
+			new AMBlogsEntryExportImportContentProcessor();
 	private final BlogsEntry _blogsEntry = Mockito.mock(BlogsEntry.class);
-	private final AdaptiveMediaBlogsEntryExportImportContentProcessor
-		_blogsExportImportContentProcessor =
-			new AdaptiveMediaBlogsEntryExportImportContentProcessor();
 	private final DLAppLocalService _dlAppLocalService = Mockito.mock(
 		DLAppLocalService.class);
 	private final ExportImportContentProcessor<String>

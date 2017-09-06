@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 		"service.ranking:Integer=100"
 	}
 )
-public class AdaptiveMediaBlogsEntryExportImportContentProcessor
+public class AMBlogsEntryExportImportContentProcessor
 	implements ExportImportContentProcessor<String> {
 
 	@Override
@@ -235,7 +235,7 @@ public class AdaptiveMediaBlogsEntryExportImportContentProcessor
 	private static final String _EXPORT_IMPORT_PATH_ATTR = "export-import-path";
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaBlogsEntryExportImportContentProcessor.class);
+		AMBlogsEntryExportImportContentProcessor.class);
 
 	private AdaptiveMediaEmbeddedReferenceSetFactory
 		_adaptiveMediaEmbeddedReferenceSetFactory;
