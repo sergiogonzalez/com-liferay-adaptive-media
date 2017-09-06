@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.finder;
 
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQueryBuilder;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
@@ -80,14 +80,11 @@ public interface AdaptiveMediaImageQueryBuilder
 	public interface FuzzySortStep extends FinalStep {
 
 		public <V> FuzzySortStep with(
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-				adaptiveMediaAttribute,
+			AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
 			Optional<V> valueOptional);
 
 		public <V> FuzzySortStep with(
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-				adaptiveMediaAttribute,
-			V value);
+			AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute, V value);
 
 	}
 
@@ -122,8 +119,7 @@ public interface AdaptiveMediaImageQueryBuilder
 	public interface StrictSortStep extends FinalStep {
 
 		public <V> StrictSortStep orderBy(
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-				adaptiveMediaAttribute,
+			AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
 			SortOrder sortOrder);
 
 	}

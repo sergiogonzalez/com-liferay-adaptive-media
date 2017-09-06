@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.util.AdaptiveMediaAttributeConverterUtil;
 
 import java.util.HashMap;
@@ -25,17 +25,15 @@ import java.util.Map;
  */
 public final class AdaptiveMediaImageAttribute {
 
-	public static final AdaptiveMediaAttribute
-		<AdaptiveMediaImageProcessor, Integer> IMAGE_HEIGHT =
-			new AdaptiveMediaAttribute<>(
-				"height", AdaptiveMediaAttributeConverterUtil::parseInt,
-				AdaptiveMediaImageAttribute::_intDistance);
+	public static final AMAttribute<AdaptiveMediaImageProcessor, Integer>
+		IMAGE_HEIGHT = new AMAttribute<>(
+			"height", AdaptiveMediaAttributeConverterUtil::parseInt,
+			AdaptiveMediaImageAttribute::_intDistance);
 
-	public static final AdaptiveMediaAttribute
-		<AdaptiveMediaImageProcessor, Integer> IMAGE_WIDTH =
-			new AdaptiveMediaAttribute<>(
-				"width", AdaptiveMediaAttributeConverterUtil::parseInt,
-				AdaptiveMediaImageAttribute::_intDistance);
+	public static final AMAttribute<AdaptiveMediaImageProcessor, Integer>
+		IMAGE_WIDTH = new AMAttribute<>(
+			"width", AdaptiveMediaAttributeConverterUtil::parseInt,
+			AdaptiveMediaImageAttribute::_intDistance);
 
 	/**
 	 * Returns a string-attribute map containing the available name-attribute
@@ -43,10 +41,8 @@ public final class AdaptiveMediaImageAttribute {
 	 *
 	 * @return the list of available attributes
 	 */
-	public static Map<String, AdaptiveMediaAttribute<?, ?>>
-		getAllowedAdaptiveMediaAttributes() {
-
-		return _allowedAdaptiveMediaAttributes;
+	public static Map<String, AMAttribute<?, ?>> getAllowedAMAttributes() {
+		return _allowedAMAttributes;
 	}
 
 	private static int _intDistance(int i1, int i2) {
@@ -56,19 +52,18 @@ public final class AdaptiveMediaImageAttribute {
 	private AdaptiveMediaImageAttribute() {
 	}
 
-	private static final Map<String, AdaptiveMediaAttribute<?, ?>>
-		_allowedAdaptiveMediaAttributes = new HashMap<>();
+	private static final Map<String, AMAttribute<?, ?>> _allowedAMAttributes =
+		new HashMap<>();
 
 	static {
-		_allowedAdaptiveMediaAttributes.put(
+		_allowedAMAttributes.put(
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT.getName(),
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
-		_allowedAdaptiveMediaAttributes.put(
+		_allowedAMAttributes.put(
 			AdaptiveMediaImageAttribute.IMAGE_WIDTH.getName(),
 			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
 
-		_allowedAdaptiveMediaAttributes.putAll(
-			AdaptiveMediaAttribute.getAllowedAdaptiveMediaAttributes());
+		_allowedAMAttributes.putAll(AMAttribute.getAllowedAMAttributes());
 	}
 
 }

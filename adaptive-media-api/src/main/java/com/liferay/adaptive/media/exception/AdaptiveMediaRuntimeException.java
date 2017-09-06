@@ -38,8 +38,7 @@ public class AdaptiveMediaRuntimeException extends SystemException {
 
 	/**
 	 * This exception is thrown when a value serialized as a
-	 * <code>String</code> cannot be converted by an
-	 * {@link AdaptiveMediaAttribute}.
+	 * <code>String</code> cannot be converted by an {@link AMAttribute}.
 	 */
 	public static final class AdaptiveMediaAttributeFormatException
 		extends AdaptiveMediaRuntimeException {

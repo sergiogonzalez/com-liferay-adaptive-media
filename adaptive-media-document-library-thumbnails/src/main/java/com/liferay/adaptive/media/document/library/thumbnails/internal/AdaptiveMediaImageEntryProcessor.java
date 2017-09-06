@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.document.library.thumbnails.internal;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
@@ -134,7 +134,7 @@ public class AdaptiveMediaImageEntryProcessor
 
 		return adaptiveMediaOptional.flatMap(
 			mediaMedia -> mediaMedia.getValueOptional(
-				AdaptiveMediaAttribute.getContentLength())
+				AMAttribute.getContentLengthAMAttribute())
 		).orElse(
 			0
 		);

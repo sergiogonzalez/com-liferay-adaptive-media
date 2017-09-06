@@ -32,75 +32,70 @@ public class AdaptiveMediaAttributeTest {
 
 	@Test
 	public void testAllPublicAttributesAreSupported() {
-		Collection<AdaptiveMediaAttribute<?, ?>> adaptiveMediaAttributes =
-			Arrays.asList(
-				AdaptiveMediaAttribute.getConfigurationUuid(),
-				AdaptiveMediaAttribute.getContentLength(),
-				AdaptiveMediaAttribute.getContentType(),
-				AdaptiveMediaAttribute.getFileName());
+		Collection<AMAttribute<?, ?>> amAttributes = Arrays.asList(
+			AMAttribute.getConfigurationUuidAMAttribute(),
+			AMAttribute.getContentLengthAMAttribute(),
+			AMAttribute.getContentTypeAMAttribute(),
+			AMAttribute.getFileNameAMAttribute());
 
-		Map<String, AdaptiveMediaAttribute<?, ?>>
-			allowedAdaptiveMediaAttributesMap =
-				AdaptiveMediaAttribute.getAllowedAdaptiveMediaAttributes();
+		Map<String, AMAttribute<?, ?>> allowedAMAttributesMap =
+			AMAttribute.getAllowedAMAttributes();
 
-		Collection<AdaptiveMediaAttribute<?, ?>>
-			allowedAdaptiveMediaAttributes =
-				allowedAdaptiveMediaAttributesMap.values();
+		Collection<AMAttribute<?, ?>> allowedAMAttributes =
+			allowedAMAttributesMap.values();
 
-		Assert.assertTrue(
-			allowedAdaptiveMediaAttributes.containsAll(
-				adaptiveMediaAttributes));
+		Assert.assertTrue(allowedAMAttributes.containsAll(amAttributes));
 	}
 
 	@Test
 	public void testConfigurationUuidRecognizesAnyString() {
-		AdaptiveMediaAttribute<?, String> configurationUuid =
-			AdaptiveMediaAttribute.getConfigurationUuid();
+		AMAttribute<?, String> configurationUuidAMAttribute =
+			AMAttribute.getConfigurationUuidAMAttribute();
 
 		String value = StringUtil.randomString();
 
-		Assert.assertEquals(value, configurationUuid.convert(value));
+		Assert.assertEquals(value, configurationUuidAMAttribute.convert(value));
 	}
 
 	@Test(
 		expected = AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException.class
 	)
 	public void testContentLengthFailsForNonIntegers() {
-		AdaptiveMediaAttribute<?, Integer> contentLength =
-			AdaptiveMediaAttribute.getContentLength();
+		AMAttribute<?, Integer> contentLengthAMAttribute =
+			AMAttribute.getContentLengthAMAttribute();
 
-		contentLength.convert(StringUtil.randomString());
+		contentLengthAMAttribute.convert(StringUtil.randomString());
 	}
 
 	@Test
 	public void testContentLengthRecognizesIntegers() {
-		AdaptiveMediaAttribute<?, Integer> contentLength =
-			AdaptiveMediaAttribute.getContentLength();
+		AMAttribute<?, Integer> contentLengthAMAttribute =
+			AMAttribute.getContentLengthAMAttribute();
 
 		Integer value = RandomUtil.nextInt(Integer.MAX_VALUE);
 
 		Assert.assertEquals(
-			value, contentLength.convert(String.valueOf(value)));
+			value, contentLengthAMAttribute.convert(String.valueOf(value)));
 	}
 
 	@Test
 	public void testContentTypeRecognizesAnyString() {
-		AdaptiveMediaAttribute<?, String> contentType =
-			AdaptiveMediaAttribute.getContentType();
+		AMAttribute<?, String> contentTypeAMAttribute =
+			AMAttribute.getContentTypeAMAttribute();
 
 		String value = StringUtil.randomString();
 
-		Assert.assertEquals(value, contentType.convert(value));
+		Assert.assertEquals(value, contentTypeAMAttribute.convert(value));
 	}
 
 	@Test
 	public void testFileNameRecognizesAnyString() {
-		AdaptiveMediaAttribute<?, String> fileName =
-			AdaptiveMediaAttribute.getFileName();
+		AMAttribute<?, String> fileNameAMAttribute =
+			AMAttribute.getFileNameAMAttribute();
 
 		String value = StringUtil.randomString();
 
-		Assert.assertEquals(value, fileName.convert(value));
+		Assert.assertEquals(value, fileNameAMAttribute.convert(value));
 	}
 
 }

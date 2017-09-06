@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.finder;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.finder.AdaptiveMediaFinder;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
@@ -149,47 +149,50 @@ public class AdaptiveMediaImageFinderImpl implements AdaptiveMediaImageFinder {
 
 		Map<String, String> properties = configurationEntry.getProperties();
 
-		AdaptiveMediaAttribute<Object, String> configurationUuidAttribute =
-			AdaptiveMediaAttribute.getConfigurationUuid();
+		AMAttribute<Object, String> configurationUuidAMAttribute =
+			AMAttribute.getConfigurationUuidAMAttribute();
 
 		properties.put(
-			configurationUuidAttribute.getName(), configurationEntry.getUUID());
+			configurationUuidAMAttribute.getName(),
+			configurationEntry.getUUID());
 
-		AdaptiveMediaAttribute<Object, String> fileNameAttribute =
-			AdaptiveMediaAttribute.getFileName();
+		AMAttribute<Object, String> fileNameAMAttribute =
+			AMAttribute.getFileNameAMAttribute();
 
-		properties.put(fileNameAttribute.getName(), fileVersion.getFileName());
+		properties.put(
+			fileNameAMAttribute.getName(), fileVersion.getFileName());
 
 		AdaptiveMediaImageEntry imageEntry =
 			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
 				configurationEntry.getUUID(), fileVersion.getFileVersionId());
 
 		if (imageEntry != null) {
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, Integer>
-				imageHeightAttribute = AdaptiveMediaImageAttribute.IMAGE_HEIGHT;
+			AMAttribute<AdaptiveMediaImageProcessor, Integer>
+				imageHeightAMAttribute =
+					AdaptiveMediaImageAttribute.IMAGE_HEIGHT;
 
 			properties.put(
-				imageHeightAttribute.getName(),
+				imageHeightAMAttribute.getName(),
 				String.valueOf(imageEntry.getHeight()));
 
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, Integer>
-				imageWidthAttribute = AdaptiveMediaImageAttribute.IMAGE_WIDTH;
+			AMAttribute<AdaptiveMediaImageProcessor, Integer>
+				imageWidthAMAttribute = AdaptiveMediaImageAttribute.IMAGE_WIDTH;
 
 			properties.put(
-				imageWidthAttribute.getName(),
+				imageWidthAMAttribute.getName(),
 				String.valueOf(imageEntry.getWidth()));
 
-			AdaptiveMediaAttribute<Object, String> contentTypeAttribute =
-				AdaptiveMediaAttribute.getContentType();
+			AMAttribute<Object, String> contentTypeAMAttribute =
+				AMAttribute.getContentTypeAMAttribute();
 
 			properties.put(
-				contentTypeAttribute.getName(), imageEntry.getMimeType());
+				contentTypeAMAttribute.getName(), imageEntry.getMimeType());
 
-			AdaptiveMediaAttribute<Object, Integer> contentLengthAttribute =
-				AdaptiveMediaAttribute.getContentLength();
+			AMAttribute<Object, Integer> contentLengthAMAttribute =
+				AMAttribute.getContentLengthAMAttribute();
 
 			properties.put(
-				contentLengthAttribute.getName(),
+				contentLengthAMAttribute.getName(),
 				String.valueOf(imageEntry.getSize()));
 		}
 

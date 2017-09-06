@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.finder;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 
 import java.util.Comparator;
@@ -29,10 +29,9 @@ public class AdaptiveMediaPropertyDistanceComparator
 	implements Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>> {
 
 	public AdaptiveMediaPropertyDistanceComparator(
-		Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, ?>
-			attributes) {
+		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, ?> amAttributes) {
 
-		_attributes = attributes;
+		_amAttributes = amAttributes;
 	}
 
 	@Override
@@ -41,27 +40,26 @@ public class AdaptiveMediaPropertyDistanceComparator
 		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2) {
 
 		for (Map.Entry
-				<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, ?>
-					entry : _attributes.entrySet()) {
+				<AMAttribute<AdaptiveMediaImageProcessor, ?>, ?>
+					entry : _amAttributes.entrySet()) {
 
-			AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, Object>
-				attribute =
-					(AdaptiveMediaAttribute
-						<AdaptiveMediaImageProcessor, Object>)entry.getKey();
+			AMAttribute<AdaptiveMediaImageProcessor, Object> amAttribute =
+				(AMAttribute<AdaptiveMediaImageProcessor, Object>)
+					entry.getKey();
 
 			Object requestedValue = entry.getValue();
 
 			Optional<?> value1Optional = adaptiveMedia1.getValueOptional(
-				attribute);
+				amAttribute);
 
 			Optional<Integer> value1DistanceOptional = value1Optional.map(
-				value1 -> attribute.distance(value1, requestedValue));
+				value1 -> amAttribute.distance(value1, requestedValue));
 
 			Optional<?> value2Optional = adaptiveMedia2.getValueOptional(
-				attribute);
+				amAttribute);
 
 			Optional<Integer> value2DistanceOptional = value2Optional.map(
-				value2 -> attribute.distance(value2, requestedValue));
+				value2 -> amAttribute.distance(value2, requestedValue));
 
 			Optional<Integer> resultOptional = value1DistanceOptional.flatMap(
 				value1 -> value2DistanceOptional.map(
@@ -77,7 +75,7 @@ public class AdaptiveMediaPropertyDistanceComparator
 		return 0;
 	}
 
-	private final Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, ?>
-		_attributes;
+	private final Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, ?>
+		_amAttributes;
 
 }

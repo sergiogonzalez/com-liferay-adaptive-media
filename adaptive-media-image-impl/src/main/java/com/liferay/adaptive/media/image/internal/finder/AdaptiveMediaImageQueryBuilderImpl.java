@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.finder;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
@@ -108,8 +108,8 @@ public class AdaptiveMediaImageQueryBuilderImpl
 		return this;
 	}
 
-	public Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Object>
-		getAttributes() {
+	public Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Object>
+		getAMAttributes() {
 
 		return _attributes;
 	}
@@ -175,24 +175,22 @@ public class AdaptiveMediaImageQueryBuilderImpl
 
 	@Override
 	public <V> StrictSortStep orderBy(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-			adaptiveMediaAttribute,
+		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
 		AdaptiveMediaImageQueryBuilder.SortOrder sortOrder) {
 
-		if (adaptiveMediaAttribute == null) {
+		if (amAttribute == null) {
 			throw new IllegalArgumentException(
 				"Adaptive media attribute cannot be null");
 		}
 
-		_sortCriteria.put(adaptiveMediaAttribute, sortOrder);
+		_sortCriteria.put(amAttribute, sortOrder);
 
 		return this;
 	}
 
 	@Override
 	public <V> FuzzySortStep with(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-			adaptiveMediaAttribute,
+		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
 		Optional<V> valueOptional) {
 
 		if (valueOptional == null) {
@@ -200,24 +198,21 @@ public class AdaptiveMediaImageQueryBuilderImpl
 				"Adaptive media attribute value optional cannot be null");
 		}
 
-		valueOptional.ifPresent(
-			value -> _attributes.put(adaptiveMediaAttribute, value));
+		valueOptional.ifPresent(value -> _attributes.put(amAttribute, value));
 
 		return this;
 	}
 
 	@Override
 	public <V> FuzzySortStep with(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-			adaptiveMediaAttribute,
-		V value) {
+		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute, V value) {
 
 		if (value == null) {
 			throw new IllegalArgumentException(
 				"Adaptive media attribute value cannot be null");
 		}
 
-		_attributes.put(adaptiveMediaAttribute, value);
+		_attributes.put(amAttribute, value);
 
 		return this;
 	}
@@ -245,14 +240,14 @@ public class AdaptiveMediaImageQueryBuilderImpl
 	}
 
 	private final Map
-		<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Object>
+		<AMAttribute<AdaptiveMediaImageProcessor, ?>, Object>
 			_attributes = new LinkedHashMap<>();
 	private ConfigurationStatus _configurationStatus;
 	private String _configurationUuid;
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
 	private final Map
-		<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, SortOrder>
+		<AMAttribute<AdaptiveMediaImageProcessor, ?>, SortOrder>
 			_sortCriteria = new LinkedHashMap<>();
 
 }
