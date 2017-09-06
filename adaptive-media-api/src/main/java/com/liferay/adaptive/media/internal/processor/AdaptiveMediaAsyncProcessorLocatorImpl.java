@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.internal.processor;
 
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
+import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
 import com.liferay.portal.kernel.messaging.MessageBus;
 
@@ -29,9 +29,7 @@ public class AdaptiveMediaAsyncProcessorLocatorImpl
 	implements AdaptiveMediaAsyncProcessorLocator {
 
 	@Override
-	public <M> AdaptiveMediaAsyncProcessor<M, ?> locateForClass(
-		Class<M> clazz) {
-
+	public <M> AMAsyncProcessor<M, ?> locateForClass(Class<M> clazz) {
 		return new AdaptiveMediaAsyncProcessorImpl<>(clazz, _messageBus);
 	}
 

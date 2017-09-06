@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.document.library.internal.repository;
 
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
+import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
@@ -141,14 +141,14 @@ public abstract class BaseOverridingRepositoryDefiner
 
 	private void _deleteAdaptiveMedia(FileEntry fileEntry) {
 		try {
-			AdaptiveMediaAsyncProcessor<FileVersion, ?> processor =
+			AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
 				_asyncProcessorLocator.locateForClass(FileVersion.class);
 
 			List<FileVersion> fileVersions = fileEntry.getFileVersions(
 				WorkflowConstants.STATUS_ANY);
 
 			for (FileVersion fileVersion : fileVersions) {
-				processor.triggerCleanUp(
+				amAsyncProcessor.triggerCleanUp(
 					fileVersion,
 					String.valueOf(fileVersion.getFileVersionId()));
 			}
@@ -182,13 +182,13 @@ public abstract class BaseOverridingRepositoryDefiner
 
 	private void _updateAdaptiveMedia(FileEntry fileEntry) {
 		try {
-			AdaptiveMediaAsyncProcessor<FileVersion, ?> asyncProcessor =
+			AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
 				_asyncProcessorLocator.locateForClass(FileVersion.class);
 
 			FileVersion latestFileVersion = fileEntry.getLatestFileVersion(
 				true);
 
-			asyncProcessor.triggerProcess(
+			amAsyncProcessor.triggerProcess(
 				latestFileVersion,
 				String.valueOf(latestFileVersion.getFileVersionId()));
 		}

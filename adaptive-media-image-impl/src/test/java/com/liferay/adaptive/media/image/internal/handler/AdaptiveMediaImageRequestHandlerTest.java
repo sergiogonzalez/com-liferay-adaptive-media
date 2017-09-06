@@ -30,7 +30,7 @@ import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
+import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -66,7 +66,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		_fileVersion = _getFileVersion();
 
 		Mockito.doReturn(
-			_adaptiveMediaAsyncProcessor
+			_amAsyncProcessor
 		).when(
 			_adaptiveMediaAsyncProcessorLocator
 		).locateForClass(
@@ -199,7 +199,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			_requestHandler.handleRequest(request));
 
 		Mockito.verify(
-			_adaptiveMediaAsyncProcessor
+			_amAsyncProcessor
 		).triggerProcess(
 			_fileVersion, String.valueOf(_fileVersion.getFileVersionId())
 		);
@@ -225,7 +225,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			Optional.of(adaptiveMedia), _requestHandler.handleRequest(request));
 
 		Mockito.verify(
-			_adaptiveMediaAsyncProcessor, Mockito.never()
+			_amAsyncProcessor, Mockito.never()
 		).triggerProcess(
 			_fileVersion, String.valueOf(_fileVersion.getFileVersionId())
 		);
@@ -277,7 +277,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		Assert.assertEquals(_fileVersion.getSize(), (long)contentLength.get());
 
 		Mockito.verify(
-			_adaptiveMediaAsyncProcessor
+			_amAsyncProcessor
 		).triggerProcess(
 			_fileVersion, String.valueOf(_fileVersion.getFileVersionId())
 		);
@@ -517,9 +517,6 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		);
 	}
 
-	private final AdaptiveMediaAsyncProcessor<FileVersion, ?>
-		_adaptiveMediaAsyncProcessor = Mockito.mock(
-			AdaptiveMediaAsyncProcessor.class);
 	private final AdaptiveMediaAsyncProcessorLocator
 		_adaptiveMediaAsyncProcessorLocator = Mockito.mock(
 			AdaptiveMediaAsyncProcessorLocator.class);
@@ -528,6 +525,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			AdaptiveMediaImageConfigurationHelper.class);
 	private final AdaptiveMediaImageFinder _adaptiveMediaImageFinder =
 		Mockito.mock(AdaptiveMediaImageFinder.class);
+	private final AMAsyncProcessor<FileVersion, ?> _amAsyncProcessor =
+		Mockito.mock(AMAsyncProcessor.class);
 	private FileVersion _fileVersion;
 	private final PathInterpreter _pathInterpreter = Mockito.mock(
 		PathInterpreter.class);

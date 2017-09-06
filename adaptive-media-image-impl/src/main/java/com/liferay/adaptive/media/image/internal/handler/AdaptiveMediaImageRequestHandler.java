@@ -26,7 +26,7 @@ import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
+import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -329,10 +329,10 @@ public class AdaptiveMediaImageRequestHandler
 		}
 
 		try {
-			AdaptiveMediaAsyncProcessor<FileVersion, ?> asyncProcessor =
+			AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
 				_asyncProcessorLocator.locateForClass(FileVersion.class);
 
-			asyncProcessor.triggerProcess(
+			amAsyncProcessor.triggerProcess(
 				fileVersion, String.valueOf(fileVersion.getFileVersionId()));
 		}
 		catch (PortalException pe) {
