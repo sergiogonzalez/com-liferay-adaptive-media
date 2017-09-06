@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.document.library.web.internal.counter;
 
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
-import com.liferay.adaptive.media.image.counter.AdaptiveMediaImageCounter;
+import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -33,12 +33,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true, property = {"adaptive.media.key=document-library"},
-	service = AdaptiveMediaImageCounter.class
+	service = AMImageCounter.class
 )
-public class DLAdaptiveMediaImageCounter implements AdaptiveMediaImageCounter {
+public class DLAMImageCounter implements AMImageCounter {
 
 	@Override
-	public int countExpectedAdaptiveMediaImageEntries(long companyId) {
+	public int countExpectedAMImageEntries(long companyId) {
 		DynamicQuery trashEntryDynamicQuery =
 			_trashEntryLocalService.dynamicQuery();
 
