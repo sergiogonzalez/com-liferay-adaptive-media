@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.internal.processor;
 
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
+import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.messaging.MessageBus;
 
 import org.osgi.service.component.annotations.Component;
@@ -24,9 +24,8 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adolfo Pérez
  */
-@Component(immediate = true, service = AdaptiveMediaAsyncProcessorLocator.class)
-public class AdaptiveMediaAsyncProcessorLocatorImpl
-	implements AdaptiveMediaAsyncProcessorLocator {
+@Component(immediate = true, service = AMAsyncProcessorLocator.class)
+public class AMAsyncProcessorLocatorImpl implements AMAsyncProcessorLocator {
 
 	@Override
 	public <M> AMAsyncProcessor<M, ?> locateForClass(Class<M> clazz) {

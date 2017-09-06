@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.document.library.internal.repository;
 
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
+import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.repository.DocumentRepository;
@@ -99,10 +99,10 @@ public abstract class BaseOverridingRepositoryDefiner
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaAsyncProcessorLocator(
-		AdaptiveMediaAsyncProcessorLocator asyncProcessorLocator) {
+	public void setAMAsyncProcessorLocator(
+		AMAsyncProcessorLocator amAsyncProcessorLocator) {
 
-		_asyncProcessorLocator = asyncProcessorLocator;
+		_amAsyncProcessorLocator = amAsyncProcessorLocator;
 	}
 
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
@@ -142,7 +142,7 @@ public abstract class BaseOverridingRepositoryDefiner
 	private void _deleteAdaptiveMedia(FileEntry fileEntry) {
 		try {
 			AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
-				_asyncProcessorLocator.locateForClass(FileVersion.class);
+				_amAsyncProcessorLocator.locateForClass(FileVersion.class);
 
 			List<FileVersion> fileVersions = fileEntry.getFileVersions(
 				WorkflowConstants.STATUS_ANY);
@@ -183,7 +183,7 @@ public abstract class BaseOverridingRepositoryDefiner
 	private void _updateAdaptiveMedia(FileEntry fileEntry) {
 		try {
 			AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
-				_asyncProcessorLocator.locateForClass(FileVersion.class);
+				_amAsyncProcessorLocator.locateForClass(FileVersion.class);
 
 			FileVersion latestFileVersion = fileEntry.getLatestFileVersion(
 				true);
@@ -197,7 +197,7 @@ public abstract class BaseOverridingRepositoryDefiner
 		}
 	}
 
-	private AdaptiveMediaAsyncProcessorLocator _asyncProcessorLocator;
+	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
 	private RepositoryDefiner _overridenRepositoryDefiner;
 
 	private class AdaptiveMediaCapabiliy

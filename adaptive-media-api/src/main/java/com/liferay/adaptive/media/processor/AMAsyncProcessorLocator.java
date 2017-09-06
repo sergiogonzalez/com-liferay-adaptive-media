@@ -19,7 +19,7 @@ package com.liferay.adaptive.media.processor;
  *
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaAsyncProcessorLocator {
+public interface AMAsyncProcessorLocator {
 
 	public <M> AMAsyncProcessor<M, ?> locateForClass(Class<M> clazz);
 
