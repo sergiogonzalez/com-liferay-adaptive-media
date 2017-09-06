@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 /**
  * @author Alejandro Tardín
  */
-public interface AdaptiveMediaImageHTMLTagFactory {
+public interface AMImageHTMLTagFactory {
 
 	public String create(String originalImgTag, FileEntry fileEntry)
 		throws PortalException;

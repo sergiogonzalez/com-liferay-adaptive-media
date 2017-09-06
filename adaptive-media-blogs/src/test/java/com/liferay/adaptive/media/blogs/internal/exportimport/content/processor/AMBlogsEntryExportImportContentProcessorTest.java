@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.blogs.internal.exportimport.content.processor;
 
-import com.liferay.adaptive.media.image.html.AdaptiveMediaImageHTMLTagFactory;
+import com.liferay.adaptive.media.image.html.AMImageHTMLTagFactory;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -52,9 +52,8 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 			_dlAppLocalService);
 		_amBlogsEntryExportImportContentProcessor.
 			setExportImportContentProcessor(_exportImportContentProcessor);
-		_amBlogsEntryExportImportContentProcessor.
-			setAdaptiveMediaImageHTMLTagFactory(
-				_adaptiveMediaImageHTMLTagFactory);
+		_amBlogsEntryExportImportContentProcessor.setAMImageHTMLTagFactory(
+			_amImageHTMLTagFactory);
 		_amBlogsEntryExportImportContentProcessor.
 			setAMEmbeddedReferenceSetFactory(_amEmbeddedReferenceSetFactory);
 
@@ -432,7 +431,7 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageHTMLTagFactory.create(
+			_amImageHTMLTagFactory.create(
 				Mockito.anyString(), Mockito.eq(fileEntry))
 		).thenAnswer(
 			invocation -> {
@@ -491,9 +490,6 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		);
 	}
 
-	private final AdaptiveMediaImageHTMLTagFactory
-		_adaptiveMediaImageHTMLTagFactory = Mockito.mock(
-			AdaptiveMediaImageHTMLTagFactory.class);
 	private final AMBlogsEntryExportImportContentProcessor
 		_amBlogsEntryExportImportContentProcessor =
 			new AMBlogsEntryExportImportContentProcessor();
@@ -501,6 +497,8 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		AMEmbeddedReferenceSet.class);
 	private final AMEmbeddedReferenceSetFactory _amEmbeddedReferenceSetFactory =
 		Mockito.mock(AMEmbeddedReferenceSetFactory.class);
+	private final AMImageHTMLTagFactory _amImageHTMLTagFactory = Mockito.mock(
+		AMImageHTMLTagFactory.class);
 	private final BlogsEntry _blogsEntry = Mockito.mock(BlogsEntry.class);
 	private final DLAppLocalService _dlAppLocalService = Mockito.mock(
 		DLAppLocalService.class);

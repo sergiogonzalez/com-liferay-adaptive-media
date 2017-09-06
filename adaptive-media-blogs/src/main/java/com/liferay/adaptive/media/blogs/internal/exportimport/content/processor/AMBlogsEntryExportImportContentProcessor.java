@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.blogs.internal.exportimport.content.processor;
 
-import com.liferay.adaptive.media.image.html.AdaptiveMediaImageHTMLTagFactory;
+import com.liferay.adaptive.media.image.html.AMImageHTMLTagFactory;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.ExportImportPathUtil;
@@ -83,17 +83,17 @@ public class AMBlogsEntryExportImportContentProcessor
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageHTMLTagFactory(
-		AdaptiveMediaImageHTMLTagFactory adaptiveMediaImageHTMLTagFactory) {
-
-		_adaptiveMediaImageHTMLTagFactory = adaptiveMediaImageHTMLTagFactory;
-	}
-
-	@Reference(unbind = "-")
 	public void setAMEmbeddedReferenceSetFactory(
 		AMEmbeddedReferenceSetFactory amEmbeddedReferenceSetFactory) {
 
 		_amEmbeddedReferenceSetFactory = amEmbeddedReferenceSetFactory;
+	}
+
+	@Reference(unbind = "-")
+	public void setAMImageHTMLTagFactory(
+		AMImageHTMLTagFactory amImageHTMLTagFactory) {
+
+		_amImageHTMLTagFactory = amImageHTMLTagFactory;
 	}
 
 	@Reference(unbind = "-")
@@ -218,8 +218,7 @@ public class AMBlogsEntryExportImportContentProcessor
 				Element img = imgElements.first();
 
 				Element picture = _parseNode(
-					_adaptiveMediaImageHTMLTagFactory.create(
-						img.toString(), fileEntry));
+					_amImageHTMLTagFactory.create(img.toString(), fileEntry));
 
 				element.html(picture.html());
 			}
@@ -233,8 +232,8 @@ public class AMBlogsEntryExportImportContentProcessor
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMBlogsEntryExportImportContentProcessor.class);
 
-	private AdaptiveMediaImageHTMLTagFactory _adaptiveMediaImageHTMLTagFactory;
 	private AMEmbeddedReferenceSetFactory _amEmbeddedReferenceSetFactory;
+	private AMImageHTMLTagFactory _amImageHTMLTagFactory;
 	private DLAppLocalService _dlAppLocalService;
 	private ExportImportContentProcessor<String> _exportImportContentProcessor;
 

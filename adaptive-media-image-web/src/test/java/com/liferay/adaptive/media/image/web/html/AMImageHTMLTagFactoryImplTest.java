@@ -39,7 +39,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author Alejandro Tardín
  */
 @RunWith(MockitoJUnitRunner.class)
-public class AdaptiveMediaImageHTMLTagFactoryImplTest {
+public class AMImageHTMLTagFactoryImplTest {
 
 	@Before
 	public void setUp() throws PortalException {
@@ -196,9 +196,8 @@ public class AdaptiveMediaImageHTMLTagFactoryImplTest {
 			Arrays.asList(new Condition("max-width", width + "px")), url);
 	}
 
-	private final AdaptiveMediaImageHTMLTagFactoryImpl
-		_adaptiveMediaImageHTMLTagFactory =
-			new AdaptiveMediaImageHTMLTagFactoryImpl();
+	private final AMImageHTMLTagFactoryImpl _adaptiveMediaImageHTMLTagFactory =
+		new AMImageHTMLTagFactoryImpl();
 
 	@Mock
 	private FileEntry _fileEntry;

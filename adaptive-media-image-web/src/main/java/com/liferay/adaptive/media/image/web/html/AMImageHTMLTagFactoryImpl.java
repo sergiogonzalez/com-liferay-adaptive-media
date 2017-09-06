@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.web.html;
 
-import com.liferay.adaptive.media.image.html.AdaptiveMediaImageHTMLTagFactory;
+import com.liferay.adaptive.media.image.html.AMImageHTMLTagFactory;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.mediaquery.MediaQueryProvider;
@@ -36,9 +36,8 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Tardín
  */
-@Component(service = AdaptiveMediaImageHTMLTagFactory.class)
-public class AdaptiveMediaImageHTMLTagFactoryImpl
-	implements AdaptiveMediaImageHTMLTagFactory {
+@Component(service = AMImageHTMLTagFactory.class)
+public class AMImageHTMLTagFactoryImpl implements AMImageHTMLTagFactory {
 
 	@Override
 	public String create(String originalImgTag, FileEntry fileEntry)
