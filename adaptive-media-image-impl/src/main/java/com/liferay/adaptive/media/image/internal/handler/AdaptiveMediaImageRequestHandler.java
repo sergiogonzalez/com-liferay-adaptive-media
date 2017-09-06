@@ -20,7 +20,7 @@ import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
@@ -90,15 +90,15 @@ public class AdaptiveMediaImageRequestHandler
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageFinder(AdaptiveMediaImageFinder finder) {
-		_finder = finder;
-	}
-
-	@Reference(unbind = "-")
 	public void setAMAsyncProcessorLocator(
 		AMAsyncProcessorLocator amAsyncProcessorLocator) {
 
 		_amAsyncProcessorLocator = amAsyncProcessorLocator;
+	}
+
+	@Reference(unbind = "-")
+	public void setAMImageFinder(AMImageFinder amImageFinder) {
+		_amImageFinder = amImageFinder;
 	}
 
 	@Reference(unbind = "-")
@@ -204,7 +204,7 @@ public class AdaptiveMediaImageRequestHandler
 
 		try {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _finder.getAdaptiveMediaStream(
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 						fileVersion
 					).with(
@@ -230,7 +230,7 @@ public class AdaptiveMediaImageRequestHandler
 				AdaptiveMediaImageConfigurationEntry configurationEntry)
 		throws PortalException {
 
-		return _finder.getAdaptiveMediaStream(amImageQueryBuilder ->
+		return _amImageFinder.getAdaptiveMediaStream(amImageQueryBuilder ->
 			amImageQueryBuilder.forVersion(
 				fileVersion
 			).forConfiguration(
@@ -350,8 +350,8 @@ public class AdaptiveMediaImageRequestHandler
 		AdaptiveMediaImageRequestHandler.class);
 
 	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
+	private AMImageFinder _amImageFinder;
 	private AdaptiveMediaImageConfigurationHelper _configurationHelper;
-	private AdaptiveMediaImageFinder _finder;
 	private PathInterpreter _pathInterpreter;
 
 }

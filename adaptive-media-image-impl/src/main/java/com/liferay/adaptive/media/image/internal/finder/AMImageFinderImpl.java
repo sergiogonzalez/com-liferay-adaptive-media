@@ -16,12 +16,12 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
+import com.liferay.adaptive.media.finder.AMFinder;
 import com.liferay.adaptive.media.finder.AMQuery;
-import com.liferay.adaptive.media.finder.AdaptiveMediaFinder;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
@@ -51,9 +51,9 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = "model.class.name=com.liferay.portal.kernel.repository.model.FileVersion",
-	service = {AdaptiveMediaFinder.class, AdaptiveMediaImageFinder.class}
+	service = {AMFinder.class, AMImageFinder.class}
 )
-public class AdaptiveMediaImageFinderImpl implements AdaptiveMediaImageFinder {
+public class AMImageFinderImpl implements AMImageFinder {
 
 	@Override
 	public Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>

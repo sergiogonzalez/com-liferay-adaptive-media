@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.processor.test;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.test.util.DestinationReplacer;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
@@ -76,7 +76,7 @@ public class AdaptiveMediaImageProcessorTest {
 		_adaptiveMediaImageConfigurationHelper = _getService(
 			AdaptiveMediaImageConfigurationHelper.class);
 		_dlAppLocalService = _getService(DLAppLocalService.class);
-		_adaptiveMediaImageFinder = _getService(AdaptiveMediaImageFinder.class);
+		_amImageFinder = _getService(AMImageFinder.class);
 		_adaptiveMediaImageProcessor = _getService(
 			AdaptiveMediaImageProcessor.class);
 
@@ -127,12 +127,10 @@ public class AdaptiveMediaImageProcessorTest {
 			FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
 
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream =
-					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						amImageQueryBuilder ->
-							amImageQueryBuilder.allForFileEntry(
-								fileEntry
-							).done());
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+						fileEntry
+					).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -151,12 +149,10 @@ public class AdaptiveMediaImageProcessorTest {
 			final FileEntry fileEntry = _addImageFileEntry(serviceContext);
 
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream =
-					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						amImageQueryBuilder ->
-							amImageQueryBuilder.allForFileEntry(
-								fileEntry
-							).done());
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+						fileEntry
+					).done());
 
 			Assert.assertEquals(
 				_getVariantsCount(), adaptiveMediaStream.count());
@@ -177,12 +173,10 @@ public class AdaptiveMediaImageProcessorTest {
 			FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
 
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream =
-					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						amImageQueryBuilder ->
-							amImageQueryBuilder.allForFileEntry(
-								fileEntry
-							).done());
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+						fileEntry
+					).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -203,12 +197,10 @@ public class AdaptiveMediaImageProcessorTest {
 				fileEntry.getLatestFileVersion(true));
 
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream =
-					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						amImageQueryBuilder ->
-							amImageQueryBuilder.allForFileEntry(
-								fileEntry
-							).done());
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+						fileEntry
+					).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -229,12 +221,10 @@ public class AdaptiveMediaImageProcessorTest {
 				fileEntry.getLatestFileVersion(true));
 
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream =
-					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						amImageQueryBuilder ->
-							amImageQueryBuilder.allForFileEntry(
-								fileEntry
-							).done());
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+						fileEntry
+					).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -307,8 +297,8 @@ public class AdaptiveMediaImageProcessorTest {
 
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
-	private AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
 	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
+	private AMImageFinder _amImageFinder;
 	private DLAppLocalService _dlAppLocalService;
 
 	@DeleteAfterTestRun

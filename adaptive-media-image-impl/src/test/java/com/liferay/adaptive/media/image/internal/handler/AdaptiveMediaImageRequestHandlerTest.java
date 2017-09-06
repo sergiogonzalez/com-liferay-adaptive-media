@@ -21,8 +21,8 @@ import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
@@ -74,7 +74,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		);
 
 		_requestHandler.setAMAsyncProcessorLocator(_amAsyncProcessorLocator);
-		_requestHandler.setAdaptiveMediaImageFinder(_adaptiveMediaImageFinder);
+		_requestHandler.setAMImageFinder(_amImageFinder);
 		_requestHandler.setPathInterpreter(_pathInterpreter);
 		_requestHandler.setAdaptiveMediaImageConfigurationHelper(
 			_adaptiveMediaImageConfigurationHelper);
@@ -90,8 +90,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			_fileVersion, configurationEntry);
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenThrow(
 			AdaptiveMediaException.class
 		);
@@ -109,8 +108,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			_fileVersion, configurationEntry);
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenThrow(
 			PortalException.class
 		);
@@ -242,8 +240,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			_fileVersion, configurationEntry);
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> Stream.empty()
 		);
@@ -433,8 +430,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		throws Exception {
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> {
 				Function<AMImageQueryBuilder, AMQuery>
@@ -488,8 +484,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		throws Exception {
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> {
 				Function<AMImageQueryBuilder, AMQuery>
@@ -527,12 +522,12 @@ public class AdaptiveMediaImageRequestHandlerTest {
 	private final AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper = Mockito.mock(
 			AdaptiveMediaImageConfigurationHelper.class);
-	private final AdaptiveMediaImageFinder _adaptiveMediaImageFinder =
-		Mockito.mock(AdaptiveMediaImageFinder.class);
 	private final AMAsyncProcessor<FileVersion, ?> _amAsyncProcessor =
 		Mockito.mock(AMAsyncProcessor.class);
 	private final AMAsyncProcessorLocator _amAsyncProcessorLocator =
 		Mockito.mock(AMAsyncProcessorLocator.class);
+	private final AMImageFinder _amImageFinder = Mockito.mock(
+		AMImageFinder.class);
 	private FileVersion _fileVersion;
 	private final PathInterpreter _pathInterpreter = Mockito.mock(
 		PathInterpreter.class);

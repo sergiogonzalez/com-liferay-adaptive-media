@@ -19,8 +19,8 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
@@ -73,8 +73,7 @@ public class MediaQueryProviderImplTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> Stream.empty()
 		);
@@ -85,8 +84,7 @@ public class MediaQueryProviderImplTest {
 		_mediaQueryProvider.setAdaptiveMediaImageConfigurationHelper(
 			_adaptiveMediaImageConfigurationHelper);
 
-		_mediaQueryProvider.setAdaptiveMediaImageFinder(
-			_adaptiveMediaImageFinder);
+		_mediaQueryProvider.setAMImageFinder(_amImageFinder);
 	}
 
 	@Test
@@ -610,8 +608,7 @@ public class MediaQueryProviderImplTest {
 		throws PortalException {
 
 		Mockito.when(
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				Mockito.any(Function.class))
+			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> {
 				Function<AMImageQueryBuilder, AMQuery>
@@ -774,10 +771,10 @@ public class MediaQueryProviderImplTest {
 		_adaptiveMediaImageConfigurationHelper;
 
 	@Mock
-	private AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
+	private AdaptiveMediaImageURLFactory _adaptiveMediaURLFactory;
 
 	@Mock
-	private AdaptiveMediaImageURLFactory _adaptiveMediaURLFactory;
+	private AMImageFinder _amImageFinder;
 
 	@Mock
 	private FileEntry _fileEntry;

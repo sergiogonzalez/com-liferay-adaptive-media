@@ -21,7 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * An {@link AdaptiveMediaFinder} is responsible for locating and returning
+ * An {@link AMFinder} is responsible for locating and returning
  * media related to a model.
  *
  * <p>
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  *
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaFinder<B extends AMQueryBuilder<M, T>, M, T> {
+public interface AMFinder<B extends AMQueryBuilder<M, T>, M, T> {
 
 	/**
 	 * Returns all {@link AdaptiveMedia} instances for the model that matches
