@@ -18,13 +18,13 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.mediaquery.MediaQueryProvider;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -136,16 +136,15 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH.getName(),
+			AMImageAttribute.IMAGE_WIDTH.getName(),
 			String.valueOf(widthOptional.orElse(0)));
 
 		properties.put(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT.getName(),
+			AMImageAttribute.IMAGE_HEIGHT.getName(),
 			String.valueOf(heightOptional.orElse(0)));
 
 		return new AdaptiveMediaImage(
-			() -> null,
-			AdaptiveMediaImageAttributeMapping.fromProperties(properties),
+			() -> null, AMImageAttributeMapping.fromProperties(properties),
 			_getFileEntryURL(fileEntry, amImageConfigurationEntry));
 	}
 
@@ -252,7 +251,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 
 	private Integer _getHeight(AdaptiveMedia<AMImageProcessor> adaptiveMedia) {
 		return adaptiveMedia.getValueOptional(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT).orElse(0);
+			AMImageAttribute.IMAGE_HEIGHT).orElse(0);
 	}
 
 	private Optional<Integer> _getHeight(
@@ -286,7 +285,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 
 	private Integer _getWidth(AdaptiveMedia<AMImageProcessor> adaptiveMedia) {
 		Optional<Integer> attributeValue = adaptiveMedia.getValueOptional(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+			AMImageAttribute.IMAGE_WIDTH);
 
 		return attributeValue.orElse(0);
 	}

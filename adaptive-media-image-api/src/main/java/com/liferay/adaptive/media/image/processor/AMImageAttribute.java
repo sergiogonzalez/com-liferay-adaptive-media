@@ -23,17 +23,17 @@ import java.util.Map;
 /**
  * @author Adolfo Pérez
  */
-public final class AdaptiveMediaImageAttribute {
+public final class AMImageAttribute {
 
 	public static final AMAttribute<AMImageProcessor, Integer> IMAGE_HEIGHT =
 		new AMAttribute<>(
 			"height", AMAttributeConverterUtil::parseInt,
-			AdaptiveMediaImageAttribute::_intDistance);
+			AMImageAttribute::_intDistance);
 
 	public static final AMAttribute<AMImageProcessor, Integer> IMAGE_WIDTH =
 		new AMAttribute<>(
 			"width", AMAttributeConverterUtil::parseInt,
-			AdaptiveMediaImageAttribute::_intDistance);
+			AMImageAttribute::_intDistance);
 
 	/**
 	 * Returns a string-attribute map containing the available name-attribute
@@ -49,7 +49,7 @@ public final class AdaptiveMediaImageAttribute {
 		return i1 - i2;
 	}
 
-	private AdaptiveMediaImageAttribute() {
+	private AMImageAttribute() {
 	}
 
 	private static final Map<String, AMAttribute<?, ?>> _allowedAMAttributes =
@@ -57,11 +57,11 @@ public final class AdaptiveMediaImageAttribute {
 
 	static {
 		_allowedAMAttributes.put(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT.getName(),
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
+			AMImageAttribute.IMAGE_HEIGHT.getName(),
+			AMImageAttribute.IMAGE_HEIGHT);
 		_allowedAMAttributes.put(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH.getName(),
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+			AMImageAttribute.IMAGE_WIDTH.getName(),
+			AMImageAttribute.IMAGE_WIDTH);
 
 		_allowedAMAttributes.putAll(AMAttribute.getAllowedAMAttributes());
 	}

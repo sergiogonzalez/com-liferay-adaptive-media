@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.internal.configuration;
 
 import com.liferay.adaptive.media.AMAttribute;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,17 +30,17 @@ import java.util.Optional;
  *
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageAttributeMapping {
+public class AMImageAttributeMapping {
 
 	/**
-	 * Returns an {@link AdaptiveMediaImageAttributeMapping} that uses the map
+	 * Returns an {@link AMImageAttributeMapping} that uses the map
 	 * as the underlying attribute storage.
 	 *
 	 * @param  properties the map to get the properties from
 	 * @return a non-<code>null</code> mapping that provides type-safe access to
 	 *         an underlying map
 	 */
-	public static AdaptiveMediaImageAttributeMapping fromProperties(
+	public static AMImageAttributeMapping fromProperties(
 		Map<String, String> properties) {
 
 		if (properties == null) {
@@ -67,15 +67,13 @@ public class AdaptiveMediaImageAttributeMapping {
 			_getValueOptional(
 				properties, AMAttribute.getFileNameAMAttribute()));
 		amAttributes.put(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
-			_getValueOptional(
-				properties, AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
+			AMImageAttribute.IMAGE_HEIGHT,
+			_getValueOptional(properties, AMImageAttribute.IMAGE_HEIGHT));
 		amAttributes.put(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH,
-			_getValueOptional(
-				properties, AdaptiveMediaImageAttribute.IMAGE_WIDTH));
+			AMImageAttribute.IMAGE_WIDTH,
+			_getValueOptional(properties, AMImageAttribute.IMAGE_WIDTH));
 
-		return new AdaptiveMediaImageAttributeMapping(amAttributes);
+		return new AMImageAttributeMapping(amAttributes);
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class AdaptiveMediaImageAttributeMapping {
 		return (Optional<V>)_amAttributes.get(amAttribute);
 	}
 
-	protected AdaptiveMediaImageAttributeMapping(
+	protected AMImageAttributeMapping(
 		Map<AMAttribute<AMImageProcessor, ?>, Optional<?>> amAttributes) {
 
 		_amAttributes = amAttributes;

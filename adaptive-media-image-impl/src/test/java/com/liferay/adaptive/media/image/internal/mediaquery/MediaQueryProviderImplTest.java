@@ -21,13 +21,13 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -696,20 +696,17 @@ public class MediaQueryProviderImplTest {
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT.getName(),
-			String.valueOf(height));
+			AMImageAttribute.IMAGE_HEIGHT.getName(), String.valueOf(height));
 
 		properties.put(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH.getName(),
-			String.valueOf(width));
+			AMImageAttribute.IMAGE_WIDTH.getName(), String.valueOf(width));
 
 		properties.put(
 			AMAttribute.getConfigurationUuidAMAttribute().getName(),
 			adaptiveMediaImageConfigurationEntryUuid);
 
 		return new AdaptiveMediaImage(
-			() -> null,
-			AdaptiveMediaImageAttributeMapping.fromProperties(properties),
+			() -> null, AMImageAttributeMapping.fromProperties(properties),
 			URI.create(url));
 	}
 

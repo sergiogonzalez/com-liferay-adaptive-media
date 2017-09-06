@@ -18,8 +18,8 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.document.library.kernel.model.DLProcessorConstants;
 import com.liferay.document.library.kernel.util.DLProcessor;
 import com.liferay.document.library.kernel.util.ImageProcessor;
@@ -221,11 +221,11 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				fileVersion
 			).with(
-				AdaptiveMediaImageAttribute.IMAGE_WIDTH,
+				AMImageAttribute.IMAGE_WIDTH,
 				PrefsPropsUtil.getInteger(
 					PropsKeys.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH)
 			).with(
-				AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
+				AMImageAttribute.IMAGE_HEIGHT,
 				PrefsPropsUtil.getInteger(
 					PropsKeys.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT)
 			).done());
