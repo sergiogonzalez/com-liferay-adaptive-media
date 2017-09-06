@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.journal.editor.configuration.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
 import com.liferay.item.selector.ItemSelectorReturnType;
@@ -205,7 +205,7 @@ public class AMJournalEditorConfigContributorTest extends PowerMockito {
 
 		Assert.assertTrue(
 			itemSelectorReturnType0 instanceof
-				AdaptiveMediaImageFileEntryItemSelectorReturnType);
+				AMImageFileEntryItemSelectorReturnType);
 
 		ItemSelectorReturnType itemSelectorReturnType1 =
 			desiredItemSelectorReturnTypes.get(1);

@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.item.selector.upload.web.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageURLItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageURLItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorViewReturnTypeProvider;
 
@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {"item.selector.view.key=upload"},
 	service = ItemSelectorViewReturnTypeProvider.class
 )
-public class AdaptiveMediaUploadViewReturnTypeProvider
+public class AMUploadViewReturnTypeProvider
 	implements ItemSelectorViewReturnTypeProvider {
 
 	public List<ItemSelectorReturnType>
@@ -38,10 +38,10 @@ public class AdaptiveMediaUploadViewReturnTypeProvider
 			List<ItemSelectorReturnType> supportedItemSelectorReturnTypes) {
 
 		supportedItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageFileEntryItemSelectorReturnType());
+			new AMImageFileEntryItemSelectorReturnType());
 
 		supportedItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageURLItemSelectorReturnType());
+			new AMImageURLItemSelectorReturnType());
 
 		return supportedItemSelectorReturnTypes;
 	}

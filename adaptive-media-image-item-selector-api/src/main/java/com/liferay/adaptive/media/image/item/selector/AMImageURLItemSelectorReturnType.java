@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.image.item.selector;
 import com.liferay.item.selector.ItemSelectorReturnType;
 
 /**
- * @author Alejandro Tardín
+ * @author Roberto Díaz
  */
-public class AdaptiveMediaImageFileEntryItemSelectorReturnType
+public class AMImageURLItemSelectorReturnType
 	implements ItemSelectorReturnType {
 }

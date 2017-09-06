@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.item.selector.upload.web.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageURLItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageURLItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorViewReturnTypeProvider;
 import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
@@ -32,8 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 /**
  * @author Alejandro Tardín
  */
-public class AdaptiveMediaUploadViewReturnTypeProviderTest
-	extends PowerMockito {
+public class AMUploadViewReturnTypeProviderTest extends PowerMockito {
 
 	@Test
 	public void testAddAdaptiveMediaImageURLItemSelectorReturnTypeWithEmptyList()
@@ -43,7 +42,7 @@ public class AdaptiveMediaUploadViewReturnTypeProviderTest
 			new ArrayList<>();
 
 		ItemSelectorViewReturnTypeProvider itemSelectorViewReturnTypeProvider =
-			new AdaptiveMediaUploadViewReturnTypeProvider();
+			new AMUploadViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
 			itemSelectorViewReturnTypeProvider.
@@ -56,11 +55,11 @@ public class AdaptiveMediaUploadViewReturnTypeProviderTest
 
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(0) instanceof
-				AdaptiveMediaImageFileEntryItemSelectorReturnType);
+				AMImageFileEntryItemSelectorReturnType);
 
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(1) instanceof
-				AdaptiveMediaImageURLItemSelectorReturnType);
+				AMImageURLItemSelectorReturnType);
 	}
 
 	@Test
@@ -75,7 +74,7 @@ public class AdaptiveMediaUploadViewReturnTypeProviderTest
 		supportedItemSelectorReturnTypes.add(new URLItemSelectorReturnType());
 
 		ItemSelectorViewReturnTypeProvider itemSelectorViewReturnTypeProvider =
-			new AdaptiveMediaUploadViewReturnTypeProvider();
+			new AMUploadViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
 			itemSelectorViewReturnTypeProvider.
@@ -94,10 +93,10 @@ public class AdaptiveMediaUploadViewReturnTypeProviderTest
 				URLItemSelectorReturnType);
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(2) instanceof
-				AdaptiveMediaImageFileEntryItemSelectorReturnType);
+				AMImageFileEntryItemSelectorReturnType);
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(3) instanceof
-				AdaptiveMediaImageURLItemSelectorReturnType);
+				AMImageURLItemSelectorReturnType);
 	}
 
 }

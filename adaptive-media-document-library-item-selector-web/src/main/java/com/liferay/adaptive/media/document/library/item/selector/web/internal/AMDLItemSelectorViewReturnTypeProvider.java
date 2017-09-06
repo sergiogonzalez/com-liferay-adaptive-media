@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.document.library.item.selector.web.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageURLItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageURLItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorViewReturnTypeProvider;
 
@@ -40,10 +40,10 @@ public class AMDLItemSelectorViewReturnTypeProvider
 			List<ItemSelectorReturnType> supportedItemSelectorReturnTypes) {
 
 		supportedItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageFileEntryItemSelectorReturnType());
+			new AMImageFileEntryItemSelectorReturnType());
 
 		supportedItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageURLItemSelectorReturnType());
+			new AMImageURLItemSelectorReturnType());
 
 		return supportedItemSelectorReturnTypes;
 	}

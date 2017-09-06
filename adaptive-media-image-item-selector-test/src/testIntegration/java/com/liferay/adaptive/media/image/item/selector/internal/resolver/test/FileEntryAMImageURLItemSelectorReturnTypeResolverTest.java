@@ -65,7 +65,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Sync
-public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest {
+public class FileEntryAMImageURLItemSelectorReturnTypeResolverTest {
 
 	@ClassRule
 	@Rule
@@ -702,8 +702,7 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest {
 
 	private byte[] _getImageBytes() throws Exception {
 		return FileUtil.getBytes(
-			FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest.
-				class,
+			FileEntryAMImageURLItemSelectorReturnTypeResolverTest.class,
 			"/com/liferay/adaptive/media/image/item/selector/internal" +
 				"/resolver/test/dependencies/image.jpg");
 	}

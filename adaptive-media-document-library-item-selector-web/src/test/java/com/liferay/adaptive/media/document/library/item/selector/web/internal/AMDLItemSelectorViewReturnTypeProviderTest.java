@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.document.library.item.selector.web.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageURLItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageURLItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorViewReturnTypeProvider;
 import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
@@ -66,10 +66,10 @@ public class AMDLItemSelectorViewReturnTypeProviderTest extends PowerMockito {
 				URLItemSelectorReturnType);
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(2) instanceof
-				AdaptiveMediaImageFileEntryItemSelectorReturnType);
+				AMImageFileEntryItemSelectorReturnType);
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(3) instanceof
-				AdaptiveMediaImageURLItemSelectorReturnType);
+				AMImageURLItemSelectorReturnType);
 	}
 
 	@Test
@@ -94,11 +94,11 @@ public class AMDLItemSelectorViewReturnTypeProviderTest extends PowerMockito {
 
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(0) instanceof
-				AdaptiveMediaImageFileEntryItemSelectorReturnType);
+				AMImageFileEntryItemSelectorReturnType);
 
 		Assert.assertTrue(
 			itemSelectorReturnTypes.get(1) instanceof
-				AdaptiveMediaImageURLItemSelectorReturnType);
+				AMImageURLItemSelectorReturnType);
 	}
 
 }

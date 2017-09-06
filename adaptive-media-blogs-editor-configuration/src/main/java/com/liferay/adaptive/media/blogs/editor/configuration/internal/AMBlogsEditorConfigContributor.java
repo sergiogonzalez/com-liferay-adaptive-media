@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.blogs.editor.configuration.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
 import com.liferay.blogs.item.selector.criterion.BlogsItemSelectorCriterion;
 import com.liferay.blogs.web.constants.BlogsPortletKeys;
 import com.liferay.item.selector.ItemSelector;
@@ -139,7 +139,7 @@ public class AMBlogsEditorConfigContributor
 			new ArrayList<>();
 
 		desiredItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageFileEntryItemSelectorReturnType());
+			new AMImageFileEntryItemSelectorReturnType());
 		desiredItemSelectorReturnTypes.addAll(
 			itemSelectorCriterion.getDesiredItemSelectorReturnTypes());
 

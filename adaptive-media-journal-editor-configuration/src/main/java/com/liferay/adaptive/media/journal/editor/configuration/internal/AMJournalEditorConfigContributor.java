@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.journal.editor.configuration.internal;
 
-import com.liferay.adaptive.media.image.item.selector.AdaptiveMediaImageFileEntryItemSelectorReturnType;
+import com.liferay.adaptive.media.image.item.selector.AMImageFileEntryItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
 import com.liferay.item.selector.ItemSelectorReturnType;
@@ -138,7 +138,7 @@ public class AMJournalEditorConfigContributor
 			new ArrayList<>();
 
 		desiredItemSelectorReturnTypes.add(
-			new AdaptiveMediaImageFileEntryItemSelectorReturnType());
+			new AMImageFileEntryItemSelectorReturnType());
 		desiredItemSelectorReturnTypes.addAll(
 			itemSelectorCriterion.getDesiredItemSelectorReturnTypes());
 
