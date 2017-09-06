@@ -32,7 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 /**
  * @author Sergio González
  */
-public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
+public class AMBlogsItemSelectorViewReturnTypeProviderTest
 	extends PowerMockito {
 
 	@Test
@@ -42,11 +42,12 @@ public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
 			new ArrayList<>();
 
-		ItemSelectorViewReturnTypeProvider itemSelectorViewReturnTypeProvider =
-			new AdaptiveMediaBlogsItemSelectorViewReturnTypeProvider();
+		ItemSelectorViewReturnTypeProvider
+			amBlogsItemSelectorViewReturnTypeProvider =
+				new AMBlogsItemSelectorViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
-			itemSelectorViewReturnTypeProvider.
+			amBlogsItemSelectorViewReturnTypeProvider.
 				populateSupportedItemSelectorReturnTypes(
 					supportedItemSelectorReturnTypes);
 
@@ -74,11 +75,12 @@ public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProviderTest
 			new FileEntryItemSelectorReturnType());
 		supportedItemSelectorReturnTypes.add(new URLItemSelectorReturnType());
 
-		ItemSelectorViewReturnTypeProvider itemSelectorViewReturnTypeProvider =
-			new AdaptiveMediaBlogsItemSelectorViewReturnTypeProvider();
+		ItemSelectorViewReturnTypeProvider
+			amBlogsItemSelectorViewReturnTypeProvider =
+				new AMBlogsItemSelectorViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
-			itemSelectorViewReturnTypeProvider.
+			amBlogsItemSelectorViewReturnTypeProvider.
 				populateSupportedItemSelectorReturnTypes(
 					supportedItemSelectorReturnTypes);
 

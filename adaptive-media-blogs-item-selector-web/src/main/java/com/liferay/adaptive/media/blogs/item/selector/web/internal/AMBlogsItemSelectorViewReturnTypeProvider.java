@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = ItemSelectorViewReturnTypeProvider.class
 )
-public class AdaptiveMediaBlogsItemSelectorViewReturnTypeProvider
+public class AMBlogsItemSelectorViewReturnTypeProvider
 	implements ItemSelectorViewReturnTypeProvider {
 
 	public List<ItemSelectorReturnType>
