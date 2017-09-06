@@ -55,8 +55,8 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Sync
-public class AdaptiveMediaImageDeleteConfigurationTest
-	extends BaseAdaptiveMediaImageConfigurationTestCase {
+public class AMImageDeleteConfigurationTest
+	extends BaseAMImageConfigurationTestCase {
 
 	@ClassRule
 	@Rule
@@ -897,8 +897,7 @@ public class AdaptiveMediaImageDeleteConfigurationTest
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			StringUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
 			FileUtil.getBytes(
-				AdaptiveMediaImageDeleteConfigurationTest.class,
-				_PNG_IMAGE_FILE_PATH),
+				AMImageDeleteConfigurationTest.class, _PNG_IMAGE_FILE_PATH),
 			new ServiceContext());
 	}
 

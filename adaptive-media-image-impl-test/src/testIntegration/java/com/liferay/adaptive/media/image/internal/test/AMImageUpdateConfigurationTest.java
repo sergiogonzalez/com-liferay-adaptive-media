@@ -42,8 +42,8 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Sync
-public class AdaptiveMediaImageUpdateConfigurationTest
-	extends BaseAdaptiveMediaImageConfigurationTestCase {
+public class AMImageUpdateConfigurationTest
+	extends BaseAMImageConfigurationTestCase {
 
 	@ClassRule
 	@Rule
