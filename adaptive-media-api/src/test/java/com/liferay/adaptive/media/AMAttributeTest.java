@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaAttributeTest {
+public class AMAttributeTest {
 
 	@Test
 	public void testAllPublicAttributesAreSupported() {
