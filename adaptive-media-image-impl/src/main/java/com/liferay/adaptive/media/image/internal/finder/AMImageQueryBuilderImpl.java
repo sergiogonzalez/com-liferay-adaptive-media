@@ -117,7 +117,7 @@ public class AMImageQueryBuilderImpl
 		}
 
 		if (!_amAttributes.isEmpty()) {
-			return new AdaptiveMediaPropertyDistanceComparator(_amAttributes);
+			return new AMPropertyDistanceComparator(_amAttributes);
 		}
 
 		return (v1, v2) -> 0;

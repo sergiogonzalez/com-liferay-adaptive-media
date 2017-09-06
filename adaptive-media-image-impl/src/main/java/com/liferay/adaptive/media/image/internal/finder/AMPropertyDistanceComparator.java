@@ -25,10 +25,10 @@ import java.util.Optional;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaPropertyDistanceComparator
+public class AMPropertyDistanceComparator
 	implements Comparator<AdaptiveMedia<AMImageProcessor>> {
 
-	public AdaptiveMediaPropertyDistanceComparator(
+	public AMPropertyDistanceComparator(
 		Map<AMAttribute<AMImageProcessor, ?>, ?> amAttributes) {
 
 		_amAttributes = amAttributes;
