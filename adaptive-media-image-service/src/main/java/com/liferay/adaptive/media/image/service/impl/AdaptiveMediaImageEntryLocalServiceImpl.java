@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.service.impl;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.counter.AdaptiveMediaImageCounter;
+import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.exception.DuplicateAdaptiveMediaImageEntryException;
 import com.liferay.adaptive.media.image.internal.storage.ImageStorage;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
@@ -123,8 +123,7 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 		BundleContext bundleContext = bundle.getBundleContext();
 
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, AdaptiveMediaImageCounter.class,
-			"adaptive.media.key");
+			bundleContext, AMImageCounter.class, "adaptive.media.key");
 	}
 
 	/**
@@ -282,16 +281,14 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 */
 	@Override
 	public int getExpectedAdaptiveMediaImageEntriesCount(long companyId) {
-		Collection<AdaptiveMediaImageCounter> adaptiveMediaImageCounters =
+		Collection<AMImageCounter> amImageCounters =
 			_serviceTrackerMap.values();
 
-		Stream<AdaptiveMediaImageCounter> adaptiveMediaImageCounterStream =
-			adaptiveMediaImageCounters.stream();
+		Stream<AMImageCounter> amImageCounterStream = amImageCounters.stream();
 
-		return adaptiveMediaImageCounterStream.mapToInt(
-			adaptiveMediaImageCounter ->
-				adaptiveMediaImageCounter.
-					countExpectedAdaptiveMediaImageEntries(companyId)
+		return amImageCounterStream.mapToInt(
+			amImageCounter ->
+				amImageCounter.countExpectedAMImageEntries(companyId)
 		).sum();
 	}
 
@@ -344,7 +341,6 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		AdaptiveMediaImageEntryLocalServiceImpl.class);
 
-	private ServiceTrackerMap<String, AdaptiveMediaImageCounter>
-		_serviceTrackerMap;
+	private ServiceTrackerMap<String, AMImageCounter> _serviceTrackerMap;
 
 }

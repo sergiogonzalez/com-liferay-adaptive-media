@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.blogs.web.internal.counter;
 
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
-import com.liferay.adaptive.media.image.counter.AdaptiveMediaImageCounter;
+import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -31,13 +31,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true, property = {"adaptive.media.key=blogs"},
-	service = AdaptiveMediaImageCounter.class
+	service = AMImageCounter.class
 )
-public class BlogsAdaptiveMediaImageCounter
-	implements AdaptiveMediaImageCounter {
+public class BlogsAMImageCounter implements AMImageCounter {
 
 	@Override
-	public int countExpectedAdaptiveMediaImageEntries(long companyId) {
+	public int countExpectedAMImageEntries(long companyId) {
 		DynamicQuery dynamicQuery = _dlFileEntryLocalService.dynamicQuery();
 
 		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");

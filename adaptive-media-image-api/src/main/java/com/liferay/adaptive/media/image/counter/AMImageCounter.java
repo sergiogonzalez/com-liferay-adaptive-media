@@ -34,7 +34,7 @@ package com.liferay.adaptive.media.image.counter;
  *
  * @author Sergio González
  */
-public interface AdaptiveMediaImageCounter {
+public interface AMImageCounter {
 
 	/**
 	 * Returns the number of images in the application that should have an
@@ -44,6 +44,6 @@ public interface AdaptiveMediaImageCounter {
 	 * @return the number of images in the application that should have an
 	 *         adaptive media image in a particular company
 	 */
-	public int countExpectedAdaptiveMediaImageEntries(long companyId);
+	public int countExpectedAMImageEntries(long companyId);
 
 }

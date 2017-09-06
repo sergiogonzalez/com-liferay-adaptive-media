@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.document.library.web.internal.optimizer;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
-import com.liferay.adaptive.media.image.counter.AdaptiveMediaImageCounter;
+import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.optimizer.AdaptiveMediaImageOptimizer;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.web.constants.OptimizeImagesBackgroundTaskConstants;
@@ -62,9 +62,7 @@ public class DLAdaptiveMediaImageOptimizer
 			_adaptiveMediaImageConfigurationHelper.
 				getAdaptiveMediaImageConfigurationEntries(companyId);
 
-		int count =
-			_adaptiveMediaImageCounter.countExpectedAdaptiveMediaImageEntries(
-				companyId);
+		int count = _amImageCounter.countExpectedAMImageEntries(companyId);
 
 		int total = count * configurationEntries.size();
 
@@ -80,9 +78,7 @@ public class DLAdaptiveMediaImageOptimizer
 
 	@Override
 	public void optimize(long companyId, String configurationEntryUuid) {
-		int total =
-			_adaptiveMediaImageCounter.countExpectedAdaptiveMediaImageEntries(
-				companyId);
+		int total = _amImageCounter.countExpectedAMImageEntries(companyId);
 
 		final AtomicInteger atomiCounter = new AtomicInteger(0);
 
@@ -208,11 +204,11 @@ public class DLAdaptiveMediaImageOptimizer
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
 
-	@Reference(target = "(adaptive.media.key=document-library)")
-	private AdaptiveMediaImageCounter _adaptiveMediaImageCounter;
-
 	@Reference
 	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
+
+	@Reference(target = "(adaptive.media.key=document-library)")
+	private AMImageCounter _amImageCounter;
 
 	@Reference
 	private BackgroundTaskStatusMessageSender
