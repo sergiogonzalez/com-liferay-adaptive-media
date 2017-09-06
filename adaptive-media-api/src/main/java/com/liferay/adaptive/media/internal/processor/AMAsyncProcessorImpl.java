@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.internal.processor;
 
-import com.liferay.adaptive.media.internal.constants.AdaptiveMediaDestinationNames;
+import com.liferay.adaptive.media.internal.constants.AMDestinationNames;
 import com.liferay.adaptive.media.internal.messaging.AdaptiveMediaProcessorCommand;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -97,8 +97,7 @@ public final class AMAsyncProcessorImpl<M, T>
 		TransactionCommitCallbackUtil.registerCallback(
 			() -> {
 				_messageBus.sendMessage(
-					AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR,
-					message);
+					AMDestinationNames.AM_PROCESSOR, message);
 
 				return null;
 			});
@@ -145,8 +144,7 @@ public final class AMAsyncProcessorImpl<M, T>
 		TransactionCommitCallbackUtil.registerCallback(
 			() -> {
 				_messageBus.sendMessage(
-					AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR,
-					message);
+					AMDestinationNames.AM_PROCESSOR, message);
 
 				return null;
 			});

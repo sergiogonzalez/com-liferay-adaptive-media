@@ -118,7 +118,7 @@ public class AdaptiveMediaImageProcessorTest {
 		}
 
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+				"liferay/am_processor")) {
 
 			ServiceContext serviceContext =
 				ServiceContextTestUtil.getServiceContext(
@@ -141,7 +141,7 @@ public class AdaptiveMediaImageProcessorTest {
 	@Test
 	public void testAddingFileEntryWithImageCreatesMedia() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+				"liferay/am_processor")) {
 
 			ServiceContext serviceContext =
 				ServiceContextTestUtil.getServiceContext(
@@ -166,7 +166,7 @@ public class AdaptiveMediaImageProcessorTest {
 		throws Exception {
 
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+				"liferay/am_processor")) {
 
 			ServiceContext serviceContext =
 				ServiceContextTestUtil.getServiceContext(
@@ -188,7 +188,7 @@ public class AdaptiveMediaImageProcessorTest {
 	@Test
 	public void testCleaningFileEntryWithImageRemovesMedia() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+				"liferay/am_processor")) {
 
 			ServiceContext serviceContext =
 				ServiceContextTestUtil.getServiceContext(
@@ -213,7 +213,7 @@ public class AdaptiveMediaImageProcessorTest {
 	@Test
 	public void testCleaningFileEntryWithNoImageDoesNothing() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+				"liferay/am_processor")) {
 
 			ServiceContext serviceContext =
 				ServiceContextTestUtil.getServiceContext(

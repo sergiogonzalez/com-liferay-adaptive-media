@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.internal.messaging;
 
-import com.liferay.adaptive.media.internal.constants.AdaptiveMediaDestinationNames;
+import com.liferay.adaptive.media.internal.constants.AMDestinationNames;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.adaptive.media.processor.AdaptiveMediaProcessor;
@@ -40,9 +40,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = {
-		"destination.name=" + AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR
-	},
+	property = {"destination.name=" + AMDestinationNames.AM_PROCESSOR},
 	service = MessageListener.class
 )
 public class AdaptiveMediaMessageListener extends BaseMessageListener {

@@ -172,7 +172,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public void testCleanUpDeletesImageThumbnails() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_ADAPTIVE_MEDIA_PROCESSOR)) {
+				_AM_PROCESSOR)) {
 
 			int count = _getThumbnailCount();
 
@@ -190,7 +190,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public void testCleanUpDeletesOnlyImageThumbnails() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_ADAPTIVE_MEDIA_PROCESSOR)) {
+				_AM_PROCESSOR)) {
 
 			int count = _getThumbnailCount();
 
@@ -209,7 +209,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public void testMigrateDoesNotRemoveThumbnails() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_ADAPTIVE_MEDIA_PROCESSOR)) {
+				_AM_PROCESSOR)) {
 
 			int count = _getThumbnailCount();
 
@@ -228,7 +228,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	public void testMigrateOnlyProcessesImages() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_ADAPTIVE_MEDIA_PROCESSOR);
+				_AM_PROCESSOR);
 			PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT", 100);
 			PropsValuesReplacer propsValuesReplacer2 = new PropsValuesReplacer(
@@ -250,7 +250,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
 				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_ADAPTIVE_MEDIA_PROCESSOR);
+				_AM_PROCESSOR);
 			PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT", 999);
 			PropsValuesReplacer propsValuesReplacer2 = new PropsValuesReplacer(
@@ -429,8 +429,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 			(Object)new String[] {String.valueOf(_company.getCompanyId())});
 	}
 
-	private static final String _ADAPTIVE_MEDIA_PROCESSOR =
-		"liferay/adaptive_media_processor";
+	private static final String _AM_PROCESSOR = "liferay/am_processor";
 
 	private static final String _BUNDLE_SYMBOLIC_NAME =
 		"com.liferay.adaptive.media.document.library";

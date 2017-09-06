@@ -17,9 +17,8 @@ package com.liferay.adaptive.media.internal.constants;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaDestinationNames {
+public class AMDestinationNames {
 
-	public static final String ADAPTIVE_MEDIA_PROCESSOR =
-		"liferay/adaptive_media_processor";
+	public static final String AM_PROCESSOR = "liferay/am_processor";
 
 }
