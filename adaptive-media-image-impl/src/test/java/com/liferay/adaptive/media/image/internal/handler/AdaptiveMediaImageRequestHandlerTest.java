@@ -18,14 +18,14 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
+import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
-import com.liferay.adaptive.media.image.internal.finder.AdaptiveMediaImageQueryBuilderImpl;
+import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
@@ -437,17 +437,19 @@ public class AdaptiveMediaImageRequestHandlerTest {
 				Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> {
-				Function<AdaptiveMediaImageQueryBuilder, AdaptiveMediaQuery>
-					function = invocation.getArgumentAt(0, Function.class);
+				Function<AMImageQueryBuilder, AMQuery>
+					amImageQueryBuilderFunction = invocation.getArgumentAt(
+						0, Function.class);
 
-				AdaptiveMediaImageQueryBuilderImpl queryBuilder =
-					new AdaptiveMediaImageQueryBuilderImpl();
+				AMImageQueryBuilderImpl amImageQueryBuilderImpl =
+					new AMImageQueryBuilderImpl();
 
-				AdaptiveMediaQuery adaptiveMediaQuery = function.apply(
-					queryBuilder);
+				AMQuery amQuery = amImageQueryBuilderFunction.apply(
+					amImageQueryBuilderImpl);
 
 				Map<AMAttribute<AdaptiveMediaImageProcessor, ?>,
-					Object> amAttributes = queryBuilder.getAMAttributes();
+					Object> amAttributes =
+						amImageQueryBuilderImpl.getAMAttributes();
 
 				Object queryBuilderWidth = amAttributes.get(
 					AdaptiveMediaImageAttribute.IMAGE_WIDTH);
@@ -464,10 +466,10 @@ public class AdaptiveMediaImageRequestHandlerTest {
 				int configurationHeight = GetterUtil.getInteger(
 					properties.get("max-height"));
 
-				if (AdaptiveMediaImageQueryBuilderImpl.QUERY.equals(
-						adaptiveMediaQuery) &&
-					fileVersion.equals(queryBuilder.getFileVersion()) &&
-					(queryBuilder.getConfigurationUuid() == null) &&
+				if (AMImageQueryBuilderImpl.AM_QUERY.equals(amQuery) &&
+					fileVersion.equals(
+						amImageQueryBuilderImpl.getFileVersion()) &&
+					(amImageQueryBuilderImpl.getConfigurationUuid() == null) &&
 					queryBuilderWidth.equals(configurationWidth) &&
 					queryBuilderHeight.equals(configurationHeight)) {
 
@@ -490,25 +492,27 @@ public class AdaptiveMediaImageRequestHandlerTest {
 				Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> {
-				Function<AdaptiveMediaImageQueryBuilder, AdaptiveMediaQuery>
-					function = invocation.getArgumentAt(0, Function.class);
+				Function<AMImageQueryBuilder, AMQuery>
+					amImageQueryBuilderFunction = invocation.getArgumentAt(
+						0, Function.class);
 
-				AdaptiveMediaImageQueryBuilderImpl queryBuilder =
-					new AdaptiveMediaImageQueryBuilderImpl();
+				AMImageQueryBuilderImpl amImageQueryBuilderImpl =
+					new AMImageQueryBuilderImpl();
 
-				AdaptiveMediaQuery adaptiveMediaQuery = function.apply(
-					queryBuilder);
+				AMQuery amQuery = amImageQueryBuilderFunction.apply(
+					amImageQueryBuilderImpl);
 
-				if (!AdaptiveMediaImageQueryBuilderImpl.QUERY.equals(
-						adaptiveMediaQuery)) {
-
+				if (!AMImageQueryBuilderImpl.AM_QUERY.equals(amQuery)) {
 					return Stream.empty();
 				}
 
-				if (fileVersion.equals(queryBuilder.getFileVersion())) {
+				if (fileVersion.equals(
+						amImageQueryBuilderImpl.getFileVersion())) {
+
 					Predicate<AdaptiveMediaImageConfigurationEntry>
 						configurationEntryFilter =
-							queryBuilder.getConfigurationEntryFilter();
+							amImageQueryBuilderImpl.
+								getConfigurationEntryFilter();
 
 					if (configurationEntryFilter.test(configurationEntry)) {
 						return Stream.of(adaptiveMedia);

@@ -129,9 +129,10 @@ public class AdaptiveMediaImageProcessorTest {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaStream =
 					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						queryBuilder -> queryBuilder.allForFileEntry(
-							fileEntry
-						).done());
+						amImageQueryBuilder ->
+							amImageQueryBuilder.allForFileEntry(
+								fileEntry
+							).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -152,9 +153,10 @@ public class AdaptiveMediaImageProcessorTest {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaStream =
 					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						queryBuilder -> queryBuilder.allForFileEntry(
-							fileEntry
-						).done());
+						amImageQueryBuilder ->
+							amImageQueryBuilder.allForFileEntry(
+								fileEntry
+							).done());
 
 			Assert.assertEquals(
 				_getVariantsCount(), adaptiveMediaStream.count());
@@ -177,9 +179,10 @@ public class AdaptiveMediaImageProcessorTest {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaStream =
 					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						queryBuilder -> queryBuilder.allForFileEntry(
-							fileEntry
-						).done());
+						amImageQueryBuilder ->
+							amImageQueryBuilder.allForFileEntry(
+								fileEntry
+							).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -202,9 +205,10 @@ public class AdaptiveMediaImageProcessorTest {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaStream =
 					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						queryBuilder -> queryBuilder.allForFileEntry(
-							fileEntry
-						).done());
+						amImageQueryBuilder ->
+							amImageQueryBuilder.allForFileEntry(
+								fileEntry
+							).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}
@@ -227,9 +231,10 @@ public class AdaptiveMediaImageProcessorTest {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaStream =
 					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						queryBuilder -> queryBuilder.allForFileEntry(
-							fileEntry
-						).done());
+						amImageQueryBuilder ->
+							amImageQueryBuilder.allForFileEntry(
+								fileEntry
+							).done());
 
 			Assert.assertEquals(0, adaptiveMediaStream.count());
 		}

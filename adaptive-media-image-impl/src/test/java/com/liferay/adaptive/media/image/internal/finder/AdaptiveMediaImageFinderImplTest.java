@@ -17,10 +17,10 @@ package com.liferay.adaptive.media.image.internal.finder;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
+import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
@@ -74,9 +74,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				new HashMap<>());
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -101,7 +100,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 					_fileEntry
 				).done());
 
@@ -115,9 +114,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				new HashMap<>());
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -164,7 +162,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 					_fileEntry
 				).done());
 
@@ -178,9 +176,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -220,7 +217,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
 
@@ -263,9 +260,8 @@ public class AdaptiveMediaImageFinderImplTest {
 			Arrays.asList(
 				configurationEntry1, configurationEntry2, configurationEntry3);
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -326,11 +322,11 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).orderBy(
 					AdaptiveMediaImageAttribute.IMAGE_WIDTH,
-					AdaptiveMediaImageQueryBuilder.SortOrder.ASC
+					AMImageQueryBuilder.SortOrder.ASC
 				).done());
 
 		List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaList =
@@ -383,9 +379,8 @@ public class AdaptiveMediaImageFinderImplTest {
 			Arrays.asList(
 				configurationEntry1, configurationEntry2, configurationEntry3);
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -446,11 +441,11 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).orderBy(
 					AdaptiveMediaImageAttribute.IMAGE_WIDTH,
-					AdaptiveMediaImageQueryBuilder.SortOrder.DESC
+					AMImageQueryBuilder.SortOrder.DESC
 				).done());
 
 		List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaList =
@@ -486,14 +481,15 @@ public class AdaptiveMediaImageFinderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetMediaAttributesWithNonBuilderQuery() throws Exception {
-		_adaptiveMediaImageFinder.getAdaptiveMediaStream(queryBuilder ->
-			new AdaptiveMediaQuery<FileVersion, AdaptiveMediaImageProcessor>() {
+		_adaptiveMediaImageFinder.getAdaptiveMediaStream(amImageQueryBuilder ->
+			new AMQuery<FileVersion, AdaptiveMediaImageProcessor>() {
 			});
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetMediaAttributesWithNullQuery() throws Exception {
-		_adaptiveMediaImageFinder.getAdaptiveMediaStream(queryBuilder -> null);
+		_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			amImageQueryBuilder -> null);
 	}
 
 	@Test(expected = AdaptiveMediaRuntimeException.InvalidConfiguration.class)
@@ -513,7 +509,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			queryBuilder -> queryBuilder.allForVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 				_fileVersion
 			).done());
 	}
@@ -525,9 +521,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -578,7 +573,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
 
@@ -601,9 +596,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "100"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -644,7 +638,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
 
@@ -680,9 +674,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "200", "max-width", "200"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -733,7 +726,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
 					AdaptiveMediaImageAttribute.IMAGE_HEIGHT, 100
@@ -773,9 +766,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "200", "max-width", "200"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -826,7 +818,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
 					AdaptiveMediaImageAttribute.IMAGE_HEIGHT, 200
@@ -866,9 +858,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "200", "max-width", "100"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -919,7 +910,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
 					AdaptiveMediaImageAttribute.IMAGE_HEIGHT, 200
@@ -959,9 +950,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), "medium",
 				MapUtil.fromArray("max-height", "200", "max-width", "200"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			anyConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ANY;
+		AMImageQueryBuilder.ConfigurationStatus anyConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ANY;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -1012,7 +1002,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).forConfiguration(
 					"small"
@@ -1053,8 +1043,7 @@ public class AdaptiveMediaImageFinderImplTest {
 			_adaptiveMediaImageConfigurationHelper.
 				getAdaptiveMediaImageConfigurationEntries(
 					_fileVersion.getCompanyId(),
-					AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ANY.
-						getPredicate())
+					AMImageQueryBuilder.ConfigurationStatus.ANY.getPredicate())
 		).thenReturn(
 			Arrays.asList(configurationEntry1, configurationEntry2)
 		);
@@ -1063,7 +1052,7 @@ public class AdaptiveMediaImageFinderImplTest {
 			_adaptiveMediaImageConfigurationHelper.
 				getAdaptiveMediaImageConfigurationEntries(
 					_fileVersion.getCompanyId(),
-					AdaptiveMediaImageQueryBuilder.ConfigurationStatus.DISABLED.
+					AMImageQueryBuilder.ConfigurationStatus.DISABLED.
 						getPredicate())
 		).thenReturn(
 			Arrays.asList(configurationEntry2)
@@ -1073,7 +1062,7 @@ public class AdaptiveMediaImageFinderImplTest {
 			_adaptiveMediaImageConfigurationHelper.
 				getAdaptiveMediaImageConfigurationEntries(
 					_fileVersion.getCompanyId(),
-					AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED.
+					AMImageQueryBuilder.ConfigurationStatus.ENABLED.
 						getPredicate())
 		).thenReturn(
 			Arrays.asList(configurationEntry1)
@@ -1118,11 +1107,11 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(queryBuilder ->
-				queryBuilder.forVersion(
+			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).withConfigurationStatus(
-					AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED
+					AMImageQueryBuilder.ConfigurationStatus.ENABLED
 				).forConfiguration(
 					"small"
 				).done());
@@ -1143,10 +1132,10 @@ public class AdaptiveMediaImageFinderImplTest {
 		Assert.assertEquals("small", adaptiveMedia0Optional.get());
 
 		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			queryBuilder -> queryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ANY
+				AMImageQueryBuilder.ConfigurationStatus.ANY
 			).forConfiguration(
 				"small"
 			).done());
@@ -1164,10 +1153,10 @@ public class AdaptiveMediaImageFinderImplTest {
 		Assert.assertEquals("small", adaptiveMedia0Optional.get());
 
 		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			queryBuilder -> queryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.DISABLED
+				AMImageQueryBuilder.ConfigurationStatus.DISABLED
 			).forConfiguration(
 				"small"
 			).done());
@@ -1192,9 +1181,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(), "2",
 				MapUtil.fromArray("max-height", "200"), false);
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -1205,9 +1193,8 @@ public class AdaptiveMediaImageFinderImplTest {
 			Arrays.asList(configurationEntry1)
 		);
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			disabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.DISABLED;
+		AMImageQueryBuilder.ConfigurationStatus disabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.DISABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -1218,9 +1205,8 @@ public class AdaptiveMediaImageFinderImplTest {
 			Arrays.asList(configurationEntry2)
 		);
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			allConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ANY;
+		AMImageQueryBuilder.ConfigurationStatus allConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ANY;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -1271,7 +1257,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).withConfigurationStatus(
 					enabledConfigurationStatus
@@ -1292,7 +1278,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		Assert.assertEquals("1", adaptiveMedia0ConfigurationUuidOptional.get());
 
 		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			queryBuilder -> queryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
 				disabledConfigurationStatus
@@ -1311,7 +1297,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		Assert.assertEquals("2", adaptiveMedia0ConfigurationUuidOptional.get());
 
 		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			queryBuilder -> queryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
 				allConfigurationStatus
@@ -1351,9 +1337,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "200"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -1404,7 +1389,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
 					AdaptiveMediaImageAttribute.IMAGE_WIDTH, 100
@@ -1442,7 +1427,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
 
@@ -1466,9 +1451,8 @@ public class AdaptiveMediaImageFinderImplTest {
 				StringUtil.randomString(), StringUtil.randomString(),
 				MapUtil.fromArray("max-height", "100", "max-width", "200"));
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus
-			enabledConfigurationStatus =
-				AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		AMImageQueryBuilder.ConfigurationStatus enabledConfigurationStatus =
+			AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 
 		Mockito.when(
 			_adaptiveMediaImageConfigurationHelper.
@@ -1509,7 +1493,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
 

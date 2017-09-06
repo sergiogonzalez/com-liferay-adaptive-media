@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQueryBuilder;
+import com.liferay.adaptive.media.finder.AMQuery;
+import com.liferay.adaptive.media.finder.AMQueryBuilder;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -28,9 +28,8 @@ import java.util.function.Predicate;
 /**
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaImageQueryBuilder
-	extends AdaptiveMediaQueryBuilder
-		<FileVersion, AdaptiveMediaImageProcessor> {
+public interface AMImageQueryBuilder
+	extends AMQueryBuilder<FileVersion, AdaptiveMediaImageProcessor> {
 
 	public InitialStep allForFileEntry(FileEntry fileEntry);
 
@@ -72,8 +71,7 @@ public interface AdaptiveMediaImageQueryBuilder
 
 	public interface FinalStep {
 
-		public AdaptiveMediaQuery<FileVersion, AdaptiveMediaImageProcessor>
-			done();
+		public AMQuery<FileVersion, AdaptiveMediaImageProcessor> done();
 
 	}
 

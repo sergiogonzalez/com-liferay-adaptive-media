@@ -16,12 +16,12 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
+import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.finder.AdaptiveMediaFinder;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
@@ -59,45 +59,45 @@ public class AdaptiveMediaImageFinderImpl implements AdaptiveMediaImageFinder {
 	public Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 			getAdaptiveMediaStream(
 				Function
-					<AdaptiveMediaImageQueryBuilder,
-						AdaptiveMediaQuery
-							<FileVersion, AdaptiveMediaImageProcessor>>
-								queryBuilderFunction)
+					<AMImageQueryBuilder,
+						AMQuery<FileVersion, AdaptiveMediaImageProcessor>>
+							amImageQueryBuilderFunction)
 		throws PortalException {
 
-		if (queryBuilderFunction == null) {
-			throw new IllegalArgumentException("queryBuilder must be non null");
+		if (amImageQueryBuilderFunction == null) {
+			throw new IllegalArgumentException(
+				"amImageQueryBuilder must be non null");
 		}
 
-		AdaptiveMediaImageQueryBuilderImpl queryBuilder =
-			new AdaptiveMediaImageQueryBuilderImpl();
+		AMImageQueryBuilderImpl amImageQueryBuilderImpl =
+			new AMImageQueryBuilderImpl();
 
-		AdaptiveMediaQuery<FileVersion, AdaptiveMediaImageProcessor> query =
-			queryBuilderFunction.apply(queryBuilder);
+		AMQuery<FileVersion, AdaptiveMediaImageProcessor> amQuery =
+			amImageQueryBuilderFunction.apply(amImageQueryBuilderImpl);
 
-		if (query != AdaptiveMediaImageQueryBuilderImpl.QUERY) {
+		if (amQuery != AMImageQueryBuilderImpl.AM_QUERY) {
 			throw new IllegalArgumentException(
 				"Only queries built by the provided query builder are valid.");
 		}
 
-		FileVersion fileVersion = queryBuilder.getFileVersion();
+		FileVersion fileVersion = amImageQueryBuilderImpl.getFileVersion();
 
 		if (!_imageProcessor.isMimeTypeSupported(fileVersion.getMimeType())) {
 			return Stream.empty();
 		}
 
 		BiFunction<FileVersion, AdaptiveMediaImageConfigurationEntry, URI>
-			uriFactory = _getURIFactory(queryBuilder);
+			uriFactory = _getURIFactory(amImageQueryBuilderImpl);
 
-		AdaptiveMediaImageQueryBuilder.ConfigurationStatus configurationStatus =
-			queryBuilder.getConfigurationStatus();
+		AMImageQueryBuilder.ConfigurationStatus configurationStatus =
+			amImageQueryBuilderImpl.getConfigurationStatus();
 
 		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
 			_configurationHelper.getAdaptiveMediaImageConfigurationEntries(
 				fileVersion.getCompanyId(), configurationStatus.getPredicate());
 
 		Predicate<AdaptiveMediaImageConfigurationEntry> filter =
-			queryBuilder.getConfigurationEntryFilter();
+			amImageQueryBuilderImpl.getConfigurationEntryFilter();
 
 		Stream<AdaptiveMediaImageConfigurationEntry>
 			adaptiveMediaImageConfigurationEntryStream =
@@ -111,7 +111,7 @@ public class AdaptiveMediaImageFinderImpl implements AdaptiveMediaImageFinder {
 			configurationEntry ->
 				_createMedia(fileVersion, uriFactory, configurationEntry)
 		).sorted(
-			queryBuilder.getComparator()
+			amImageQueryBuilderImpl.getComparator()
 		);
 	}
 
@@ -208,9 +208,9 @@ public class AdaptiveMediaImageFinderImpl implements AdaptiveMediaImageFinder {
 	}
 
 	private BiFunction<FileVersion, AdaptiveMediaImageConfigurationEntry, URI>
-		_getURIFactory(AdaptiveMediaImageQueryBuilderImpl queryBuilder) {
+		_getURIFactory(AMImageQueryBuilderImpl amImageQueryBuilderImpl) {
 
-		if (queryBuilder.hasFileVersion()) {
+		if (amImageQueryBuilderImpl.hasFileVersion()) {
 			return _adaptiveMediaImageURLFactory::createFileVersionURL;
 		}
 

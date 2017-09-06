@@ -15,10 +15,10 @@
 package com.liferay.adaptive.media.finder;
 
 /**
- * A marker interface that {@link AdaptiveMediaQueryBuilder} implementations
- * must return to indicate valid or final results.
+ * A marker interface that implementations of {@link AdaptiveMediaFinder} must
+ * extend to provide a way to create {@link AMQuery} instances.
  *
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaQuery<M, T> {
+public interface AMQueryBuilder<M, T> {
 }

@@ -219,7 +219,7 @@ public class AdaptiveMediaImageEntryProcessor
 		throws PortalException {
 
 		return _adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			queryBuilder -> queryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				fileVersion
 			).with(
 				AdaptiveMediaImageAttribute.IMAGE_WIDTH,

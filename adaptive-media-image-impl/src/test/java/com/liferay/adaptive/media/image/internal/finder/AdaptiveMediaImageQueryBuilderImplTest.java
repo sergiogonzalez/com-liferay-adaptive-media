@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
@@ -43,10 +43,11 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 	public void testFileEntryQueryReturnsLatestFileVersion() throws Exception {
 		FileEntry fileEntry = Mockito.mock(FileEntry.class);
 
-		_queryBuilder.allForFileEntry(fileEntry);
+		_amImageQueryBuilderImpl.allForFileEntry(fileEntry);
 
 		Assert.assertEquals(
-			fileEntry.getFileVersion(), _queryBuilder.getFileVersion());
+			fileEntry.getFileVersion(),
+			_amImageQueryBuilderImpl.getFileVersion());
 	}
 
 	@Test
@@ -55,19 +56,20 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 
 		FileEntry fileEntry = Mockito.mock(FileEntry.class);
 
-		_queryBuilder.forFileEntry(
+		_amImageQueryBuilderImpl.forFileEntry(
 			fileEntry
 		).done();
 
 		Assert.assertEquals(
-			fileEntry.getFileVersion(), _queryBuilder.getFileVersion());
+			fileEntry.getFileVersion(),
+			_amImageQueryBuilderImpl.getFileVersion());
 	}
 
 	@Test
 	public void testMatchingConfigurationAttributeQuery() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).forConfiguration(
 			"small"
@@ -79,7 +81,7 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 				Collections.emptyMap(), true);
 
 		Predicate<AdaptiveMediaImageConfigurationEntry> filter =
-			_queryBuilder.getConfigurationEntryFilter();
+			_amImageQueryBuilderImpl.getConfigurationEntryFilter();
 
 		Assert.assertTrue(filter.test(configurationEntry));
 	}
@@ -88,7 +90,7 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 	public void testNonMatchingConfigurationAttributeQuery() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).forConfiguration(
 			"small"
@@ -100,7 +102,7 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 				StringUtil.randomString(), Collections.emptyMap(), true);
 
 		Predicate<AdaptiveMediaImageConfigurationEntry> filter =
-			_queryBuilder.getConfigurationEntryFilter();
+			_amImageQueryBuilderImpl.getConfigurationEntryFilter();
 
 		Assert.assertFalse(filter.test(configurationEntry));
 	}
@@ -109,14 +111,14 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 	public void testNonNullOptionalAttributeQuery() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).with(
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, Optional.of(100)
 		);
 
 		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Object> amAttributes =
-			_queryBuilder.getAMAttributes();
+			_amImageQueryBuilderImpl.getAMAttributes();
 
 		Assert.assertEquals(
 			100, amAttributes.get(AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
@@ -126,10 +128,10 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 	public void testNullAttributeFailsWhenOrderingByIt() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).orderBy(
-			null, AdaptiveMediaImageQueryBuilder.SortOrder.DESC
+			null, AMImageQueryBuilder.SortOrder.DESC
 		);
 	}
 
@@ -137,7 +139,7 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 	public void testNullAttributeValueFailsWhenQueryingAttributes() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).with(
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, (Integer)null
@@ -146,14 +148,14 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullConfigurationStatusFails() {
-		_queryBuilder.withConfigurationStatus(null);
+		_amImageQueryBuilderImpl.withConfigurationStatus(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullConfigurationUUIDFailsWhenQueryingAttributes() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).forConfiguration(
 			null
@@ -162,36 +164,36 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileEntryFailsWhenQueryingAll() {
-		_queryBuilder.allForFileEntry(null);
+		_amImageQueryBuilderImpl.allForFileEntry(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileEntryFailsWhenQueryingAttributes() {
-		_queryBuilder.forFileEntry(null);
+		_amImageQueryBuilderImpl.forFileEntry(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileVersionFailsWhenQueryingAll() {
-		_queryBuilder.allForVersion(null);
+		_amImageQueryBuilderImpl.allForVersion(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileVersionFailsWhenQueryingAttributes() {
-		_queryBuilder.forVersion(null);
+		_amImageQueryBuilderImpl.forVersion(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullOptionalAttributeValueFailsWhenQueryingAttributes() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_queryBuilder.forVersion(
+		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).with(
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, (Optional<Integer>)null
 		);
 	}
 
-	private final AdaptiveMediaImageQueryBuilderImpl _queryBuilder =
-		new AdaptiveMediaImageQueryBuilderImpl();
+	private final AMImageQueryBuilderImpl _amImageQueryBuilderImpl =
+		new AMImageQueryBuilderImpl();
 
 }

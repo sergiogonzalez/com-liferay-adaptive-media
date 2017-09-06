@@ -389,7 +389,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 	private long _getAdaptiveMediaCount(FileEntry fileEntry) throws Exception {
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
 			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.allForFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 					fileEntry
 				).done());
 

@@ -16,13 +16,13 @@ package com.liferay.adaptive.media.image.internal.mediaquery;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
+import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.finder.AdaptiveMediaImageQueryBuilderImpl;
+import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
@@ -614,15 +614,17 @@ public class MediaQueryProviderImplTest {
 				Mockito.any(Function.class))
 		).thenAnswer(
 			invocation -> {
-				Function<AdaptiveMediaImageQueryBuilder, AdaptiveMediaQuery>
-					function = invocation.getArgumentAt(0, Function.class);
+				Function<AMImageQueryBuilder, AMQuery>
+					amImageQueryBuilderFunction = invocation.getArgumentAt(
+						0, Function.class);
 
-				AdaptiveMediaImageQueryBuilderImpl queryBuilder =
-					new AdaptiveMediaImageQueryBuilderImpl();
+				AMImageQueryBuilderImpl amImageQueryBuilderImpl =
+					new AMImageQueryBuilderImpl();
 
-				AdaptiveMediaQuery query = function.apply(queryBuilder);
+				AMQuery amQuery = amImageQueryBuilderFunction.apply(
+					amImageQueryBuilderImpl);
 
-				if (!AdaptiveMediaImageQueryBuilderImpl.QUERY.equals(query)) {
+				if (!AMImageQueryBuilderImpl.AM_QUERY.equals(amQuery)) {
 					return Stream.empty();
 				}
 
@@ -633,9 +635,9 @@ public class MediaQueryProviderImplTest {
 						AMAttribute.getConfigurationUuidAMAttribute()).get();
 
 					if (fileEntry.getFileVersion().equals(
-							queryBuilder.getFileVersion()) &&
+							amImageQueryBuilderImpl.getFileVersion()) &&
 						configurationUuid.equals(
-							queryBuilder.getConfigurationUuid())) {
+							amImageQueryBuilderImpl.getConfigurationUuid())) {
 
 						return Stream.of(adaptiveMedia);
 					}

@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
@@ -38,15 +38,14 @@ public class AMAttributeComparatorTest {
 	public void setUp() {
 		Map<
 			AMAttribute<AdaptiveMediaImageProcessor, ?>,
-				AdaptiveMediaImageQueryBuilder.SortOrder>
-					amAttributes = new HashMap<>();
+				AMImageQueryBuilder.SortOrder> amAttributes = new HashMap<>();
 
 		amAttributes.put(
 			AMAttribute.getContentLengthAMAttribute(),
-			AdaptiveMediaImageQueryBuilder.SortOrder.ASC);
+			AMImageQueryBuilder.SortOrder.ASC);
 		amAttributes.put(
 			AMAttribute.getFileNameAMAttribute(),
-			AdaptiveMediaImageQueryBuilder.SortOrder.DESC);
+			AMImageQueryBuilder.SortOrder.DESC);
 
 		_multiAMAttributeComparator = new AMAttributeComparator(amAttributes);
 	}
