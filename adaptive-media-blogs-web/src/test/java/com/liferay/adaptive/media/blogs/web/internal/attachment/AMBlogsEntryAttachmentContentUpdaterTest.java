@@ -37,7 +37,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @PrepareForTest(PortletFileRepositoryUtil.class)
 @RunWith(PowerMockRunner.class)
-public class AdaptiveMediaBlogsEntryAttachmentContentUpdaterTest {
+public class AMBlogsEntryAttachmentContentUpdaterTest {
 
 	@Before
 	public void setUp() {
@@ -63,7 +63,7 @@ public class AdaptiveMediaBlogsEntryAttachmentContentUpdaterTest {
 	@Test
 	public void testGetBlogsEntryAttachmentFileEntryImgTag() throws Exception {
 		String imgTag =
-			_adaptiveMediaBlogsEntryAttachmentContentUpdater.
+			_amBlogsEntryAttachmentContentUpdater.
 				getBlogsEntryAttachmentFileEntryImgTag(_fileEntry);
 
 		Assert.assertEquals(
@@ -77,9 +77,9 @@ public class AdaptiveMediaBlogsEntryAttachmentContentUpdaterTest {
 
 	private static final String _FILE_ENTRY_IMAGE_URL = "theUrl";
 
-	private final AdaptiveMediaBlogsEntryAttachmentContentUpdater
-		_adaptiveMediaBlogsEntryAttachmentContentUpdater =
-			new AdaptiveMediaBlogsEntryAttachmentContentUpdater();
+	private final AMBlogsEntryAttachmentContentUpdater
+		_amBlogsEntryAttachmentContentUpdater =
+			new AMBlogsEntryAttachmentContentUpdater();
 
 	@Mock
 	private FileEntry _fileEntry;
