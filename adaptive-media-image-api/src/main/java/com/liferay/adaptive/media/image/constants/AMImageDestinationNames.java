@@ -17,9 +17,9 @@ package com.liferay.adaptive.media.image.constants;
 /**
  * @author Alejandro Tardín
  */
-public final class AdaptiveMediaImageDestinationNames {
+public final class AMImageDestinationNames {
 
-	public static final String ADAPTIVE_MEDIA_IMAGE_CONFIGURATION =
-		"liferay/adaptive_media_image_configuration";
+	public static final String AM_IMAGE_CONFIGURATION =
+		"liferay/am_image_configuration";
 
 }

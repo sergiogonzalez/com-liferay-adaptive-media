@@ -19,7 +19,7 @@ import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationExcep
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageDestinationNames;
+import com.liferay.adaptive.media.image.constants.AMImageDestinationNames;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
@@ -369,8 +369,7 @@ public class AMImageConfigurationHelperImpl
 		DestinationConfiguration destinationConfiguration =
 			new DestinationConfiguration(
 				DestinationConfiguration.DESTINATION_TYPE_SYNCHRONOUS,
-				AdaptiveMediaImageDestinationNames.
-					ADAPTIVE_MEDIA_IMAGE_CONFIGURATION);
+				AMImageDestinationNames.AM_IMAGE_CONFIGURATION);
 
 		Destination destination = _destinationFactory.createDestination(
 			destinationConfiguration);
@@ -381,8 +380,7 @@ public class AMImageConfigurationHelperImpl
 	@Deactivate
 	protected void deactivate() {
 		_messageBus.removeDestination(
-			AdaptiveMediaImageDestinationNames.
-				ADAPTIVE_MEDIA_IMAGE_CONFIGURATION);
+			AMImageDestinationNames.AM_IMAGE_CONFIGURATION);
 	}
 
 	@Reference(unbind = "-")
@@ -563,9 +561,7 @@ public class AMImageConfigurationHelperImpl
 		message.setPayload(payload);
 
 		_messageBus.sendMessage(
-			AdaptiveMediaImageDestinationNames.
-				ADAPTIVE_MEDIA_IMAGE_CONFIGURATION,
-			message);
+			AMImageDestinationNames.AM_IMAGE_CONFIGURATION, message);
 	}
 
 	private void _updateConfiguration(

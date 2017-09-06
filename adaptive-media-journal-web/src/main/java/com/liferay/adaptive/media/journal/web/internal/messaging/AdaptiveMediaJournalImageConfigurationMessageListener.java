@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.journal.web.internal.messaging;
 
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageDestinationNames;
+import com.liferay.adaptive.media.image.constants.AMImageDestinationNames;
 import com.liferay.journal.util.JournalContent;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"destination.name=" + AdaptiveMediaImageDestinationNames.ADAPTIVE_MEDIA_IMAGE_CONFIGURATION
+		"destination.name=" + AMImageDestinationNames.AM_IMAGE_CONFIGURATION
 	},
 	service = MessageListener.class
 )

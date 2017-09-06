@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.test;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageDestinationNames;
+import com.liferay.adaptive.media.image.constants.AMImageDestinationNames;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
@@ -118,9 +118,7 @@ public abstract class BaseAMImageConfigurationTestCase {
 			CheckedRunnable runnable)
 		throws Exception {
 
-		String destinationName =
-			AdaptiveMediaImageDestinationNames.
-				ADAPTIVE_MEDIA_IMAGE_CONFIGURATION;
+		String destinationName = AMImageDestinationNames.AM_IMAGE_CONFIGURATION;
 
 		List<Message> messages = new ArrayList<>();
 
