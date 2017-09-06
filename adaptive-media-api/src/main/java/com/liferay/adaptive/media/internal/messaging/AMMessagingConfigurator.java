@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Adolfo Pérez
  */
 @Component(immediate = true)
-public class AdaptiveMediaMessagingConfigurator {
+public class AMMessagingConfigurator {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {

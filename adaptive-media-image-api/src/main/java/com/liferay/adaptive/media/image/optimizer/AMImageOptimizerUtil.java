@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Sergio González
  */
 @Component(immediate = true)
-public class AdaptiveMediaImageOptimizerUtil {
+public class AMImageOptimizerUtil {
 
 	public static void optimize(long companyId) {
 		if (_serviceTrackerMap == null) {
@@ -90,7 +90,7 @@ public class AdaptiveMediaImageOptimizerUtil {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaImageOptimizerUtil.class);
+		AMImageOptimizerUtil.class);
 
 	private static ServiceTrackerMap<String, AdaptiveMediaImageOptimizer>
 		_serviceTrackerMap;

@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = {"destination.name=" + AMDestinationNames.AM_PROCESSOR},
 	service = MessageListener.class
 )
-public class AdaptiveMediaMessageListener extends BaseMessageListener {
+public class AMMessageListener extends BaseMessageListener {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
@@ -93,7 +93,7 @@ public class AdaptiveMediaMessageListener extends BaseMessageListener {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaMessageListener.class);
+		AMMessageListener.class);
 
 	@Reference(unbind = "-")
 	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
