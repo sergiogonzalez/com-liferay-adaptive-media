@@ -21,7 +21,7 @@ import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeM
 import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
+import com.liferay.adaptive.media.image.util.AMImageSerializer;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -40,9 +40,8 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Adolfo Pérez
  */
-@Component(immediate = true, service = AdaptiveMediaImageSerializer.class)
-public class AdaptiveMediaImageSerializerImpl
-	implements AdaptiveMediaImageSerializer {
+@Component(immediate = true, service = AMImageSerializer.class)
+public class AMImageSerializerImpl implements AMImageSerializer {
 
 	@Override
 	public AdaptiveMedia<AMImageProcessor> deserialize(

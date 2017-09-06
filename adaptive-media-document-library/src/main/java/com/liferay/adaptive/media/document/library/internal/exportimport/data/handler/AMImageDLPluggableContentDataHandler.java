@@ -24,7 +24,7 @@ import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
-import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
+import com.liferay.adaptive.media.image.util.AMImageSerializer;
 import com.liferay.document.library.exportimport.data.handler.DLPluggableContentDataHandler;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -150,8 +150,7 @@ public class AMImageDLPluggableContentDataHandler
 		}
 
 		portletDataContext.addZipEntry(
-			basePath + ".json",
-			_adaptiveMediaImageSerializer.serialize(adaptiveMedia));
+			basePath + ".json", _amImageSerializer.serialize(adaptiveMedia));
 	}
 
 	private String _getAdaptiveMediaBasePath(
@@ -183,7 +182,7 @@ public class AMImageDLPluggableContentDataHandler
 			return null;
 		}
 
-		return _adaptiveMediaImageSerializer.deserialize(
+		return _amImageSerializer.deserialize(
 			serializedAdaptiveMedia,
 			() -> portletDataContext.getZipEntryAsInputStream(
 				basePath + ".bin"));
@@ -264,9 +263,6 @@ public class AMImageDLPluggableContentDataHandler
 		_adaptiveMediaImageEntryLocalService;
 
 	@Reference
-	private AdaptiveMediaImageSerializer _adaptiveMediaImageSerializer;
-
-	@Reference
 	private AMImageConfigurationEntrySerializer
 		_amImageConfigurationEntrySerializer;
 
@@ -275,5 +271,8 @@ public class AMImageDLPluggableContentDataHandler
 
 	@Reference
 	private AMImageFinder _amImageFinder;
+
+	@Reference
+	private AMImageSerializer _amImageSerializer;
 
 }

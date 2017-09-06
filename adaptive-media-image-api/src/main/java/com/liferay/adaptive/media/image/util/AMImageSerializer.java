@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 /**
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaImageSerializer {
+public interface AMImageSerializer {
 
 	public AdaptiveMedia<AMImageProcessor> deserialize(
 		String s, Supplier<InputStream> inputStreamSupplier);
