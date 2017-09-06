@@ -71,24 +71,15 @@ public class AMBlogsEntryExportImportContentProcessor
 			String content)
 		throws Exception {
 
-		AdaptiveMediaEmbeddedReferenceSet adaptiveMediaEmbeddedReferenceSet =
-			_adaptiveMediaEmbeddedReferenceSetFactory.create(
+		AMEmbeddedReferenceSet amEmbeddedReferenceSet =
+			_amEmbeddedReferenceSetFactory.create(
 				portletDataContext, stagedModel);
 
 		String replacedContent =
 			_exportImportContentProcessor.replaceImportContentReferences(
 				portletDataContext, stagedModel, content);
 
-		return _replace(replacedContent, adaptiveMediaEmbeddedReferenceSet);
-	}
-
-	@Reference(unbind = "-")
-	public void setAdaptiveMediaEmbeddedReferenceSetFactory(
-		AdaptiveMediaEmbeddedReferenceSetFactory
-			adaptiveMediaEmbeddedReferenceSetFactory) {
-
-		_adaptiveMediaEmbeddedReferenceSetFactory =
-			adaptiveMediaEmbeddedReferenceSetFactory;
+		return _replace(replacedContent, amEmbeddedReferenceSet);
 	}
 
 	@Reference(unbind = "-")
@@ -96,6 +87,13 @@ public class AMBlogsEntryExportImportContentProcessor
 		AdaptiveMediaImageHTMLTagFactory adaptiveMediaImageHTMLTagFactory) {
 
 		_adaptiveMediaImageHTMLTagFactory = adaptiveMediaImageHTMLTagFactory;
+	}
+
+	@Reference(unbind = "-")
+	public void setAMEmbeddedReferenceSetFactory(
+		AMEmbeddedReferenceSetFactory amEmbeddedReferenceSetFactory) {
+
+		_amEmbeddedReferenceSetFactory = amEmbeddedReferenceSetFactory;
 	}
 
 	@Reference(unbind = "-")
@@ -164,8 +162,31 @@ public class AMBlogsEntryExportImportContentProcessor
 	}
 
 	private String _replace(
-			String content,
-			AdaptiveMediaEmbeddedReferenceSet adaptiveMediaEmbeddedReferenceSet)
+			String content, AdaptiveMediaReferenceExporter referenceExporter)
+		throws PortalException {
+
+		Document document = _parseDocument(content);
+
+		for (Element element : document.select("[data-fileEntryId]")) {
+			long fileEntryId = Long.valueOf(element.attr("data-fileEntryId"));
+
+			FileEntry fileEntry = _dlAppLocalService.getFileEntry(fileEntryId);
+
+			referenceExporter.exportReference(fileEntry);
+
+			element.removeAttr("data-fileEntryId");
+			element.attr(
+				_EXPORT_IMPORT_PATH_ATTR,
+				ExportImportPathUtil.getModelPath(fileEntry));
+		}
+
+		Element body = document.body();
+
+		return body.html();
+	}
+
+	private String _replace(
+			String content, AMEmbeddedReferenceSet amEmbeddedReferenceSet)
 		throws PortalException {
 
 		Document document = _parseDocument(content);
@@ -176,12 +197,11 @@ public class AMBlogsEntryExportImportContentProcessor
 		for (Element element : elements) {
 			String path = element.attr(_EXPORT_IMPORT_PATH_ATTR);
 
-			if (!adaptiveMediaEmbeddedReferenceSet.containsReference(path)) {
+			if (!amEmbeddedReferenceSet.containsReference(path)) {
 				continue;
 			}
 
-			long fileEntryId =
-				adaptiveMediaEmbeddedReferenceSet.importReference(path);
+			long fileEntryId = amEmbeddedReferenceSet.importReference(path);
 
 			FileEntry fileEntry = _getFileEntry(fileEntryId);
 
@@ -208,38 +228,13 @@ public class AMBlogsEntryExportImportContentProcessor
 		return document.body().html();
 	}
 
-	private String _replace(
-			String content, AdaptiveMediaReferenceExporter referenceExporter)
-		throws PortalException {
-
-		Document document = _parseDocument(content);
-
-		for (Element element : document.select("[data-fileEntryId]")) {
-			long fileEntryId = Long.valueOf(element.attr("data-fileEntryId"));
-
-			FileEntry fileEntry = _dlAppLocalService.getFileEntry(fileEntryId);
-
-			referenceExporter.exportReference(fileEntry);
-
-			element.removeAttr("data-fileEntryId");
-			element.attr(
-				_EXPORT_IMPORT_PATH_ATTR,
-				ExportImportPathUtil.getModelPath(fileEntry));
-		}
-
-		Element body = document.body();
-
-		return body.html();
-	}
-
 	private static final String _EXPORT_IMPORT_PATH_ATTR = "export-import-path";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMBlogsEntryExportImportContentProcessor.class);
 
-	private AdaptiveMediaEmbeddedReferenceSetFactory
-		_adaptiveMediaEmbeddedReferenceSetFactory;
 	private AdaptiveMediaImageHTMLTagFactory _adaptiveMediaImageHTMLTagFactory;
+	private AMEmbeddedReferenceSetFactory _amEmbeddedReferenceSetFactory;
 	private DLAppLocalService _dlAppLocalService;
 	private ExportImportContentProcessor<String> _exportImportContentProcessor;
 

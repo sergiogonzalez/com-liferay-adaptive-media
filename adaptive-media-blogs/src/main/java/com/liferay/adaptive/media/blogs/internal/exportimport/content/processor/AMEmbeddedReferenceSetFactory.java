@@ -31,12 +31,10 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Adolfo Pérez
  */
-@Component(
-	immediate = true, service = AdaptiveMediaEmbeddedReferenceSetFactory.class
-)
-public class AdaptiveMediaEmbeddedReferenceSetFactory {
+@Component(immediate = true, service = AMEmbeddedReferenceSetFactory.class)
+public class AMEmbeddedReferenceSetFactory {
 
-	public AdaptiveMediaEmbeddedReferenceSet create(
+	public AMEmbeddedReferenceSet create(
 		PortletDataContext portletDataContext, StagedModel stagedModel) {
 
 		Map<String, Long> embeddedReferences = new HashMap<>();
@@ -73,7 +71,7 @@ public class AdaptiveMediaEmbeddedReferenceSetFactory {
 			embeddedReferences.put(path, classPK);
 		}
 
-		return new AdaptiveMediaEmbeddedReferenceSet(
+		return new AMEmbeddedReferenceSet(
 			portletDataContext, stagedModel, embeddedReferences);
 	}
 

@@ -56,13 +56,12 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 			setAdaptiveMediaImageHTMLTagFactory(
 				_adaptiveMediaImageHTMLTagFactory);
 		_amBlogsEntryExportImportContentProcessor.
-			setAdaptiveMediaEmbeddedReferenceSetFactory(
-				_adaptiveMediaEmbeddedReferenceSetFactory);
+			setAMEmbeddedReferenceSetFactory(_amEmbeddedReferenceSetFactory);
 
 		Mockito.doReturn(
-			_adaptiveMediaEmbeddedReferenceSet
+			_amEmbeddedReferenceSet
 		).when(
-			_adaptiveMediaEmbeddedReferenceSetFactory
+			_amEmbeddedReferenceSetFactory
 		).create(
 			Mockito.any(PortletDataContext.class),
 			Mockito.any(StagedModel.class)
@@ -411,7 +410,7 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		Mockito.doReturn(
 			true
 		).when(
-			_adaptiveMediaEmbeddedReferenceSet
+			_amEmbeddedReferenceSet
 		).containsReference(
 			"PATH_" + fileEntryId
 		);
@@ -419,7 +418,7 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		Mockito.doReturn(
 			fileEntryId
 		).when(
-			_adaptiveMediaEmbeddedReferenceSet
+			_amEmbeddedReferenceSet
 		).importReference(
 			"PATH_" + fileEntryId
 		);
@@ -483,27 +482,25 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		);
 
 		Mockito.doReturn(
-			_adaptiveMediaEmbeddedReferenceSet
+			_amEmbeddedReferenceSet
 		).when(
-			_adaptiveMediaEmbeddedReferenceSetFactory
+			_amEmbeddedReferenceSetFactory
 		).create(
 			Mockito.any(PortletDataContext.class),
 			Mockito.any(StagedModel.class)
 		);
 	}
 
-	private final AdaptiveMediaEmbeddedReferenceSet
-		_adaptiveMediaEmbeddedReferenceSet = Mockito.mock(
-			AdaptiveMediaEmbeddedReferenceSet.class);
-	private final AdaptiveMediaEmbeddedReferenceSetFactory
-		_adaptiveMediaEmbeddedReferenceSetFactory = Mockito.mock(
-			AdaptiveMediaEmbeddedReferenceSetFactory.class);
 	private final AdaptiveMediaImageHTMLTagFactory
 		_adaptiveMediaImageHTMLTagFactory = Mockito.mock(
 			AdaptiveMediaImageHTMLTagFactory.class);
 	private final AMBlogsEntryExportImportContentProcessor
 		_amBlogsEntryExportImportContentProcessor =
 			new AMBlogsEntryExportImportContentProcessor();
+	private final AMEmbeddedReferenceSet _amEmbeddedReferenceSet = Mockito.mock(
+		AMEmbeddedReferenceSet.class);
+	private final AMEmbeddedReferenceSetFactory _amEmbeddedReferenceSetFactory =
+		Mockito.mock(AMEmbeddedReferenceSetFactory.class);
 	private final BlogsEntry _blogsEntry = Mockito.mock(BlogsEntry.class);
 	private final DLAppLocalService _dlAppLocalService = Mockito.mock(
 		DLAppLocalService.class);
