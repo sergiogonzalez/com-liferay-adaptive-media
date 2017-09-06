@@ -12,16 +12,15 @@
  * details.
  */
 
-package com.liferay.adaptive.media.blogs.web.internal.optimizer;
+package com.liferay.adaptive.media.document.library.web.internal.optimizer;
 
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
-import com.liferay.adaptive.media.image.optimizer.AdaptiveMediaImageOptimizer;
+import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.web.constants.OptimizeImagesBackgroundTaskConstants;
-import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
@@ -29,6 +28,7 @@ import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusMessageSende
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
+import com.liferay.trash.kernel.service.TrashEntryLocalService;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -49,11 +50,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sergio González
  */
 @Component(
-	immediate = true, property = {"adaptive.media.key=blogs"},
-	service = AdaptiveMediaImageOptimizer.class
+	immediate = true, property = {"adaptive.media.key=document-library"},
+	service = AMImageOptimizer.class
 )
-public class BlogsAdaptiveMediaImageOptimizer
-	implements AdaptiveMediaImageOptimizer {
+public class DLAMImageOptimizer implements AMImageOptimizer {
 
 	@Override
 	public void optimize(long companyId) {
@@ -79,9 +79,9 @@ public class BlogsAdaptiveMediaImageOptimizer
 	public void optimize(long companyId, String configurationEntryUuid) {
 		int total = _amImageCounter.countExpectedAMImageEntries(companyId);
 
-		final AtomicInteger atomicCounter = new AtomicInteger(0);
+		final AtomicInteger atomiCounter = new AtomicInteger(0);
 
-		_optimize(companyId, configurationEntryUuid, total, atomicCounter);
+		_optimize(companyId, configurationEntryUuid, total, atomiCounter);
 	}
 
 	private void _optimize(
@@ -91,23 +91,39 @@ public class BlogsAdaptiveMediaImageOptimizer
 		ActionableDynamicQuery actionableDynamicQuery =
 			_dlFileEntryLocalService.getActionableDynamicQuery();
 
-		long classNameId = _classNameLocalService.getClassNameId(
-			BlogsEntry.class.getName());
-
 		actionableDynamicQuery.setAddCriteriaMethod(
 			new ActionableDynamicQuery.AddCriteriaMethod() {
 
 				@Override
 				public void addCriteria(DynamicQuery dynamicQuery) {
+					DynamicQuery trashEntryDynamicQuery =
+						_trashEntryLocalService.dynamicQuery();
+
+					trashEntryDynamicQuery.setProjection(
+						ProjectionFactoryUtil.property("classPK"));
+
 					Property companyIdProperty = PropertyFactoryUtil.forName(
 						"companyId");
 
-					dynamicQuery.add(companyIdProperty.eq(companyId));
+					trashEntryDynamicQuery.add(companyIdProperty.eq(companyId));
 
 					Property classNameIdProperty = PropertyFactoryUtil.forName(
 						"classNameId");
 
-					dynamicQuery.add(classNameIdProperty.eq(classNameId));
+					trashEntryDynamicQuery.add(
+						classNameIdProperty.eq(
+							_classNameLocalService.getClassNameId(
+								DLFileEntry.class)));
+
+					dynamicQuery.add(companyIdProperty.eq(companyId));
+
+					Property groupIdProperty = PropertyFactoryUtil.forName(
+						"groupId");
+					Property repositoryIdProperty = PropertyFactoryUtil.forName(
+						"repositoryId");
+
+					dynamicQuery.add(
+						groupIdProperty.eqProperty(repositoryIdProperty));
 
 					Property mimeTypeProperty = PropertyFactoryUtil.forName(
 						"mimeType");
@@ -116,10 +132,15 @@ public class BlogsAdaptiveMediaImageOptimizer
 						mimeTypeProperty.in(
 							AdaptiveMediaImageConstants.
 								getSupportedMimeTypes()));
+
+					Property fileEntryIdProperty = PropertyFactoryUtil.forName(
+						"fileEntryId");
+
+					dynamicQuery.add(
+						fileEntryIdProperty.notIn(trashEntryDynamicQuery));
 				}
 
 			});
-
 		actionableDynamicQuery.setPerformActionMethod(
 			new ActionableDynamicQuery.PerformActionMethod<DLFileEntry>() {
 
@@ -161,7 +182,7 @@ public class BlogsAdaptiveMediaImageOptimizer
 			BackgroundTaskConstants.BACKGROUND_TASK_ID,
 			BackgroundTaskThreadLocal.getBackgroundTaskId());
 
-		Class<? extends BlogsAdaptiveMediaImageOptimizer> clazz = getClass();
+		Class<? extends DLAMImageOptimizer> clazz = getClass();
 
 		message.put(
 			OptimizeImagesBackgroundTaskConstants.CLASS_NAME, clazz.getName());
@@ -176,7 +197,7 @@ public class BlogsAdaptiveMediaImageOptimizer
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		BlogsAdaptiveMediaImageOptimizer.class);
+		DLAMImageOptimizer.class);
 
 	@Reference
 	private AdaptiveMediaImageConfigurationHelper
@@ -185,7 +206,7 @@ public class BlogsAdaptiveMediaImageOptimizer
 	@Reference
 	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
 
-	@Reference(target = "(adaptive.media.key=blogs)")
+	@Reference(target = "(adaptive.media.key=document-library)")
 	private AMImageCounter _amImageCounter;
 
 	@Reference
@@ -197,5 +218,8 @@ public class BlogsAdaptiveMediaImageOptimizer
 
 	@Reference
 	private DLFileEntryLocalService _dlFileEntryLocalService;
+
+	@Reference
+	private TrashEntryLocalService _trashEntryLocalService;
 
 }

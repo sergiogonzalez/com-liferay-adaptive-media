@@ -36,7 +36,7 @@ import aQute.bnd.annotation.ProviderType;
  * @author Sergio González
  */
 @ProviderType
-public interface AdaptiveMediaImageOptimizer {
+public interface AMImageOptimizer {
 
 	/**
 	 * Generates missing adaptive media images for an application or use case in
