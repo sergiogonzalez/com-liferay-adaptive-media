@@ -55,7 +55,7 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = DLPluggableContentDataHandler.class
 )
-public class AdaptiveMediaImageDLPluggableContentDataHandler
+public class AMImageDLPluggableContentDataHandler
 	implements DLPluggableContentDataHandler<FileEntry> {
 
 	@Override
