@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.processor;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 
@@ -53,10 +53,9 @@ public final class AdaptiveMediaImage
 
 	@Override
 	public <V> Optional<V> getValueOptional(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-			adaptiveMediaAttribute) {
+		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute) {
 
-		return _attributeMapping.getValueOptional(adaptiveMediaAttribute);
+		return _attributeMapping.getValueOptional(amAttribute);
 	}
 
 	private final AdaptiveMediaImageAttributeMapping _attributeMapping;

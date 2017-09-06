@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.web.internal.servlet;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
 import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
 import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebConstants;
@@ -88,19 +88,19 @@ public class AdaptiveMediaServlet extends HttpServlet {
 
 			Optional<Integer> contentLengthOptional =
 				adaptiveMedia.getValueOptional(
-					AdaptiveMediaAttribute.getContentLength());
+					AMAttribute.getContentLengthAMAttribute());
 
 			Integer contentLength = contentLengthOptional.orElse(0);
 
 			Optional<String> contentTypeOptional =
 				adaptiveMedia.getValueOptional(
-					AdaptiveMediaAttribute.getContentType());
+					AMAttribute.getContentTypeAMAttribute());
 
 			String contentType = contentTypeOptional.orElse(
 				ContentTypes.APPLICATION_OCTET_STREAM);
 
 			Optional<String> fileNameOptional = adaptiveMedia.getValueOptional(
-				AdaptiveMediaAttribute.getFileName());
+				AMAttribute.getFileNameAMAttribute());
 
 			String fileName = fileNameOptional.orElse(null);
 

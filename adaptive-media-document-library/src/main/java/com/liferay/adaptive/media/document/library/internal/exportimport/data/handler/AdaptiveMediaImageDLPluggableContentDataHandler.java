@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.document.library.internal.exportimport.data.handler;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntrySerializer;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
@@ -138,7 +138,7 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 
 		Optional<String> configurationUuidOptional =
 			adaptiveMedia.getValueOptional(
-				AdaptiveMediaAttribute.getConfigurationUuid());
+				AMAttribute.getConfigurationUuidAMAttribute());
 
 		if (!configurationUuidOptional.isPresent()) {
 			return;
@@ -225,7 +225,7 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 
 			Optional<Integer> contentLengthOptional =
 				adaptiveMedia.getValueOptional(
-					AdaptiveMediaAttribute.getContentLength());
+					AMAttribute.getContentLengthAMAttribute());
 
 			Optional<Integer> widthOptional = adaptiveMedia.getValueOptional(
 				AdaptiveMediaImageAttribute.IMAGE_WIDTH);

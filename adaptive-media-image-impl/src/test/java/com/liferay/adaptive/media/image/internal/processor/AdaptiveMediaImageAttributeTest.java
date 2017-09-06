@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 
@@ -32,22 +32,21 @@ public class AdaptiveMediaImageAttributeTest {
 
 	@Test
 	public void testAllPublicAttributesAreSupported() {
-		Collection<AdaptiveMediaAttribute<?, ?>> publicAttributes =
-			Arrays.asList(
-				AdaptiveMediaAttribute.getConfigurationUuid(),
-				AdaptiveMediaAttribute.getContentLength(),
-				AdaptiveMediaAttribute.getContentType(),
-				AdaptiveMediaAttribute.getFileName(),
-				AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
-				AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+		Collection<AMAttribute<?, ?>> publicAMAttributes = Arrays.asList(
+			AMAttribute.getConfigurationUuidAMAttribute(),
+			AMAttribute.getContentLengthAMAttribute(),
+			AMAttribute.getContentTypeAMAttribute(),
+			AMAttribute.getFileNameAMAttribute(),
+			AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
+			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
 
-		Map<String, AdaptiveMediaAttribute<?, ?>> allowedAttributesMap =
-			AdaptiveMediaImageAttribute.getAllowedAdaptiveMediaAttributes();
+		Map<String, AMAttribute<?, ?>> allowedAMAttributesMap =
+			AdaptiveMediaImageAttribute.getAllowedAMAttributes();
 
-		Collection<AdaptiveMediaAttribute<?, ?>> allowedAttributes =
-			allowedAttributesMap.values();
+		Collection<AMAttribute<?, ?>> allowedAMAttributes =
+			allowedAMAttributesMap.values();
 
-		Assert.assertTrue(allowedAttributes.containsAll(publicAttributes));
+		Assert.assertTrue(allowedAMAttributes.containsAll(publicAMAttributes));
 	}
 
 	@Test(

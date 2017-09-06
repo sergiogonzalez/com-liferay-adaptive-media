@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.finder;
 
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
@@ -115,11 +115,11 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, Optional.of(100)
 		);
 
-		Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Object>
-			attributes = _queryBuilder.getAttributes();
+		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Object> amAttributes =
+			_queryBuilder.getAMAttributes();
 
 		Assert.assertEquals(
-			100, attributes.get(AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
+			100, amAttributes.get(AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

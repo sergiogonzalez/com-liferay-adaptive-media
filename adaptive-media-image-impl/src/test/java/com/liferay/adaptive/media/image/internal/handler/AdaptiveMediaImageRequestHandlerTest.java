@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.handler;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
@@ -263,15 +263,15 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		Assert.assertEquals(
 			Optional.of(_fileVersion.getFileName()),
 			adaptiveMedia.getValueOptional(
-				AdaptiveMediaAttribute.getFileName()));
+				AMAttribute.getFileNameAMAttribute()));
 
 		Assert.assertEquals(
 			Optional.of(_fileVersion.getMimeType()),
 			adaptiveMedia.getValueOptional(
-				AdaptiveMediaAttribute.getContentType()));
+				AMAttribute.getContentTypeAMAttribute()));
 
 		Optional<Integer> contentLength = adaptiveMedia.getValueOptional(
-			AdaptiveMediaAttribute.getContentLength());
+			AMAttribute.getContentLengthAMAttribute());
 
 		Assert.assertEquals(_fileVersion.getSize(), (long)contentLength.get());
 
@@ -289,27 +289,31 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 		Map<String, String> properties = new HashMap<>();
 
-		AdaptiveMediaAttribute<Object, String> configurationUuid =
-			AdaptiveMediaAttribute.getConfigurationUuid();
+		AMAttribute<Object, String> configurationUuidAMAttribute =
+			AMAttribute.getConfigurationUuidAMAttribute();
 
 		properties.put(
-			configurationUuid.getName(), configurationEntry.getUUID());
+			configurationUuidAMAttribute.getName(),
+			configurationEntry.getUUID());
 
-		AdaptiveMediaAttribute<Object, String> fileName =
-			AdaptiveMediaAttribute.getFileName();
-
-		properties.put(fileName.getName(), fileVersion.getFileName());
-
-		AdaptiveMediaAttribute<Object, String> contentType =
-			AdaptiveMediaAttribute.getContentType();
-
-		properties.put(contentType.getName(), fileVersion.getMimeType());
-
-		AdaptiveMediaAttribute<Object, Integer> contentLength =
-			AdaptiveMediaAttribute.getContentLength();
+		AMAttribute<Object, String> fileNameAMAttribute =
+			AMAttribute.getFileNameAMAttribute();
 
 		properties.put(
-			contentLength.getName(), String.valueOf(fileVersion.getSize()));
+			fileNameAMAttribute.getName(), fileVersion.getFileName());
+
+		AMAttribute<Object, String> contentTypeAMAttribute =
+			AMAttribute.getContentTypeAMAttribute();
+
+		properties.put(
+			contentTypeAMAttribute.getName(), fileVersion.getMimeType());
+
+		AMAttribute<Object, Integer> contentLengthAMAttribute =
+			AMAttribute.getContentLengthAMAttribute();
+
+		properties.put(
+			contentLengthAMAttribute.getName(),
+			String.valueOf(fileVersion.getSize()));
 
 		Map<String, String> configurationEntryProperties =
 			configurationEntry.getProperties();
@@ -442,13 +446,13 @@ public class AdaptiveMediaImageRequestHandlerTest {
 				AdaptiveMediaQuery adaptiveMediaQuery = function.apply(
 					queryBuilder);
 
-				Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>,
-					Object> attributes = queryBuilder.getAttributes();
+				Map<AMAttribute<AdaptiveMediaImageProcessor, ?>,
+					Object> amAttributes = queryBuilder.getAMAttributes();
 
-				Object queryBuilderWidth = attributes.get(
+				Object queryBuilderWidth = amAttributes.get(
 					AdaptiveMediaImageAttribute.IMAGE_WIDTH);
 
-				Object queryBuilderHeight = attributes.get(
+				Object queryBuilderHeight = amAttributes.get(
 					AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
 
 				Map<String, String> properties =

@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.util;
 
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
@@ -56,13 +56,11 @@ public class AdaptiveMediaImageSerializerImpl
 			JSONObject attributesJSONObject = jsonObject.getJSONObject(
 				"attributes");
 
-			Map<String, AdaptiveMediaAttribute<?, ?>>
-				allowedAdaptiveMediaAttributes =
-					AdaptiveMediaImageAttribute.
-						getAllowedAdaptiveMediaAttributes();
+			Map<String, AMAttribute<?, ?>> allowedAMAttributes =
+				AdaptiveMediaImageAttribute.getAllowedAMAttributes();
 
-			allowedAdaptiveMediaAttributes.forEach(
-				(name, attribute) -> {
+			allowedAMAttributes.forEach(
+				(name, amAttribute) -> {
 					if (attributesJSONObject.has(name)) {
 						properties.put(
 							name, attributesJSONObject.getString(name));
@@ -89,14 +87,13 @@ public class AdaptiveMediaImageSerializerImpl
 
 		JSONObject attributesJSONObject = JSONFactoryUtil.createJSONObject();
 
-		Map<String, AdaptiveMediaAttribute<?, ?>>
-			allowedAdaptiveMediaAttributes =
-				AdaptiveMediaImageAttribute.getAllowedAdaptiveMediaAttributes();
+		Map<String, AMAttribute<?, ?>> allowedAMAttributes =
+			AdaptiveMediaImageAttribute.getAllowedAMAttributes();
 
-		allowedAdaptiveMediaAttributes.forEach(
-			(name, attribute) -> {
+		allowedAMAttributes.forEach(
+			(name, amAttribute) -> {
 				Optional<Object> valueOptional = media.getValueOptional(
-					(AdaptiveMediaAttribute)attribute);
+					(AMAttribute)amAttribute);
 
 				valueOptional.ifPresent(
 					value -> attributesJSONObject.put(

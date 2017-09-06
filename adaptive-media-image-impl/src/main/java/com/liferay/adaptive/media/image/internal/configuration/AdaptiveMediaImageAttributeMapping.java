@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
-import com.liferay.adaptive.media.AdaptiveMediaAttribute;
+import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 
@@ -47,79 +47,77 @@ public class AdaptiveMediaImageAttributeMapping {
 			throw new IllegalArgumentException("properties map cannot be null");
 		}
 
-		Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
-			attributes = new HashMap<>();
+		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
+			amAttributes = new HashMap<>();
 
-		attributes.put(
-			AdaptiveMediaAttribute.getConfigurationUuid(),
+		amAttributes.put(
+			AMAttribute.getConfigurationUuidAMAttribute(),
 			_getValueOptional(
-				properties, AdaptiveMediaAttribute.getConfigurationUuid()));
-		attributes.put(
-			AdaptiveMediaAttribute.getContentLength(),
+				properties, AMAttribute.getConfigurationUuidAMAttribute()));
+		amAttributes.put(
+			AMAttribute.getContentLengthAMAttribute(),
 			_getValueOptional(
-				properties, AdaptiveMediaAttribute.getContentLength()));
-		attributes.put(
-			AdaptiveMediaAttribute.getContentType(),
+				properties, AMAttribute.getContentLengthAMAttribute()));
+		amAttributes.put(
+			AMAttribute.getContentTypeAMAttribute(),
 			_getValueOptional(
-				properties, AdaptiveMediaAttribute.getContentType()));
-		attributes.put(
-			AdaptiveMediaAttribute.getFileName(),
+				properties, AMAttribute.getContentTypeAMAttribute()));
+		amAttributes.put(
+			AMAttribute.getFileNameAMAttribute(),
 			_getValueOptional(
-				properties, AdaptiveMediaAttribute.getFileName()));
-		attributes.put(
+				properties, AMAttribute.getFileNameAMAttribute()));
+		amAttributes.put(
 			AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
 			_getValueOptional(
 				properties, AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
-		attributes.put(
+		amAttributes.put(
 			AdaptiveMediaImageAttribute.IMAGE_WIDTH,
 			_getValueOptional(
 				properties, AdaptiveMediaImageAttribute.IMAGE_WIDTH));
 
-		return new AdaptiveMediaImageAttributeMapping(attributes);
+		return new AdaptiveMediaImageAttributeMapping(amAttributes);
 	}
 
 	/**
 	 * Returns an {@link Optional} instance that contains the value of the
 	 * attribute (if any) in this mapping.
 	 *
-	 * @param  adaptiveMediaAttribute a non <code>null</code> attribute
+	 * @param  amAttribute a non <code>null</code> attribute
 	 * @return a non-<code>null</code> optional that contains the
 	 *         (non-<code>null</code>) value (if any)
 	 */
 	public <V> Optional<V> getValueOptional(
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-			adaptiveMediaAttribute) {
+		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute) {
 
-		if (adaptiveMediaAttribute == null) {
+		if (amAttribute == null) {
 			throw new IllegalArgumentException("attribute cannot be null");
 		}
 
-		return (Optional<V>)_attributes.get(adaptiveMediaAttribute);
+		return (Optional<V>)_amAttributes.get(amAttribute);
 	}
 
 	protected AdaptiveMediaImageAttributeMapping(
-		Map<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
-			attributes) {
+		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
+			amAttributes) {
 
-		_attributes = attributes;
+		_amAttributes = amAttributes;
 	}
 
 	private static <V> Optional<V> _getValueOptional(
 		Map<String, String> properties,
-		AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, V>
-			adaptiveMediaAttribute) {
+		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute) {
 
-		String value = properties.get(adaptiveMediaAttribute.getName());
+		String value = properties.get(amAttribute.getName());
 
 		if (value == null) {
 			return Optional.empty();
 		}
 
-		return Optional.of(adaptiveMediaAttribute.convert(value));
+		return Optional.of(amAttribute.convert(value));
 	}
 
 	private final Map
-		<AdaptiveMediaAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
-			_attributes;
+		<AMAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
+			_amAttributes;
 
 }

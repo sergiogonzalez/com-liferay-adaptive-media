@@ -35,7 +35,7 @@ import java.util.function.Function;
  * @author Adolfo Pérez
  */
 @ProviderType
-public final class AdaptiveMediaAttribute<T, V> {
+public final class AMAttribute<T, V> {
 
 	/**
 	 * Returns a string-attribute map containing the available name-attribute
@@ -43,10 +43,8 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 *
 	 * @return the list of available attributes
 	 */
-	public static Map<String, AdaptiveMediaAttribute<?, ?>>
-		getAllowedAdaptiveMediaAttributes() {
-
-		return _allowedAdaptiveMediaAttributes;
+	public static Map<String, AMAttribute<?, ?>> getAllowedAMAttributes() {
+		return _allowedAMAttributes;
 	}
 
 	/**
@@ -55,10 +53,10 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 *
 	 * @return the configuration UUID
 	 */
-	public static final <S> AdaptiveMediaAttribute<S, String>
-		getConfigurationUuid() {
+	public static final <S> AMAttribute<S, String>
+		getConfigurationUuidAMAttribute() {
 
-		return (AdaptiveMediaAttribute<S, String>)_CONFIGURATION_UUID;
+		return (AMAttribute<S, String>)_CONFIGURATION_UUID;
 	}
 
 	/**
@@ -68,9 +66,9 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 * @return the content length attribute
 	 */
 	public static final <S>
-		AdaptiveMediaAttribute<S, Integer> getContentLength() {
+		AMAttribute<S, Integer> getContentLengthAMAttribute() {
 
-		return (AdaptiveMediaAttribute<S, Integer>)_CONTENT_LENGTH;
+		return (AMAttribute<S, Integer>)_CONTENT_LENGTH;
 	}
 
 	/**
@@ -79,8 +77,8 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 *
 	 * @return the content type attribute
 	 */
-	public static final <S> AdaptiveMediaAttribute<S, String> getContentType() {
-		return (AdaptiveMediaAttribute<S, String>)_CONTENT_TYPE;
+	public static final <S> AMAttribute<S, String> getContentTypeAMAttribute() {
+		return (AMAttribute<S, String>)_CONTENT_TYPE;
 	}
 
 	/**
@@ -89,8 +87,8 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 *
 	 * @return the file name attribute
 	 */
-	public static final <S> AdaptiveMediaAttribute<S, String> getFileName() {
-		return (AdaptiveMediaAttribute<S, String>)_FILE_NAME;
+	public static final <S> AMAttribute<S, String> getFileNameAMAttribute() {
+		return (AMAttribute<S, String>)_FILE_NAME;
 	}
 
 	/**
@@ -108,7 +106,7 @@ public final class AdaptiveMediaAttribute<T, V> {
 	 *        {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE} based on
 	 *        the distance of the values.
 	 */
-	public AdaptiveMediaAttribute(
+	public AMAttribute(
 		String name, Function<String, V> converter, Comparator<V> comparator) {
 
 		_name = name;
@@ -162,39 +160,33 @@ public final class AdaptiveMediaAttribute<T, V> {
 		return _name;
 	}
 
-	private static final AdaptiveMediaAttribute<?, String> _CONFIGURATION_UUID =
-		new AdaptiveMediaAttribute<>(
-			"configuration-uuid", (s) -> s, String::compareTo);
+	private static final AMAttribute<?, String> _CONFIGURATION_UUID =
+		new AMAttribute<>("configuration-uuid", (s) -> s, String::compareTo);
 
-	private static final AdaptiveMediaAttribute<?, Integer> _CONTENT_LENGTH =
-		new AdaptiveMediaAttribute<>(
+	private static final AMAttribute<?, Integer> _CONTENT_LENGTH =
+		new AMAttribute<>(
 			"content-length", AdaptiveMediaAttributeConverterUtil::parseInt,
 			(value1, value2) -> value1 - value2);
 
-	private static final AdaptiveMediaAttribute<?, String> _CONTENT_TYPE =
-		new AdaptiveMediaAttribute<>(
-			"content-type", (value) -> value, String::compareTo);
+	private static final AMAttribute<?, String> _CONTENT_TYPE =
+		new AMAttribute<>("content-type", (value) -> value, String::compareTo);
 
-	private static final AdaptiveMediaAttribute<?, String> _FILE_NAME =
-		new AdaptiveMediaAttribute<>(
-			"file-name", (value) -> value, String::compareTo);
+	private static final AMAttribute<?, String> _FILE_NAME = new AMAttribute<>(
+		"file-name", (value) -> value, String::compareTo);
 
-	private static final Map<String, AdaptiveMediaAttribute<?, ?>>
-		_allowedAdaptiveMediaAttributes = new HashMap<>();
+	private static final Map<String, AMAttribute<?, ?>> _allowedAMAttributes =
+		new HashMap<>();
 
 	static {
-		_allowedAdaptiveMediaAttributes.put(
-			AdaptiveMediaAttribute._CONFIGURATION_UUID.getName(),
-			AdaptiveMediaAttribute._CONFIGURATION_UUID);
-		_allowedAdaptiveMediaAttributes.put(
-			AdaptiveMediaAttribute._CONTENT_LENGTH.getName(),
-			AdaptiveMediaAttribute._CONTENT_LENGTH);
-		_allowedAdaptiveMediaAttributes.put(
-			AdaptiveMediaAttribute._CONTENT_TYPE.getName(),
-			AdaptiveMediaAttribute._CONTENT_TYPE);
-		_allowedAdaptiveMediaAttributes.put(
-			AdaptiveMediaAttribute._FILE_NAME.getName(),
-			AdaptiveMediaAttribute._FILE_NAME);
+		_allowedAMAttributes.put(
+			AMAttribute._CONFIGURATION_UUID.getName(),
+			AMAttribute._CONFIGURATION_UUID);
+		_allowedAMAttributes.put(
+			AMAttribute._CONTENT_LENGTH.getName(), AMAttribute._CONTENT_LENGTH);
+		_allowedAMAttributes.put(
+			AMAttribute._CONTENT_TYPE.getName(), AMAttribute._CONTENT_TYPE);
+		_allowedAMAttributes.put(
+			AMAttribute._FILE_NAME.getName(), AMAttribute._FILE_NAME);
 	}
 
 	private final Comparator<V> _comparator;
