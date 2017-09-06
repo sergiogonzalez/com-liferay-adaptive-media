@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.demo.data.creator.internal;
 import com.liferay.adaptive.media.demo.data.creator.AdaptiveMediaImageConfigurationDemoDataCreator;
 import com.liferay.adaptive.media.demo.data.creator.DemoAdaptiveMediaImageConfigurationVariant;
 import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -42,55 +42,52 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 	implements AdaptiveMediaImageConfigurationDemoDataCreator {
 
 	@Override
-	public Collection<AdaptiveMediaImageConfigurationEntry> create(
-			long companyId)
+	public Collection<AMImageConfigurationEntry> create(long companyId)
 		throws IOException {
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
 			new ArrayList<>();
 
 		for (DemoAdaptiveMediaImageConfigurationVariant
 				demoConfigurationVariant :
 					DemoAdaptiveMediaImageConfigurationVariant.values()) {
 
-			AdaptiveMediaImageConfigurationEntry configurationEntry = create(
+			AMImageConfigurationEntry amImageConfigurationEntry = create(
 				companyId, demoConfigurationVariant);
 
-			configurationEntries.add(configurationEntry);
+			amImageConfigurationEntries.add(amImageConfigurationEntry);
 		}
 
-		return configurationEntries;
+		return amImageConfigurationEntries;
 	}
 
 	@Override
-	public AdaptiveMediaImageConfigurationEntry create(
+	public AMImageConfigurationEntry create(
 			long companyId,
 			DemoAdaptiveMediaImageConfigurationVariant
 				demoAdaptiveMediaImageConfigurationVariant)
 		throws IOException {
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry = null;
+		AMImageConfigurationEntry amImageConfigurationEntry = null;
 
 		try {
-			configurationEntry =
-				_adaptiveMediaImageConfigurationHelper.
-					addAdaptiveMediaImageConfigurationEntry(
-						companyId,
-						demoAdaptiveMediaImageConfigurationVariant.getName(),
-						demoAdaptiveMediaImageConfigurationVariant.
-							getDescription(),
-						demoAdaptiveMediaImageConfigurationVariant.getUuid(),
-						demoAdaptiveMediaImageConfigurationVariant.
-							getProperties());
+			amImageConfigurationEntry =
+				_amImageConfigurationHelper.addAMImageConfigurationEntry(
+					companyId,
+					demoAdaptiveMediaImageConfigurationVariant.getName(),
+					demoAdaptiveMediaImageConfigurationVariant.getDescription(),
+					demoAdaptiveMediaImageConfigurationVariant.getUuid(),
+					demoAdaptiveMediaImageConfigurationVariant.getProperties());
 
-			_addConfigurationUuid(companyId, configurationEntry.getUUID());
+			_addConfigurationUuid(
+				companyId, amImageConfigurationEntry.getUUID());
 		}
 		catch (AdaptiveMediaImageConfigurationException amice) {
 			_log.error(
 				"Unable to add image adaptive media configuration", amice);
 		}
 
-		return configurationEntry;
+		return amImageConfigurationEntry;
 	}
 
 	@Override
@@ -99,9 +96,8 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 			List<String> uuids = _configurationIds.get(companyId);
 
 			for (String uuid : uuids) {
-				_adaptiveMediaImageConfigurationHelper.
-					forceDeleteAdaptiveMediaImageConfigurationEntry(
-						companyId, uuid);
+				_amImageConfigurationHelper.
+					forceDeleteAMImageConfigurationEntry(companyId, uuid);
 
 				uuids.remove(uuid);
 			}
@@ -121,8 +117,7 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 		AdaptiveMediaImageConfigurationDemoDataCreatorImpl.class);
 
 	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	private final Map<Long, List<String>> _configurationIds = new HashMap<>();
 

@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.document.library.thumbnails.internal.commands;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
@@ -148,12 +148,11 @@ public class AMThumbnailsOSGiCommands {
 
 	public void migrate(String... companyIds) throws PortalException {
 		for (long companyId : _getCompanyIds(companyIds)) {
-			Collection<AdaptiveMediaImageConfigurationEntry>
-				configurationEntries =
-					_adaptiveMediaImageConfigurationHelper.
-						getAdaptiveMediaImageConfigurationEntries(companyId);
+			Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+				_amImageConfigurationHelper.getAMImageConfigurationEntries(
+					companyId);
 
-			if (!_isValidConfigurationEntries(configurationEntries)) {
+			if (!_isValidConfigurationEntries(amImageConfigurationEntries)) {
 				throw new PortalException(
 					"No valid Adaptive Media configuration found. Please " +
 						"refer to the upgrade documentation for the details.");
@@ -174,15 +173,15 @@ public class AMThumbnailsOSGiCommands {
 					for (ThumbnailConfiguration thumbnailConfiguration :
 							_getThumbnailConfigurations()) {
 
-						Optional<AdaptiveMediaImageConfigurationEntry>
-							configurationEntryOptional =
+						Optional<AMImageConfigurationEntry>
+							amImageConfigurationEntryOptional =
 								thumbnailConfiguration.
 									selectMatchingConfigurationEntry(
-										configurationEntries);
+										amImageConfigurationEntries);
 
-						configurationEntryOptional.ifPresent(
-							configurationEntry -> _migrate(
-								actualFileName, configurationEntry,
+						amImageConfigurationEntryOptional.ifPresent(
+							amImageConfigurationEntry -> _migrate(
+								actualFileName, amImageConfigurationEntry,
 								thumbnailConfiguration));
 					}
 				}
@@ -276,25 +275,24 @@ public class AMThumbnailsOSGiCommands {
 	}
 
 	private boolean _isValidConfigurationEntries(
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries) {
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries) {
 
 		Stream<ThumbnailConfiguration> thumbnailConfigurationStream =
 			Arrays.stream(_getThumbnailConfigurations());
 
 		return thumbnailConfigurationStream.anyMatch(
 			thumbnailConfiguration -> {
-				Stream<AdaptiveMediaImageConfigurationEntry>
-					adaptiveMediaImageConfigurationEntryStream =
-						configurationEntries.stream();
+				Stream<AMImageConfigurationEntry>
+					amImageConfigurationEntryStream =
+						amImageConfigurationEntries.stream();
 
-				return adaptiveMediaImageConfigurationEntryStream.anyMatch(
+				return amImageConfigurationEntryStream.anyMatch(
 					thumbnailConfiguration::matches);
 			});
 	}
 
 	private void _migrate(
-		String fileName,
-		AdaptiveMediaImageConfigurationEntry configurationEntry,
+		String fileName, AMImageConfigurationEntry amImageConfigurationEntry,
 		ThumbnailConfiguration thumbnailConfiguration) {
 
 		try {
@@ -308,7 +306,7 @@ public class AMThumbnailsOSGiCommands {
 			AdaptiveMediaImageEntry adaptiveMediaImageEntry =
 				_adaptiveMediaImageEntryLocalService.
 					fetchAdaptiveMediaImageEntry(
-						configurationEntry.getUUID(),
+						amImageConfigurationEntry.getUUID(),
 						fileVersion.getFileVersionId());
 
 			if (adaptiveMediaImageEntry != null) {
@@ -324,8 +322,8 @@ public class AMThumbnailsOSGiCommands {
 			RenderedImage renderedImage = imageBag.getRenderedImage();
 
 			_adaptiveMediaImageEntryLocalService.addAdaptiveMediaImageEntry(
-				configurationEntry, fileVersion, renderedImage.getWidth(),
-				renderedImage.getHeight(),
+				amImageConfigurationEntry, fileVersion,
+				renderedImage.getWidth(), renderedImage.getHeight(),
 				new UnsyncByteArrayInputStream(bytes), bytes.length);
 		}
 		catch (IOException | PortalException e) {
@@ -337,12 +335,11 @@ public class AMThumbnailsOSGiCommands {
 		AMThumbnailsOSGiCommands.class);
 
 	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
-
-	@Reference
 	private AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService;
+
+	@Reference
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;

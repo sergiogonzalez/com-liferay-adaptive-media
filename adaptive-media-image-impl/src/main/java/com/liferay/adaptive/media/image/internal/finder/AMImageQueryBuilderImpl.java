@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.finder.AMQuery;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.ConfigurationStep;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.FuzzySortStep;
@@ -128,15 +128,13 @@ public class AMImageQueryBuilderImpl
 		return (v1, v2) -> 0;
 	}
 
-	public Predicate<AdaptiveMediaImageConfigurationEntry>
-		getConfigurationEntryFilter() {
-
+	public Predicate<AMImageConfigurationEntry> getConfigurationEntryFilter() {
 		if (_hasConfiguration()) {
-			return configurationEntry -> _configurationUuid.equals(
-				configurationEntry.getUUID());
+			return amImageConfigurationEntry -> _configurationUuid.equals(
+				amImageConfigurationEntry.getUUID());
 		}
 
-		return configurationEntry -> true;
+		return amImageConfigurationEntry -> true;
 	}
 
 	public ConfigurationStatus getConfigurationStatus() {

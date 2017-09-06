@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.finder;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.finder.AMQueryBuilder;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -41,22 +41,23 @@ public interface AMImageQueryBuilder
 
 	public enum ConfigurationStatus {
 
-		ANY(configurationEntry -> true),
-		ENABLED(AdaptiveMediaImageConfigurationEntry::isEnabled),
-		DISABLED(configurationEntry -> !configurationEntry.isEnabled());
+		ANY(amImageConfigurationEntry -> true),
+		ENABLED(AMImageConfigurationEntry::isEnabled),
+		DISABLED(
+			amImageConfigurationEntry ->
+				!amImageConfigurationEntry.isEnabled());
 
-		public Predicate<AdaptiveMediaImageConfigurationEntry> getPredicate() {
+		public Predicate<AMImageConfigurationEntry> getPredicate() {
 			return _predicate;
 		}
 
 		private ConfigurationStatus(
-			Predicate<AdaptiveMediaImageConfigurationEntry> predicate) {
+			Predicate<AMImageConfigurationEntry> predicate) {
 
 			_predicate = predicate;
 		}
 
-		private final Predicate<AdaptiveMediaImageConfigurationEntry>
-			_predicate;
+		private final Predicate<AMImageConfigurationEntry> _predicate;
 
 	}
 

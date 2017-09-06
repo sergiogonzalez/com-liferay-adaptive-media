@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.image.internal.mediaquery;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.finder.AMQuery;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
@@ -81,8 +81,8 @@ public class MediaQueryProviderImplTest {
 		_mediaQueryProvider.setAdaptiveMediaImageURLFactory(
 			_adaptiveMediaURLFactory);
 
-		_mediaQueryProvider.setAdaptiveMediaImageConfigurationHelper(
-			_adaptiveMediaImageConfigurationHelper);
+		_mediaQueryProvider.setAMImageConfigurationHelper(
+			_amImageConfigurationHelper);
 
 		_mediaQueryProvider.setAMImageFinder(_amImageFinder);
 	}
@@ -646,15 +646,14 @@ public class MediaQueryProviderImplTest {
 	}
 
 	private void _addConfigs(
-			AdaptiveMediaImageConfigurationEntry...
-				adaptiveMediaImageConfigurationEntries)
+			AMImageConfigurationEntry... amImageConfigurationEntries)
 		throws Exception {
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(_COMPANY_ID)
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				_COMPANY_ID)
 		).thenReturn(
-			Arrays.asList(adaptiveMediaImageConfigurationEntries)
+			Arrays.asList(amImageConfigurationEntries)
 		);
 	}
 
@@ -715,12 +714,12 @@ public class MediaQueryProviderImplTest {
 			URI.create(url));
 	}
 
-	private AdaptiveMediaImageConfigurationEntry _createConfig(
+	private AMImageConfigurationEntry _createConfig(
 			final String uuid, final int height, final int width, String url)
 		throws Exception {
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntry() {
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntry() {
 
 				@Override
 				public String getDescription() {
@@ -756,22 +755,21 @@ public class MediaQueryProviderImplTest {
 
 		Mockito.when(
 			_adaptiveMediaURLFactory.createFileEntryURL(
-				_fileEntry.getFileVersion(), configurationEntry)
+				_fileEntry.getFileVersion(), amImageConfigurationEntry)
 		).thenReturn(
 			URI.create(url)
 		);
 
-		return configurationEntry;
+		return amImageConfigurationEntry;
 	}
 
 	private static final long _COMPANY_ID = 1L;
 
 	@Mock
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
+	private AdaptiveMediaImageURLFactory _adaptiveMediaURLFactory;
 
 	@Mock
-	private AdaptiveMediaImageURLFactory _adaptiveMediaURLFactory;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Mock
 	private AMImageFinder _amImageFinder;

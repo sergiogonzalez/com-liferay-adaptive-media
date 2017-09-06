@@ -16,9 +16,9 @@ package com.liferay.adaptive.media.document.library.internal.exportimport.data.h
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntrySerializer;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntrySerializer;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
@@ -64,14 +64,13 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 			FileEntry fileEntry)
 		throws Exception {
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					portletDataContext.getCompanyId());
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				portletDataContext.getCompanyId());
 
-		configurationEntries.forEach(
-			configurationEntry -> _exportConfigurationEntry(
-				portletDataContext, configurationEntry));
+		amImageConfigurationEntries.forEach(
+			amImageConfigurationEntry -> _exportConfigurationEntry(
+				portletDataContext, amImageConfigurationEntry));
 
 		_exportMedia(portletDataContext, fileEntry);
 	}
@@ -82,27 +81,27 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 			FileEntry fileEntry, FileEntry importedFileEntry)
 		throws Exception {
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					portletDataContext.getCompanyId());
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				portletDataContext.getCompanyId());
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
 			_importGeneratedMedia(
-				portletDataContext, importedFileEntry, configurationEntry);
+				portletDataContext, importedFileEntry,
+				amImageConfigurationEntry);
 		}
 	}
 
 	private void _exportConfigurationEntry(
 		PortletDataContext portletDataContext,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		portletDataContext.addZipEntry(
-			_getConfigurationEntryBinPath(configurationEntry),
-			_adaptiveMediaImageConfigurationEntrySerializer.serialize(
-				configurationEntry));
+			_getConfigurationEntryBinPath(amImageConfigurationEntry),
+			_amImageConfigurationEntrySerializer.serialize(
+				amImageConfigurationEntry));
 	}
 
 	private void _exportMedia(
@@ -164,18 +163,18 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 	}
 
 	private String _getConfigurationEntryBinPath(
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		return String.format(
-			"adaptive-media/%s.cf", configurationEntry.getUUID());
+			"adaptive-media/%s.cf", amImageConfigurationEntry.getUUID());
 	}
 
 	private AdaptiveMedia<AdaptiveMediaImageProcessor> _getExportedMedia(
 		PortletDataContext portletDataContext, FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		String basePath = _getAdaptiveMediaBasePath(
-			fileVersion, configurationEntry.getUUID());
+			fileVersion, amImageConfigurationEntry.getUUID());
 
 		String serializedAdaptiveMedia = portletDataContext.getZipEntryAsString(
 			basePath + ".json");
@@ -192,21 +191,22 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 
 	private void _importGeneratedMedia(
 			PortletDataContext portletDataContext, FileEntry importedFileEntry,
-			AdaptiveMediaImageConfigurationEntry configurationEntry)
+			AMImageConfigurationEntry amImageConfigurationEntry)
 		throws IOException, PortalException {
 
 		String configuration = portletDataContext.getZipEntryAsString(
-			_getConfigurationEntryBinPath(configurationEntry));
+			_getConfigurationEntryBinPath(amImageConfigurationEntry));
 
 		if (configuration == null) {
 			return;
 		}
 
-		AdaptiveMediaImageConfigurationEntry importedConfigurationEntry =
-			_adaptiveMediaImageConfigurationEntrySerializer.deserialize(
-				configuration);
+		AMImageConfigurationEntry importedAMImageConfigurationEntry =
+			_amImageConfigurationEntrySerializer.deserialize(configuration);
 
-		if (!importedConfigurationEntry.equals(configurationEntry)) {
+		if (!importedAMImageConfigurationEntry.equals(
+				amImageConfigurationEntry)) {
+
 			return;
 		}
 
@@ -216,7 +216,7 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 		for (FileVersion fileVersion : fileVersions) {
 			AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia =
 				_getExportedMedia(
-					portletDataContext, fileVersion, configurationEntry);
+					portletDataContext, fileVersion, amImageConfigurationEntry);
 
 			if (adaptiveMedia == null) {
 				continue;
@@ -241,19 +241,19 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 			AdaptiveMediaImageEntry adaptiveMediaImageEntry =
 				_adaptiveMediaImageEntryLocalService.
 					fetchAdaptiveMediaImageEntry(
-						configurationEntry.getUUID(),
+						amImageConfigurationEntry.getUUID(),
 						fileVersion.getFileVersionId());
 
 			if (adaptiveMediaImageEntry != null) {
 				_adaptiveMediaImageEntryLocalService.
 					deleteAdaptiveMediaImageEntryFileVersion(
-						configurationEntry.getUUID(),
+						amImageConfigurationEntry.getUUID(),
 						fileVersion.getFileVersionId());
 			}
 
 			try (InputStream inputStream = adaptiveMedia.getInputStream()) {
 				_adaptiveMediaImageEntryLocalService.addAdaptiveMediaImageEntry(
-					configurationEntry, fileVersion, widthOptional.get(),
+					amImageConfigurationEntry, fileVersion, widthOptional.get(),
 					heightOptional.get(), inputStream,
 					contentLengthOptional.get());
 			}
@@ -261,19 +261,18 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 	}
 
 	@Reference
-	private AdaptiveMediaImageConfigurationEntrySerializer
-		_adaptiveMediaImageConfigurationEntrySerializer;
-
-	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
-
-	@Reference
 	private AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService;
 
 	@Reference
 	private AdaptiveMediaImageSerializer _adaptiveMediaImageSerializer;
+
+	@Reference
+	private AMImageConfigurationEntrySerializer
+		_amImageConfigurationEntrySerializer;
+
+	@Reference
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference
 	private AMImageFinder _amImageFinder;

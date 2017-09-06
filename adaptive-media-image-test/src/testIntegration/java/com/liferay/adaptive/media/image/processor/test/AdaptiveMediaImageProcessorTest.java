@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.processor.test;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.test.util.DestinationReplacer;
@@ -73,8 +73,8 @@ public class AdaptiveMediaImageProcessorTest {
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		_adaptiveMediaImageConfigurationHelper = _getService(
-			AdaptiveMediaImageConfigurationHelper.class);
+		_amImageConfigurationHelper = _getService(
+			AMImageConfigurationHelper.class);
 		_dlAppLocalService = _getService(DLAppLocalService.class);
 		_amImageFinder = _getService(AMImageFinder.class);
 		_adaptiveMediaImageProcessor = _getService(
@@ -82,18 +82,17 @@ public class AdaptiveMediaImageProcessorTest {
 
 		ServiceTestUtil.setUser(TestPropsValues.getUser());
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					TestPropsValues.getCompanyId(), configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry -> true);
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
-			_adaptiveMediaImageConfigurationHelper.
-				forceDeleteAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(),
-					configurationEntry.getUUID());
+			_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry.getUUID());
 		}
 
 		_addTestVariant();
@@ -103,18 +102,17 @@ public class AdaptiveMediaImageProcessorTest {
 	public void testAddingFileEntryWithDisabledConfigurationCreatesNoMedia()
 		throws Exception {
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					TestPropsValues.getCompanyId(), configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry -> true);
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
-			_adaptiveMediaImageConfigurationHelper.
-				disableAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(),
-					configurationEntry.getUUID());
+			_amImageConfigurationHelper.disableAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry.getUUID());
 		}
 
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
@@ -256,10 +254,9 @@ public class AdaptiveMediaImageProcessorTest {
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		_adaptiveMediaImageConfigurationHelper.
-			addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "small", StringPool.BLANK, "0",
-				properties);
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), "small", StringPool.BLANK, "0",
+			properties);
 	}
 
 	private byte[] _getImageBytes() throws Exception {
@@ -287,17 +284,15 @@ public class AdaptiveMediaImageProcessorTest {
 	}
 
 	private int _getVariantsCount() throws Exception {
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					TestPropsValues.getCompanyId());
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				TestPropsValues.getCompanyId());
 
-		return configurationEntries.size();
+		return amImageConfigurationEntries.size();
 	}
 
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
 	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AMImageFinder _amImageFinder;
 	private DLAppLocalService _dlAppLocalService;
 

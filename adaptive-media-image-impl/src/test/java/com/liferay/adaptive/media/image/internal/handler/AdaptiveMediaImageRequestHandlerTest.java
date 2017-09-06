@@ -19,12 +19,12 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.finder.AMQuery;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
@@ -76,18 +76,18 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		_requestHandler.setAMAsyncProcessorLocator(_amAsyncProcessorLocator);
 		_requestHandler.setAMImageFinder(_amImageFinder);
 		_requestHandler.setPathInterpreter(_pathInterpreter);
-		_requestHandler.setAdaptiveMediaImageConfigurationHelper(
-			_adaptiveMediaImageConfigurationHelper);
+		_requestHandler.setAMImageConfigurationHelper(
+			_amImageConfigurationHelper);
 	}
 
 	@Test(expected = AdaptiveMediaRuntimeException.class)
 	public void testFinderFailsWithMediaProcessorException() throws Exception {
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
+		AMImageConfigurationEntry amImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		HttpServletRequest request = _createRequestFor(
-			_fileVersion, configurationEntry);
+			_fileVersion, amImageConfigurationEntry);
 
 		Mockito.when(
 			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
@@ -100,12 +100,12 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 	@Test(expected = AdaptiveMediaRuntimeException.class)
 	public void testFinderFailsWithPortalException() throws Exception {
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
+		AMImageConfigurationEntry getConfigurationEntryFilter =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		HttpServletRequest request = _createRequestFor(
-			_fileVersion, configurationEntry);
+			_fileVersion, getConfigurationEntryFilter);
 
 		Mockito.when(
 			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
@@ -157,39 +157,42 @@ public class AdaptiveMediaImageRequestHandlerTest {
 	public void testReturnsTheClosestMatchByWidthIfNoExactMatchPresentAndRunsTheProcess()
 		throws Exception {
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
+		AMImageConfigurationEntry getConfigurationEntryFilter =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
-		AdaptiveMediaImageConfigurationEntry closestConfigurationEntry =
+		AMImageConfigurationEntry closestAMImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 201, 501);
 
-		AdaptiveMediaImageConfigurationEntry fartherConfigurationEntry =
+		AMImageConfigurationEntry fartherAMImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 301, 501);
 
-		AdaptiveMediaImageConfigurationEntry farthestConfigurationEntry =
+		AMImageConfigurationEntry farthestAMImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 401, 501);
 
 		AdaptiveMedia<AdaptiveMediaImageProcessor> closestAdaptiveMedia =
-			_createAdaptiveMedia(_fileVersion, closestConfigurationEntry);
+			_createAdaptiveMedia(
+				_fileVersion, closestAMImageConfigurationEntry);
 
 		AdaptiveMedia<AdaptiveMediaImageProcessor> fartherAdaptiveMedia =
-			_createAdaptiveMedia(_fileVersion, fartherConfigurationEntry);
+			_createAdaptiveMedia(
+				_fileVersion, fartherAMImageConfigurationEntry);
 
 		AdaptiveMedia<AdaptiveMediaImageProcessor> farthestAdaptiveMedia =
-			_createAdaptiveMedia(_fileVersion, farthestConfigurationEntry);
+			_createAdaptiveMedia(
+				_fileVersion, farthestAMImageConfigurationEntry);
 
 		_mockClosestMatch(
-			_fileVersion, configurationEntry,
+			_fileVersion, getConfigurationEntryFilter,
 			Arrays.asList(
 				farthestAdaptiveMedia, closestAdaptiveMedia,
 				fartherAdaptiveMedia));
 
 		HttpServletRequest request = _createRequestFor(
-			_fileVersion, configurationEntry);
+			_fileVersion, getConfigurationEntryFilter);
 
 		Assert.assertEquals(
 			Optional.of(closestAdaptiveMedia),
@@ -206,17 +209,17 @@ public class AdaptiveMediaImageRequestHandlerTest {
 	public void testReturnsTheExactMatchIfPresentAndDoesNotRunTheProcess()
 		throws Exception {
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
+		AMImageConfigurationEntry amImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia =
-			_createAdaptiveMedia(_fileVersion, configurationEntry);
+			_createAdaptiveMedia(_fileVersion, amImageConfigurationEntry);
 
-		_mockExactMatch(_fileVersion, configurationEntry, adaptiveMedia);
+		_mockExactMatch(_fileVersion, amImageConfigurationEntry, adaptiveMedia);
 
 		HttpServletRequest request = _createRequestFor(
-			_fileVersion, configurationEntry);
+			_fileVersion, amImageConfigurationEntry);
 
 		Assert.assertEquals(
 			Optional.of(adaptiveMedia), _requestHandler.handleRequest(request));
@@ -232,12 +235,12 @@ public class AdaptiveMediaImageRequestHandlerTest {
 	public void testReturnsTheRealImageIfThereAreNoAdaptiveMediasAndRunsTheProcess()
 		throws Exception {
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
+		AMImageConfigurationEntry amImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		HttpServletRequest request = _createRequestFor(
-			_fileVersion, configurationEntry);
+			_fileVersion, amImageConfigurationEntry);
 
 		Mockito.when(
 			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
@@ -281,7 +284,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 	private AdaptiveMedia<AdaptiveMediaImageProcessor> _createAdaptiveMedia(
 			FileVersion fileVersion,
-			AdaptiveMediaImageConfigurationEntry configurationEntry)
+			AMImageConfigurationEntry amImageConfigurationEntry)
 		throws Exception {
 
 		Map<String, String> properties = new HashMap<>();
@@ -291,7 +294,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 		properties.put(
 			configurationUuidAMAttribute.getName(),
-			configurationEntry.getUUID());
+			amImageConfigurationEntry.getUUID());
 
 		AMAttribute<Object, String> fileNameAMAttribute =
 			AMAttribute.getFileNameAMAttribute();
@@ -313,7 +316,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			String.valueOf(fileVersion.getSize()));
 
 		Map<String, String> configurationEntryProperties =
-			configurationEntry.getProperties();
+			amImageConfigurationEntry.getProperties();
 
 		properties.put(
 			AdaptiveMediaImageAttribute.IMAGE_WIDTH.getName(),
@@ -335,7 +338,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			null);
 	}
 
-	private AdaptiveMediaImageConfigurationEntry
+	private AMImageConfigurationEntry
 		_createAdaptiveMediaImageConfigurationEntry(
 			long companyId, int width, int height) {
 
@@ -347,24 +350,22 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		properties.put("max-height", String.valueOf(height));
 		properties.put("max-width", String.valueOf(width));
 
-		AdaptiveMediaImageConfigurationEntryImpl configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
-				uuid, uuid, properties);
+		AMImageConfigurationEntryImpl amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(uuid, uuid, properties);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					companyId, configurationEntry.getUUID())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				companyId, amImageConfigurationEntry.getUUID())
 		).thenReturn(
-			Optional.of(configurationEntry)
+			Optional.of(amImageConfigurationEntry)
 		);
 
-		return configurationEntry;
+		return amImageConfigurationEntry;
 	}
 
 	private HttpServletRequest _createRequestFor(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
@@ -376,7 +377,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 		Map<String, String> pathProperties = new HashMap<>();
 
-		pathProperties.put("configuration-uuid", configurationEntry.getUUID());
+		pathProperties.put(
+			"configuration-uuid", amImageConfigurationEntry.getUUID());
 
 		Mockito.when(
 			_pathInterpreter.interpretPath(request.getPathInfo())
@@ -425,7 +427,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 	private void _mockClosestMatch(
 			FileVersion fileVersion,
-			AdaptiveMediaImageConfigurationEntry configurationEntry,
+			AMImageConfigurationEntry amImageConfigurationEntry,
 			List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaList)
 		throws Exception {
 
@@ -454,7 +456,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 					AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
 
 				Map<String, String> properties =
-					configurationEntry.getProperties();
+					amImageConfigurationEntry.getProperties();
 
 				int configurationWidth = GetterUtil.getInteger(
 					properties.get("max-width"));
@@ -479,7 +481,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 	private void _mockExactMatch(
 			FileVersion fileVersion,
-			AdaptiveMediaImageConfigurationEntry configurationEntry,
+			AMImageConfigurationEntry amImageConfigurationEntry,
 			AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia)
 		throws Exception {
 
@@ -504,12 +506,14 @@ public class AdaptiveMediaImageRequestHandlerTest {
 				if (fileVersion.equals(
 						amImageQueryBuilderImpl.getFileVersion())) {
 
-					Predicate<AdaptiveMediaImageConfigurationEntry>
-						configurationEntryFilter =
+					Predicate<AMImageConfigurationEntry>
+						amImageConfigurationEntryFilter =
 							amImageQueryBuilderImpl.
 								getConfigurationEntryFilter();
 
-					if (configurationEntryFilter.test(configurationEntry)) {
+					if (amImageConfigurationEntryFilter.test(
+							amImageConfigurationEntry)) {
+
 						return Stream.of(adaptiveMedia);
 					}
 				}
@@ -519,13 +523,12 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		);
 	}
 
-	private final AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper = Mockito.mock(
-			AdaptiveMediaImageConfigurationHelper.class);
 	private final AMAsyncProcessor<FileVersion, ?> _amAsyncProcessor =
 		Mockito.mock(AMAsyncProcessor.class);
 	private final AMAsyncProcessorLocator _amAsyncProcessorLocator =
 		Mockito.mock(AMAsyncProcessorLocator.class);
+	private final AMImageConfigurationHelper _amImageConfigurationHelper =
+		Mockito.mock(AMImageConfigurationHelper.class);
 	private final AMImageFinder _amImageFinder = Mockito.mock(
 		AMImageFinder.class);
 	private FileVersion _fileVersion;

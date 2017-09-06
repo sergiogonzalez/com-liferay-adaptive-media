@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
 import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
@@ -55,35 +55,32 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 
 		resourceRequest.setAttribute(
 			AdaptiveMediaWebKeys.SELECTED_CONFIGURATION_ENTRIES,
-			_getSelectedAdaptiveMediaImageConfigurationEntries(
-				resourceRequest));
+			_getSelectedAMImageConfigurationEntries(resourceRequest));
 
 		resourceRequest.setAttribute(
 			AdaptiveMediaWebKeys.CONFIGURATION_ENTRIES_LIST,
-			_getAdaptiveMediaImageConfigurationEntries(resourceRequest));
+			_getAMImageConfigurationEntries(resourceRequest));
 
 		include(
 			resourceRequest, resourceResponse,
 			"/adaptive_media/info_panel.jsp");
 	}
 
-	private List<AdaptiveMediaImageConfigurationEntry>
-		_getAdaptiveMediaImageConfigurationEntries(
-			ResourceRequest resourceRequest) {
+	private List<AMImageConfigurationEntry> _getAMImageConfigurationEntries(
+		ResourceRequest resourceRequest) {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					themeDisplay.getCompanyId(), configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				themeDisplay.getCompanyId(), amImageConfigurationEntry -> true);
 
-		return new ArrayList<>(configurationEntries);
+		return new ArrayList<>(amImageConfigurationEntries);
 	}
 
-	private List<AdaptiveMediaImageConfigurationEntry>
-		_getSelectedAdaptiveMediaImageConfigurationEntries(
+	private List<AMImageConfigurationEntry>
+		_getSelectedAMImageConfigurationEntries(
 			ResourceRequest resourceRequest) {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
@@ -93,24 +90,23 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 			ParamUtil.getStringValues(
 				resourceRequest, "rowIdsAdaptiveMediaImageConfigurationEntry");
 
-		List<AdaptiveMediaImageConfigurationEntry> configurationEntries =
+		List<AMImageConfigurationEntry> amImageConfigurationEntries =
 			new ArrayList<>();
 
 		for (String entryUuid : rowIdsAdaptiveMediaImageConfigurationEntry) {
-			Optional<AdaptiveMediaImageConfigurationEntry>
-				configurationEntryOptional =
-					_adaptiveMediaImageConfigurationHelper.
-						getAdaptiveMediaImageConfigurationEntry(
-							themeDisplay.getCompanyId(), entryUuid);
+			Optional<AMImageConfigurationEntry>
+				amImageConfigurationEntryOptional =
+					_amImageConfigurationHelper.getAMImageConfigurationEntry(
+						themeDisplay.getCompanyId(), entryUuid);
 
-			configurationEntryOptional.ifPresent(configurationEntries::add);
+			amImageConfigurationEntryOptional.ifPresent(
+				amImageConfigurationEntries::add);
 		}
 
-		return configurationEntries;
+		return amImageConfigurationEntries;
 	}
 
 	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 }

@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.image.service;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -60,7 +61,7 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 	file version and configuration
 	*/
 	public static com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry addAdaptiveMediaImageEntry(
-		com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry configurationEntry,
 		com.liferay.portal.kernel.repository.model.FileVersion fileVersion,
 		int width, int height, java.io.InputStream inputStream, int size)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -288,7 +289,7 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 	version and configuration
 	*/
 	public static java.io.InputStream getAdaptiveMediaImageEntryContentStream(
-		com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry configurationEntry,
 		com.liferay.portal.kernel.repository.model.FileVersion fileVersion) {
 		return getService()
 				   .getAdaptiveMediaImageEntryContentStream(configurationEntry,
@@ -436,7 +437,7 @@ public class AdaptiveMediaImageEntryLocalServiceUtil {
 	media image
 	*/
 	public static void deleteAdaptiveMediaImageEntries(long companyId,
-		com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry configurationEntry) {
 		getService()
 			.deleteAdaptiveMediaImageEntries(companyId, configurationEntry);
 	}

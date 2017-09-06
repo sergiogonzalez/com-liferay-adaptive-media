@@ -23,16 +23,16 @@ portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
 
 boolean configurationEntryEditable = GetterUtil.getBoolean(request.getAttribute(AdaptiveMediaWebKeys.CONFIGURATION_ENTRY_EDITABLE));
-AdaptiveMediaImageConfigurationEntry configurationEntry = (AdaptiveMediaImageConfigurationEntry)request.getAttribute(AdaptiveMediaWebKeys.CONFIGURATION_ENTRY);
+AdaptiveMediaImageConfigurationEntry amImageConfigurationEntry = (AdaptiveMediaImageConfigurationEntry)request.getAttribute(AdaptiveMediaWebKeys.CONFIGURATION_ENTRY);
 
-String configurationEntryUuid = ParamUtil.getString(request, "uuid", (configurationEntry != null) ? configurationEntry.getUUID() : StringPool.BLANK);
+String configurationEntryUuid = ParamUtil.getString(request, "uuid", (amImageConfigurationEntry != null) ? amImageConfigurationEntry.getUUID() : StringPool.BLANK);
 
-renderResponse.setTitle((configurationEntry != null) ? configurationEntry.getName() : LanguageUtil.get(request, "new-image-resolution"));
+renderResponse.setTitle((amImageConfigurationEntry != null) ? amImageConfigurationEntry.getName() : LanguageUtil.get(request, "new-image-resolution"));
 
 Map<String, String> properties = null;
 
-if (configurationEntry != null) {
-	properties = configurationEntry.getProperties();
+if (amImageConfigurationEntry != null) {
+	properties = amImageConfigurationEntry.getProperties();
 }
 %>
 
@@ -65,9 +65,9 @@ if (configurationEntry != null) {
 
 				<div class="row">
 					<div class="col-md-6">
-						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" required="<%= true %>" value="<%= (configurationEntry != null) ? configurationEntry.getName() : StringPool.BLANK %>" />
+						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" required="<%= true %>" value="<%= (amImageConfigurationEntry != null) ? amImageConfigurationEntry.getName() : StringPool.BLANK %>" />
 
-						<aui:input name="description" type="textarea" value="<%= (configurationEntry != null) ? configurationEntry.getDescription() : StringPool.BLANK %>" />
+						<aui:input name="description" type="textarea" value="<%= (amImageConfigurationEntry != null) ? amImageConfigurationEntry.getDescription() : StringPool.BLANK %>" />
 					</div>
 				</div>
 
@@ -132,7 +132,7 @@ if (configurationEntry != null) {
 
 				<div class="row">
 					<div class="col-md-12">
-						<c:if test="<%= configurationEntry == null %>">
+						<c:if test="<%= amImageConfigurationEntry == null %>">
 							<aui:input label="add-a-resolution-for-high-density-displays" name="addHighResolution" type="checkbox" />
 						</c:if>
 					</div>
@@ -143,11 +143,11 @@ if (configurationEntry != null) {
 					<%
 					boolean automaticUuid;
 
-					if (configurationEntry == null) {
+					if (amImageConfigurationEntry == null) {
 						automaticUuid = Validator.isNull(configurationEntryUuid);
 					}
 					else {
-						automaticUuid = configurationEntryUuid.equals(FriendlyURLNormalizerUtil.normalize(configurationEntry.getName()));
+						automaticUuid = configurationEntryUuid.equals(FriendlyURLNormalizerUtil.normalize(amImageConfigurationEntry.getName()));
 					}
 
 					automaticUuid = ParamUtil.getBoolean(request, "automaticUuid", automaticUuid);

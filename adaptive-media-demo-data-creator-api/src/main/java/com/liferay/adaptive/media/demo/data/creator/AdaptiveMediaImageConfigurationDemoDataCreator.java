@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.demo.data.creator;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 
 import java.io.IOException;
 
@@ -28,7 +28,7 @@ import java.util.Collection;
 public interface AdaptiveMediaImageConfigurationDemoDataCreator {
 
 	/**
-	 * Creates a collection of {@link AdaptiveMediaImageConfigurationEntry}
+	 * Creates a collection of {@link AMImageConfigurationEntry}
 	 * configurations based on the {@link
 	 * DemoAdaptiveMediaImageConfigurationVariant} enum
 	 *
@@ -36,12 +36,11 @@ public interface AdaptiveMediaImageConfigurationDemoDataCreator {
 	 *         created
 	 * @return a list of the configurations
 	 */
-	public Collection<AdaptiveMediaImageConfigurationEntry> create(
-			long companyId)
+	public Collection<AMImageConfigurationEntry> create(long companyId)
 		throws IOException;
 
 	/**
-	 * Creates a {@link AdaptiveMediaImageConfigurationEntry} for a company
+	 * Creates a {@link AMImageConfigurationEntry} for a company
 	 *
 	 * @param  companyId ID of the company where the configuration will be
 	 *         created
@@ -49,7 +48,7 @@ public interface AdaptiveMediaImageConfigurationDemoDataCreator {
 	 *         create
 	 * @return the configuration
 	 */
-	public AdaptiveMediaImageConfigurationEntry create(
+	public AMImageConfigurationEntry create(
 			long companyId,
 			DemoAdaptiveMediaImageConfigurationVariant
 				demoAdaptiveMediaImageConfigurationVariant)

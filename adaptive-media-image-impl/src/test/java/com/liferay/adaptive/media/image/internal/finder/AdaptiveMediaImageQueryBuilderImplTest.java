@@ -15,9 +15,9 @@
 package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -75,15 +75,15 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 			"small"
 		);
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(), "small",
 				Collections.emptyMap(), true);
 
-		Predicate<AdaptiveMediaImageConfigurationEntry> filter =
+		Predicate<AMImageConfigurationEntry> filter =
 			_amImageQueryBuilderImpl.getConfigurationEntryFilter();
 
-		Assert.assertTrue(filter.test(configurationEntry));
+		Assert.assertTrue(filter.test(amImageConfigurationEntry));
 	}
 
 	@Test
@@ -96,15 +96,15 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 			"small"
 		);
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				StringUtil.randomString(), Collections.emptyMap(), true);
 
-		Predicate<AdaptiveMediaImageConfigurationEntry> filter =
+		Predicate<AMImageConfigurationEntry> filter =
 			_amImageQueryBuilderImpl.getConfigurationEntryFilter();
 
-		Assert.assertFalse(filter.test(configurationEntry));
+		Assert.assertFalse(filter.test(amImageConfigurationEntry));
 	}
 
 	@Test

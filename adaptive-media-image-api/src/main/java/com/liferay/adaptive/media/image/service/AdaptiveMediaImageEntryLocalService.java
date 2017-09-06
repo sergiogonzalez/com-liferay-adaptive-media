@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.service;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -68,7 +68,7 @@ public interface AdaptiveMediaImageEntryLocalService extends BaseLocalService,
 	* Adds an adaptive media image entry in the database and stores the image
 	* bytes in the file store.
 	*
-	* @param configurationEntry the configuration used to create the adaptive
+	* @param amImageConfigurationEntry the configuration used to create the adaptive
 	media image
 	* @param fileVersion the file version used to create the adaptive media
 	image
@@ -82,7 +82,7 @@ public interface AdaptiveMediaImageEntryLocalService extends BaseLocalService,
 	file version and configuration
 	*/
 	public AdaptiveMediaImageEntry addAdaptiveMediaImageEntry(
-		AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry amImageConfigurationEntry,
 		FileVersion fileVersion, int width, int height,
 		InputStream inputStream, int size) throws PortalException;
 
@@ -260,7 +260,7 @@ public interface AdaptiveMediaImageEntryLocalService extends BaseLocalService,
 	* Returns the input stream of the adaptive media image generated for a file
 	* version and configuration.
 	*
-	* @param configurationEntry the configuration used to create the adaptive
+	* @param amImageConfigurationEntry the configuration used to create the adaptive
 	media image
 	* @param fileVersion the file version used to create the adaptive media
 	image
@@ -269,7 +269,7 @@ public interface AdaptiveMediaImageEntryLocalService extends BaseLocalService,
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public InputStream getAdaptiveMediaImageEntryContentStream(
-		AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry amImageConfigurationEntry,
 		FileVersion fileVersion);
 
 	/**
@@ -383,11 +383,11 @@ public interface AdaptiveMediaImageEntryLocalService extends BaseLocalService,
 	* the database and the bytes from the file store.
 	*
 	* @param companyId the primary key of the company
-	* @param configurationEntry the configuration used to create the adaptive
+	* @param amImageConfigurationEntry the configuration used to create the adaptive
 	media image
 	*/
 	public void deleteAdaptiveMediaImageEntries(long companyId,
-		AdaptiveMediaImageConfigurationEntry configurationEntry);
+		AMImageConfigurationEntry amImageConfigurationEntry);
 
 	/**
 	* Deletes all the adaptive media images generated for a file version. This

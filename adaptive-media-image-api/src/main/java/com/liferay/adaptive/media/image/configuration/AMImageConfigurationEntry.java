@@ -21,13 +21,13 @@ import java.util.Map;
  * adaptive media images. Image configuration entries are company scoped.
  *
  * <p>
- * It is recommended that you use {@link AdaptiveMediaImageConfigurationHelper}
+ * It is recommended that you use {@link AMImageConfigurationHelper}
  * to manage and fetch image configuration entries.
  * </p>
  *
  * @author Alejandro Hernández
  */
-public interface AdaptiveMediaImageConfigurationEntry {
+public interface AMImageConfigurationEntry {
 
 	/**
 	 * Returns the image configuration entry's description.

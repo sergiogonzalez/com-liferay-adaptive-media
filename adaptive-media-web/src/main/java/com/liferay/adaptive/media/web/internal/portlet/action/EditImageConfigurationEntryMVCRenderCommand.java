@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
 import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebKeys;
@@ -55,23 +55,21 @@ public class EditImageConfigurationEntryMVCRenderCommand
 
 		String entryUuid = ParamUtil.getString(renderRequest, "entryUuid");
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional =
-				_adaptiveMediaImageConfigurationHelper.
-					getAdaptiveMediaImageConfigurationEntry(
-						themeDisplay.getCompanyId(), entryUuid);
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				themeDisplay.getCompanyId(), entryUuid);
 
 		boolean configurationEntryEditable = true;
 
-		if (configurationEntryOptional.isPresent()) {
-			AdaptiveMediaImageConfigurationEntry configurationEntry =
-				configurationEntryOptional.get();
+		if (amImageConfigurationEntryOptional.isPresent()) {
+			AMImageConfigurationEntry amImageConfigurationEntry =
+				amImageConfigurationEntryOptional.get();
 
 			int entriesCount =
 				_adaptiveMediaImageEntryLocalService.
 					getAdaptiveMediaImageEntriesCount(
 						themeDisplay.getCompanyId(),
-						configurationEntry.getUUID());
+						amImageConfigurationEntry.getUUID());
 
 			if (entriesCount != 0) {
 				configurationEntryEditable = false;
@@ -80,7 +78,7 @@ public class EditImageConfigurationEntryMVCRenderCommand
 
 		renderRequest.setAttribute(
 			AdaptiveMediaWebKeys.CONFIGURATION_ENTRY,
-			configurationEntryOptional.orElse(null));
+			amImageConfigurationEntryOptional.orElse(null));
 
 		renderRequest.setAttribute(
 			AdaptiveMediaWebKeys.CONFIGURATION_ENTRY_EDITABLE,
@@ -90,11 +88,10 @@ public class EditImageConfigurationEntryMVCRenderCommand
 	}
 
 	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
-
-	@Reference
 	private AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService;
+
+	@Reference
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 }

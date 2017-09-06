@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.image.internal.util;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.internal.processor.util.TiffOrientationTransformer;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -48,13 +48,14 @@ public class ImageProcessor {
 
 	public RenderedImage scaleImage(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		try {
 			RenderedImage renderedImage = _tiffOrientationTransformer.transform(
 				() -> _getInputStream(fileVersion));
 
-			Map<String, String> properties = configurationEntry.getProperties();
+			Map<String, String> properties =
+				amImageConfigurationEntry.getProperties();
 
 			int maxHeight = GetterUtil.getInteger(properties.get("max-height"));
 			int maxWidth = GetterUtil.getInteger(properties.get("max-width"));

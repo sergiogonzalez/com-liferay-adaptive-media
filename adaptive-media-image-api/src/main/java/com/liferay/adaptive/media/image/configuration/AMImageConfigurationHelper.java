@@ -27,14 +27,14 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * Manages and fetches an {@link AdaptiveMediaImageConfigurationEntry}. This
+ * Manages and fetches an {@link AMImageConfigurationEntry}. This
  * interface is the preferred mechanism to interact with image configuration
  * entries.
  *
  * @author Alejandro Hernández
  */
 @ProviderType
-public interface AdaptiveMediaImageConfigurationHelper {
+public interface AMImageConfigurationHelper {
 
 	/**
 	 * Adds a new image configuration entry.
@@ -51,10 +51,9 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @throws IOException if there was an issue when persisting the new image
 	 *         configuration entry in the store
 	 */
-	public AdaptiveMediaImageConfigurationEntry
-			addAdaptiveMediaImageConfigurationEntry(
-				long companyId, String name, String description, String uuid,
-				Map<String, String> properties)
+	public AMImageConfigurationEntry addAMImageConfigurationEntry(
+			long companyId, String name, String description, String uuid,
+			Map<String, String> properties)
 		throws AdaptiveMediaImageConfigurationException, IOException;
 
 	/**
@@ -69,8 +68,7 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @throws IOException if there was an issue when deleting the image
 	 *         configuration entry from the store
 	 */
-	public void deleteAdaptiveMediaImageConfigurationEntry(
-			long companyId, String uuid)
+	public void deleteAMImageConfigurationEntry(long companyId, String uuid)
 		throws InvalidStateAdaptiveMediaImageConfigurationException,
 			IOException;
 
@@ -84,8 +82,7 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @throws IOException if there was an issue when updating the image
 	 *         configuration entry from the store
 	 */
-	public void disableAdaptiveMediaImageConfigurationEntry(
-			long companyId, String uuid)
+	public void disableAMImageConfigurationEntry(long companyId, String uuid)
 		throws IOException;
 
 	/**
@@ -98,8 +95,7 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @throws IOException if there was an issue when updating the image
 	 *         configuration entry from the store
 	 */
-	public void enableAdaptiveMediaImageConfigurationEntry(
-			long companyId, String uuid)
+	public void enableAMImageConfigurationEntry(long companyId, String uuid)
 		throws IOException;
 
 	/**
@@ -113,7 +109,7 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @throws IOException if there was an issue when deleting the image
 	 *         configuration entry from the store
 	 */
-	public void forceDeleteAdaptiveMediaImageConfigurationEntry(
+	public void forceDeleteAMImageConfigurationEntry(
 			long companyId, String uuid)
 		throws IOException;
 
@@ -124,8 +120,8 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @param  companyId the primary key of the company
 	 * @return the collection of enabled image configuration entries
 	 */
-	public Collection<AdaptiveMediaImageConfigurationEntry>
-		getAdaptiveMediaImageConfigurationEntries(long companyId);
+	public Collection<AMImageConfigurationEntry> getAMImageConfigurationEntries(
+		long companyId);
 
 	/**
 	 * Returns a collection of image configuration entries filtered by the given
@@ -135,10 +131,8 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @param  predicate the predicate used to filter the collection
 	 * @return the filtered collection of image configuration entries
 	 */
-	public Collection<AdaptiveMediaImageConfigurationEntry>
-		getAdaptiveMediaImageConfigurationEntries(
-			long companyId,
-			Predicate<? super AdaptiveMediaImageConfigurationEntry> predicate);
+	public Collection<AMImageConfigurationEntry> getAMImageConfigurationEntries(
+		long companyId, Predicate<? super AMImageConfigurationEntry> predicate);
 
 	/**
 	 * Returns an optional image configuration entry for the given company and
@@ -148,9 +142,8 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @param  configurationEntryUUID the image configuration entry's UUID
 	 * @return an optional image configuration entry
 	 */
-	public Optional<AdaptiveMediaImageConfigurationEntry>
-		getAdaptiveMediaImageConfigurationEntry(
-			long companyId, String configurationEntryUUID);
+	public Optional<AMImageConfigurationEntry> getAMImageConfigurationEntry(
+		long companyId, String configurationEntryUUID);
 
 	/**
 	 * Updates an existing image configuration entry.
@@ -168,10 +161,9 @@ public interface AdaptiveMediaImageConfigurationHelper {
 	 * @throws IOException if there was an issue when persisting the new image
 	 *         configuration entry in the store
 	 */
-	public AdaptiveMediaImageConfigurationEntry
-			updateAdaptiveMediaImageConfigurationEntry(
-				long companyId, String oldUuid, String name, String description,
-				String newUuid, Map<String, String> properties)
+	public AMImageConfigurationEntry updateAMImageConfigurationEntry(
+			long companyId, String oldUuid, String name, String description,
+			String newUuid, Map<String, String> properties)
 		throws AdaptiveMediaImageConfigurationException, IOException;
 
 }

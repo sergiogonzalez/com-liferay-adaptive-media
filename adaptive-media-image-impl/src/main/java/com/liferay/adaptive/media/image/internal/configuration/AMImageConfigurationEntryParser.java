@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -61,7 +61,7 @@ import org.osgi.service.component.annotations.Component;
  * </li>
  * <li>
  * The key and value pairs can be anything, but consumers of the resulting
- * {@link AdaptiveMediaImageConfigurationEntry} may require a particular set of
+ * {@link AMImageConfigurationEntry} may require a particular set of
  * attributes.
  * </li>
  * <li>
@@ -73,24 +73,24 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Adolfo Pérez
  */
-@Component(
-	immediate = true, service = AdaptiveMediaImageConfigurationEntryParser.class
-)
-public class AdaptiveMediaImageConfigurationEntryParser {
+@Component(immediate = true, service = AMImageConfigurationEntryParser.class)
+public class AMImageConfigurationEntryParser {
 
 	public String getConfigurationString(
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		StringBundler sb = new StringBundler();
 
-		sb.append(HttpUtil.encodeURL(configurationEntry.getName()));
+		sb.append(HttpUtil.encodeURL(amImageConfigurationEntry.getName()));
 		sb.append(StringPool.COLON);
-		sb.append(HttpUtil.encodeURL(configurationEntry.getDescription()));
+		sb.append(
+			HttpUtil.encodeURL(amImageConfigurationEntry.getDescription()));
 		sb.append(StringPool.COLON);
-		sb.append(configurationEntry.getUUID());
+		sb.append(amImageConfigurationEntry.getUUID());
 		sb.append(StringPool.COLON);
 
-		Map<String, String> properties = configurationEntry.getProperties();
+		Map<String, String> properties =
+			amImageConfigurationEntry.getProperties();
 
 		if (properties.get("max-height") != null) {
 			int height = GetterUtil.getInteger(properties.get("max-height"));
@@ -113,7 +113,7 @@ public class AdaptiveMediaImageConfigurationEntryParser {
 		sb.append(StringPool.COLON);
 
 		sb.append("enabled=");
-		sb.append(String.valueOf(configurationEntry.isEnabled()));
+		sb.append(String.valueOf(amImageConfigurationEntry.isEnabled()));
 
 		return sb.toString();
 	}
@@ -122,9 +122,9 @@ public class AdaptiveMediaImageConfigurationEntryParser {
 	 * Returns a configuration entry parsed from the configuration line's data.
 	 *
 	 * @param  s the configuration line to parse
-	 * @return a {@link AdaptiveMediaImageConfigurationEntry} with the line data
+	 * @return a {@link AMImageConfigurationEntry} with the line data
 	 */
-	public AdaptiveMediaImageConfigurationEntry parse(String s) {
+	public AMImageConfigurationEntry parse(String s) {
 		if (Validator.isNull(s)) {
 			throw new IllegalArgumentException(
 				"Invalid image adaptive media configuration: " + s);
@@ -179,7 +179,7 @@ public class AdaptiveMediaImageConfigurationEntryParser {
 			enabled = GetterUtil.getBoolean(matcher.group(1));
 		}
 
-		return new AdaptiveMediaImageConfigurationEntryImpl(
+		return new AMImageConfigurationEntryImpl(
 			name, description, uuid, properties, enabled);
 	}
 

@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.HashMap;
@@ -23,16 +23,16 @@ import java.util.Map;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageConfigurationEntryImpl
-	implements AdaptiveMediaImageConfigurationEntry {
+public class AMImageConfigurationEntryImpl
+	implements AMImageConfigurationEntry {
 
-	public AdaptiveMediaImageConfigurationEntryImpl(
+	public AMImageConfigurationEntryImpl(
 		String name, String uuid, Map<String, String> properties) {
 
 		this(name, StringPool.BLANK, uuid, properties, true);
 	}
 
-	public AdaptiveMediaImageConfigurationEntryImpl(
+	public AMImageConfigurationEntryImpl(
 		String name, String description, String uuid,
 		Map<String, String> properties, boolean enabled) {
 
@@ -45,12 +45,12 @@ public class AdaptiveMediaImageConfigurationEntryImpl
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof AdaptiveMediaImageConfigurationEntryImpl)) {
+		if (!(obj instanceof AMImageConfigurationEntryImpl)) {
 			return false;
 		}
 
-		AdaptiveMediaImageConfigurationEntryImpl other =
-			(AdaptiveMediaImageConfigurationEntryImpl)obj;
+		AMImageConfigurationEntryImpl other =
+			(AMImageConfigurationEntryImpl)obj;
 
 		if (_name.equals(other._name) && _uuid.equals(other._uuid) &&
 			(_enabled == other._enabled) &&

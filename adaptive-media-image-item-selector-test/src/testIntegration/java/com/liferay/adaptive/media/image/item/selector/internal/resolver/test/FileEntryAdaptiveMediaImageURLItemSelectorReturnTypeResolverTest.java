@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.item.selector.internal.resolver.test;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -78,8 +78,8 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest {
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		_adaptiveMediaImageConfigurationHelper = _getService(
-			AdaptiveMediaImageConfigurationHelper.class);
+		_amImageConfigurationHelper = _getService(
+			AMImageConfigurationHelper.class);
 		_dlAppLocalService = _getService(DLAppLocalService.class);
 
 		_resolver = _getService(
@@ -87,35 +87,33 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest {
 
 		ServiceTestUtil.setUser(TestPropsValues.getUser());
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					TestPropsValues.getCompanyId(), configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry -> true);
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
-			_adaptiveMediaImageConfigurationHelper.
-				forceDeleteAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(),
-					configurationEntry.getUUID());
+			_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry.getUUID());
 		}
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					TestPropsValues.getCompanyId(), configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry -> true);
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
-			_adaptiveMediaImageConfigurationHelper.
-				forceDeleteAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(),
-					configurationEntry.getUUID());
+			_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry.getUUID());
 		}
 	}
 
@@ -615,10 +613,9 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest {
 		properties.put("max-height", String.valueOf(height));
 		properties.put("max-width", String.valueOf(width));
 
-		_adaptiveMediaImageConfigurationHelper.
-			addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), name, StringPool.BLANK, uuid,
-				properties);
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), name, StringPool.BLANK, uuid,
+			properties);
 	}
 
 	private void _assertAttibutes(
@@ -740,8 +737,7 @@ public class FileEntryAdaptiveMediaImageURLItemSelectorReturnTypeResolverTest {
 			"internal.resolver.FileEntryAdaptiveMediaImageURLItem" +
 				"SelectorReturnTypeResolver)";
 
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private DLAppLocalService _dlAppLocalService;
 
 	@DeleteAfterTestRun

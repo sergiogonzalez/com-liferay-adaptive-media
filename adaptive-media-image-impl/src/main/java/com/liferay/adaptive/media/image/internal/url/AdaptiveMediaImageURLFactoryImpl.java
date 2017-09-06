@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.url;
 
 import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
@@ -40,11 +40,12 @@ public class AdaptiveMediaImageURLFactoryImpl
 	@Override
 	public URI createFileEntryURL(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		String relativeURI = String.format(
 			"image/%d/%s/%s", fileVersion.getFileEntryId(),
-			configurationEntry.getUUID(), _encode(fileVersion.getFileName()));
+			amImageConfigurationEntry.getUUID(),
+			_encode(fileVersion.getFileName()));
 
 		return _uriResolver.resolveURI(URI.create(relativeURI));
 	}
@@ -52,11 +53,11 @@ public class AdaptiveMediaImageURLFactoryImpl
 	@Override
 	public URI createFileVersionURL(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		String relativeURI = String.format(
 			"image/%d/%d/%s/%s", fileVersion.getFileEntryId(),
-			fileVersion.getFileVersionId(), configurationEntry.getUUID(),
+			fileVersion.getFileVersionId(), amImageConfigurationEntry.getUUID(),
 			_encode(fileVersion.getFileName()));
 
 		return _uriResolver.resolveURI(URI.create(relativeURI));
