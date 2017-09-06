@@ -23,7 +23,7 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
@@ -195,7 +195,7 @@ public class AMImageFinderImpl implements AMImageFinder {
 		AMImageAttributeMapping amImageAttributeMapping =
 			AMImageAttributeMapping.fromProperties(properties);
 
-		return new AdaptiveMediaImage(
+		return new AMImage(
 			() ->
 				_imageEntryLocalService.getAdaptiveMediaImageEntryContentStream(
 					amImageConfigurationEntry, fileVersion),

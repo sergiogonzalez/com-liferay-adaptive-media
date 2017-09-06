@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
@@ -69,7 +69,7 @@ public class AdaptiveMediaImageSerializerImpl
 
 			String uri = jsonObject.getString("uri");
 
-			return new AdaptiveMediaImage(
+			return new AMImage(
 				inputStreamSupplier,
 				AMImageAttributeMapping.fromProperties(properties),
 				URI.create(uri));

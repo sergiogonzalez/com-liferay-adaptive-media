@@ -37,7 +37,7 @@ import org.mockito.Mockito;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageQueryBuilderImplTest {
+public class AMImageQueryBuilderImplTest {
 
 	@Test
 	public void testFileEntryQueryReturnsLatestFileVersion() throws Exception {

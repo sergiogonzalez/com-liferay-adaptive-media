@@ -23,7 +23,7 @@ import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
@@ -705,7 +705,7 @@ public class MediaQueryProviderImplTest {
 			AMAttribute.getConfigurationUuidAMAttribute().getName(),
 			adaptiveMediaImageConfigurationEntryUuid);
 
-		return new AdaptiveMediaImage(
+		return new AMImage(
 			() -> null, AMImageAttributeMapping.fromProperties(properties),
 			URI.create(url));
 	}

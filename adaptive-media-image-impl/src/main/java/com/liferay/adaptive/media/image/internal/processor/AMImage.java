@@ -29,10 +29,9 @@ import java.util.function.Supplier;
 /**
  * @author Adolfo Pérez
  */
-public final class AdaptiveMediaImage
-	implements AdaptiveMedia<AMImageProcessor> {
+public final class AMImage implements AdaptiveMedia<AMImageProcessor> {
 
-	public AdaptiveMediaImage(
+	public AMImage(
 		Supplier<InputStream> supplier,
 		AMImageAttributeMapping amImageAttributeMapping, URI uri) {
 

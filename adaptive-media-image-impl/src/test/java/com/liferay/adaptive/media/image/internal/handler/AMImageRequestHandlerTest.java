@@ -26,7 +26,7 @@ import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
@@ -59,7 +59,7 @@ import org.mockito.Mockito;
  * @author Adolfo Pérez
  * @author Alejandro Tardín
  */
-public class AdaptiveMediaImageRequestHandlerTest {
+public class AMImageRequestHandlerTest {
 
 	@Before
 	public void setUp() throws PortalException {
@@ -325,7 +325,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			AMImageAttribute.IMAGE_HEIGHT.getName(),
 			configurationEntryProperties.get("max-height"));
 
-		return new AdaptiveMediaImage(
+		return new AMImage(
 			() -> {
 				try {
 					return fileVersion.getContentStream(false);

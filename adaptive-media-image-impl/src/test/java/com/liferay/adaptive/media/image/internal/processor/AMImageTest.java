@@ -32,17 +32,17 @@ import org.mockito.Mockito;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageTest {
+public class AMImageTest {
 
 	@Test
 	public void testGetAttributeDelegatesOnMapping() {
 		AMImageAttributeMapping amImageAttributeMapping = Mockito.mock(
 			AMImageAttributeMapping.class);
 
-		AdaptiveMediaImage adaptiveMedia = new AdaptiveMediaImage(
+		AMImage amImage = new AMImage(
 			() -> null, amImageAttributeMapping, URI.create("/"));
 
-		adaptiveMedia.getValueOptional(AMImageAttribute.IMAGE_HEIGHT);
+		amImage.getValueOptional(AMImageAttribute.IMAGE_HEIGHT);
 
 		Mockito.verify(
 			amImageAttributeMapping
@@ -60,10 +60,10 @@ public class AdaptiveMediaImageTest {
 		AMImageAttributeMapping amImageAttributeMapping =
 			AMImageAttributeMapping.fromProperties(Collections.emptyMap());
 
-		AdaptiveMediaImage adaptiveMedia = new AdaptiveMediaImage(
+		AMImage amImage = new AMImage(
 			supplier, amImageAttributeMapping, URI.create("/"));
 
-		Assert.assertEquals(inputStream, adaptiveMedia.getInputStream());
+		Assert.assertEquals(inputStream, amImage.getInputStream());
 	}
 
 }

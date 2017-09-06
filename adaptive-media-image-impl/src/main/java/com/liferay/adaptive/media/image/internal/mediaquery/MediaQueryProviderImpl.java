@@ -19,7 +19,7 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.mediaquery.MediaQueryProvider;
@@ -143,7 +143,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 			AMImageAttribute.IMAGE_HEIGHT.getName(),
 			String.valueOf(heightOptional.orElse(0)));
 
-		return new AdaptiveMediaImage(
+		return new AMImage(
 			() -> null, AMImageAttributeMapping.fromProperties(properties),
 			_getFileEntryURL(fileEntry, amImageConfigurationEntry));
 	}

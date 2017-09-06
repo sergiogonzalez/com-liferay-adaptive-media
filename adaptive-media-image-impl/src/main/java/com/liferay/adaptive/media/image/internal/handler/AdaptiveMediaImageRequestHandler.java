@@ -22,7 +22,7 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
@@ -131,7 +131,7 @@ public class AdaptiveMediaImageRequestHandler
 			contentLengthAMAttribute.getName(),
 			String.valueOf(fileVersion.getSize()));
 
-		return new AdaptiveMediaImage(
+		return new AMImage(
 			() -> {
 				try {
 					return fileVersion.getContentStream(false);

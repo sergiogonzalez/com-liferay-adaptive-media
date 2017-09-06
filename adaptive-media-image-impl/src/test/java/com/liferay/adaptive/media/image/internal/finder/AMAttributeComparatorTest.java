@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
-import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
 import java.util.Collections;
@@ -146,8 +146,7 @@ public class AMAttributeComparatorTest {
 		AMImageAttributeMapping amImageAttributeMapping =
 			AMImageAttributeMapping.fromProperties(properties);
 
-		return new AdaptiveMediaImage(
-			() -> null, amImageAttributeMapping, null);
+		return new AMImage(() -> null, amImageAttributeMapping, null);
 	}
 
 	private <T> AdaptiveMedia<AMImageProcessor> _createMedia(
@@ -158,8 +157,7 @@ public class AMAttributeComparatorTest {
 				Collections.singletonMap(
 					amAttribute.getName(), String.valueOf(value)));
 
-		return new AdaptiveMediaImage(
-			() -> null, amImageAttributeMapping, null);
+		return new AMImage(() -> null, amImageAttributeMapping, null);
 	}
 
 	private AMAttributeComparator _multiAMAttributeComparator;

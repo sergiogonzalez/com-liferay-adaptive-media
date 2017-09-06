@@ -54,7 +54,7 @@ import org.mockito.Mockito;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageFinderImplTest {
+public class AMImageFinderImplTest {
 
 	@Before
 	public void setUp() {
