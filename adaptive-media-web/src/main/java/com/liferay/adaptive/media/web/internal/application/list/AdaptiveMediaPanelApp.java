@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.application.list;
 
-import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
+import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.application.list.BasePanelApp;
 import com.liferay.application.list.PanelApp;
 import com.liferay.application.list.constants.PanelCategoryKeys;
@@ -40,7 +40,7 @@ public class AdaptiveMediaPanelApp extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
-		return AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA;
+		return AMPortletKeys.ADAPTIVE_MEDIA;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class AdaptiveMediaPanelApp extends BasePanelApp {
 
 	@Override
 	@Reference(
-		target = "(javax.portlet.name=" + AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA + ")",
+		target = "(javax.portlet.name=" + AMPortletKeys.ADAPTIVE_MEDIA + ")",
 		unbind = "-"
 	)
 	public void setPortlet(Portlet portlet) {

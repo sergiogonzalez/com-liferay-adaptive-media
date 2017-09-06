@@ -30,7 +30,6 @@ page import="com.liferay.adaptive.media.image.configuration.AMImageConfiguration
 page import="com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalServiceUtil" %><%@
 page import="com.liferay.adaptive.media.web.internal.background.task.OptimizeImagesAllConfigurationsBackgroundTaskExecutor" %><%@
 page import="com.liferay.adaptive.media.web.internal.background.task.OptimizeImagesSingleConfigurationBackgroundTaskExecutor" %><%@
-page import="com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebKeys" %><%@
 page import="com.liferay.adaptive.media.web.internal.search.ImageConfigurationEntriesChecker" %><%@
 page import="com.liferay.portal.kernel.backgroundtask.BackgroundTask" %><%@
 page import="com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants" %><%@

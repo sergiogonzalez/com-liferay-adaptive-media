@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.web.internal.portlet.configuration.icon;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
+import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.adaptive.media.web.internal.background.task.OptimizeImagesAllConfigurationsBackgroundTaskExecutor;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = {"javax.portlet.name=" + AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA},
+	property = {"javax.portlet.name=" + AMPortletKeys.ADAPTIVE_MEDIA},
 	service = PortletConfigurationIcon.class
 )
 public class OptimizeImagesPortletConfigurationIcon
@@ -78,7 +78,7 @@ public class OptimizeImagesPortletConfigurationIcon
 		PortletRequest portletRequest, PortletResponse portletResponse) {
 
 		PortletURL portletURL = _portal.getControlPanelPortletURL(
-			portletRequest, AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA,
+			portletRequest, AMPortletKeys.ADAPTIVE_MEDIA,
 			PortletRequest.ACTION_PHASE);
 
 		portletURL.setParameter(

@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.document.library.web.internal.counter;
 
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
@@ -71,8 +71,7 @@ public class DLAMImageCounter implements AMImageCounter {
 		Property mimeTypeProperty = PropertyFactoryUtil.forName("mimeType");
 
 		dlFileEntryEntryDynamicQuery.add(
-			mimeTypeProperty.in(
-				AdaptiveMediaImageConstants.getSupportedMimeTypes()));
+			mimeTypeProperty.in(AMImageConstants.getSupportedMimeTypes()));
 
 		Property fileEntryIdProperty = PropertyFactoryUtil.forName(
 			"fileEntryId");

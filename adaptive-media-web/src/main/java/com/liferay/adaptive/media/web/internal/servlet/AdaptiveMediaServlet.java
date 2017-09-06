@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaException;
 import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
-import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebConstants;
+import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
@@ -48,7 +48,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"osgi.http.whiteboard.servlet.name=com.liferay.adaptive.media.web.internal.servlet.AdaptiveMediaServlet",
-		"osgi.http.whiteboard.servlet.pattern=/" + AdaptiveMediaWebConstants.SERVLET_PATH + "/*",
+		"osgi.http.whiteboard.servlet.pattern=/" + AMWebConstants.SERVLET_PATH + "/*",
 		"servlet.init.httpMethods=GET,HEAD"
 	},
 	service = Servlet.class

@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageConstants {
+public class AMImageConstants {
 
 	public static final Set<String> getSupportedMimeTypes() {
 		return _supportedMimeTypes;

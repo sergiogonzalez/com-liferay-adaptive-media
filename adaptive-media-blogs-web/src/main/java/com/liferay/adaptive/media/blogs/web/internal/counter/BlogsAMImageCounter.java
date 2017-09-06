@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.blogs.web.internal.counter;
 
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
@@ -54,8 +54,7 @@ public class BlogsAMImageCounter implements AMImageCounter {
 		Property mimeTypeProperty = PropertyFactoryUtil.forName("mimeType");
 
 		dynamicQuery.add(
-			mimeTypeProperty.in(
-				AdaptiveMediaImageConstants.getSupportedMimeTypes()));
+			mimeTypeProperty.in(AMImageConstants.getSupportedMimeTypes()));
 
 		return (int)_dlFileEntryLocalService.dynamicQueryCount(dynamicQuery);
 	}

@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.web.internal.processor;
 
 import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
-import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebConstants;
+import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -61,8 +61,7 @@ public class DefaultAdaptiveMediaURIResolverTest {
 		String uriString = uri.toString();
 
 		Assert.assertTrue(uriString.contains(pathModule));
-		Assert.assertTrue(
-			uriString.contains(AdaptiveMediaWebConstants.SERVLET_PATH));
+		Assert.assertTrue(uriString.contains(AMWebConstants.SERVLET_PATH));
 		Assert.assertTrue(uriString.contains(relativeURI.toString()));
 	}
 
@@ -84,8 +83,7 @@ public class DefaultAdaptiveMediaURIResolverTest {
 		String uriString = uri.toString();
 
 		Assert.assertTrue(uriString.contains(pathModule));
-		Assert.assertTrue(
-			uriString.contains(AdaptiveMediaWebConstants.SERVLET_PATH));
+		Assert.assertTrue(uriString.contains(AMWebConstants.SERVLET_PATH));
 		Assert.assertTrue(uriString.contains(relativeURI.toString()));
 	}
 

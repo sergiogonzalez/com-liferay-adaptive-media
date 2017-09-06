@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.web.internal.constants;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaWebConstants {
+public class AMWebConstants {
 
 	public static final String SERVLET_PATH = "adaptive-media";
 

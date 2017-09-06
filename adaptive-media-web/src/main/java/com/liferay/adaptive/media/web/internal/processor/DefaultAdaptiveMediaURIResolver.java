@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.web.internal.processor;
 
 import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
-import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebConstants;
+import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -40,8 +40,7 @@ public class DefaultAdaptiveMediaURIResolver
 		}
 
 		String servletPath =
-			pathModule + AdaptiveMediaWebConstants.SERVLET_PATH +
-				StringPool.SLASH;
+			pathModule + AMWebConstants.SERVLET_PATH + StringPool.SLASH;
 
 		URI moduleURI = URI.create(servletPath);
 

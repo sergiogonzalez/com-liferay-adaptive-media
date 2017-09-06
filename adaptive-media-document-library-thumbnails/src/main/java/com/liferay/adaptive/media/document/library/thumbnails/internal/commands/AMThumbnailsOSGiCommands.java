@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.commands
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -269,7 +269,7 @@ public class AMThumbnailsOSGiCommands {
 
 	private boolean _isMimeTypeSupported(FileVersion fileVersion) {
 		Set<String> supportedMimeTypes =
-			AdaptiveMediaImageConstants.getSupportedMimeTypes();
+			AMImageConstants.getSupportedMimeTypes();
 
 		return supportedMimeTypes.contains(fileVersion.getMimeType());
 	}

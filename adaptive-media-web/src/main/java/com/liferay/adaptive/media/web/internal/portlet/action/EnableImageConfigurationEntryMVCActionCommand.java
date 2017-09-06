@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.web.internal.portlet.action;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
+import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA,
+		"javax.portlet.name=" + AMPortletKeys.ADAPTIVE_MEDIA,
 		"mvc.command.name=/adaptive_media/enable_image_configuration_entry"
 	},
 	service = MVCActionCommand.class

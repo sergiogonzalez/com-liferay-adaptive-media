@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.util;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.internal.processor.util.TiffOrientationTransformer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageToolUtil;
@@ -41,7 +41,7 @@ public class ImageProcessor {
 
 	public boolean isMimeTypeSupported(String mimeType) {
 		Set<String> supportedMimeTypes =
-			AdaptiveMediaImageConstants.getSupportedMimeTypes();
+			AMImageConstants.getSupportedMimeTypes();
 
 		return supportedMimeTypes.contains(mimeType);
 	}

@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
-import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
+import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA,
+		"javax.portlet.name=" + AMPortletKeys.ADAPTIVE_MEDIA,
 		"mvc.command.name=/adaptive_media/adapted_images_percentage"
 	},
 	service = MVCResourceCommand.class

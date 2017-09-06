@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.blogs.web.internal.optimizer;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
@@ -114,8 +114,7 @@ public class BlogsAMImageOptimizer implements AMImageOptimizer {
 
 					dynamicQuery.add(
 						mimeTypeProperty.in(
-							AdaptiveMediaImageConstants.
-								getSupportedMimeTypes()));
+							AMImageConstants.getSupportedMimeTypes()));
 				}
 
 			});

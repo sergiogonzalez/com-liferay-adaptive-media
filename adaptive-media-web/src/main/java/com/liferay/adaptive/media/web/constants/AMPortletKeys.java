@@ -12,22 +12,14 @@
  * details.
  */
 
-package com.liferay.adaptive.media.web.internal.constants;
+package com.liferay.adaptive.media.web.constants;
 
 /**
  * @author Sergio González
  */
-public class AdaptiveMediaWebKeys {
+public class AMPortletKeys {
 
-	public static final String CONFIGURATION_ENTRIES_LIST =
-		"CONFIGURATION_ENTRIES_LIST";
-
-	public static final String CONFIGURATION_ENTRY = "CONFIGURATION_ENTRY";
-
-	public static final String CONFIGURATION_ENTRY_EDITABLE =
-		"CONFIGURATION_ENTRY_EDITABLE";
-
-	public static final String SELECTED_CONFIGURATION_ENTRIES =
-		"SELECTED_CONFIGURATION_ENTRIES";
+	public static final String ADAPTIVE_MEDIA =
+		"com_liferay_adaptive_media_web_portlet_AdaptiveMediaPortlet";
 
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.servlet.filter;
 
-import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebConstants;
+import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.servlet.filters.authverifier.AuthVerifierFilter;
 
 import javax.servlet.Filter;
@@ -27,10 +27,10 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	property = {
-		"filter.init.auth.verifier.OAuthVerifier.urls.includes=/" + AdaptiveMediaWebConstants.SERVLET_PATH + "/*",
-		"filter.init.auth.verifier.SyncAuthVerifier.urls.includes=/" + AdaptiveMediaWebConstants.SERVLET_PATH + "/*",
+		"filter.init.auth.verifier.OAuthVerifier.urls.includes=/" + AMWebConstants.SERVLET_PATH + "/*",
+		"filter.init.auth.verifier.SyncAuthVerifier.urls.includes=/" + AMWebConstants.SERVLET_PATH + "/*",
 		"osgi.http.whiteboard.filter.name=com.liferay.adaptive.media.web.internal.servlet.filter.AMAuthVerifierFilter",
-		"osgi.http.whiteboard.filter.pattern=/" + AdaptiveMediaWebConstants.SERVLET_PATH + "/*"
+		"osgi.http.whiteboard.filter.pattern=/" + AMWebConstants.SERVLET_PATH + "/*"
 	},
 	service = Filter.class
 )

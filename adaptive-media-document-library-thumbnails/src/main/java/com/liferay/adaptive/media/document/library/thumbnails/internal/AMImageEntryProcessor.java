@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
+import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
@@ -84,7 +84,7 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	@Override
 	public Set<String> getImageMimeTypes() {
-		return AdaptiveMediaImageConstants.getSupportedMimeTypes();
+		return AMImageConstants.getSupportedMimeTypes();
 	}
 
 	@Override
@@ -233,7 +233,7 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	private boolean _isMimeTypeSupported(String mimeType) {
 		Set<String> supportedMimeTypes =
-			AdaptiveMediaImageConstants.getSupportedMimeTypes();
+			AMImageConstants.getSupportedMimeTypes();
 
 		return supportedMimeTypes.contains(mimeType);
 	}

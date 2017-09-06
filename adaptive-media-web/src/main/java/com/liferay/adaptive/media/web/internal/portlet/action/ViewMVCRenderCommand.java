@@ -16,8 +16,8 @@ package com.liferay.adaptive.media.web.internal.portlet.action;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
-import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebKeys;
+import com.liferay.adaptive.media.web.constants.AMPortletKeys;
+import com.liferay.adaptive.media.web.internal.constants.AMWebKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA,
+		"javax.portlet.name=" + AMPortletKeys.ADAPTIVE_MEDIA,
 		"mvc.command.name=/", "mvc.command.name=/adaptive_media/view"
 	},
 	service = MVCRenderCommand.class
@@ -54,7 +54,7 @@ public class ViewMVCRenderCommand implements MVCRenderCommand {
 			_getAMImageConfigurationEntries(renderRequest);
 
 		renderRequest.setAttribute(
-			AdaptiveMediaWebKeys.CONFIGURATION_ENTRIES_LIST,
+			AMWebKeys.CONFIGURATION_ENTRIES_LIST,
 			new ArrayList<>(amImageConfigurationEntries));
 
 		return "/adaptive_media/view.jsp";

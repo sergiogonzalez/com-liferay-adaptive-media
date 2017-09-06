@@ -16,8 +16,8 @@ package com.liferay.adaptive.media.web.internal.portlet.action;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
-import com.liferay.adaptive.media.web.internal.constants.AdaptiveMediaWebKeys;
+import com.liferay.adaptive.media.web.constants.AMPortletKeys;
+import com.liferay.adaptive.media.web.internal.constants.AMWebKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + AdaptiveMediaPortletKeys.ADAPTIVE_MEDIA,
+		"javax.portlet.name=" + AMPortletKeys.ADAPTIVE_MEDIA,
 		"mvc.command.name=/adaptive_media/info_panel"
 	},
 	service = MVCResourceCommand.class
@@ -54,11 +54,11 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 		throws Exception {
 
 		resourceRequest.setAttribute(
-			AdaptiveMediaWebKeys.SELECTED_CONFIGURATION_ENTRIES,
+			AMWebKeys.SELECTED_CONFIGURATION_ENTRIES,
 			_getSelectedAMImageConfigurationEntries(resourceRequest));
 
 		resourceRequest.setAttribute(
-			AdaptiveMediaWebKeys.CONFIGURATION_ENTRIES_LIST,
+			AMWebKeys.CONFIGURATION_ENTRIES_LIST,
 			_getAMImageConfigurationEntries(resourceRequest));
 
 		include(
