@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.processor;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
 import java.io.InputStream;
@@ -34,10 +34,10 @@ public final class AdaptiveMediaImage
 
 	public AdaptiveMediaImage(
 		Supplier<InputStream> supplier,
-		AdaptiveMediaImageAttributeMapping attributeMapping, URI uri) {
+		AMImageAttributeMapping amImageAttributeMapping, URI uri) {
 
 		_supplier = supplier;
-		_attributeMapping = attributeMapping;
+		_amImageAttributeMapping = amImageAttributeMapping;
 		_uri = uri;
 	}
 
@@ -55,10 +55,10 @@ public final class AdaptiveMediaImage
 	public <V> Optional<V> getValueOptional(
 		AMAttribute<AMImageProcessor, V> amAttribute) {
 
-		return _attributeMapping.getValueOptional(amAttribute);
+		return _amImageAttributeMapping.getValueOptional(amAttribute);
 	}
 
-	private final AdaptiveMediaImageAttributeMapping _attributeMapping;
+	private final AMImageAttributeMapping _amImageAttributeMapping;
 	private final Supplier<InputStream> _supplier;
 	private final URI _uri;
 

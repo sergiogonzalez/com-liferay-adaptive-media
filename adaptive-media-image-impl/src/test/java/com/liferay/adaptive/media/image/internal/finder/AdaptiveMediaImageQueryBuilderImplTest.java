@@ -18,8 +18,8 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -114,14 +114,14 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).with(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, Optional.of(100)
+			AMImageAttribute.IMAGE_HEIGHT, Optional.of(100)
 		);
 
 		Map<AMAttribute<AMImageProcessor, ?>, Object> amAttributes =
 			_amImageQueryBuilderImpl.getAMAttributes();
 
 		Assert.assertEquals(
-			100, amAttributes.get(AdaptiveMediaImageAttribute.IMAGE_HEIGHT));
+			100, amAttributes.get(AMImageAttribute.IMAGE_HEIGHT));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -142,7 +142,7 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).with(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, (Integer)null
+			AMImageAttribute.IMAGE_HEIGHT, (Integer)null
 		);
 	}
 
@@ -189,7 +189,7 @@ public class AdaptiveMediaImageQueryBuilderImplTest {
 		_amImageQueryBuilderImpl.forVersion(
 			fileVersion
 		).with(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT, (Optional<Integer>)null
+			AMImageAttribute.IMAGE_HEIGHT, (Optional<Integer>)null
 		);
 	}
 

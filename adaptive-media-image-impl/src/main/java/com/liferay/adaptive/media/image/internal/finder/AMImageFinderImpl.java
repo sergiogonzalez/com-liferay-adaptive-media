@@ -22,12 +22,12 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -165,14 +165,14 @@ public class AMImageFinderImpl implements AMImageFinder {
 
 		if (imageEntry != null) {
 			AMAttribute<AMImageProcessor, Integer> imageHeightAMAttribute =
-				AdaptiveMediaImageAttribute.IMAGE_HEIGHT;
+				AMImageAttribute.IMAGE_HEIGHT;
 
 			properties.put(
 				imageHeightAMAttribute.getName(),
 				String.valueOf(imageEntry.getHeight()));
 
 			AMAttribute<AMImageProcessor, Integer> imageWidthAMAttribute =
-				AdaptiveMediaImageAttribute.IMAGE_WIDTH;
+				AMImageAttribute.IMAGE_WIDTH;
 
 			properties.put(
 				imageWidthAMAttribute.getName(),
@@ -192,14 +192,14 @@ public class AMImageFinderImpl implements AMImageFinder {
 				String.valueOf(imageEntry.getSize()));
 		}
 
-		AdaptiveMediaImageAttributeMapping attributeMapping =
-			AdaptiveMediaImageAttributeMapping.fromProperties(properties);
+		AMImageAttributeMapping amImageAttributeMapping =
+			AMImageAttributeMapping.fromProperties(properties);
 
 		return new AdaptiveMediaImage(
 			() ->
 				_imageEntryLocalService.getAdaptiveMediaImageEntryContentStream(
 					amImageConfigurationEntry, fileVersion),
-			attributeMapping,
+			amImageAttributeMapping,
 			uriFactory.apply(fileVersion, amImageConfigurationEntry));
 	}
 

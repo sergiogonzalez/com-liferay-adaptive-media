@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
@@ -143,21 +143,23 @@ public class AMAttributeComparatorTest {
 		properties.put(amAttribute1.getName(), String.valueOf(value1));
 		properties.put(amAttribute2.getName(), String.valueOf(value2));
 
-		AdaptiveMediaImageAttributeMapping attributeMapping =
-			AdaptiveMediaImageAttributeMapping.fromProperties(properties);
+		AMImageAttributeMapping amImageAttributeMapping =
+			AMImageAttributeMapping.fromProperties(properties);
 
-		return new AdaptiveMediaImage(() -> null, attributeMapping, null);
+		return new AdaptiveMediaImage(
+			() -> null, amImageAttributeMapping, null);
 	}
 
 	private <T> AdaptiveMedia<AMImageProcessor> _createMedia(
 		AMAttribute<AMImageProcessor, T> amAttribute, T value) {
 
-		AdaptiveMediaImageAttributeMapping attributeMapping =
-			AdaptiveMediaImageAttributeMapping.fromProperties(
+		AMImageAttributeMapping amImageAttributeMapping =
+			AMImageAttributeMapping.fromProperties(
 				Collections.singletonMap(
 					amAttribute.getName(), String.valueOf(value)));
 
-		return new AdaptiveMediaImage(() -> null, attributeMapping, null);
+		return new AdaptiveMediaImage(
+			() -> null, amImageAttributeMapping, null);
 	}
 
 	private AMAttributeComparator _multiAMAttributeComparator;

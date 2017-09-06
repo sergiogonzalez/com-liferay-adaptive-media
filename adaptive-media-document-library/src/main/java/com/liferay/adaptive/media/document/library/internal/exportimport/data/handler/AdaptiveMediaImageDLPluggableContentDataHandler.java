@@ -21,8 +21,8 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntryS
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
 import com.liferay.document.library.exportimport.data.handler.DLPluggableContentDataHandler;
@@ -226,10 +226,10 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 					AMAttribute.getContentLengthAMAttribute());
 
 			Optional<Integer> widthOptional = adaptiveMedia.getValueOptional(
-				AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+				AMImageAttribute.IMAGE_WIDTH);
 
 			Optional<Integer> heightOptional = adaptiveMedia.getValueOptional(
-				AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
+				AMImageAttribute.IMAGE_HEIGHT);
 
 			if (!contentLengthOptional.isPresent() ||
 				!widthOptional.isPresent() || !heightOptional.isPresent()) {

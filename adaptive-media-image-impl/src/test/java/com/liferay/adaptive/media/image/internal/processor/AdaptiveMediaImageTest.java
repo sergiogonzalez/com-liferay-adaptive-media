@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.processor;
 
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 
 import java.io.InputStream;
 
@@ -36,19 +36,18 @@ public class AdaptiveMediaImageTest {
 
 	@Test
 	public void testGetAttributeDelegatesOnMapping() {
-		AdaptiveMediaImageAttributeMapping attributeMapping = Mockito.mock(
-			AdaptiveMediaImageAttributeMapping.class);
+		AMImageAttributeMapping amImageAttributeMapping = Mockito.mock(
+			AMImageAttributeMapping.class);
 
 		AdaptiveMediaImage adaptiveMedia = new AdaptiveMediaImage(
-			() -> null, attributeMapping, URI.create("/"));
+			() -> null, amImageAttributeMapping, URI.create("/"));
 
-		adaptiveMedia.getValueOptional(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
+		adaptiveMedia.getValueOptional(AMImageAttribute.IMAGE_HEIGHT);
 
 		Mockito.verify(
-			attributeMapping
+			amImageAttributeMapping
 		).getValueOptional(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT
+			AMImageAttribute.IMAGE_HEIGHT
 		);
 	}
 
@@ -58,12 +57,11 @@ public class AdaptiveMediaImageTest {
 
 		Supplier<InputStream> supplier = () -> inputStream;
 
-		AdaptiveMediaImageAttributeMapping attributeMapping =
-			AdaptiveMediaImageAttributeMapping.fromProperties(
-				Collections.emptyMap());
+		AMImageAttributeMapping amImageAttributeMapping =
+			AMImageAttributeMapping.fromProperties(Collections.emptyMap());
 
 		AdaptiveMediaImage adaptiveMedia = new AdaptiveMediaImage(
-			supplier, attributeMapping, URI.create("/"));
+			supplier, amImageAttributeMapping, URI.create("/"));
 
 		Assert.assertEquals(inputStream, adaptiveMedia.getInputStream());
 	}

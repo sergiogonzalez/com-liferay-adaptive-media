@@ -23,13 +23,13 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -319,10 +319,10 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			amImageConfigurationEntry.getProperties();
 
 		properties.put(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH.getName(),
+			AMImageAttribute.IMAGE_WIDTH.getName(),
 			configurationEntryProperties.get("max-width"));
 		properties.put(
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT.getName(),
+			AMImageAttribute.IMAGE_HEIGHT.getName(),
 			configurationEntryProperties.get("max-height"));
 
 		return new AdaptiveMediaImage(
@@ -334,8 +334,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 					throw new AdaptiveMediaRuntimeException(pe);
 				}
 			},
-			AdaptiveMediaImageAttributeMapping.fromProperties(properties),
-			null);
+			AMImageAttributeMapping.fromProperties(properties), null);
 	}
 
 	private AMImageConfigurationEntry
@@ -450,10 +449,10 @@ public class AdaptiveMediaImageRequestHandlerTest {
 						amImageQueryBuilderImpl.getAMAttributes();
 
 				Object queryBuilderWidth = amAttributes.get(
-					AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+					AMImageAttribute.IMAGE_WIDTH);
 
 				Object queryBuilderHeight = amAttributes.get(
-					AdaptiveMediaImageAttribute.IMAGE_HEIGHT);
+					AMImageAttribute.IMAGE_HEIGHT);
 
 				Map<String, String> properties =
 					amImageConfigurationEntry.getProperties();

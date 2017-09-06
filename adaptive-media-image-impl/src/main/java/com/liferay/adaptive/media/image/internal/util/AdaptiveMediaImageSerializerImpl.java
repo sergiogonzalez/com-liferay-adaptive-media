@@ -17,10 +17,10 @@ package com.liferay.adaptive.media.image.internal.util;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -57,7 +57,7 @@ public class AdaptiveMediaImageSerializerImpl
 				"attributes");
 
 			Map<String, AMAttribute<?, ?>> allowedAMAttributes =
-				AdaptiveMediaImageAttribute.getAllowedAMAttributes();
+				AMImageAttribute.getAllowedAMAttributes();
 
 			allowedAMAttributes.forEach(
 				(name, amAttribute) -> {
@@ -71,7 +71,7 @@ public class AdaptiveMediaImageSerializerImpl
 
 			return new AdaptiveMediaImage(
 				inputStreamSupplier,
-				AdaptiveMediaImageAttributeMapping.fromProperties(properties),
+				AMImageAttributeMapping.fromProperties(properties),
 				URI.create(uri));
 		}
 		catch (JSONException jsone) {
@@ -88,7 +88,7 @@ public class AdaptiveMediaImageSerializerImpl
 		JSONObject attributesJSONObject = JSONFactoryUtil.createJSONObject();
 
 		Map<String, AMAttribute<?, ?>> allowedAMAttributes =
-			AdaptiveMediaImageAttribute.getAllowedAMAttributes();
+			AMImageAttribute.getAllowedAMAttributes();
 
 		allowedAMAttributes.forEach(
 			(name, amAttribute) -> {

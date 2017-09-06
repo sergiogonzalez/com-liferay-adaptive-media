@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.processor;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageAttributeTest {
+public class AMImageAttributeTest {
 
 	@Test
 	public void testAllPublicAttributesAreSupported() {
@@ -36,12 +36,11 @@ public class AdaptiveMediaImageAttributeTest {
 			AMAttribute.getConfigurationUuidAMAttribute(),
 			AMAttribute.getContentLengthAMAttribute(),
 			AMAttribute.getContentTypeAMAttribute(),
-			AMAttribute.getFileNameAMAttribute(),
-			AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+			AMAttribute.getFileNameAMAttribute(), AMImageAttribute.IMAGE_HEIGHT,
+			AMImageAttribute.IMAGE_WIDTH);
 
 		Map<String, AMAttribute<?, ?>> allowedAMAttributesMap =
-			AdaptiveMediaImageAttribute.getAllowedAMAttributes();
+			AMImageAttribute.getAllowedAMAttributes();
 
 		Collection<AMAttribute<?, ?>> allowedAMAttributes =
 			allowedAMAttributesMap.values();
@@ -53,12 +52,12 @@ public class AdaptiveMediaImageAttributeTest {
 		expected = AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException.class
 	)
 	public void testImageHeightFailsForNonIntegers() {
-		AdaptiveMediaImageAttribute.IMAGE_HEIGHT.convert("xyz");
+		AMImageAttribute.IMAGE_HEIGHT.convert("xyz");
 	}
 
 	@Test
 	public void testImageHeightRecognizesIntegers() {
-		int result = AdaptiveMediaImageAttribute.IMAGE_HEIGHT.convert("42");
+		int result = AMImageAttribute.IMAGE_HEIGHT.convert("42");
 
 		Assert.assertEquals(42, result);
 	}
@@ -67,12 +66,12 @@ public class AdaptiveMediaImageAttributeTest {
 		expected = AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException.class
 	)
 	public void testImageWidthFailsForNonIntegers() {
-		AdaptiveMediaImageAttribute.IMAGE_WIDTH.convert("xyz");
+		AMImageAttribute.IMAGE_WIDTH.convert("xyz");
 	}
 
 	@Test
 	public void testImageWidthRecognizesIntegers() {
-		int result = AdaptiveMediaImageAttribute.IMAGE_WIDTH.convert("42");
+		int result = AMImageAttribute.IMAGE_WIDTH.convert("42");
 
 		Assert.assertEquals(42, result);
 	}

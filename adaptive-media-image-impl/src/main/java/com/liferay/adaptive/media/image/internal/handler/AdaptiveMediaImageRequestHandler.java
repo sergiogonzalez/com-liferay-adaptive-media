@@ -21,11 +21,11 @@ import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
+import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -65,7 +65,7 @@ public class AdaptiveMediaImageRequestHandler
 			HttpServletRequest request)
 		throws IOException, ServletException {
 
-		Optional<Tuple<FileVersion, AdaptiveMediaImageAttributeMapping>>
+		Optional<Tuple<FileVersion, AMImageAttributeMapping>>
 			interpretedPathOptional = _interpretPath(request.getPathInfo());
 
 		return interpretedPathOptional.flatMap(
@@ -140,18 +140,17 @@ public class AdaptiveMediaImageRequestHandler
 					throw new AdaptiveMediaRuntimeException(pe);
 				}
 			},
-			AdaptiveMediaImageAttributeMapping.fromProperties(properties),
-			null);
+			AMImageAttributeMapping.fromProperties(properties), null);
 	}
 
 	private Optional<AdaptiveMedia<AMImageProcessor>> _findAdaptiveMedia(
 		FileVersion fileVersion,
-		AdaptiveMediaImageAttributeMapping attributeMapping) {
+		AMImageAttributeMapping amImageAttributeMapping) {
 
 		try {
 			Optional<AMImageConfigurationEntry>
 				amImageConfigurationEntryOptional =
-					attributeMapping.getValueOptional(
+					amImageAttributeMapping.getValueOptional(
 						AMAttribute.getConfigurationUuidAMAttribute()
 					).flatMap(
 						configurationUuid ->
@@ -208,11 +207,9 @@ public class AdaptiveMediaImageRequestHandler
 					amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 						fileVersion
 					).with(
-						AdaptiveMediaImageAttribute.IMAGE_WIDTH,
-						configurationWidth
+						AMImageAttribute.IMAGE_WIDTH, configurationWidth
 					).with(
-						AdaptiveMediaImageAttribute.IMAGE_HEIGHT,
-						configurationHeight
+						AMImageAttribute.IMAGE_HEIGHT, configurationHeight
 					).done());
 
 			return adaptiveMediaStream.sorted(
@@ -249,7 +246,7 @@ public class AdaptiveMediaImageRequestHandler
 		int width, AdaptiveMedia<AMImageProcessor> adaptiveMedia) {
 
 		Optional<Integer> imageWidthOptional = adaptiveMedia.getValueOptional(
-			AdaptiveMediaImageAttribute.IMAGE_WIDTH);
+			AMImageAttribute.IMAGE_WIDTH);
 
 		Optional<Integer> distanceOptional = imageWidthOptional.map(
 			imageWidth -> Math.abs(imageWidth - width));
@@ -257,7 +254,7 @@ public class AdaptiveMediaImageRequestHandler
 		return distanceOptional.orElse(Integer.MAX_VALUE);
 	}
 
-	private Optional<Tuple<FileVersion, AdaptiveMediaImageAttributeMapping>>
+	private Optional<Tuple<FileVersion, AMImageAttributeMapping>>
 		_interpretPath(String pathInfo) {
 
 		try {
@@ -299,10 +296,10 @@ public class AdaptiveMediaImageRequestHandler
 			properties.put(
 				fileNameAMAttribute.getName(), fileVersion.getFileName());
 
-			AdaptiveMediaImageAttributeMapping attributeMapping =
-				AdaptiveMediaImageAttributeMapping.fromProperties(properties);
+			AMImageAttributeMapping amImageAttributeMapping =
+				AMImageAttributeMapping.fromProperties(properties);
 
-			return Optional.of(Tuple.of(fileVersion, attributeMapping));
+			return Optional.of(Tuple.of(fileVersion, amImageAttributeMapping));
 		}
 		catch (AdaptiveMediaRuntimeException | NumberFormatException e) {
 			_log.error(e);
@@ -313,14 +310,14 @@ public class AdaptiveMediaImageRequestHandler
 
 	private void _processAdaptiveMediaImage(
 		AdaptiveMedia<AMImageProcessor> adaptiveMedia, FileVersion fileVersion,
-		AdaptiveMediaImageAttributeMapping attributeMapping) {
+		AMImageAttributeMapping amImageAttributeMapping) {
 
 		Optional<String> adaptiveMediaConfigurationUuidOptional =
 			adaptiveMedia.getValueOptional(
 				AMAttribute.getConfigurationUuidAMAttribute());
 
 		Optional<String> attributeMappingConfigurationUuidOptional =
-			attributeMapping.getValueOptional(
+			amImageAttributeMapping.getValueOptional(
 				AMAttribute.getConfigurationUuidAMAttribute());
 
 		if (adaptiveMediaConfigurationUuidOptional.equals(
