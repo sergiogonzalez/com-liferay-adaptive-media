@@ -21,8 +21,8 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntryS
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.adaptive.media.image.util.AdaptiveMediaImageSerializer;
 import com.liferay.document.library.exportimport.data.handler.DLPluggableContentDataHandler;
@@ -112,16 +112,16 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 			WorkflowConstants.STATUS_APPROVED);
 
 		for (FileVersion fileVersion : fileVersions) {
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 						fileVersion
 					).done());
 
-			List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaList =
+			List<AdaptiveMedia<AMImageProcessor>> adaptiveMediaList =
 				adaptiveMediaStream.collect(Collectors.toList());
 
-			for (AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia :
+			for (AdaptiveMedia<AMImageProcessor> adaptiveMedia :
 					adaptiveMediaList) {
 
 				_exportMedia(portletDataContext, fileVersion, adaptiveMedia);
@@ -131,7 +131,7 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 
 	private void _exportMedia(
 			PortletDataContext portletDataContext, FileVersion fileVersion,
-			AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia)
+			AdaptiveMedia<AMImageProcessor> adaptiveMedia)
 		throws IOException {
 
 		Optional<String> configurationUuidOptional =
@@ -169,7 +169,7 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 			"adaptive-media/%s.cf", amImageConfigurationEntry.getUUID());
 	}
 
-	private AdaptiveMedia<AdaptiveMediaImageProcessor> _getExportedMedia(
+	private AdaptiveMedia<AMImageProcessor> _getExportedMedia(
 		PortletDataContext portletDataContext, FileVersion fileVersion,
 		AMImageConfigurationEntry amImageConfigurationEntry) {
 
@@ -214,9 +214,8 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 			WorkflowConstants.STATUS_APPROVED);
 
 		for (FileVersion fileVersion : fileVersions) {
-			AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia =
-				_getExportedMedia(
-					portletDataContext, fileVersion, amImageConfigurationEntry);
+			AdaptiveMedia<AMImageProcessor> adaptiveMedia = _getExportedMedia(
+				portletDataContext, fileVersion, amImageConfigurationEntry);
 
 			if (adaptiveMedia == null) {
 				continue;

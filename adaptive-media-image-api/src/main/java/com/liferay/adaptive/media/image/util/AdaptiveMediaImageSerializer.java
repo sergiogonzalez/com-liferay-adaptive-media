@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.image.util;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
 import java.io.InputStream;
 
@@ -26,10 +26,9 @@ import java.util.function.Supplier;
  */
 public interface AdaptiveMediaImageSerializer {
 
-	public AdaptiveMedia<AdaptiveMediaImageProcessor> deserialize(
+	public AdaptiveMedia<AMImageProcessor> deserialize(
 		String s, Supplier<InputStream> inputStreamSupplier);
 
-	public String serialize(
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia);
+	public String serialize(AdaptiveMedia<AMImageProcessor> adaptiveMedia);
 
 }

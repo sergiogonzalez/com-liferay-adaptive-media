@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -26,26 +26,25 @@ import java.util.Optional;
  * @author Adolfo Pérez
  */
 public class AdaptiveMediaPropertyDistanceComparator
-	implements Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>> {
+	implements Comparator<AdaptiveMedia<AMImageProcessor>> {
 
 	public AdaptiveMediaPropertyDistanceComparator(
-		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, ?> amAttributes) {
+		Map<AMAttribute<AMImageProcessor, ?>, ?> amAttributes) {
 
 		_amAttributes = amAttributes;
 	}
 
 	@Override
 	public int compare(
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia1,
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2) {
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia1,
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia2) {
 
 		for (Map.Entry
-				<AMAttribute<AdaptiveMediaImageProcessor, ?>, ?>
+				<AMAttribute<AMImageProcessor, ?>, ?>
 					entry : _amAttributes.entrySet()) {
 
-			AMAttribute<AdaptiveMediaImageProcessor, Object> amAttribute =
-				(AMAttribute<AdaptiveMediaImageProcessor, Object>)
-					entry.getKey();
+			AMAttribute<AMImageProcessor, Object> amAttribute =
+				(AMAttribute<AMImageProcessor, Object>)entry.getKey();
 
 			Object requestedValue = entry.getValue();
 
@@ -75,7 +74,6 @@ public class AdaptiveMediaPropertyDistanceComparator
 		return 0;
 	}
 
-	private final Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, ?>
-		_amAttributes;
+	private final Map<AMAttribute<AMImageProcessor, ?>, ?> _amAttributes;
 
 }

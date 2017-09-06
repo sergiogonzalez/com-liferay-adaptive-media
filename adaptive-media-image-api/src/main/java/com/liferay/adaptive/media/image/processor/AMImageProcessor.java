@@ -12,42 +12,19 @@
  * details.
  */
 
-package com.liferay.adaptive.media.internal.messaging;
+package com.liferay.adaptive.media.image.processor;
 
-import com.liferay.adaptive.media.processor.AdaptiveMediaProcessor;
+import com.liferay.adaptive.media.processor.AMProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.repository.model.FileVersion;
 
 /**
  * @author Adolfo Pérez
  */
-public enum AdaptiveMediaProcessorCommand {
+public interface AMImageProcessor
+	extends AMProcessor<FileVersion, AMImageProcessor> {
 
-	CLEAN_UP {
-
-		@Override
-		protected <M> void execute(
-				AdaptiveMediaProcessor<M, ?> processor, M model, String modelId)
-			throws PortalException {
-
-			processor.cleanUp(model);
-		}
-
-	},
-
-	PROCESS {
-
-		@Override
-		protected <M> void execute(
-				AdaptiveMediaProcessor<M, ?> processor, M model, String modelId)
-			throws PortalException {
-
-			processor.process(model);
-		}
-
-	};
-
-	protected abstract <M> void execute(
-			AdaptiveMediaProcessor<M, ?> processor, M model, String modelId)
+	public void process(FileVersion fileVersion, String configurationEntryUuid)
 		throws PortalException;
 
 }

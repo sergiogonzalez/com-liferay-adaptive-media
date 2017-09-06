@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.internal.messaging;
 import com.liferay.adaptive.media.internal.constants.AMDestinationNames;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
-import com.liferay.adaptive.media.processor.AdaptiveMediaProcessor;
+import com.liferay.adaptive.media.processor.AMProcessor;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.log.Log;
@@ -48,7 +48,7 @@ public class AMMessageListener extends BaseMessageListener {
 	@Activate
 	public void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
-			bundleContext, AdaptiveMediaProcessor.class, "(model.class.name=*)",
+			bundleContext, AMProcessor.class, "(model.class.name=*)",
 			(serviceReference, emitter) -> emitter.emit(
 				(String)serviceReference.getProperty("model.class.name")));
 	}
@@ -62,22 +62,22 @@ public class AMMessageListener extends BaseMessageListener {
 	protected void doReceive(Message message) throws Exception {
 		String className = message.getString("className");
 
-		List<AdaptiveMediaProcessor> processors = _serviceTrackerMap.getService(
+		List<AMProcessor> amProcessors = _serviceTrackerMap.getService(
 			className);
 
-		if (processors == null) {
+		if (amProcessors == null) {
 			return;
 		}
 
-		AdaptiveMediaProcessorCommand command =
-			(AdaptiveMediaProcessorCommand)message.get("command");
+		AMProcessorCommand amProcessorCommand = (AMProcessorCommand)message.get(
+			"command");
 
 		Object model = message.get("model");
 		String modelId = (String)message.get("modelId");
 
-		for (AdaptiveMediaProcessor processor : processors) {
+		for (AMProcessor processor : amProcessors) {
 			try {
-				command.execute(processor, model, modelId);
+				amProcessorCommand.execute(processor, model, modelId);
 			}
 			catch (Exception e) {
 				if (_log.isWarnEnabled()) {
@@ -89,7 +89,7 @@ public class AMMessageListener extends BaseMessageListener {
 		AMAsyncProcessor<FileVersion, ?> amAsyncProcessor =
 			_amAsyncProcessorLocator.locateForClass(FileVersion.class);
 
-		amAsyncProcessor.cleanQueue(command, modelId);
+		amAsyncProcessor.cleanQueue(amProcessorCommand, modelId);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -98,7 +98,6 @@ public class AMMessageListener extends BaseMessageListener {
 	@Reference(unbind = "-")
 	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
 
-	private ServiceTrackerMap<String, List<AdaptiveMediaProcessor>>
-		_serviceTrackerMap;
+	private ServiceTrackerMap<String, List<AMProcessor>> _serviceTrackerMap;
 
 }

@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.internal.configuration;
 
 import com.liferay.adaptive.media.AMAttribute;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +47,8 @@ public class AdaptiveMediaImageAttributeMapping {
 			throw new IllegalArgumentException("properties map cannot be null");
 		}
 
-		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
-			amAttributes = new HashMap<>();
+		Map<AMAttribute<AMImageProcessor, ?>, Optional<?>> amAttributes =
+			new HashMap<>();
 
 		amAttributes.put(
 			AMAttribute.getConfigurationUuidAMAttribute(),
@@ -87,7 +87,7 @@ public class AdaptiveMediaImageAttributeMapping {
 	 *         (non-<code>null</code>) value (if any)
 	 */
 	public <V> Optional<V> getValueOptional(
-		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute) {
+		AMAttribute<AMImageProcessor, V> amAttribute) {
 
 		if (amAttribute == null) {
 			throw new IllegalArgumentException("attribute cannot be null");
@@ -97,15 +97,14 @@ public class AdaptiveMediaImageAttributeMapping {
 	}
 
 	protected AdaptiveMediaImageAttributeMapping(
-		Map<AMAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
-			amAttributes) {
+		Map<AMAttribute<AMImageProcessor, ?>, Optional<?>> amAttributes) {
 
 		_amAttributes = amAttributes;
 	}
 
 	private static <V> Optional<V> _getValueOptional(
 		Map<String, String> properties,
-		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute) {
+		AMAttribute<AMImageProcessor, V> amAttribute) {
 
 		String value = properties.get(amAttribute.getName());
 
@@ -117,7 +116,6 @@ public class AdaptiveMediaImageAttributeMapping {
 	}
 
 	private final Map
-		<AMAttribute<AdaptiveMediaImageProcessor, ?>, Optional<?>>
-			_amAttributes;
+		<AMAttribute<AMImageProcessor, ?>, Optional<?>> _amAttributes;
 
 }

@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.finder.AMQueryBuilder;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  * @author Adolfo Pérez
  */
 public interface AMImageQueryBuilder
-	extends AMQueryBuilder<FileVersion, AdaptiveMediaImageProcessor> {
+	extends AMQueryBuilder<FileVersion, AMImageProcessor> {
 
 	public InitialStep allForFileEntry(FileEntry fileEntry);
 
@@ -72,18 +72,18 @@ public interface AMImageQueryBuilder
 
 	public interface FinalStep {
 
-		public AMQuery<FileVersion, AdaptiveMediaImageProcessor> done();
+		public AMQuery<FileVersion, AMImageProcessor> done();
 
 	}
 
 	public interface FuzzySortStep extends FinalStep {
 
 		public <V> FuzzySortStep with(
-			AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
+			AMAttribute<AMImageProcessor, V> amAttribute,
 			Optional<V> valueOptional);
 
 		public <V> FuzzySortStep with(
-			AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute, V value);
+			AMAttribute<AMImageProcessor, V> amAttribute, V value);
 
 	}
 
@@ -118,8 +118,7 @@ public interface AMImageQueryBuilder
 	public interface StrictSortStep extends FinalStep {
 
 		public <V> StrictSortStep orderBy(
-			AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
-			SortOrder sortOrder);
+			AMAttribute<AMImageProcessor, V> amAttribute, SortOrder sortOrder);
 
 	}
 

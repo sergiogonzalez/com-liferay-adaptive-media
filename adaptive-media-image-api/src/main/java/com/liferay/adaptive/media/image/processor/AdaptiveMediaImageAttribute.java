@@ -25,13 +25,13 @@ import java.util.Map;
  */
 public final class AdaptiveMediaImageAttribute {
 
-	public static final AMAttribute<AdaptiveMediaImageProcessor, Integer>
-		IMAGE_HEIGHT = new AMAttribute<>(
+	public static final AMAttribute<AMImageProcessor, Integer> IMAGE_HEIGHT =
+		new AMAttribute<>(
 			"height", AMAttributeConverterUtil::parseInt,
 			AdaptiveMediaImageAttribute::_intDistance);
 
-	public static final AMAttribute<AdaptiveMediaImageProcessor, Integer>
-		IMAGE_WIDTH = new AMAttribute<>(
+	public static final AMAttribute<AMImageProcessor, Integer> IMAGE_WIDTH =
+		new AMAttribute<>(
 			"width", AMAttributeConverterUtil::parseInt,
 			AdaptiveMediaImageAttribute::_intDistance);
 

@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.test.util.DestinationReplacer;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
@@ -60,7 +60,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Sync
-public class AdaptiveMediaImageProcessorTest {
+public class AMImageProcessorTest {
 
 	@ClassRule
 	@Rule
@@ -77,8 +77,7 @@ public class AdaptiveMediaImageProcessorTest {
 			AMImageConfigurationHelper.class);
 		_dlAppLocalService = _getService(DLAppLocalService.class);
 		_amImageFinder = _getService(AMImageFinder.class);
-		_adaptiveMediaImageProcessor = _getService(
-			AdaptiveMediaImageProcessor.class);
+		_amImageProcessor = _getService(AMImageProcessor.class);
 
 		ServiceTestUtil.setUser(TestPropsValues.getUser());
 
@@ -124,8 +123,8 @@ public class AdaptiveMediaImageProcessorTest {
 
 			FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
 
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 						fileEntry
 					).done());
@@ -146,8 +145,8 @@ public class AdaptiveMediaImageProcessorTest {
 
 			final FileEntry fileEntry = _addImageFileEntry(serviceContext);
 
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 						fileEntry
 					).done());
@@ -170,8 +169,8 @@ public class AdaptiveMediaImageProcessorTest {
 
 			FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
 
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 						fileEntry
 					).done());
@@ -191,11 +190,10 @@ public class AdaptiveMediaImageProcessorTest {
 
 			final FileEntry fileEntry = _addImageFileEntry(serviceContext);
 
-			_adaptiveMediaImageProcessor.cleanUp(
-				fileEntry.getLatestFileVersion(true));
+			_amImageProcessor.cleanUp(fileEntry.getLatestFileVersion(true));
 
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 						fileEntry
 					).done());
@@ -215,11 +213,10 @@ public class AdaptiveMediaImageProcessorTest {
 
 			final FileEntry fileEntry = _addNonImageFileEntry(serviceContext);
 
-			_adaptiveMediaImageProcessor.cleanUp(
-				fileEntry.getLatestFileVersion(true));
+			_amImageProcessor.cleanUp(fileEntry.getLatestFileVersion(true));
 
-			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
+				_amImageFinder.getAdaptiveMediaStream(
 					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 						fileEntry
 					).done());
@@ -261,7 +258,7 @@ public class AdaptiveMediaImageProcessorTest {
 
 	private byte[] _getImageBytes() throws Exception {
 		return FileUtil.getBytes(
-			AdaptiveMediaImageProcessorTest.class,
+			AMImageProcessorTest.class,
 			"/com/liferay/adaptive/media/image/processor/test/dependencies" +
 				"/image.jpg");
 	}
@@ -291,9 +288,9 @@ public class AdaptiveMediaImageProcessorTest {
 		return amImageConfigurationEntries.size();
 	}
 
-	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AMImageFinder _amImageFinder;
+	private AMImageProcessor _amImageProcessor;
 	private DLAppLocalService _dlAppLocalService;
 
 	@DeleteAfterTestRun

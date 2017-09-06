@@ -26,8 +26,8 @@ import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImag
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -56,12 +56,11 @@ import org.osgi.service.component.annotations.Reference;
 public class AMImageFinderImpl implements AMImageFinder {
 
 	@Override
-	public Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			getAdaptiveMediaStream(
-				Function
-					<AMImageQueryBuilder,
-						AMQuery<FileVersion, AdaptiveMediaImageProcessor>>
-							amImageQueryBuilderFunction)
+	public Stream<AdaptiveMedia<AMImageProcessor>> getAdaptiveMediaStream(
+			Function
+				<AMImageQueryBuilder,
+					AMQuery<FileVersion, AMImageProcessor>>
+						amImageQueryBuilderFunction)
 		throws PortalException {
 
 		if (amImageQueryBuilderFunction == null) {
@@ -72,7 +71,7 @@ public class AMImageFinderImpl implements AMImageFinder {
 		AMImageQueryBuilderImpl amImageQueryBuilderImpl =
 			new AMImageQueryBuilderImpl();
 
-		AMQuery<FileVersion, AdaptiveMediaImageProcessor> amQuery =
+		AMQuery<FileVersion, AMImageProcessor> amQuery =
 			amImageQueryBuilderFunction.apply(amImageQueryBuilderImpl);
 
 		if (amQuery != AMImageQueryBuilderImpl.AM_QUERY) {
@@ -140,7 +139,7 @@ public class AMImageFinderImpl implements AMImageFinder {
 		_imageProcessor = imageProcessor;
 	}
 
-	private AdaptiveMedia<AdaptiveMediaImageProcessor> _createMedia(
+	private AdaptiveMedia<AMImageProcessor> _createMedia(
 		FileVersion fileVersion,
 		BiFunction<FileVersion, AMImageConfigurationEntry, URI> uriFactory,
 		AMImageConfigurationEntry amImageConfigurationEntry) {
@@ -167,16 +166,15 @@ public class AMImageFinderImpl implements AMImageFinder {
 				fileVersion.getFileVersionId());
 
 		if (imageEntry != null) {
-			AMAttribute<AdaptiveMediaImageProcessor, Integer>
-				imageHeightAMAttribute =
-					AdaptiveMediaImageAttribute.IMAGE_HEIGHT;
+			AMAttribute<AMImageProcessor, Integer> imageHeightAMAttribute =
+				AdaptiveMediaImageAttribute.IMAGE_HEIGHT;
 
 			properties.put(
 				imageHeightAMAttribute.getName(),
 				String.valueOf(imageEntry.getHeight()));
 
-			AMAttribute<AdaptiveMediaImageProcessor, Integer>
-				imageWidthAMAttribute = AdaptiveMediaImageAttribute.IMAGE_WIDTH;
+			AMAttribute<AMImageProcessor, Integer> imageWidthAMAttribute =
+				AdaptiveMediaImageAttribute.IMAGE_WIDTH;
 
 			properties.put(
 				imageWidthAMAttribute.getName(),

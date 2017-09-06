@@ -28,8 +28,8 @@ import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImag
 import com.liferay.adaptive.media.image.internal.finder.AMImageQueryBuilderImpl;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
+import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AMAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -126,8 +126,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
-		Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			adaptiveMediaOptional = _requestHandler.handleRequest(request);
+		Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+			_requestHandler.handleRequest(request);
 
 		Assert.assertFalse(adaptiveMediaOptional.isPresent());
 	}
@@ -147,8 +147,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
-		Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			adaptiveMediaOptional = _requestHandler.handleRequest(request);
+		Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+			_requestHandler.handleRequest(request);
 
 		Assert.assertFalse(adaptiveMediaOptional.isPresent());
 	}
@@ -173,15 +173,15 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 401, 501);
 
-		AdaptiveMedia<AdaptiveMediaImageProcessor> closestAdaptiveMedia =
+		AdaptiveMedia<AMImageProcessor> closestAdaptiveMedia =
 			_createAdaptiveMedia(
 				_fileVersion, closestAMImageConfigurationEntry);
 
-		AdaptiveMedia<AdaptiveMediaImageProcessor> fartherAdaptiveMedia =
+		AdaptiveMedia<AMImageProcessor> fartherAdaptiveMedia =
 			_createAdaptiveMedia(
 				_fileVersion, fartherAMImageConfigurationEntry);
 
-		AdaptiveMedia<AdaptiveMediaImageProcessor> farthestAdaptiveMedia =
+		AdaptiveMedia<AMImageProcessor> farthestAdaptiveMedia =
 			_createAdaptiveMedia(
 				_fileVersion, farthestAMImageConfigurationEntry);
 
@@ -213,8 +213,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			_createAdaptiveMediaImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia =
-			_createAdaptiveMedia(_fileVersion, amImageConfigurationEntry);
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia = _createAdaptiveMedia(
+			_fileVersion, amImageConfigurationEntry);
 
 		_mockExactMatch(_fileVersion, amImageConfigurationEntry, adaptiveMedia);
 
@@ -248,12 +248,12 @@ public class AdaptiveMediaImageRequestHandlerTest {
 			invocation -> Stream.empty()
 		);
 
-		Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-			adaptiveMediaOptional = _requestHandler.handleRequest(request);
+		Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
+			_requestHandler.handleRequest(request);
 
 		Assert.assertTrue(adaptiveMediaOptional.isPresent());
 
-		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia =
+		AdaptiveMedia<AMImageProcessor> adaptiveMedia =
 			adaptiveMediaOptional.get();
 
 		Assert.assertEquals(
@@ -282,7 +282,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		);
 	}
 
-	private AdaptiveMedia<AdaptiveMediaImageProcessor> _createAdaptiveMedia(
+	private AdaptiveMedia<AMImageProcessor> _createAdaptiveMedia(
 			FileVersion fileVersion,
 			AMImageConfigurationEntry amImageConfigurationEntry)
 		throws Exception {
@@ -428,7 +428,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 	private void _mockClosestMatch(
 			FileVersion fileVersion,
 			AMImageConfigurationEntry amImageConfigurationEntry,
-			List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaList)
+			List<AdaptiveMedia<AMImageProcessor>> adaptiveMediaList)
 		throws Exception {
 
 		Mockito.when(
@@ -445,7 +445,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 				AMQuery amQuery = amImageQueryBuilderFunction.apply(
 					amImageQueryBuilderImpl);
 
-				Map<AMAttribute<AdaptiveMediaImageProcessor, ?>,
+				Map<AMAttribute<AMImageProcessor, ?>,
 					Object> amAttributes =
 						amImageQueryBuilderImpl.getAMAttributes();
 
@@ -482,7 +482,7 @@ public class AdaptiveMediaImageRequestHandlerTest {
 	private void _mockExactMatch(
 			FileVersion fileVersion,
 			AMImageConfigurationEntry amImageConfigurationEntry,
-			AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia)
+			AdaptiveMedia<AMImageProcessor> adaptiveMedia)
 		throws Exception {
 
 		Mockito.when(
