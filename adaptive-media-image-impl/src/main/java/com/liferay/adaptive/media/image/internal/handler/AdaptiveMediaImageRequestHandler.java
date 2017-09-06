@@ -205,7 +205,7 @@ public class AdaptiveMediaImageRequestHandler
 		try {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaStream = _finder.getAdaptiveMediaStream(
-					queryBuilder -> queryBuilder.forVersion(
+					amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 						fileVersion
 					).with(
 						AdaptiveMediaImageAttribute.IMAGE_WIDTH,
@@ -230,8 +230,8 @@ public class AdaptiveMediaImageRequestHandler
 				AdaptiveMediaImageConfigurationEntry configurationEntry)
 		throws PortalException {
 
-		return _finder.getAdaptiveMediaStream(queryBuilder ->
-			queryBuilder.forVersion(
+		return _finder.getAdaptiveMediaStream(amImageQueryBuilder ->
+			amImageQueryBuilder.forVersion(
 				fileVersion
 			).forConfiguration(
 				configurationEntry.getUUID()

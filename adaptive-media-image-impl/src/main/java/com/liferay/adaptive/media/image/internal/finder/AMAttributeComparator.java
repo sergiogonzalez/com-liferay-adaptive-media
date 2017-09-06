@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 
 import java.util.Collections;
@@ -35,12 +35,12 @@ public class AMAttributeComparator
 
 		this(
 			Collections.singletonMap(
-				amAttribute, AdaptiveMediaImageQueryBuilder.SortOrder.ASC));
+				amAttribute, AMImageQueryBuilder.SortOrder.ASC));
 	}
 
 	public AMAttributeComparator(
 		AMAttribute<AdaptiveMediaImageProcessor, ?> amAttribute,
-		AdaptiveMediaImageQueryBuilder.SortOrder sortOrder) {
+		AMImageQueryBuilder.SortOrder sortOrder) {
 
 		this(Collections.singletonMap(amAttribute, sortOrder));
 	}
@@ -48,7 +48,7 @@ public class AMAttributeComparator
 	public AMAttributeComparator(
 		Map
 			<AMAttribute<AdaptiveMediaImageProcessor, ?>,
-				AdaptiveMediaImageQueryBuilder.SortOrder> sortCriteria) {
+				AMImageQueryBuilder.SortOrder> sortCriteria) {
 
 		_sortCriteria = (Map)sortCriteria;
 	}
@@ -60,7 +60,7 @@ public class AMAttributeComparator
 
 		for (Map.Entry
 				<AMAttribute<AdaptiveMediaImageProcessor, Object>,
-					AdaptiveMediaImageQueryBuilder.SortOrder> sortCriterion :
+					AMImageQueryBuilder.SortOrder> sortCriterion :
 						_sortCriteria.entrySet()) {
 
 			AMAttribute<AdaptiveMediaImageProcessor, Object> amAttribute =
@@ -75,8 +75,7 @@ public class AMAttributeComparator
 				value1 -> value2Optional.map(
 					value2 -> amAttribute.compare(value1, value2)));
 
-			AdaptiveMediaImageQueryBuilder.SortOrder sortOrder =
-				sortCriterion.getValue();
+			AMImageQueryBuilder.SortOrder sortOrder = sortCriterion.getValue();
 
 			int result = valueOptional.map(
 				sortOrder::getSortValue
@@ -95,6 +94,6 @@ public class AMAttributeComparator
 	private final Map
 		<AMAttribute<
 			AdaptiveMediaImageProcessor, Object>,
-				AdaptiveMediaImageQueryBuilder.SortOrder> _sortCriteria;
+				AMImageQueryBuilder.SortOrder> _sortCriteria;
 
 }

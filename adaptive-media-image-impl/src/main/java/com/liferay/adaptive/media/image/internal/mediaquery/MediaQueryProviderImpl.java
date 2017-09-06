@@ -111,7 +111,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 
 		try {
 			return _adaptiveMediaImageFinder.getAdaptiveMediaStream(
-				queryBuilder -> queryBuilder.forFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 					fileEntry
 				).forConfiguration(
 					configurationEntry.getUUID()

@@ -16,13 +16,13 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.finder.AdaptiveMediaQuery;
+import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder.ConfigurationStep;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder.FuzzySortStep;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder.InitialStep;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageQueryBuilder.StrictSortStep;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.ConfigurationStep;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.FuzzySortStep;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.InitialStep;
+import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder.StrictSortStep;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -38,13 +38,13 @@ import java.util.function.Predicate;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaImageQueryBuilderImpl
-	implements AdaptiveMediaImageQueryBuilder, ConfigurationStep, FuzzySortStep,
+public class AMImageQueryBuilderImpl
+	implements AMImageQueryBuilder, ConfigurationStep, FuzzySortStep,
 			   InitialStep, StrictSortStep {
 
 	public static final
-		AdaptiveMediaQuery<FileVersion, AdaptiveMediaImageProcessor> QUERY =
-			new AdaptiveMediaQuery<FileVersion, AdaptiveMediaImageProcessor>() {
+		AMQuery<FileVersion, AdaptiveMediaImageProcessor> AM_QUERY =
+			new AMQuery<FileVersion, AdaptiveMediaImageProcessor>() {
 			};
 
 	@Override
@@ -70,8 +70,8 @@ public class AdaptiveMediaImageQueryBuilderImpl
 	}
 
 	@Override
-	public AdaptiveMediaQuery<FileVersion, AdaptiveMediaImageProcessor> done() {
-		return QUERY;
+	public AMQuery<FileVersion, AdaptiveMediaImageProcessor> done() {
+		return AM_QUERY;
 	}
 
 	@Override
@@ -145,10 +145,10 @@ public class AdaptiveMediaImageQueryBuilderImpl
 		}
 
 		if (_hasConfiguration()) {
-			return AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ANY;
+			return AMImageQueryBuilder.ConfigurationStatus.ANY;
 		}
 
-		return AdaptiveMediaImageQueryBuilder.ConfigurationStatus.ENABLED;
+		return AMImageQueryBuilder.ConfigurationStatus.ENABLED;
 	}
 
 	public String getConfigurationUuid() {
@@ -176,7 +176,7 @@ public class AdaptiveMediaImageQueryBuilderImpl
 	@Override
 	public <V> StrictSortStep orderBy(
 		AMAttribute<AdaptiveMediaImageProcessor, V> amAttribute,
-		AdaptiveMediaImageQueryBuilder.SortOrder sortOrder) {
+		AMImageQueryBuilder.SortOrder sortOrder) {
 
 		if (amAttribute == null) {
 			throw new IllegalArgumentException(

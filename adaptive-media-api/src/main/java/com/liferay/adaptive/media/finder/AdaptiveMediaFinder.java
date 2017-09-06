@@ -31,17 +31,16 @@ import java.util.stream.Stream;
  *
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaFinder
-	<B extends AdaptiveMediaQueryBuilder<M, T>, M, T> {
+public interface AdaptiveMediaFinder<B extends AMQueryBuilder<M, T>, M, T> {
 
 	/**
 	 * Returns all {@link AdaptiveMedia} instances for the model that matches
 	 * the query. The function is invoked with an instance of an implementation
-	 * dependent {@link AdaptiveMediaQueryBuilder}, that callers must use to
+	 * dependent {@link AMQueryBuilder}, that callers must use to
 	 * create the query.
 	 *
-	 * @param  queryBuilderFunction a function to be invoked with an {@link
-	 *         AdaptiveMediaQueryBuilder} argument. The query builder provides
+	 * @param  amQueryBuilderFunction a function to be invoked with an {@link
+	 *         AMQueryBuilder} argument. The query builder provides
 	 *         operations to filter and sort the returned media.
 	 * @return a non-<code>null</code>, possibly empty stream of all media
 	 *         instances matching the query ordered by score: better matches are
@@ -50,7 +49,7 @@ public interface AdaptiveMediaFinder
 	 *         service
 	 */
 	public Stream<AdaptiveMedia<T>> getAdaptiveMediaStream(
-			Function<B, AdaptiveMediaQuery<M, T>> queryBuilderFunction)
+			Function<B, AMQuery<M, T>> amQueryBuilderFunction)
 		throws PortalException;
 
 }
