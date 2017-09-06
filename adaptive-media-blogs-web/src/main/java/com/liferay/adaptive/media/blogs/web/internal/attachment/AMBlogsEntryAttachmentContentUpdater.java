@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	property = "service.ranking:Integer=2",
 	service = BlogsEntryAttachmentContentUpdater.class
 )
-public class AdaptiveMediaBlogsEntryAttachmentContentUpdater
+public class AMBlogsEntryAttachmentContentUpdater
 	extends BlogsEntryAttachmentContentUpdater {
 
 	@Override
