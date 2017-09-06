@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Sergio González
  */
 @Component(immediate = true, service = RepositoryDefiner.class)
-public class AdaptiveMediaPortletRepositoryDefiner
+public class AMPortletRepositoryDefiner
 	extends BaseOverridingRepositoryDefiner {
 
 	@Activate

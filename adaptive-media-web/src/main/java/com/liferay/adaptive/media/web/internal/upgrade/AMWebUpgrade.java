@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Sergio González
  */
 @Component(immediate = true, service = UpgradeStepRegistrator.class)
-public class AdaptiveMediaWebUpgrade implements UpgradeStepRegistrator {
+public class AMWebUpgrade implements UpgradeStepRegistrator {
 
 	@Override
 	public void register(Registry registry) {

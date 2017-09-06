@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = Portlet.class
 )
-public class AdaptiveMediaPortlet extends MVCPortlet {
+public class AMPortlet extends MVCPortlet {
 
 	@Reference(
 		target = "(&(release.bundle.symbolic.name=com.liferay.adaptive.media.web)(release.schema.version=1.0.0))",

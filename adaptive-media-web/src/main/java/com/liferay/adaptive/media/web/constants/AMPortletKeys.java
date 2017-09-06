@@ -20,6 +20,6 @@ package com.liferay.adaptive.media.web.constants;
 public class AMPortletKeys {
 
 	public static final String ADAPTIVE_MEDIA =
-		"com_liferay_adaptive_media_web_portlet_AdaptiveMediaPortlet";
+		"com_liferay_adaptive_media_web_portlet_AMPortlet";
 
 }
