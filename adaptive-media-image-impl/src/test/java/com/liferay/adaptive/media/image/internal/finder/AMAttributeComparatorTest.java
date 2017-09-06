@@ -32,7 +32,7 @@ import org.junit.Test;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaAttributeComparatorTest {
+public class AMAttributeComparatorTest {
 
 	@Before
 	public void setUp() {
@@ -48,8 +48,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 			AMAttribute.getFileNameAMAttribute(),
 			AdaptiveMediaImageQueryBuilder.SortOrder.DESC);
 
-		_multiAttributeComparator = new AdaptiveMediaAttributeComparator(
-			amAttributes);
+		_multiAMAttributeComparator = new AMAttributeComparator(amAttributes);
 	}
 
 	@Test
@@ -63,7 +62,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 				AMAttribute.getContentLengthAMAttribute(), 10,
 				AMAttribute.getFileNameAMAttribute(), "aaa");
 
-		int result = _multiAttributeComparator.compare(
+		int result = _multiAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
 
 		Assert.assertEquals(-25, result);
@@ -80,7 +79,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 				AMAttribute.getContentLengthAMAttribute(), 10,
 				AMAttribute.getFileNameAMAttribute(), "aaa");
 
-		int result = _multiAttributeComparator.compare(
+		int result = _multiAMAttributeComparator.compare(
 			adaptiveMedia2, adaptiveMedia1);
 
 		Assert.assertEquals(25, result);
@@ -93,7 +92,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
 			_createMedia(AMAttribute.getContentLengthAMAttribute(), 20);
 
-		int result = _singleAttributeComparator.compare(
+		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
 
 		Assert.assertEquals(-10, result);
@@ -106,7 +105,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
 			_createMedia(AMAttribute.getContentLengthAMAttribute(), 20);
 
-		int result = _singleAttributeComparator.compare(
+		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia2, adaptiveMedia1);
 
 		Assert.assertEquals(10, result);
@@ -123,7 +122,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 				AMAttribute.getContentLengthAMAttribute(), 10,
 				AMAttribute.getFileNameAMAttribute(), "aaa");
 
-		int result = _singleAttributeComparator.compare(
+		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
 
 		Assert.assertEquals(0, result);
@@ -136,7 +135,7 @@ public class AdaptiveMediaAttributeComparatorTest {
 		AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia2 =
 			_createMedia(AMAttribute.getContentLengthAMAttribute(), 10);
 
-		int result = _singleAttributeComparator.compare(
+		int result = _singleAMAttributeComparator.compare(
 			adaptiveMedia1, adaptiveMedia2);
 
 		Assert.assertEquals(0, result);
@@ -168,9 +167,8 @@ public class AdaptiveMediaAttributeComparatorTest {
 		return new AdaptiveMediaImage(() -> null, attributeMapping, null);
 	}
 
-	private AdaptiveMediaAttributeComparator _multiAttributeComparator;
-	private final AdaptiveMediaAttributeComparator _singleAttributeComparator =
-		new AdaptiveMediaAttributeComparator(
-			AMAttribute.getContentLengthAMAttribute());
+	private AMAttributeComparator _multiAMAttributeComparator;
+	private final AMAttributeComparator _singleAMAttributeComparator =
+		new AMAttributeComparator(AMAttribute.getContentLengthAMAttribute());
 
 }
