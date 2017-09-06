@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Adolfo Pérez
  */
 @Component(immediate = true, service = RepositoryDefiner.class)
-public class AdaptiveMediaLiferayRepositoryDefiner
+public class AMLiferayRepositoryDefiner
 	extends BaseOverridingRepositoryDefiner {
 
 	@Activate

@@ -85,7 +85,7 @@ import org.osgi.util.promise.Promise;
  */
 @RunWith(Arquillian.class)
 @Sync
-public class AdaptiveMediaThumbnailsOSGiCommandsTest {
+public class AMThumbnailsOSGiCommandsTest {
 
 	@ClassRule
 	@Rule
@@ -293,7 +293,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		throws BundleException {
 
 		Bundle bundle = FrameworkUtil.getBundle(
-			AdaptiveMediaThumbnailsOSGiCommandsTest.class);
+			AMThumbnailsOSGiCommandsTest.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -336,7 +336,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		throws BundleException {
 
 		Bundle bundle = FrameworkUtil.getBundle(
-			AdaptiveMediaThumbnailsOSGiCommandsTest.class);
+			AMThumbnailsOSGiCommandsTest.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -397,7 +397,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 	private byte[] _getFileContents(String fileName) throws Exception {
 		return FileUtil.getBytes(
-			AdaptiveMediaThumbnailsOSGiCommandsTest.class,
+			AMThumbnailsOSGiCommandsTest.class,
 			"/com/liferay/adaptive/media/document/library/thumbnails/internal" +
 				"/commands/test/dependencies/" + fileName);
 	}

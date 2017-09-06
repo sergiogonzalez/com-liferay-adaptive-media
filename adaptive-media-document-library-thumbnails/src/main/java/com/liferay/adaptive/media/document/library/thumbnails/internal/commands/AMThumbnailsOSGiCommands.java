@@ -61,9 +61,9 @@ import org.osgi.service.component.annotations.Reference;
 		"osgi.command.function=check", "osgi.command.function=cleanUp",
 		"osgi.command.function=migrate", "osgi.command.scope=thumbnails"
 	},
-	service = AdaptiveMediaThumbnailsOSGiCommands.class
+	service = AMThumbnailsOSGiCommands.class
 )
-public class AdaptiveMediaThumbnailsOSGiCommands {
+public class AMThumbnailsOSGiCommands {
 
 	public void check(String... companyIds) {
 		System.out.println("Company ID\t# of thumbnails pending migration");
@@ -334,7 +334,7 @@ public class AdaptiveMediaThumbnailsOSGiCommands {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaThumbnailsOSGiCommands.class);
+		AMThumbnailsOSGiCommands.class);
 
 	@Reference
 	private AdaptiveMediaImageConfigurationHelper
