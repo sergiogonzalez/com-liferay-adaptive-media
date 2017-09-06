@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = EditorConfigContributor.class
 )
-public class AdaptiveMediaJournalEditorConfigContributor
+public class AMJournalEditorConfigContributor
 	extends BaseEditorConfigContributor {
 
 	@Override
