@@ -27,10 +27,10 @@ import java.util.Optional;
 /**
  * @author Sergio González
  */
-public class AdaptiveMediaAttributeComparator
+public class AMAttributeComparator
 	implements Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>> {
 
-	public AdaptiveMediaAttributeComparator(
+	public AMAttributeComparator(
 		AMAttribute<AdaptiveMediaImageProcessor, ?> amAttribute) {
 
 		this(
@@ -38,14 +38,14 @@ public class AdaptiveMediaAttributeComparator
 				amAttribute, AdaptiveMediaImageQueryBuilder.SortOrder.ASC));
 	}
 
-	public AdaptiveMediaAttributeComparator(
+	public AMAttributeComparator(
 		AMAttribute<AdaptiveMediaImageProcessor, ?> amAttribute,
 		AdaptiveMediaImageQueryBuilder.SortOrder sortOrder) {
 
 		this(Collections.singletonMap(amAttribute, sortOrder));
 	}
 
-	public AdaptiveMediaAttributeComparator(
+	public AMAttributeComparator(
 		Map
 			<AMAttribute<AdaptiveMediaImageProcessor, ?>,
 				AdaptiveMediaImageQueryBuilder.SortOrder> sortCriteria) {

@@ -118,7 +118,7 @@ public class AdaptiveMediaImageQueryBuilderImpl
 		getComparator() {
 
 		if (!_sortCriteria.isEmpty()) {
-			return new AdaptiveMediaAttributeComparator(_sortCriteria);
+			return new AMAttributeComparator(_sortCriteria);
 		}
 
 		if (!_attributes.isEmpty()) {
