@@ -83,7 +83,7 @@ public class
 	@Test
 	public void testAddingFileEntryWithImageCreatesMedia() throws Exception {
 		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/adaptive_media_processor")) {
+				"liferay/am_processor")) {
 
 			ServiceContext serviceContext =
 				ServiceContextTestUtil.getServiceContext(

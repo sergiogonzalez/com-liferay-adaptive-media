@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.internal.messaging;
 
-import com.liferay.adaptive.media.internal.constants.AdaptiveMediaDestinationNames;
+import com.liferay.adaptive.media.internal.constants.AMDestinationNames;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
@@ -40,7 +40,7 @@ public class AdaptiveMediaMessagingConfigurator {
 		DestinationConfiguration destinationConfiguration =
 			new DestinationConfiguration(
 				DestinationConfiguration.DESTINATION_TYPE_SERIAL,
-				AdaptiveMediaDestinationNames.ADAPTIVE_MEDIA_PROCESSOR);
+				AMDestinationNames.AM_PROCESSOR);
 
 		Destination destination = _destinationFactory.createDestination(
 			destinationConfiguration);
