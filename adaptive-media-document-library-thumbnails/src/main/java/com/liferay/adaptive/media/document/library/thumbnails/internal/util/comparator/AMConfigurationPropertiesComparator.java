@@ -23,10 +23,10 @@ import java.util.function.Function;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaConfigurationPropertiesComparator<T>
+public class AMConfigurationPropertiesComparator<T>
 	implements Comparator<Map<String, String>> {
 
-	public AdaptiveMediaConfigurationPropertiesComparator(
+	public AMConfigurationPropertiesComparator(
 		String attributeName, Function<String, T> function,
 		Comparator<T> comparator) {
 
