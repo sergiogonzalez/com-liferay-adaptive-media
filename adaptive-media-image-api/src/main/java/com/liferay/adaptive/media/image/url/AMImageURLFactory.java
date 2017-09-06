@@ -22,7 +22,7 @@ import java.net.URI;
 /**
  * @author Alejandro Tardín
  */
-public interface AdaptiveMediaImageURLFactory {
+public interface AMImageURLFactory {
 
 	public URI createFileEntryURL(
 		FileVersion fileVersion,

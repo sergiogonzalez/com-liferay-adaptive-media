@@ -27,7 +27,7 @@ import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
-import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
+import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -58,8 +58,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 	@Before
 	public void setUp() {
-		_amImageFinderImpl.setAdaptiveMediaImageURLFactory(
-			_adaptiveMediaImageURLFactory);
+		_amImageFinderImpl.setAMImageURLFactory(_amImageURLFactory);
 		_amImageFinderImpl.setAMImageConfigurationHelper(
 			_amImageConfigurationHelper);
 		_amImageFinderImpl.setImageProcessor(_imageProcessor);
@@ -1553,12 +1552,12 @@ public class AdaptiveMediaImageFinderImplTest {
 	private final AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService = Mockito.mock(
 			AdaptiveMediaImageEntryLocalService.class);
-	private final AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory =
-		Mockito.mock(AdaptiveMediaImageURLFactory.class);
 	private final AMImageConfigurationHelper _amImageConfigurationHelper =
 		Mockito.mock(AMImageConfigurationHelper.class);
 	private final AMImageFinderImpl _amImageFinderImpl =
 		new AMImageFinderImpl();
+	private final AMImageURLFactory _amImageURLFactory = Mockito.mock(
+		AMImageURLFactory.class);
 	private final FileEntry _fileEntry = Mockito.mock(FileEntry.class);
 	private final FileVersion _fileVersion = Mockito.mock(FileVersion.class);
 	private final ImageProcessor _imageProcessor = Mockito.mock(

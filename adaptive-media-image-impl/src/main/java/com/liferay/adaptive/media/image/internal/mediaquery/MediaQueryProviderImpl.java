@@ -25,7 +25,7 @@ import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.mediaquery.MediaQueryProvider;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
+import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -79,13 +79,6 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	}
 
 	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageURLFactory(
-		AdaptiveMediaImageURLFactory adaptiveMediaImageURLFactory) {
-
-		_adaptiveMediaImageURLFactory = adaptiveMediaImageURLFactory;
-	}
-
-	@Reference(unbind = "-")
 	protected void setAMImageConfigurationHelper(
 		AMImageConfigurationHelper amImageConfigurationHelper) {
 
@@ -95,6 +88,11 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	@Reference(unbind = "-")
 	protected void setAMImageFinder(AMImageFinder amImageFinder) {
 		_amImageFinder = amImageFinder;
+	}
+
+	@Reference(unbind = "-")
+	protected void setAMImageURLFactory(AMImageURLFactory amImageURLFactory) {
+		_amImageURLFactory = amImageURLFactory;
 	}
 
 	private Optional<AdaptiveMedia<AMImageProcessor>> _findAdaptiveMedia(
@@ -216,7 +214,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		try {
-			return _adaptiveMediaImageURLFactory.createFileEntryURL(
+			return _amImageURLFactory.createFileEntryURL(
 				fileEntry.getFileVersion(), amImageConfigurationEntry);
 		}
 		catch (PortalException pe) {
@@ -302,9 +300,9 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	private static final Log _log = LogFactoryUtil.getLog(
 		MediaQueryProviderImpl.class);
 
-	private AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory;
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AMImageFinder _amImageFinder;
+	private AMImageURLFactory _amImageURLFactory;
 	private final Comparator<AdaptiveMedia<AMImageProcessor>> _comparator =
 		Comparator.comparingInt(this::_getWidth);
 

@@ -28,7 +28,7 @@ import com.liferay.adaptive.media.image.mediaquery.Condition;
 import com.liferay.adaptive.media.image.mediaquery.MediaQuery;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
-import com.liferay.adaptive.media.image.url.AdaptiveMediaImageURLFactory;
+import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -78,8 +78,7 @@ public class MediaQueryProviderImplTest {
 			invocation -> Stream.empty()
 		);
 
-		_mediaQueryProvider.setAdaptiveMediaImageURLFactory(
-			_adaptiveMediaURLFactory);
+		_mediaQueryProvider.setAMImageURLFactory(_amURLFactory);
 
 		_mediaQueryProvider.setAMImageConfigurationHelper(
 			_amImageConfigurationHelper);
@@ -754,7 +753,7 @@ public class MediaQueryProviderImplTest {
 			};
 
 		Mockito.when(
-			_adaptiveMediaURLFactory.createFileEntryURL(
+			_amURLFactory.createFileEntryURL(
 				_fileEntry.getFileVersion(), amImageConfigurationEntry)
 		).thenReturn(
 			URI.create(url)
@@ -766,13 +765,13 @@ public class MediaQueryProviderImplTest {
 	private static final long _COMPANY_ID = 1L;
 
 	@Mock
-	private AdaptiveMediaImageURLFactory _adaptiveMediaURLFactory;
-
-	@Mock
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Mock
 	private AMImageFinder _amImageFinder;
+
+	@Mock
+	private AMImageURLFactory _amURLFactory;
 
 	@Mock
 	private FileEntry _fileEntry;
