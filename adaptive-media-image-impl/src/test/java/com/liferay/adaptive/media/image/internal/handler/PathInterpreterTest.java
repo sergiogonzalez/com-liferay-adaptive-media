@@ -15,9 +15,9 @@
 package com.liferay.adaptive.media.image.internal.handler;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationHelperImpl;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationHelperImpl;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -42,8 +42,8 @@ public class PathInterpreterTest {
 	@Before
 	public void setUp() {
 		_pathInterpreter.setDLAppService(_dlAppService);
-		_pathInterpreter.setAdaptiveMediaImageConfigurationHelper(
-			_adaptiveMediaImageConfigurationHelper);
+		_pathInterpreter.setAMImageConfigurationHelper(
+			_amImageConfigurationHelper);
 	}
 
 	@Test
@@ -61,11 +61,10 @@ public class PathInterpreterTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.eq("x"))
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.eq("x"))
 		).thenReturn(
-			Optional.of(_configurationEntry)
+			Optional.of(_amImageConfigurationEntry)
 		);
 
 		_pathInterpreter.interpretPath("/image/0/x/foo.jpg");
@@ -81,11 +80,11 @@ public class PathInterpreterTest {
 		).getCompanyId();
 
 		Mockito.verify(
-			_configurationEntry
+			_amImageConfigurationEntry
 		).getProperties();
 
 		Mockito.verify(
-			_configurationEntry
+			_amImageConfigurationEntry
 		).getUUID();
 	}
 
@@ -126,11 +125,10 @@ public class PathInterpreterTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.eq("x"))
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.eq("x"))
 		).thenReturn(
-			Optional.of(_configurationEntry)
+			Optional.of(_amImageConfigurationEntry)
 		);
 
 		_pathInterpreter.interpretPath("/image/0/1/x/foo.jpg");
@@ -152,11 +150,11 @@ public class PathInterpreterTest {
 		).getCompanyId();
 
 		Mockito.verify(
-			_configurationEntry
+			_amImageConfigurationEntry
 		).getProperties();
 
 		Mockito.verify(
-			_configurationEntry
+			_amImageConfigurationEntry
 		).getUUID();
 	}
 
@@ -184,11 +182,10 @@ public class PathInterpreterTest {
 		_pathInterpreter.interpretPath(null);
 	}
 
-	private final AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper = Mockito.mock(
-			AdaptiveMediaImageConfigurationHelperImpl.class);
-	private final AdaptiveMediaImageConfigurationEntry _configurationEntry =
-		Mockito.mock(AdaptiveMediaImageConfigurationEntry.class);
+	private final AMImageConfigurationEntry _amImageConfigurationEntry =
+		Mockito.mock(AMImageConfigurationEntry.class);
+	private final AMImageConfigurationHelper _amImageConfigurationHelper =
+		Mockito.mock(AMImageConfigurationHelperImpl.class);
 	private final DLAppService _dlAppService = Mockito.mock(DLAppService.class);
 	private final FileEntry _fileEntry = Mockito.mock(FileEntry.class);
 	private final FileVersion _fileVersion = Mockito.mock(FileVersion.class);

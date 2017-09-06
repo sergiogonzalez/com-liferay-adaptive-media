@@ -17,11 +17,11 @@ package com.liferay.adaptive.media.image.configuration;
 /**
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaImageConfigurationEntrySerializer {
+public interface AMImageConfigurationEntrySerializer {
 
-	public AdaptiveMediaImageConfigurationEntry deserialize(String s);
+	public AMImageConfigurationEntry deserialize(String s);
 
 	public String serialize(
-		AdaptiveMediaImageConfigurationEntry configurationEntry);
+		AMImageConfigurationEntry amImageConfigurationEntry);
 
 }

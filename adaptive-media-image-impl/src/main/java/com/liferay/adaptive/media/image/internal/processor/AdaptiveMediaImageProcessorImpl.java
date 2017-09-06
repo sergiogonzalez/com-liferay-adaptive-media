@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.internal.processor;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.internal.util.RenderedImageUtil;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
@@ -70,13 +70,13 @@ public final class AdaptiveMediaImageProcessorImpl
 			return;
 		}
 
-		Iterable<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_configurationHelper.getAdaptiveMediaImageConfigurationEntries(
+		Iterable<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
 				fileVersion.getCompanyId());
 
-		configurationEntries.forEach(
-			configurationEntry -> process(
-				fileVersion, configurationEntry.getUUID()));
+		amImageConfigurationEntries.forEach(
+			amImageConfigurationEntry -> process(
+				fileVersion, amImageConfigurationEntry.getUUID()));
 	}
 
 	@Override
@@ -87,36 +87,36 @@ public final class AdaptiveMediaImageProcessorImpl
 			return;
 		}
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional =
-				_configurationHelper.getAdaptiveMediaImageConfigurationEntry(
-					fileVersion.getCompanyId(), configurationEntryUuid);
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				fileVersion.getCompanyId(), configurationEntryUuid);
 
-		if (!configurationEntryOptional.isPresent()) {
+		if (!amImageConfigurationEntryOptional.isPresent()) {
 			return;
 		}
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
 		AdaptiveMediaImageEntry imageEntry =
 			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-				configurationEntry.getUUID(), fileVersion.getFileVersionId());
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId());
 
 		if (imageEntry != null) {
 			return;
 		}
 
 		RenderedImage renderedImage = _imageProcessor.scaleImage(
-			fileVersion, configurationEntry);
+			fileVersion, amImageConfigurationEntry);
 
 		try {
 			byte[] bytes = RenderedImageUtil.getRenderedImageContentStream(
 				renderedImage, fileVersion.getMimeType());
 
 			_imageEntryLocalService.addAdaptiveMediaImageEntry(
-				configurationEntry, fileVersion, renderedImage.getWidth(),
-				renderedImage.getHeight(),
+				amImageConfigurationEntry, fileVersion,
+				renderedImage.getWidth(), renderedImage.getHeight(),
 				new UnsyncByteArrayInputStream(bytes), bytes.length);
 		}
 		catch (IOException | PortalException e) {
@@ -125,10 +125,10 @@ public final class AdaptiveMediaImageProcessorImpl
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper configurationHelper) {
+	public void setAMImageConfigurationHelper(
+		AMImageConfigurationHelper amImageConfigurationHelper) {
 
-		_configurationHelper = configurationHelper;
+		_amImageConfigurationHelper = amImageConfigurationHelper;
 	}
 
 	@Reference(unbind = "-")
@@ -143,7 +143,7 @@ public final class AdaptiveMediaImageProcessorImpl
 		_imageProcessor = imageProcessor;
 	}
 
-	private AdaptiveMediaImageConfigurationHelper _configurationHelper;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
 	private ImageProcessor _imageProcessor;
 

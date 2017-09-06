@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.commands
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.DestinationReplacer;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.PropsValuesReplacer;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalServiceUtil;
@@ -98,14 +98,13 @@ public class AMThumbnailsOSGiCommandsTest {
 	public static void setUpClass() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_adaptiveMediaImageConfigurationHelperServiceReference =
-			registry.getServiceReference(
-				AdaptiveMediaImageConfigurationHelper.class);
+		_amImageConfigurationHelperServiceReference =
+			registry.getServiceReference(AMImageConfigurationHelper.class);
 		_amImageFinderServiceReference = registry.getServiceReference(
 			AMImageFinder.class);
 
-		_adaptiveMediaImageConfigurationHelper = registry.getService(
-			_adaptiveMediaImageConfigurationHelperServiceReference);
+		_amImageConfigurationHelper = registry.getService(
+			_amImageConfigurationHelperServiceReference);
 		_amImageFinder = registry.getService(_amImageFinderServiceReference);
 
 		_disableAdaptiveMediaThumbnails();
@@ -116,8 +115,7 @@ public class AMThumbnailsOSGiCommandsTest {
 	public static void tearDownClass() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
-		registry.ungetService(
-			_adaptiveMediaImageConfigurationHelperServiceReference);
+		registry.ungetService(_amImageConfigurationHelperServiceReference);
 		registry.ungetService(_amImageFinderServiceReference);
 
 		_enableDocumentLibraryAdaptiveMedia();
@@ -147,13 +145,11 @@ public class AMThumbnailsOSGiCommandsTest {
 
 	@After
 	public void tearDown() throws Exception {
-		_adaptiveMediaImageConfigurationHelper.
-			forceDeleteAdaptiveMediaImageConfigurationEntry(
-				_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 100);
+		_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 100);
 
-		_adaptiveMediaImageConfigurationHelper.
-			forceDeleteAdaptiveMediaImageConfigurationEntry(
-				_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 300);
+		_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + 300);
 
 		FileVersion latestFileVersion = _pngFileEntry.getFileVersion();
 
@@ -357,10 +353,9 @@ public class AMThumbnailsOSGiCommandsTest {
 		properties.put("max-height", String.valueOf(height));
 		properties.put("max-width", String.valueOf(width));
 
-		_adaptiveMediaImageConfigurationHelper.
-			addAdaptiveMediaImageConfigurationEntry(
-				_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + width,
-				StringPool.BLANK, _THUMBNAIL_CONFIGURATION + width, properties);
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_company.getCompanyId(), _THUMBNAIL_CONFIGURATION + width,
+			StringPool.BLANK, _THUMBNAIL_CONFIGURATION + width, properties);
 	}
 
 	private FileEntry _addPDFFileEntry() throws Exception {
@@ -443,10 +438,9 @@ public class AMThumbnailsOSGiCommandsTest {
 
 	private static final String _THUMBNAIL_CONFIGURATION = "thumbnail";
 
-	private static AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
-	private static ServiceReference<AdaptiveMediaImageConfigurationHelper>
-		_adaptiveMediaImageConfigurationHelperServiceReference;
+	private static AMImageConfigurationHelper _amImageConfigurationHelper;
+	private static ServiceReference<AMImageConfigurationHelper>
+		_amImageConfigurationHelperServiceReference;
 	private static AMImageFinder _amImageFinder;
 	private static ServiceReference<AMImageFinder>
 		_amImageFinderServiceReference;

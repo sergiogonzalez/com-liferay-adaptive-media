@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.image.service;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -38,7 +39,7 @@ public class AdaptiveMediaImageEntryLocalServiceWrapper
 	* Adds an adaptive media image entry in the database and stores the image
 	* bytes in the file store.
 	*
-	* @param configurationEntry the configuration used to create the adaptive
+	* @param amImageConfigurationEntry the configuration used to create the adaptive
 	media image
 	* @param fileVersion the file version used to create the adaptive media
 	image
@@ -53,11 +54,11 @@ public class AdaptiveMediaImageEntryLocalServiceWrapper
 	*/
 	@Override
 	public com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry addAdaptiveMediaImageEntry(
-		com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry amImageConfigurationEntry,
 		com.liferay.portal.kernel.repository.model.FileVersion fileVersion,
 		int width, int height, java.io.InputStream inputStream, int size)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _adaptiveMediaImageEntryLocalService.addAdaptiveMediaImageEntry(configurationEntry,
+		return _adaptiveMediaImageEntryLocalService.addAdaptiveMediaImageEntry(amImageConfigurationEntry,
 			fileVersion, width, height, inputStream, size);
 	}
 
@@ -284,7 +285,7 @@ public class AdaptiveMediaImageEntryLocalServiceWrapper
 	* Returns the input stream of the adaptive media image generated for a file
 	* version and configuration.
 	*
-	* @param configurationEntry the configuration used to create the adaptive
+	* @param amImageConfigurationEntry the configuration used to create the adaptive
 	media image
 	* @param fileVersion the file version used to create the adaptive media
 	image
@@ -293,9 +294,9 @@ public class AdaptiveMediaImageEntryLocalServiceWrapper
 	*/
 	@Override
 	public java.io.InputStream getAdaptiveMediaImageEntryContentStream(
-		com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry amImageConfigurationEntry,
 		com.liferay.portal.kernel.repository.model.FileVersion fileVersion) {
-		return _adaptiveMediaImageEntryLocalService.getAdaptiveMediaImageEntryContentStream(configurationEntry,
+		return _adaptiveMediaImageEntryLocalService.getAdaptiveMediaImageEntryContentStream(amImageConfigurationEntry,
 			fileVersion);
 	}
 
@@ -446,14 +447,14 @@ public class AdaptiveMediaImageEntryLocalServiceWrapper
 	* the database and the bytes from the file store.
 	*
 	* @param companyId the primary key of the company
-	* @param configurationEntry the configuration used to create the adaptive
+	* @param amImageConfigurationEntry the configuration used to create the adaptive
 	media image
 	*/
 	@Override
 	public void deleteAdaptiveMediaImageEntries(long companyId,
-		com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 		_adaptiveMediaImageEntryLocalService.deleteAdaptiveMediaImageEntries(companyId,
-			configurationEntry);
+				amImageConfigurationEntry);
 	}
 
 	/**

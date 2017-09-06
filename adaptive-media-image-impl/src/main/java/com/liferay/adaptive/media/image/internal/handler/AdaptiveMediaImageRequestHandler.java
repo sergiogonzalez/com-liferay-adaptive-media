@@ -18,8 +18,8 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.handler.AdaptiveMediaRequestHandler;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
@@ -83,17 +83,17 @@ public class AdaptiveMediaImageRequestHandler
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper configurationHelper) {
-
-		_configurationHelper = configurationHelper;
-	}
-
-	@Reference(unbind = "-")
 	public void setAMAsyncProcessorLocator(
 		AMAsyncProcessorLocator amAsyncProcessorLocator) {
 
 		_amAsyncProcessorLocator = amAsyncProcessorLocator;
+	}
+
+	@Reference(unbind = "-")
+	public void setAMImageConfigurationHelper(
+		AMImageConfigurationHelper amImageConfigurationHelper) {
+
+		_amImageConfigurationHelper = amImageConfigurationHelper;
 	}
 
 	@Reference(unbind = "-")
@@ -150,33 +150,35 @@ public class AdaptiveMediaImageRequestHandler
 			AdaptiveMediaImageAttributeMapping attributeMapping) {
 
 		try {
-			Optional<AdaptiveMediaImageConfigurationEntry>
-				configurationEntryOptional = attributeMapping.getValueOptional(
-					AMAttribute.getConfigurationUuidAMAttribute()
-				).flatMap(
-					configurationUuid ->
-						_configurationHelper.
-							getAdaptiveMediaImageConfigurationEntry(
-								fileVersion.getCompanyId(), configurationUuid)
-				);
+			Optional<AMImageConfigurationEntry>
+				amImageConfigurationEntryOptional =
+					attributeMapping.getValueOptional(
+						AMAttribute.getConfigurationUuidAMAttribute()
+					).flatMap(
+						configurationUuid ->
+							_amImageConfigurationHelper.
+								getAMImageConfigurationEntry(
+									fileVersion.getCompanyId(),
+									configurationUuid)
+					);
 
-			if (!configurationEntryOptional.isPresent()) {
+			if (!amImageConfigurationEntryOptional.isPresent()) {
 				return Optional.empty();
 			}
 
-			AdaptiveMediaImageConfigurationEntry configurationEntry =
-				configurationEntryOptional.get();
+			AMImageConfigurationEntry amImageConfigurationEntry =
+				amImageConfigurationEntryOptional.get();
 
 			Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 				adaptiveMediaOptional = _findExactAdaptiveMedia(
-					fileVersion, configurationEntry);
+					fileVersion, amImageConfigurationEntry);
 
 			if (adaptiveMediaOptional.isPresent()) {
 				return adaptiveMediaOptional;
 			}
 
 			adaptiveMediaOptional = _findClosestAdaptiveMedia(
-				fileVersion, configurationEntry);
+				fileVersion, amImageConfigurationEntry);
 
 			if (adaptiveMediaOptional.isPresent()) {
 				return adaptiveMediaOptional;
@@ -192,9 +194,10 @@ public class AdaptiveMediaImageRequestHandler
 	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 		_findClosestAdaptiveMedia(
 			FileVersion fileVersion,
-			AdaptiveMediaImageConfigurationEntry configurationEntry) {
+			AMImageConfigurationEntry amImageConfigurationEntry) {
 
-		Map<String, String> properties = configurationEntry.getProperties();
+		Map<String, String> properties =
+			amImageConfigurationEntry.getProperties();
 
 		final Integer configurationWidth = GetterUtil.getInteger(
 			properties.get("max-width"));
@@ -227,14 +230,14 @@ public class AdaptiveMediaImageRequestHandler
 	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 			_findExactAdaptiveMedia(
 				FileVersion fileVersion,
-				AdaptiveMediaImageConfigurationEntry configurationEntry)
+				AMImageConfigurationEntry amImageConfigurationEntry)
 		throws PortalException {
 
 		return _amImageFinder.getAdaptiveMediaStream(amImageQueryBuilder ->
 			amImageQueryBuilder.forVersion(
 				fileVersion
 			).forConfiguration(
-				configurationEntry.getUUID()
+				amImageConfigurationEntry.getUUID()
 			).done()
 		).findFirst();
 	}
@@ -350,8 +353,8 @@ public class AdaptiveMediaImageRequestHandler
 		AdaptiveMediaImageRequestHandler.class);
 
 	private AMAsyncProcessorLocator _amAsyncProcessorLocator;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AMImageFinder _amImageFinder;
-	private AdaptiveMediaImageConfigurationHelper _configurationHelper;
 	private PathInterpreter _pathInterpreter;
 
 }

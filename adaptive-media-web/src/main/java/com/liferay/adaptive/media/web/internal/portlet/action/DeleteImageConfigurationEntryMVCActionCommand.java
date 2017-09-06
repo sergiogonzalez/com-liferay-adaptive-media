@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.web.constants.AdaptiveMediaPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -55,39 +55,36 @@ public class DeleteImageConfigurationEntryMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String[] deleteAdaptiveMediaImageConfigurationEntryUuids =
+		String[] deleteAMImageConfigurationEntryUuids =
 			ParamUtil.getStringValues(
 				actionRequest, "rowIdsAdaptiveMediaImageConfigurationEntry");
 
-		List<AdaptiveMediaImageConfigurationEntry> deletedConfigurationEntries =
+		List<AMImageConfigurationEntry> deletedAMImageConfigurationEntries =
 			new ArrayList<>();
 
-		for (String deleteAdaptiveMediaImageConfigurationEntryUuid :
-				deleteAdaptiveMediaImageConfigurationEntryUuids) {
+		for (String deleteAMImageConfigurationEntryUuid :
+				deleteAMImageConfigurationEntryUuids) {
 
-			Optional<AdaptiveMediaImageConfigurationEntry>
-				configurationEntryOptional =
-					_adaptiveMediaImageConfigurationHelper.
-						getAdaptiveMediaImageConfigurationEntry(
-							themeDisplay.getCompanyId(),
-							deleteAdaptiveMediaImageConfigurationEntryUuid);
+			Optional<AMImageConfigurationEntry>
+				amImageConfigurationEntryOptional =
+					_amImageConfigurationHelper.getAMImageConfigurationEntry(
+						themeDisplay.getCompanyId(),
+						deleteAMImageConfigurationEntryUuid);
 
-			_adaptiveMediaImageConfigurationHelper.
-				deleteAdaptiveMediaImageConfigurationEntry(
-					themeDisplay.getCompanyId(),
-					deleteAdaptiveMediaImageConfigurationEntryUuid);
+			_amImageConfigurationHelper.deleteAMImageConfigurationEntry(
+				themeDisplay.getCompanyId(),
+				deleteAMImageConfigurationEntryUuid);
 
-			configurationEntryOptional.ifPresent(
-				deletedConfigurationEntries::add);
+			amImageConfigurationEntryOptional.ifPresent(
+				deletedAMImageConfigurationEntries::add);
 		}
 
 		SessionMessages.add(
 			actionRequest, "configurationEntriesDeleted",
-			deletedConfigurationEntries);
+			deletedAMImageConfigurationEntries);
 	}
 
 	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 }

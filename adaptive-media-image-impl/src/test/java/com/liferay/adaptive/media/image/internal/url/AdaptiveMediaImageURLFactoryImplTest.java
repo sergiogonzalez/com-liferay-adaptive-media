@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.internal.url;
 
 import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
 import java.net.URI;
@@ -71,7 +71,7 @@ public class AdaptiveMediaImageURLFactoryImplTest {
 	@Test
 	public void testCreatesURLForFileEntry() throws Exception {
 		URI uri = _adaptiveMediaImageURLFactory.createFileEntryURL(
-			_fileVersion, _configurationEntry);
+			_fileVersion, _amImageConfigurationEntry);
 
 		Assert.assertEquals("prefix/image/1/theUuid/fileName", uri.toString());
 	}
@@ -79,7 +79,7 @@ public class AdaptiveMediaImageURLFactoryImplTest {
 	@Test
 	public void testCreatesURLForFileVersion() throws Exception {
 		URI uri = _adaptiveMediaImageURLFactory.createFileVersionURL(
-			_fileVersion, _configurationEntry);
+			_fileVersion, _amImageConfigurationEntry);
 
 		Assert.assertEquals(
 			"prefix/image/1/2/theUuid/fileName", uri.toString());
@@ -93,9 +93,8 @@ public class AdaptiveMediaImageURLFactoryImplTest {
 	@Mock
 	private AdaptiveMediaURIResolver _adaptiveMediaURIResolver;
 
-	private final AdaptiveMediaImageConfigurationEntry _configurationEntry =
-		new AdaptiveMediaImageConfigurationEntryImpl(
-			"small", _UUID, new HashMap<>());
+	private final AMImageConfigurationEntry _amImageConfigurationEntry =
+		new AMImageConfigurationEntryImpl("small", _UUID, new HashMap<>());
 
 	@Mock
 	private FileVersion _fileVersion;

@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.image.internal.configuration;
 import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException.InvalidStateAdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageDestinationNames;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
 import com.liferay.portal.kernel.messaging.Destination;
@@ -61,17 +61,14 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adolfo Pérez
  */
-@Component(
-	immediate = true, service = AdaptiveMediaImageConfigurationHelper.class
-)
-public class AdaptiveMediaImageConfigurationHelperImpl
-	implements AdaptiveMediaImageConfigurationHelper {
+@Component(immediate = true, service = AMImageConfigurationHelper.class)
+public class AMImageConfigurationHelperImpl
+	implements AMImageConfigurationHelper {
 
 	@Override
-	public AdaptiveMediaImageConfigurationEntry
-			addAdaptiveMediaImageConfigurationEntry(
-				long companyId, String name, String description, String uuid,
-				Map<String, String> properties)
+	public AMImageConfigurationEntry addAMImageConfigurationEntry(
+			long companyId, String name, String description, String uuid,
+			Map<String, String> properties)
 		throws AdaptiveMediaImageConfigurationException, IOException {
 
 		_checkName(name);
@@ -83,236 +80,226 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 		_checkUuid(normalizedUuid);
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			getAdaptiveMediaImageConfigurationEntries(
-				companyId, configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			getAMImageConfigurationEntries(
+				companyId, amImageConfigurationEntry -> true);
 
-		_checkDuplicatesName(configurationEntries, name);
+		_checkDuplicatesName(amImageConfigurationEntries, name);
 
-		_checkDuplicatesUuid(configurationEntries, normalizedUuid);
+		_checkDuplicatesUuid(amImageConfigurationEntries, normalizedUuid);
 
-		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			new ArrayList<>(configurationEntries);
+		List<AMImageConfigurationEntry> updatedAMImageConfigurationEntries =
+			new ArrayList<>(amImageConfigurationEntries);
 
-		updatedConfigurationEntries.removeIf(
-			configurationEntry -> normalizedUuid.equals(
-				configurationEntry.getUUID()));
+		updatedAMImageConfigurationEntries.removeIf(
+			amImageConfigurationEntry -> normalizedUuid.equals(
+				amImageConfigurationEntry.getUUID()));
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				name, description, normalizedUuid, properties, true);
 
-		updatedConfigurationEntries.add(configurationEntry);
+		updatedAMImageConfigurationEntries.add(amImageConfigurationEntry);
 
-		_updateConfiguration(companyId, updatedConfigurationEntries);
+		_updateConfiguration(companyId, updatedAMImageConfigurationEntries);
 
-		_triggerConfigurationEvent(configurationEntry);
+		_triggerConfigurationEvent(amImageConfigurationEntry);
 
-		return configurationEntry;
+		return amImageConfigurationEntry;
 	}
 
 	@Override
-	public void deleteAdaptiveMediaImageConfigurationEntry(
-			long companyId, String uuid)
+	public void deleteAMImageConfigurationEntry(long companyId, String uuid)
 		throws InvalidStateAdaptiveMediaImageConfigurationException,
 			IOException {
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional =
-				getAdaptiveMediaImageConfigurationEntry(companyId, uuid);
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
+			getAMImageConfigurationEntry(companyId, uuid);
 
-		if (!configurationEntryOptional.isPresent()) {
+		if (!amImageConfigurationEntryOptional.isPresent()) {
 			return;
 		}
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
-		if (configurationEntry.isEnabled()) {
+		if (amImageConfigurationEntry.isEnabled()) {
 			throw new InvalidStateAdaptiveMediaImageConfigurationException();
 		}
 
-		forceDeleteAdaptiveMediaImageConfigurationEntry(companyId, uuid);
+		forceDeleteAMImageConfigurationEntry(companyId, uuid);
 	}
 
 	@Override
-	public void disableAdaptiveMediaImageConfigurationEntry(
-			long companyId, String uuid)
+	public void disableAMImageConfigurationEntry(long companyId, String uuid)
 		throws IOException {
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional =
-				getAdaptiveMediaImageConfigurationEntry(companyId, uuid);
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
+			getAMImageConfigurationEntry(companyId, uuid);
 
-		if (!configurationEntryOptional.isPresent()) {
+		if (!amImageConfigurationEntryOptional.isPresent()) {
 			return;
 		}
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
-		if (!configurationEntry.isEnabled()) {
+		if (!amImageConfigurationEntry.isEnabled()) {
 			return;
 		}
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			getAdaptiveMediaImageConfigurationEntries(
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			getAMImageConfigurationEntries(
 				companyId, curConfigurationEntry -> true);
 
-		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			new ArrayList<>(configurationEntries);
+		List<AMImageConfigurationEntry> updatedAMImageConfigurationEntries =
+			new ArrayList<>(amImageConfigurationEntries);
 
-		updatedConfigurationEntries.removeIf(
+		updatedAMImageConfigurationEntries.removeIf(
 			curConfigurationEntry -> uuid.equals(
 				curConfigurationEntry.getUUID()));
 
-		AdaptiveMediaImageConfigurationEntry newConfigurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
-				configurationEntry.getName(),
-				configurationEntry.getDescription(),
-				configurationEntry.getUUID(),
-				configurationEntry.getProperties(), false);
+		AMImageConfigurationEntry newAMImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
+				amImageConfigurationEntry.getName(),
+				amImageConfigurationEntry.getDescription(),
+				amImageConfigurationEntry.getUUID(),
+				amImageConfigurationEntry.getProperties(), false);
 
-		updatedConfigurationEntries.add(newConfigurationEntry);
+		updatedAMImageConfigurationEntries.add(newAMImageConfigurationEntry);
 
-		_updateConfiguration(companyId, updatedConfigurationEntries);
+		_updateConfiguration(companyId, updatedAMImageConfigurationEntries);
 
-		_triggerConfigurationEvent(configurationEntry);
+		_triggerConfigurationEvent(amImageConfigurationEntry);
 	}
 
 	@Override
-	public void enableAdaptiveMediaImageConfigurationEntry(
-			long companyId, String uuid)
+	public void enableAMImageConfigurationEntry(long companyId, String uuid)
 		throws IOException {
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional =
-				getAdaptiveMediaImageConfigurationEntry(companyId, uuid);
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
+			getAMImageConfigurationEntry(companyId, uuid);
 
-		if (!configurationEntryOptional.isPresent()) {
+		if (!amImageConfigurationEntryOptional.isPresent()) {
 			return;
 		}
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
-		if (configurationEntry.isEnabled()) {
+		if (amImageConfigurationEntry.isEnabled()) {
 			return;
 		}
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			getAdaptiveMediaImageConfigurationEntries(
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			getAMImageConfigurationEntries(
 				companyId, curConfigurationEntry -> true);
 
-		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			new ArrayList<>(configurationEntries);
+		List<AMImageConfigurationEntry> updatedAMImageConfigurationEntries =
+			new ArrayList<>(amImageConfigurationEntries);
 
-		updatedConfigurationEntries.removeIf(
+		updatedAMImageConfigurationEntries.removeIf(
 			curConfigurationEntry -> uuid.equals(
 				curConfigurationEntry.getUUID()));
 
-		AdaptiveMediaImageConfigurationEntry newConfigurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
-				configurationEntry.getName(),
-				configurationEntry.getDescription(),
-				configurationEntry.getUUID(),
-				configurationEntry.getProperties(), true);
+		AMImageConfigurationEntry newAMImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
+				amImageConfigurationEntry.getName(),
+				amImageConfigurationEntry.getDescription(),
+				amImageConfigurationEntry.getUUID(),
+				amImageConfigurationEntry.getProperties(), true);
 
-		updatedConfigurationEntries.add(newConfigurationEntry);
+		updatedAMImageConfigurationEntries.add(newAMImageConfigurationEntry);
 
-		_updateConfiguration(companyId, updatedConfigurationEntries);
+		_updateConfiguration(companyId, updatedAMImageConfigurationEntries);
 
-		_triggerConfigurationEvent(configurationEntry);
+		_triggerConfigurationEvent(amImageConfigurationEntry);
 	}
 
 	@Override
-	public void forceDeleteAdaptiveMediaImageConfigurationEntry(
+	public void forceDeleteAMImageConfigurationEntry(
 			long companyId, String uuid)
 		throws IOException {
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional =
-				getAdaptiveMediaImageConfigurationEntry(companyId, uuid);
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
+			getAMImageConfigurationEntry(companyId, uuid);
 
-		if (!configurationEntryOptional.isPresent()) {
+		if (!amImageConfigurationEntryOptional.isPresent()) {
 			return;
 		}
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
 		_adaptiveMediaImageEntryLocalService.deleteAdaptiveMediaImageEntries(
-			companyId, configurationEntry);
+			companyId, amImageConfigurationEntry);
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			getAdaptiveMediaImageConfigurationEntries(
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			getAMImageConfigurationEntries(
 				companyId, curConfigurationEntry -> true);
 
-		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			new ArrayList<>(configurationEntries);
+		List<AMImageConfigurationEntry> updatedAMImageConfigurationEntries =
+			new ArrayList<>(amImageConfigurationEntries);
 
-		updatedConfigurationEntries.removeIf(
+		updatedAMImageConfigurationEntries.removeIf(
 			curConfigurationEntry -> uuid.equals(
 				curConfigurationEntry.getUUID()));
 
-		_updateConfiguration(companyId, updatedConfigurationEntries);
+		_updateConfiguration(companyId, updatedAMImageConfigurationEntries);
 
-		_triggerConfigurationEvent(configurationEntry);
+		_triggerConfigurationEvent(amImageConfigurationEntry);
 	}
 
 	@Override
-	public Collection<AdaptiveMediaImageConfigurationEntry>
-		getAdaptiveMediaImageConfigurationEntries(long companyId) {
+	public Collection<AMImageConfigurationEntry>
+		getAMImageConfigurationEntries(long companyId) {
 
-		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
-			_getConfigurationEntries(companyId);
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			_getAMImageConfigurationEntries(companyId);
 
-		return configurationEntryStream.filter(
-			AdaptiveMediaImageConfigurationEntry::isEnabled
+		return amImageConfigurationEntryStream.filter(
+			AMImageConfigurationEntry::isEnabled
 		).sorted(
-			Comparator.comparing(AdaptiveMediaImageConfigurationEntry::getName)
+			Comparator.comparing(AMImageConfigurationEntry::getName)
 		).collect(
 			Collectors.toList()
 		);
 	}
 
 	@Override
-	public Collection<AdaptiveMediaImageConfigurationEntry>
-		getAdaptiveMediaImageConfigurationEntries(
-			long companyId,
-			Predicate<? super AdaptiveMediaImageConfigurationEntry> predicate) {
+	public Collection<AMImageConfigurationEntry> getAMImageConfigurationEntries(
+		long companyId,
+		Predicate<? super AMImageConfigurationEntry> predicate) {
 
-		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
-			_getConfigurationEntries(companyId);
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			_getAMImageConfigurationEntries(companyId);
 
-		return configurationEntryStream.filter(
+		return amImageConfigurationEntryStream.filter(
 			predicate
 		).sorted(
-			Comparator.comparing(AdaptiveMediaImageConfigurationEntry::getName)
+			Comparator.comparing(AMImageConfigurationEntry::getName)
 		).collect(
 			Collectors.toList()
 		);
 	}
 
 	@Override
-	public Optional<AdaptiveMediaImageConfigurationEntry>
-		getAdaptiveMediaImageConfigurationEntry(
-			long companyId, String configurationEntryUUID) {
+	public Optional<AMImageConfigurationEntry> getAMImageConfigurationEntry(
+		long companyId, String configurationEntryUUID) {
 
-		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
-			_getConfigurationEntries(companyId);
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			_getAMImageConfigurationEntries(companyId);
 
-		return configurationEntryStream.filter(
-			configurationEntry -> configurationEntryUUID.equals(
-				configurationEntry.getUUID())
+		return amImageConfigurationEntryStream.filter(
+			amImageConfigurationEntry -> configurationEntryUUID.equals(
+				amImageConfigurationEntry.getUUID())
 		).findFirst();
 	}
 
 	@Override
-	public AdaptiveMediaImageConfigurationEntry
-			updateAdaptiveMediaImageConfigurationEntry(
-				long companyId, String oldUuid, String name, String description,
-				String newUuid, Map<String, String> properties)
+	public AMImageConfigurationEntry updateAMImageConfigurationEntry(
+			long companyId, String oldUuid, String name, String description,
+			String newUuid, Map<String, String> properties)
 		throws AdaptiveMediaImageConfigurationException, IOException {
 
 		_checkName(name);
@@ -324,55 +311,57 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 		_checkUuid(normalizedUuid);
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			getAdaptiveMediaImageConfigurationEntries(
-				companyId, configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			getAMImageConfigurationEntries(
+				companyId, amImageConfigurationEntry -> true);
 
-		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
-			configurationEntries.stream();
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			amImageConfigurationEntries.stream();
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			oldConfigurationEntryOptional = configurationEntryStream.filter(
-				configurationEntry -> oldUuid.equals(
-					configurationEntry.getUUID())
-			).findFirst();
+		Optional<AMImageConfigurationEntry>
+			oldAMImageConfigurationEntryOptional =
+				amImageConfigurationEntryStream.filter(
+					amImageConfigurationEntry -> oldUuid.equals(
+						amImageConfigurationEntry.getUUID())
+				).findFirst();
 
-		AdaptiveMediaImageConfigurationEntry oldConfigurationEntry =
-			oldConfigurationEntryOptional.orElseThrow(
+		AMImageConfigurationEntry oldAMImageConfigurationEntry =
+			oldAMImageConfigurationEntryOptional.orElseThrow(
 				() ->
 					new AdaptiveMediaImageConfigurationException.
 						NoSuchAdaptiveMediaImageConfigurationException(
 							"{uuid=" + oldUuid + "}"));
 
-		if (!name.equals(oldConfigurationEntry.getName())) {
-			_checkDuplicatesName(configurationEntries, name);
+		if (!name.equals(oldAMImageConfigurationEntry.getName())) {
+			_checkDuplicatesName(amImageConfigurationEntries, name);
 		}
 
 		if (!oldUuid.equals(normalizedUuid)) {
-			_checkDuplicatesUuid(configurationEntries, normalizedUuid);
+			_checkDuplicatesUuid(amImageConfigurationEntries, normalizedUuid);
 		}
 
-		List<AdaptiveMediaImageConfigurationEntry> updatedConfigurationEntries =
-			new ArrayList<>(configurationEntries);
+		List<AMImageConfigurationEntry> updatedAMImageConfigurationEntries =
+			new ArrayList<>(amImageConfigurationEntries);
 
-		updatedConfigurationEntries.removeIf(
-			configurationEntry -> oldUuid.equals(configurationEntry.getUUID()));
+		updatedAMImageConfigurationEntries.removeIf(
+			amImageConfigurationEntry -> oldUuid.equals(
+				amImageConfigurationEntry.getUUID()));
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				name, description, normalizedUuid, properties,
-				oldConfigurationEntry.isEnabled());
+				oldAMImageConfigurationEntry.isEnabled());
 
-		updatedConfigurationEntries.add(configurationEntry);
+		updatedAMImageConfigurationEntries.add(amImageConfigurationEntry);
 
-		_updateConfiguration(companyId, updatedConfigurationEntries);
+		_updateConfiguration(companyId, updatedAMImageConfigurationEntries);
 
 		_triggerConfigurationEvent(
-			new AdaptiveMediaImageConfigurationEntry[] {
-				oldConfigurationEntry, configurationEntry
+			new AMImageConfigurationEntry[] {
+				oldAMImageConfigurationEntry, amImageConfigurationEntry
 			});
 
-		return configurationEntry;
+		return amImageConfigurationEntry;
 	}
 
 	@Activate
@@ -397,10 +386,10 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 	}
 
 	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationEntryParser(
-		AdaptiveMediaImageConfigurationEntryParser configurationEntryParser) {
+	protected void setAMImageConfigurationEntryParser(
+		AMImageConfigurationEntryParser amImageConfigurationEntryParser) {
 
-		_configurationEntryParser = configurationEntryParser;
+		_amImageConfigurationEntryParser = amImageConfigurationEntryParser;
 	}
 
 	private static final boolean _isPositiveNumber(String s) {
@@ -410,44 +399,42 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 	}
 
 	private void _checkDuplicatesName(
-			Collection<AdaptiveMediaImageConfigurationEntry>
-				configurationEntries,
+			Collection<AMImageConfigurationEntry> amImageConfigurationEntries,
 			String name)
 		throws AdaptiveMediaImageConfigurationException {
 
-		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
-			configurationEntries.stream();
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			amImageConfigurationEntries.stream();
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			duplicateNameConfigurationEntryOptional =
-				configurationEntryStream.filter(
-					configurationEntry -> name.equals(
-						configurationEntry.getName())
+		Optional<AMImageConfigurationEntry>
+			duplicateNameAMImageConfigurationEntryOptional =
+				amImageConfigurationEntryStream.filter(
+					amImageConfigurationEntry -> name.equals(
+						amImageConfigurationEntry.getName())
 				).findFirst();
 
-		if (duplicateNameConfigurationEntryOptional.isPresent()) {
+		if (duplicateNameAMImageConfigurationEntryOptional.isPresent()) {
 			throw new AdaptiveMediaImageConfigurationException.
 				DuplicateAdaptiveMediaImageConfigurationNameException();
 		}
 	}
 
 	private void _checkDuplicatesUuid(
-			Collection<AdaptiveMediaImageConfigurationEntry>
-				configurationEntries,
+			Collection<AMImageConfigurationEntry> amImageConfigurationEntries,
 			String uuid)
 		throws AdaptiveMediaImageConfigurationException {
 
-		Stream<AdaptiveMediaImageConfigurationEntry> configurationEntryStream =
-			configurationEntries.stream();
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			amImageConfigurationEntries.stream();
 
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			duplicateUuidConfigurationEntryOptional =
-				configurationEntryStream.filter(
-					configurationEntry -> uuid.equals(
-						configurationEntry.getUUID())
+		Optional<AMImageConfigurationEntry>
+			duplicateUuidAMImageConfigurationEntryOptional =
+				amImageConfigurationEntryStream.filter(
+					amImageConfigurationEntry -> uuid.equals(
+						amImageConfigurationEntry.getUUID())
 				).findFirst();
 
-		if (duplicateUuidConfigurationEntryOptional.isPresent()) {
+		if (duplicateUuidAMImageConfigurationEntryOptional.isPresent()) {
 			throw new AdaptiveMediaImageConfigurationException.
 				DuplicateAdaptiveMediaImageConfigurationUuidException();
 		}
@@ -502,8 +489,8 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 		}
 	}
 
-	private Stream<AdaptiveMediaImageConfigurationEntry>
-		_getConfigurationEntries(long companyId) {
+	private Stream<AMImageConfigurationEntry>
+		_getAMImageConfigurationEntries(long companyId) {
 
 		if (_configurationEntries.containsKey(companyId)) {
 			return _configurationEntries.get(companyId).stream();
@@ -523,16 +510,16 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 			Stream<String> imageVariantsStream = Stream.of(imageVariants);
 
-			List<AdaptiveMediaImageConfigurationEntry> configurationEntries =
+			List<AMImageConfigurationEntry> amImageConfigurationEntries =
 				imageVariantsStream.map(
-					_configurationEntryParser::parse
+					_amImageConfigurationEntryParser::parse
 				).collect(
 					Collectors.toList()
 				);
 
-			_configurationEntries.put(companyId, configurationEntries);
+			_configurationEntries.put(companyId, amImageConfigurationEntries);
 
-			return configurationEntries.stream();
+			return amImageConfigurationEntries.stream();
 		}
 		catch (SettingsException se) {
 			throw new AdaptiveMediaRuntimeException.InvalidConfiguration(se);
@@ -583,7 +570,7 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 	private void _updateConfiguration(
 			long companyId,
-			List<AdaptiveMediaImageConfigurationEntry> configurationEntries)
+			List<AMImageConfigurationEntry> amImageConfigurationEntries)
 		throws IOException {
 
 		try {
@@ -595,11 +582,11 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 			ModifiableSettings modifiableSettings =
 				settings.getModifiableSettings();
 
-			Stream<AdaptiveMediaImageConfigurationEntry>
-				configurationEntryStream = configurationEntries.stream();
+			Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+				amImageConfigurationEntries.stream();
 
-			List<String> imageVariants = configurationEntryStream.map(
-				_configurationEntryParser::getConfigurationString
+			List<String> imageVariants = amImageConfigurationEntryStream.map(
+				_amImageConfigurationEntryParser::getConfigurationString
 			).collect(
 				Collectors.toList()
 			);
@@ -610,11 +597,12 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 
 			modifiableSettings.store();
 
-			configurationEntryStream = configurationEntries.stream();
+			amImageConfigurationEntryStream =
+				amImageConfigurationEntries.stream();
 
 			_configurationEntries.put(
 				companyId,
-				configurationEntryStream.collect(Collectors.toList()));
+				amImageConfigurationEntryStream.collect(Collectors.toList()));
 		}
 		catch (SettingsException | ValidatorException e) {
 			throw new AdaptiveMediaRuntimeException.InvalidConfiguration(e);
@@ -628,10 +616,9 @@ public class AdaptiveMediaImageConfigurationHelperImpl
 	private AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService;
 
-	private final Map<Long, Collection<AdaptiveMediaImageConfigurationEntry>>
+	private AMImageConfigurationEntryParser _amImageConfigurationEntryParser;
+	private final Map<Long, Collection<AMImageConfigurationEntry>>
 		_configurationEntries = new ConcurrentHashMap<>();
-	private AdaptiveMediaImageConfigurationEntryParser
-		_configurationEntryParser;
 
 	@Reference
 	private DestinationFactory _destinationFactory;

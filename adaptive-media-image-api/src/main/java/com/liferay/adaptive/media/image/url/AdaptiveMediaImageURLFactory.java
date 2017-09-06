@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.url;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
 import java.net.URI;
@@ -26,10 +26,10 @@ public interface AdaptiveMediaImageURLFactory {
 
 	public URI createFileEntryURL(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry);
+		AMImageConfigurationEntry amImageConfigurationEntry);
 
 	public URI createFileVersionURL(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry);
+		AMImageConfigurationEntry amImageConfigurationEntry);
 
 }

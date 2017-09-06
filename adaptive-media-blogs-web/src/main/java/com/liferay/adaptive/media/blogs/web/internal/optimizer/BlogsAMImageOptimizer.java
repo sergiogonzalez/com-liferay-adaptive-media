@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.blogs.web.internal.optimizer;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
@@ -56,21 +56,22 @@ public class BlogsAMImageOptimizer implements AMImageOptimizer {
 
 	@Override
 	public void optimize(long companyId) {
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(companyId);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				companyId);
 
 		int count = _amImageCounter.countExpectedAMImageEntries(companyId);
 
-		int total = count * configurationEntries.size();
+		int total = count * amImageConfigurationEntries.size();
 
 		final AtomicInteger atomicCounter = new AtomicInteger(0);
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
 			_optimize(
-				companyId, configurationEntry.getUUID(), total, atomicCounter);
+				companyId, amImageConfigurationEntry.getUUID(), total,
+				atomicCounter);
 		}
 	}
 
@@ -178,11 +179,10 @@ public class BlogsAMImageOptimizer implements AMImageOptimizer {
 		BlogsAMImageOptimizer.class);
 
 	@Reference
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
+	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
 
 	@Reference
-	private AdaptiveMediaImageProcessor _adaptiveMediaImageProcessor;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference(target = "(adaptive.media.key=blogs)")
 	private AMImageCounter _amImageCounter;

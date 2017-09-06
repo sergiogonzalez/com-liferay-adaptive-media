@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.image.internal.mediaquery;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
@@ -82,19 +82,17 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	}
 
 	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper) {
-
-		_adaptiveMediaImageConfigurationHelper =
-			adaptiveMediaImageConfigurationHelper;
-	}
-
-	@Reference(unbind = "-")
 	protected void setAdaptiveMediaImageURLFactory(
 		AdaptiveMediaImageURLFactory adaptiveMediaImageURLFactory) {
 
 		_adaptiveMediaImageURLFactory = adaptiveMediaImageURLFactory;
+	}
+
+	@Reference(unbind = "-")
+	protected void setAMImageConfigurationHelper(
+		AMImageConfigurationHelper amImageConfigurationHelper) {
+
+		_amImageConfigurationHelper = amImageConfigurationHelper;
 	}
 
 	@Reference(unbind = "-")
@@ -105,14 +103,14 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 		_findAdaptiveMedia(
 			FileEntry fileEntry,
-			AdaptiveMediaImageConfigurationEntry configurationEntry) {
+			AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		try {
 			return _amImageFinder.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 					fileEntry
 				).forConfiguration(
-					configurationEntry.getUUID()
+					amImageConfigurationEntry.getUUID()
 				).done()
 			).findFirst();
 		}
@@ -128,18 +126,19 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	private AdaptiveMedia<AdaptiveMediaImageProcessor>
 		_getAdaptiveMediaFromConfigurationEntry(
 			FileEntry fileEntry,
-			AdaptiveMediaImageConfigurationEntry configurationEntry) {
+			AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 			adaptiveMediaOptional = _findAdaptiveMedia(
-				fileEntry, configurationEntry);
+				fileEntry, amImageConfigurationEntry);
 
 		if (adaptiveMediaOptional.isPresent()) {
 			return adaptiveMediaOptional.get();
 		}
 
-		Optional<Integer> widthOptional = _getWidth(configurationEntry);
-		Optional<Integer> heightOptional = _getHeight(configurationEntry);
+		Optional<Integer> widthOptional = _getWidth(amImageConfigurationEntry);
+		Optional<Integer> heightOptional = _getHeight(
+			amImageConfigurationEntry);
 
 		Map<String, String> properties = new HashMap<>();
 
@@ -154,27 +153,26 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 		return new AdaptiveMediaImage(
 			() -> null,
 			AdaptiveMediaImageAttributeMapping.fromProperties(properties),
-			_getFileEntryURL(fileEntry, configurationEntry));
+			_getFileEntryURL(fileEntry, amImageConfigurationEntry));
 	}
 
 	private Collection<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 			_getAdaptiveMedias(FileEntry fileEntry)
 		throws PortalException {
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					fileEntry.getCompanyId());
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				fileEntry.getCompanyId());
 
 		List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMedias =
 			new ArrayList<>();
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
 			AdaptiveMedia<AdaptiveMediaImageProcessor> adaptiveMedia =
 				_getAdaptiveMediaFromConfigurationEntry(
-					fileEntry, configurationEntry);
+					fileEntry, amImageConfigurationEntry);
 
 			if (_getWidth(adaptiveMedia) > 0) {
 				adaptiveMedias.add(adaptiveMedia);
@@ -187,11 +185,11 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	}
 
 	private Optional<Integer> _getAttribute(
-		AdaptiveMediaImageConfigurationEntry adaptiveMedia, String name) {
+		AMImageConfigurationEntry amImageConfigurationEntry, String name) {
 
 		try {
 			Integer height = Integer.valueOf(
-				adaptiveMedia.getProperties().get(name));
+				amImageConfigurationEntry.getProperties().get(name));
 
 			return Optional.of(height);
 		}
@@ -220,11 +218,11 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 
 	private URI _getFileEntryURL(
 		FileEntry fileEntry,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		try {
 			return _adaptiveMediaImageURLFactory.createFileEntryURL(
-				fileEntry.getFileVersion(), configurationEntry);
+				fileEntry.getFileVersion(), amImageConfigurationEntry);
 		}
 		catch (PortalException pe) {
 			throw new RuntimeException(pe);
@@ -271,9 +269,9 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	}
 
 	private Optional<Integer> _getHeight(
-		AdaptiveMediaImageConfigurationEntry originalConfigurationEntry) {
+		AMImageConfigurationEntry originalAMImageConfigurationEntry) {
 
-		return _getAttribute(originalConfigurationEntry, "max-height");
+		return _getAttribute(originalAMImageConfigurationEntry, "max-height");
 	}
 
 	private MediaQuery _getMediaQuery(
@@ -310,17 +308,16 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	}
 
 	private Optional<Integer> _getWidth(
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
-		return _getAttribute(configurationEntry, "max-width");
+		return _getAttribute(amImageConfigurationEntry, "max-width");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MediaQueryProviderImpl.class);
 
-	private AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper;
 	private AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AMImageFinder _amImageFinder;
 	private final Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 		_comparator = Comparator.comparingInt(this::_getWidth);

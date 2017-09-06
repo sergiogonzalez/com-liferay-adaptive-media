@@ -15,10 +15,10 @@
 package com.liferay.adaptive.media.image.internal.processor;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.exception.DuplicateAdaptiveMediaImageEntryException;
-import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageConfigurationEntryImpl;
+import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
@@ -50,8 +50,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		_processor.setImageEntryLocalService(
 			_adaptiveMediaImageEntryLocalService);
 		_processor.setImageProcessor(_imageProcessor);
-		_processor.setAdaptiveMediaImageConfigurationHelper(
-			_adaptiveMediaImageConfigurationHelper);
+		_processor.setAMImageConfigurationHelper(_amImageConfigurationHelper);
 
 		ImageToolUtil imageToolUtil = new ImageToolUtil();
 
@@ -141,12 +140,11 @@ public class AdaptiveMediaImageProcessorImplTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.anyString())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			Optional.of(
-				new AdaptiveMediaImageConfigurationEntryImpl(
+				new AMImageConfigurationEntryImpl(
 					StringUtil.randomString(), StringUtil.randomString(),
 					Collections.emptyMap()))
 		);
@@ -164,7 +162,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 			_imageProcessor, Mockito.never()
 		).scaleImage(
 			Mockito.any(FileVersion.class),
-			Mockito.any(AdaptiveMediaImageConfigurationEntry.class)
+			Mockito.any(AMImageConfigurationEntry.class)
 		);
 	}
 
@@ -179,9 +177,8 @@ public class AdaptiveMediaImageProcessorImplTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.anyString())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
 			Optional.empty()
 		);
@@ -206,8 +203,8 @@ public class AdaptiveMediaImageProcessorImplTest {
 		_processor.process(_fileVersion, StringUtil.randomString());
 
 		Mockito.verify(
-			_adaptiveMediaImageConfigurationHelper, Mockito.never()
-		).getAdaptiveMediaImageConfigurationEntry(
+			_amImageConfigurationHelper, Mockito.never()
+		).getAMImageConfigurationEntry(
 			Mockito.anyLong(), Mockito.anyString()
 		);
 	}
@@ -222,30 +219,29 @@ public class AdaptiveMediaImageProcessorImplTest {
 			true
 		);
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(Mockito.anyLong())
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				Mockito.anyLong())
 		).thenReturn(
-			Collections.singleton(configurationEntry)
+			Collections.singleton(amImageConfigurationEntry)
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.anyString())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
-			Optional.of(configurationEntry)
+			Optional.of(amImageConfigurationEntry)
 		);
 
 		RenderedImage renderedImage = Mockito.mock(RenderedImage.class);
 
 		Mockito.when(
-			_imageProcessor.scaleImage(_fileVersion, configurationEntry)
+			_imageProcessor.scaleImage(_fileVersion, amImageConfigurationEntry)
 		).thenReturn(
 			renderedImage
 		);
@@ -255,7 +251,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		).when(
 			_adaptiveMediaImageEntryLocalService
 		).addAdaptiveMediaImageEntry(
-			Mockito.any(AdaptiveMediaImageConfigurationEntry.class),
+			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(), Mockito.anyInt(),
 			Mockito.any(InputStream.class), Mockito.anyInt()
 		);
@@ -271,30 +267,29 @@ public class AdaptiveMediaImageProcessorImplTest {
 			true
 		);
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(Mockito.anyLong())
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				Mockito.anyLong())
 		).thenReturn(
-			Collections.singleton(configurationEntry)
+			Collections.singleton(amImageConfigurationEntry)
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.anyString())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
-			Optional.of(configurationEntry)
+			Optional.of(amImageConfigurationEntry)
 		);
 
 		RenderedImage renderedImage = Mockito.mock(RenderedImage.class);
 
 		Mockito.when(
-			_imageProcessor.scaleImage(_fileVersion, configurationEntry)
+			_imageProcessor.scaleImage(_fileVersion, amImageConfigurationEntry)
 		).thenReturn(
 			renderedImage
 		);
@@ -304,13 +299,13 @@ public class AdaptiveMediaImageProcessorImplTest {
 		Mockito.verify(
 			_imageProcessor
 		).scaleImage(
-			_fileVersion, configurationEntry
+			_fileVersion, amImageConfigurationEntry
 		);
 
 		Mockito.verify(
 			_adaptiveMediaImageEntryLocalService
 		).addAdaptiveMediaImageEntry(
-			Mockito.any(AdaptiveMediaImageConfigurationEntry.class),
+			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(), Mockito.anyInt(),
 			Mockito.any(InputStream.class), Mockito.anyInt()
 		);
@@ -327,8 +322,8 @@ public class AdaptiveMediaImageProcessorImplTest {
 		Mockito.doThrow(
 			AdaptiveMediaRuntimeException.InvalidConfiguration.class
 		).when(
-			_adaptiveMediaImageConfigurationHelper
-		).getAdaptiveMediaImageConfigurationEntries(
+			_amImageConfigurationHelper
+		).getAMImageConfigurationEntries(
 			Mockito.anyLong()
 		);
 
@@ -343,24 +338,23 @@ public class AdaptiveMediaImageProcessorImplTest {
 			true
 		);
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(Mockito.anyLong())
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				Mockito.anyLong())
 		).thenReturn(
-			Collections.singleton(configurationEntry)
+			Collections.singleton(amImageConfigurationEntry)
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.anyString())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
-			Optional.of(configurationEntry)
+			Optional.of(amImageConfigurationEntry)
 		);
 
 		Mockito.doThrow(
@@ -368,7 +362,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		).when(
 			_imageProcessor
 		).scaleImage(
-			_fileVersion, configurationEntry
+			_fileVersion, amImageConfigurationEntry
 		);
 
 		_processor.process(_fileVersion);
@@ -382,30 +376,29 @@ public class AdaptiveMediaImageProcessorImplTest {
 			true
 		);
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			new AdaptiveMediaImageConfigurationEntryImpl(
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			new AMImageConfigurationEntryImpl(
 				StringUtil.randomString(), StringUtil.randomString(),
 				Collections.emptyMap());
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(Mockito.anyLong())
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				Mockito.anyLong())
 		).thenReturn(
-			Collections.singleton(configurationEntry)
+			Collections.singleton(amImageConfigurationEntry)
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					Mockito.anyLong(), Mockito.anyString())
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
+				Mockito.anyLong(), Mockito.anyString())
 		).thenReturn(
-			Optional.of(configurationEntry)
+			Optional.of(amImageConfigurationEntry)
 		);
 
 		RenderedImage renderedImage = Mockito.mock(RenderedImage.class);
 
 		Mockito.when(
-			_imageProcessor.scaleImage(_fileVersion, configurationEntry)
+			_imageProcessor.scaleImage(_fileVersion, amImageConfigurationEntry)
 		).thenReturn(
 			renderedImage
 		);
@@ -415,7 +408,7 @@ public class AdaptiveMediaImageProcessorImplTest {
 		).when(
 			_adaptiveMediaImageEntryLocalService
 		).addAdaptiveMediaImageEntry(
-			Mockito.any(AdaptiveMediaImageConfigurationEntry.class),
+			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(), Mockito.anyInt(),
 			Mockito.any(InputStream.class), Mockito.anyInt()
 		);
@@ -432,8 +425,8 @@ public class AdaptiveMediaImageProcessorImplTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(Mockito.anyLong())
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				Mockito.anyLong())
 		).thenReturn(
 			Collections.emptyList()
 		);
@@ -444,13 +437,13 @@ public class AdaptiveMediaImageProcessorImplTest {
 			_imageProcessor, Mockito.never()
 		).scaleImage(
 			Mockito.any(FileVersion.class),
-			Mockito.any(AdaptiveMediaImageConfigurationEntry.class)
+			Mockito.any(AMImageConfigurationEntry.class)
 		);
 
 		Mockito.verify(
 			_adaptiveMediaImageEntryLocalService, Mockito.never()
 		).addAdaptiveMediaImageEntry(
-			Mockito.any(AdaptiveMediaImageConfigurationEntry.class),
+			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(),
 			Mockito.any(Integer.class), Mockito.any(InputStream.class),
 			Mockito.any(Integer.class)
@@ -468,18 +461,17 @@ public class AdaptiveMediaImageProcessorImplTest {
 		_processor.process(_fileVersion);
 
 		Mockito.verify(
-			_adaptiveMediaImageConfigurationHelper, Mockito.never()
-		).getAdaptiveMediaImageConfigurationEntries(
+			_amImageConfigurationHelper, Mockito.never()
+		).getAMImageConfigurationEntries(
 			Mockito.anyLong()
 		);
 	}
 
-	private final AdaptiveMediaImageConfigurationHelper
-		_adaptiveMediaImageConfigurationHelper = Mockito.mock(
-			AdaptiveMediaImageConfigurationHelper.class);
 	private final AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService = Mockito.mock(
 			AdaptiveMediaImageEntryLocalService.class);
+	private final AMImageConfigurationHelper _amImageConfigurationHelper =
+		Mockito.mock(AMImageConfigurationHelper.class);
 	private final FileVersion _fileVersion = Mockito.mock(FileVersion.class);
 	private final ImageProcessor _imageProcessor = Mockito.mock(
 		ImageProcessor.class);

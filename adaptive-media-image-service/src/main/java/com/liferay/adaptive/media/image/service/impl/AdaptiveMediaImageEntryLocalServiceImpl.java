@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.image.service.impl;
 
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.exception.DuplicateAdaptiveMediaImageEntryException;
 import com.liferay.adaptive.media.image.internal.storage.ImageStorage;
@@ -66,7 +66,7 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 * Adds an adaptive media image entry in the database and stores the image
 	 * bytes in the file store.
 	 *
-	 * @param  configurationEntry the configuration used to create the adaptive
+	 * @param  amImageConfigurationEntry the configuration used to create the adaptive
 	 *         media image
 	 * @param  fileVersion the file version used to create the adaptive media
 	 *         image
@@ -81,13 +81,14 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 */
 	@Override
 	public AdaptiveMediaImageEntry addAdaptiveMediaImageEntry(
-			AdaptiveMediaImageConfigurationEntry configurationEntry,
+			AMImageConfigurationEntry amImageConfigurationEntry,
 			FileVersion fileVersion, int width, int height,
 			InputStream inputStream, int size)
 		throws PortalException {
 
 		_checkDuplicates(
-			configurationEntry.getUUID(), fileVersion.getFileVersionId());
+			amImageConfigurationEntry.getUUID(),
+			fileVersion.getFileVersionId());
 
 		long imageEntryId = counterLocalService.increment();
 
@@ -104,10 +105,10 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 		adaptiveMediaImageEntry.setWidth(width);
 		adaptiveMediaImageEntry.setSize(size);
 		adaptiveMediaImageEntry.setConfigurationUuid(
-			configurationEntry.getUUID());
+			amImageConfigurationEntry.getUUID());
 
 		imageStorage.save(
-			fileVersion, configurationEntry.getUUID(), inputStream);
+			fileVersion, amImageConfigurationEntry.getUUID(), inputStream);
 
 		return adaptiveMediaImageEntryPersistence.update(
 			adaptiveMediaImageEntry);
@@ -132,18 +133,17 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 * the database and the bytes from the file store.
 	 *
 	 * @param companyId the primary key of the company
-	 * @param configurationEntry the configuration used to create the adaptive
+	 * @param amImageConfigurationEntry the configuration used to create the adaptive
 	 *        media image
 	 */
 	@Override
 	public void deleteAdaptiveMediaImageEntries(
-		long companyId,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		long companyId, AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		adaptiveMediaImageEntryPersistence.removeByC_C(
-			companyId, configurationEntry.getUUID());
+			companyId, amImageConfigurationEntry.getUUID());
 
-		imageStorage.delete(companyId, configurationEntry.getUUID());
+		imageStorage.delete(companyId, amImageConfigurationEntry.getUUID());
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 * Returns the input stream of the adaptive media image generated for a file
 	 * version and configuration.
 	 *
-	 * @param  configurationEntry the configuration used to create the adaptive
+	 * @param  amImageConfigurationEntry the configuration used to create the adaptive
 	 *         media image
 	 * @param  fileVersion the file version used to create the adaptive media
 	 *         image
@@ -263,11 +263,11 @@ public class AdaptiveMediaImageEntryLocalServiceImpl
 	 */
 	@Override
 	public InputStream getAdaptiveMediaImageEntryContentStream(
-		AdaptiveMediaImageConfigurationEntry configurationEntry,
+		AMImageConfigurationEntry amImageConfigurationEntry,
 		FileVersion fileVersion) {
 
 		return imageStorage.getContentStream(
-			fileVersion, configurationEntry.getUUID());
+			fileVersion, amImageConfigurationEntry.getUUID());
 	}
 
 	/**

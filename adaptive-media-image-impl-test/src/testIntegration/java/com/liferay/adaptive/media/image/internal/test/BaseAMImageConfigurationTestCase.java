@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.image.internal.test;
 
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageDestinationNames;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.messaging.Message;
@@ -50,8 +50,7 @@ public abstract class BaseAMImageConfigurationTestCase {
 		Registry registry = RegistryUtil.getRegistry();
 
 		Filter filter = registry.getFilter(
-			"(objectClass=" +
-				AdaptiveMediaImageConfigurationHelper.class.getName() + ")");
+			"(objectClass=" + AMImageConfigurationHelper.class.getName() + ")");
 
 		serviceTracker = registry.trackServices(filter);
 
@@ -76,46 +75,43 @@ public abstract class BaseAMImageConfigurationTestCase {
 	protected static void deleteAllConfigurationEntries()
 		throws IOException, PortalException {
 
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
+		AMImageConfigurationHelper amImageConfigurationHelper =
+			serviceTracker.getService();
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntries(
-					TestPropsValues.getCompanyId(), configurationEntry -> true);
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			amImageConfigurationHelper.getAMImageConfigurationEntries(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry -> true);
 
-		for (AdaptiveMediaImageConfigurationEntry configurationEntry :
-				configurationEntries) {
+		for (AMImageConfigurationEntry amImageConfigurationEntry :
+				amImageConfigurationEntries) {
 
-			adaptiveMediaImageConfigurationHelper.
-				forceDeleteAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(),
-					configurationEntry.getUUID());
+			amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry.getUUID());
 		}
 	}
 
 	protected void assertDisabled(
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional) {
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional) {
 
-		Assert.assertTrue(configurationEntryOptional.isPresent());
+		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
-		Assert.assertFalse(configurationEntry.isEnabled());
+		Assert.assertFalse(amImageConfigurationEntry.isEnabled());
 	}
 
 	protected void assertEnabled(
-		Optional<AdaptiveMediaImageConfigurationEntry>
-			configurationEntryOptional) {
+		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional) {
 
-		Assert.assertTrue(configurationEntryOptional.isPresent());
+		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
 
-		AdaptiveMediaImageConfigurationEntry configurationEntry =
-			configurationEntryOptional.get();
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationEntryOptional.get();
 
-		Assert.assertTrue(configurationEntry.isEnabled());
+		Assert.assertTrue(amImageConfigurationEntry.isEnabled());
 	}
 
 	protected List<Message> collectConfigurationMessages(
@@ -145,8 +141,7 @@ public abstract class BaseAMImageConfigurationTestCase {
 	}
 
 	protected static ServiceTracker
-		<AdaptiveMediaImageConfigurationHelper,
-			AdaptiveMediaImageConfigurationHelper> serviceTracker;
+		<AMImageConfigurationHelper, AMImageConfigurationHelper> serviceTracker;
 
 	@FunctionalInterface
 	protected interface CheckedRunnable {

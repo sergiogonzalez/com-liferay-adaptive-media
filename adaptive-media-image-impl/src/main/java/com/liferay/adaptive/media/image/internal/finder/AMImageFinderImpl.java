@@ -18,8 +18,8 @@ import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.finder.AMFinder;
 import com.liferay.adaptive.media.finder.AMQuery;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
-import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
+import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
@@ -86,40 +86,32 @@ public class AMImageFinderImpl implements AMImageFinder {
 			return Stream.empty();
 		}
 
-		BiFunction<FileVersion, AdaptiveMediaImageConfigurationEntry, URI>
-			uriFactory = _getURIFactory(amImageQueryBuilderImpl);
+		BiFunction<FileVersion, AMImageConfigurationEntry, URI> uriFactory =
+			_getURIFactory(amImageQueryBuilderImpl);
 
 		AMImageQueryBuilder.ConfigurationStatus configurationStatus =
 			amImageQueryBuilderImpl.getConfigurationStatus();
 
-		Collection<AdaptiveMediaImageConfigurationEntry> configurationEntries =
-			_configurationHelper.getAdaptiveMediaImageConfigurationEntries(
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
 				fileVersion.getCompanyId(), configurationStatus.getPredicate());
 
-		Predicate<AdaptiveMediaImageConfigurationEntry> filter =
+		Predicate<AMImageConfigurationEntry> filter =
 			amImageQueryBuilderImpl.getConfigurationEntryFilter();
 
-		Stream<AdaptiveMediaImageConfigurationEntry>
-			adaptiveMediaImageConfigurationEntryStream =
-				configurationEntries.stream();
+		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
+			amImageConfigurationEntries.stream();
 
-		return adaptiveMediaImageConfigurationEntryStream.filter(
-			configurationEntry ->
-				filter.test(configurationEntry) &&
-				_hasAdaptiveMedia(fileVersion, configurationEntry)
+		return amImageConfigurationEntryStream.filter(
+			amImageConfigurationEntry ->
+				filter.test(amImageConfigurationEntry) &&
+				_hasAdaptiveMedia(fileVersion, amImageConfigurationEntry)
 		).map(
-			configurationEntry ->
-				_createMedia(fileVersion, uriFactory, configurationEntry)
+			amImageConfigurationEntry ->
+				_createMedia(fileVersion, uriFactory, amImageConfigurationEntry)
 		).sorted(
 			amImageQueryBuilderImpl.getComparator()
 		);
-	}
-
-	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageConfigurationHelper(
-		AdaptiveMediaImageConfigurationHelper configurationHelper) {
-
-		_configurationHelper = configurationHelper;
 	}
 
 	@Reference(unbind = "-")
@@ -137,24 +129,31 @@ public class AMImageFinderImpl implements AMImageFinder {
 	}
 
 	@Reference(unbind = "-")
+	public void setAMImageConfigurationHelper(
+		AMImageConfigurationHelper amImageConfigurationHelper) {
+
+		_amImageConfigurationHelper = amImageConfigurationHelper;
+	}
+
+	@Reference(unbind = "-")
 	public void setImageProcessor(ImageProcessor imageProcessor) {
 		_imageProcessor = imageProcessor;
 	}
 
 	private AdaptiveMedia<AdaptiveMediaImageProcessor> _createMedia(
 		FileVersion fileVersion,
-		BiFunction<FileVersion, AdaptiveMediaImageConfigurationEntry, URI>
-			uriFactory,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		BiFunction<FileVersion, AMImageConfigurationEntry, URI> uriFactory,
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
-		Map<String, String> properties = configurationEntry.getProperties();
+		Map<String, String> properties =
+			amImageConfigurationEntry.getProperties();
 
 		AMAttribute<Object, String> configurationUuidAMAttribute =
 			AMAttribute.getConfigurationUuidAMAttribute();
 
 		properties.put(
 			configurationUuidAMAttribute.getName(),
-			configurationEntry.getUUID());
+			amImageConfigurationEntry.getUUID());
 
 		AMAttribute<Object, String> fileNameAMAttribute =
 			AMAttribute.getFileNameAMAttribute();
@@ -164,7 +163,8 @@ public class AMImageFinderImpl implements AMImageFinder {
 
 		AdaptiveMediaImageEntry imageEntry =
 			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-				configurationEntry.getUUID(), fileVersion.getFileVersionId());
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId());
 
 		if (imageEntry != null) {
 			AMAttribute<AdaptiveMediaImageProcessor, Integer>
@@ -202,12 +202,12 @@ public class AMImageFinderImpl implements AMImageFinder {
 		return new AdaptiveMediaImage(
 			() ->
 				_imageEntryLocalService.getAdaptiveMediaImageEntryContentStream(
-					configurationEntry, fileVersion),
+					amImageConfigurationEntry, fileVersion),
 			attributeMapping,
-			uriFactory.apply(fileVersion, configurationEntry));
+			uriFactory.apply(fileVersion, amImageConfigurationEntry));
 	}
 
-	private BiFunction<FileVersion, AdaptiveMediaImageConfigurationEntry, URI>
+	private BiFunction<FileVersion, AMImageConfigurationEntry, URI>
 		_getURIFactory(AMImageQueryBuilderImpl amImageQueryBuilderImpl) {
 
 		if (amImageQueryBuilderImpl.hasFileVersion()) {
@@ -219,11 +219,12 @@ public class AMImageFinderImpl implements AMImageFinder {
 
 	private boolean _hasAdaptiveMedia(
 		FileVersion fileVersion,
-		AdaptiveMediaImageConfigurationEntry configurationEntry) {
+		AMImageConfigurationEntry amImageConfigurationEntry) {
 
 		AdaptiveMediaImageEntry imageEntry =
 			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-				configurationEntry.getUUID(), fileVersion.getFileVersionId());
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId());
 
 		if (imageEntry == null) {
 			return false;
@@ -233,7 +234,7 @@ public class AMImageFinderImpl implements AMImageFinder {
 	}
 
 	private AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory;
-	private AdaptiveMediaImageConfigurationHelper _configurationHelper;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
 	private ImageProcessor _imageProcessor;
 
