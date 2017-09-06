@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.image.internal.mediaquery;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.mediaquery.Condition;
@@ -91,17 +91,15 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 	}
 
 	@Reference(unbind = "-")
-	protected void setAdaptiveMediaImageFinder(
-		AdaptiveMediaImageFinder adaptiveMediaImageFinder) {
-
-		_adaptiveMediaImageFinder = adaptiveMediaImageFinder;
-	}
-
-	@Reference(unbind = "-")
 	protected void setAdaptiveMediaImageURLFactory(
 		AdaptiveMediaImageURLFactory adaptiveMediaImageURLFactory) {
 
 		_adaptiveMediaImageURLFactory = adaptiveMediaImageURLFactory;
+	}
+
+	@Reference(unbind = "-")
+	protected void setAMImageFinder(AMImageFinder amImageFinder) {
+		_amImageFinder = amImageFinder;
 	}
 
 	private Optional<AdaptiveMedia<AdaptiveMediaImageProcessor>>
@@ -110,7 +108,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 			AdaptiveMediaImageConfigurationEntry configurationEntry) {
 
 		try {
-			return _adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			return _amImageFinder.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 					fileEntry
 				).forConfiguration(
@@ -322,8 +320,8 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 
 	private AdaptiveMediaImageConfigurationHelper
 		_adaptiveMediaImageConfigurationHelper;
-	private AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
 	private AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory;
+	private AMImageFinder _amImageFinder;
 	private final Comparator<AdaptiveMedia<AdaptiveMediaImageProcessor>>
 		_comparator = Comparator.comparingInt(this::_getWidth);
 

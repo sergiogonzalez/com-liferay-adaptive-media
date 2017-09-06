@@ -19,7 +19,7 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationEntrySerializer;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
@@ -114,12 +114,10 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 
 		for (FileVersion fileVersion : fileVersions) {
 			Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>>
-				adaptiveMediaStream =
-					_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-						amImageQueryBuilder ->
-							amImageQueryBuilder.allForVersion(
-								fileVersion
-							).done());
+				adaptiveMediaStream = _amImageFinder.getAdaptiveMediaStream(
+					amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+						fileVersion
+					).done());
 
 			List<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaList =
 				adaptiveMediaStream.collect(Collectors.toList());
@@ -275,9 +273,9 @@ public class AdaptiveMediaImageDLPluggableContentDataHandler
 		_adaptiveMediaImageEntryLocalService;
 
 	@Reference
-	private AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
+	private AdaptiveMediaImageSerializer _adaptiveMediaImageSerializer;
 
 	@Reference
-	private AdaptiveMediaImageSerializer _adaptiveMediaImageSerializer;
+	private AMImageFinder _amImageFinder;
 
 }

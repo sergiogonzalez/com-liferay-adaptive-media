@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.finder;
 
-import com.liferay.adaptive.media.finder.AdaptiveMediaFinder;
+import com.liferay.adaptive.media.finder.AMFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
  *
  * @author Adolfo Pérez
  */
-public interface AdaptiveMediaImageFinder
-	extends AdaptiveMediaFinder
+public interface AMImageFinder
+	extends AMFinder
 		<AMImageQueryBuilder, FileVersion, AdaptiveMediaImageProcessor> {
 }

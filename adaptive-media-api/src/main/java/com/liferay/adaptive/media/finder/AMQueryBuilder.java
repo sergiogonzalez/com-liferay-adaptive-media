@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.finder;
 
 /**
- * A marker interface that implementations of {@link AdaptiveMediaFinder} must
+ * A marker interface that implementations of {@link AMFinder} must
  * extend to provide a way to create {@link AMQuery} instances.
  *
  * @author Adolfo Pérez

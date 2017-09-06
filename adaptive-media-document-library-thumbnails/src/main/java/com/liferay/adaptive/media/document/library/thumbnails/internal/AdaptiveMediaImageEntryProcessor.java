@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal;
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.image.constants.AdaptiveMediaImageConstants;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.document.library.kernel.model.DLProcessorConstants;
@@ -218,7 +218,7 @@ public class AdaptiveMediaImageEntryProcessor
 			_getThumbnailAdaptiveMedia(FileVersion fileVersion)
 		throws PortalException {
 
-		return _adaptiveMediaImageFinder.getAdaptiveMediaStream(
+		return _amImageFinder.getAdaptiveMediaStream(
 			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				fileVersion
 			).with(
@@ -243,7 +243,7 @@ public class AdaptiveMediaImageEntryProcessor
 		AdaptiveMediaImageEntryProcessor.class);
 
 	@Reference
-	private AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
+	private AMImageFinder _amImageFinder;
 
 	private final ImageProcessor _imageProcessor = new ImageProcessorImpl();
 

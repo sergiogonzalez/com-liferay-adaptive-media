@@ -58,12 +58,12 @@ public class AdaptiveMediaImageFinderImplTest {
 
 	@Before
 	public void setUp() {
-		_adaptiveMediaImageFinder.setAdaptiveMediaImageURLFactory(
+		_amImageFinderImpl.setAdaptiveMediaImageURLFactory(
 			_adaptiveMediaImageURLFactory);
-		_adaptiveMediaImageFinder.setAdaptiveMediaImageConfigurationHelper(
+		_amImageFinderImpl.setAdaptiveMediaImageConfigurationHelper(
 			_adaptiveMediaImageConfigurationHelper);
-		_adaptiveMediaImageFinder.setImageProcessor(_imageProcessor);
-		_adaptiveMediaImageFinder.setAdaptiveMediaImageEntryLocalService(
+		_amImageFinderImpl.setImageProcessor(_imageProcessor);
+		_amImageFinderImpl.setAdaptiveMediaImageEntryLocalService(
 			_adaptiveMediaImageEntryLocalService);
 	}
 
@@ -99,7 +99,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 					_fileEntry
 				).done());
@@ -161,7 +161,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 					_fileEntry
 				).done());
@@ -216,7 +216,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
@@ -321,7 +321,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).orderBy(
@@ -440,7 +440,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).orderBy(
@@ -481,15 +481,14 @@ public class AdaptiveMediaImageFinderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetMediaAttributesWithNonBuilderQuery() throws Exception {
-		_adaptiveMediaImageFinder.getAdaptiveMediaStream(amImageQueryBuilder ->
+		_amImageFinderImpl.getAdaptiveMediaStream(amImageQueryBuilder ->
 			new AMQuery<FileVersion, AdaptiveMediaImageProcessor>() {
 			});
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetMediaAttributesWithNullQuery() throws Exception {
-		_adaptiveMediaImageFinder.getAdaptiveMediaStream(
-			amImageQueryBuilder -> null);
+		_amImageFinderImpl.getAdaptiveMediaStream(amImageQueryBuilder -> null);
 	}
 
 	@Test(expected = AdaptiveMediaRuntimeException.InvalidConfiguration.class)
@@ -508,7 +507,7 @@ public class AdaptiveMediaImageFinderImplTest {
 			true
 		);
 
-		_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+		_amImageFinderImpl.getAdaptiveMediaStream(
 			amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 				_fileVersion
 			).done());
@@ -572,7 +571,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
@@ -637,7 +636,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
@@ -725,7 +724,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
@@ -817,7 +816,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
@@ -909,7 +908,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
@@ -1001,7 +1000,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).forConfiguration(
@@ -1107,7 +1106,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).withConfigurationStatus(
@@ -1131,7 +1130,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Assert.assertEquals("small", adaptiveMedia0Optional.get());
 
-		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
+		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
 			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
@@ -1152,7 +1151,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Assert.assertEquals("small", adaptiveMedia0Optional.get());
 
-		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
+		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
 			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
@@ -1256,7 +1255,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).withConfigurationStatus(
@@ -1277,7 +1276,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Assert.assertEquals("1", adaptiveMedia0ConfigurationUuidOptional.get());
 
-		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
+		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
 			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
@@ -1296,7 +1295,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 		Assert.assertEquals("2", adaptiveMedia0ConfigurationUuidOptional.get());
 
-		adaptiveMediaStream = _adaptiveMediaImageFinder.getAdaptiveMediaStream(
+		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
 			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 				_fileVersion
 			).withConfigurationStatus(
@@ -1388,7 +1387,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
 					_fileVersion
 				).with(
@@ -1426,7 +1425,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
@@ -1439,7 +1438,7 @@ public class AdaptiveMediaImageFinderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetMediaWithNullFunction() throws Exception {
-		_adaptiveMediaImageFinder.getAdaptiveMediaStream(null);
+		_amImageFinderImpl.getAdaptiveMediaStream(null);
 	}
 
 	@Test
@@ -1492,7 +1491,7 @@ public class AdaptiveMediaImageFinderImplTest {
 		);
 
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinderImpl.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
 					_fileVersion
 				).done());
@@ -1545,10 +1544,10 @@ public class AdaptiveMediaImageFinderImplTest {
 	private final AdaptiveMediaImageEntryLocalService
 		_adaptiveMediaImageEntryLocalService = Mockito.mock(
 			AdaptiveMediaImageEntryLocalService.class);
-	private final AdaptiveMediaImageFinderImpl _adaptiveMediaImageFinder =
-		new AdaptiveMediaImageFinderImpl();
 	private final AdaptiveMediaImageURLFactory _adaptiveMediaImageURLFactory =
 		Mockito.mock(AdaptiveMediaImageURLFactory.class);
+	private final AMImageFinderImpl _amImageFinderImpl =
+		new AMImageFinderImpl();
 	private final FileEntry _fileEntry = Mockito.mock(FileEntry.class);
 	private final FileVersion _fileVersion = Mockito.mock(FileVersion.class);
 	private final ImageProcessor _imageProcessor = Mockito.mock(

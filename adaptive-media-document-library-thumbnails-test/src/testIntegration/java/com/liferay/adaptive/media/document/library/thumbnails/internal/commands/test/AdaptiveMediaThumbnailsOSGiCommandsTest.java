@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.AdaptiveMedia;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.DestinationReplacer;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.PropsValuesReplacer;
 import com.liferay.adaptive.media.image.configuration.AdaptiveMediaImageConfigurationHelper;
-import com.liferay.adaptive.media.image.finder.AdaptiveMediaImageFinder;
+import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalServiceUtil;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
@@ -101,13 +101,12 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		_adaptiveMediaImageConfigurationHelperServiceReference =
 			registry.getServiceReference(
 				AdaptiveMediaImageConfigurationHelper.class);
-		_adaptiveMediaImageFinderServiceReference =
-			registry.getServiceReference(AdaptiveMediaImageFinder.class);
+		_amImageFinderServiceReference = registry.getServiceReference(
+			AMImageFinder.class);
 
 		_adaptiveMediaImageConfigurationHelper = registry.getService(
 			_adaptiveMediaImageConfigurationHelperServiceReference);
-		_adaptiveMediaImageFinder = registry.getService(
-			_adaptiveMediaImageFinderServiceReference);
+		_amImageFinder = registry.getService(_amImageFinderServiceReference);
 
 		_disableAdaptiveMediaThumbnails();
 		_disableDocumentLibraryAdaptiveMedia();
@@ -119,7 +118,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 		registry.ungetService(
 			_adaptiveMediaImageConfigurationHelperServiceReference);
-		registry.ungetService(_adaptiveMediaImageFinderServiceReference);
+		registry.ungetService(_amImageFinderServiceReference);
 
 		_enableDocumentLibraryAdaptiveMedia();
 		_enableAdaptiveMediaThumbnails();
@@ -388,7 +387,7 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 
 	private long _getAdaptiveMediaCount(FileEntry fileEntry) throws Exception {
 		Stream<AdaptiveMedia<AdaptiveMediaImageProcessor>> adaptiveMediaStream =
-			_adaptiveMediaImageFinder.getAdaptiveMediaStream(
+			_amImageFinder.getAdaptiveMediaStream(
 				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
 					fileEntry
 				).done());
@@ -448,9 +447,9 @@ public class AdaptiveMediaThumbnailsOSGiCommandsTest {
 		_adaptiveMediaImageConfigurationHelper;
 	private static ServiceReference<AdaptiveMediaImageConfigurationHelper>
 		_adaptiveMediaImageConfigurationHelperServiceReference;
-	private static AdaptiveMediaImageFinder _adaptiveMediaImageFinder;
-	private static ServiceReference<AdaptiveMediaImageFinder>
-		_adaptiveMediaImageFinderServiceReference;
+	private static AMImageFinder _amImageFinder;
+	private static ServiceReference<AMImageFinder>
+		_amImageFinderServiceReference;
 
 	private Company _company;
 	private Group _group;
