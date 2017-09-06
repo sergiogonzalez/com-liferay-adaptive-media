@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.processor;
 
-import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
+import com.liferay.adaptive.media.AMURIResolver;
 import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -33,7 +33,7 @@ import org.mockito.Mockito;
 /**
  * @author Adolfo Pérez
  */
-public class DefaultAdaptiveMediaURIResolverTest {
+public class DefaultAMURIResolverTest {
 
 	@Before
 	public void setUp() {
@@ -41,7 +41,7 @@ public class DefaultAdaptiveMediaURIResolverTest {
 
 		portalUtil.setPortal(_portal);
 
-		ReflectionTestUtil.setFieldValue(_uriResolver, "_portal", _portal);
+		ReflectionTestUtil.setFieldValue(_amURIResolver, "_portal", _portal);
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class DefaultAdaptiveMediaURIResolverTest {
 
 		URI relativeURI = URI.create(StringUtil.randomString());
 
-		URI uri = _uriResolver.resolveURI(relativeURI);
+		URI uri = _amURIResolver.resolveURI(relativeURI);
 
 		String uriString = uri.toString();
 
@@ -78,7 +78,7 @@ public class DefaultAdaptiveMediaURIResolverTest {
 
 		URI relativeURI = URI.create(StringUtil.randomString());
 
-		URI uri = _uriResolver.resolveURI(relativeURI);
+		URI uri = _amURIResolver.resolveURI(relativeURI);
 
 		String uriString = uri.toString();
 
@@ -87,8 +87,7 @@ public class DefaultAdaptiveMediaURIResolverTest {
 		Assert.assertTrue(uriString.contains(relativeURI.toString()));
 	}
 
+	private final AMURIResolver _amURIResolver = new DefaultAMURIResolver();
 	private final Portal _portal = Mockito.mock(Portal.class);
-	private final AdaptiveMediaURIResolver _uriResolver =
-		new DefaultAdaptiveMediaURIResolver();
 
 }

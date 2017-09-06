@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.url;
 
-import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
+import com.liferay.adaptive.media.AMURIResolver;
 import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.url.AMImageURLFactory;
@@ -46,7 +46,7 @@ public class AMImageURLFactoryImpl implements AMImageURLFactory {
 			amImageConfigurationEntry.getUUID(),
 			_encode(fileVersion.getFileName()));
 
-		return _uriResolver.resolveURI(URI.create(relativeURI));
+		return _amURIResolver.resolveURI(URI.create(relativeURI));
 	}
 
 	@Override
@@ -59,14 +59,12 @@ public class AMImageURLFactoryImpl implements AMImageURLFactory {
 			fileVersion.getFileVersionId(), amImageConfigurationEntry.getUUID(),
 			_encode(fileVersion.getFileName()));
 
-		return _uriResolver.resolveURI(URI.create(relativeURI));
+		return _amURIResolver.resolveURI(URI.create(relativeURI));
 	}
 
 	@Reference(unbind = "-")
-	protected void setAdaptiveMediaURIResolver(
-		AdaptiveMediaURIResolver adaptiveMediaURIResolver) {
-
-		_uriResolver = adaptiveMediaURIResolver;
+	protected void setAMURIResolver(AMURIResolver amURIResolver) {
+		_amURIResolver = amURIResolver;
 	}
 
 	private String _encode(String s) {
@@ -79,6 +77,6 @@ public class AMImageURLFactoryImpl implements AMImageURLFactory {
 		}
 	}
 
-	private AdaptiveMediaURIResolver _uriResolver;
+	private AMURIResolver _amURIResolver;
 
 }

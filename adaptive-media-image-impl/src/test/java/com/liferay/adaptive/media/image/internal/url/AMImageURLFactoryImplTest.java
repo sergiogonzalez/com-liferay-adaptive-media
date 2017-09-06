@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.url;
 
-import com.liferay.adaptive.media.AdaptiveMediaURIResolver;
+import com.liferay.adaptive.media.AMURIResolver;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -59,13 +59,12 @@ public class AMImageURLFactoryImplTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaURIResolver.resolveURI(Mockito.any(URI.class))
+			_amURIResolver.resolveURI(Mockito.any(URI.class))
 		).thenAnswer(
 			invocation -> URI.create("prefix/" + invocation.getArguments()[0])
 		);
 
-		_amImageURLFactory.setAdaptiveMediaURIResolver(
-			_adaptiveMediaURIResolver);
+		_amImageURLFactory.setAMURIResolver(_amURIResolver);
 	}
 
 	@Test
@@ -87,13 +86,13 @@ public class AMImageURLFactoryImplTest {
 
 	private static final String _UUID = "theUuid";
 
-	@Mock
-	private AdaptiveMediaURIResolver _adaptiveMediaURIResolver;
-
 	private final AMImageConfigurationEntry _amImageConfigurationEntry =
 		new AMImageConfigurationEntryImpl("small", _UUID, new HashMap<>());
 	private final AMImageURLFactoryImpl _amImageURLFactory =
 		new AMImageURLFactoryImpl();
+
+	@Mock
+	private AMURIResolver _amURIResolver;
 
 	@Mock
 	private FileVersion _fileVersion;
