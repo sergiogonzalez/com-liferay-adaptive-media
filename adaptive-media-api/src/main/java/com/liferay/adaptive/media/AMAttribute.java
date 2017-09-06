@@ -16,7 +16,7 @@ package com.liferay.adaptive.media;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.adaptive.media.util.AdaptiveMediaAttributeConverterUtil;
+import com.liferay.adaptive.media.util.AMAttributeConverterUtil;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -165,7 +165,7 @@ public final class AMAttribute<T, V> {
 
 	private static final AMAttribute<?, Integer> _CONTENT_LENGTH =
 		new AMAttribute<>(
-			"content-length", AdaptiveMediaAttributeConverterUtil::parseInt,
+			"content-length", AMAttributeConverterUtil::parseInt,
 			(value1, value2) -> value1 - value2);
 
 	private static final AMAttribute<?, String> _CONTENT_TYPE =

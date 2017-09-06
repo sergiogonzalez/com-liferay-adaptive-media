@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.image.processor;
 
 import com.liferay.adaptive.media.AMAttribute;
-import com.liferay.adaptive.media.util.AdaptiveMediaAttributeConverterUtil;
+import com.liferay.adaptive.media.util.AMAttributeConverterUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +27,12 @@ public final class AdaptiveMediaImageAttribute {
 
 	public static final AMAttribute<AdaptiveMediaImageProcessor, Integer>
 		IMAGE_HEIGHT = new AMAttribute<>(
-			"height", AdaptiveMediaAttributeConverterUtil::parseInt,
+			"height", AMAttributeConverterUtil::parseInt,
 			AdaptiveMediaImageAttribute::_intDistance);
 
 	public static final AMAttribute<AdaptiveMediaImageProcessor, Integer>
 		IMAGE_WIDTH = new AMAttribute<>(
-			"width", AdaptiveMediaAttributeConverterUtil::parseInt,
+			"width", AMAttributeConverterUtil::parseInt,
 			AdaptiveMediaImageAttribute::_intDistance);
 
 	/**

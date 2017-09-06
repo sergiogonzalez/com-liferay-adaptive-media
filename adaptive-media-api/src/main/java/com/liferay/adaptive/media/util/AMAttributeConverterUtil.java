@@ -28,7 +28,7 @@ import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
  *
  * @author Alejandro Hernández
  */
-public class AdaptiveMediaAttributeConverterUtil {
+public class AMAttributeConverterUtil {
 
 	public static Integer parseInt(String value)
 		throws
