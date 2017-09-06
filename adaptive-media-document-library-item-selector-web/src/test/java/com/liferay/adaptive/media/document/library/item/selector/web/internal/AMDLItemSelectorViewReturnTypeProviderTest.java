@@ -32,8 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 /**
  * @author Sergio González
  */
-public class AdaptiveMediaDLItemSelectorViewReturnTypeProviderTest
-	extends PowerMockito {
+public class AMDLItemSelectorViewReturnTypeProviderTest extends PowerMockito {
 
 	@Test
 	public void testAddAdaptiveMediaImageItemSelectorReturnTypesWithNonEmptyList()
@@ -46,11 +45,12 @@ public class AdaptiveMediaDLItemSelectorViewReturnTypeProviderTest
 			new FileEntryItemSelectorReturnType());
 		supportedItemSelectorReturnTypes.add(new URLItemSelectorReturnType());
 
-		ItemSelectorViewReturnTypeProvider itemSelectorViewReturnTypeProvider =
-			new AdaptiveMediaDLItemSelectorViewReturnTypeProvider();
+		ItemSelectorViewReturnTypeProvider
+			amDLItemSelectorViewReturnTypeProvider =
+				new AMDLItemSelectorViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
-			itemSelectorViewReturnTypeProvider.
+			amDLItemSelectorViewReturnTypeProvider.
 				populateSupportedItemSelectorReturnTypes(
 					supportedItemSelectorReturnTypes);
 
@@ -79,11 +79,12 @@ public class AdaptiveMediaDLItemSelectorViewReturnTypeProviderTest
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
 			new ArrayList<>();
 
-		ItemSelectorViewReturnTypeProvider itemSelectorViewReturnTypeProvider =
-			new AdaptiveMediaDLItemSelectorViewReturnTypeProvider();
+		ItemSelectorViewReturnTypeProvider
+			amDLItemSelectorViewReturnTypeProvider =
+				new AMDLItemSelectorViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
-			itemSelectorViewReturnTypeProvider.
+			amDLItemSelectorViewReturnTypeProvider.
 				populateSupportedItemSelectorReturnTypes(
 					supportedItemSelectorReturnTypes);
 
