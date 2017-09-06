@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,11 +39,10 @@ import org.junit.runner.RunWith;
 /**
  * @author Sergio González
  */
-@Ignore
 @RunWith(Arquillian.class)
 @Sync
-public class AdaptiveMediaImageEnableConfigurationTest
-	extends BaseAdaptiveMediaImageConfigurationTestCase {
+public class AMImageDisableConfigurationTest
+	extends BaseAMImageConfigurationTestCase {
 
 	@ClassRule
 	@Rule
@@ -54,9 +52,7 @@ public class AdaptiveMediaImageEnableConfigurationTest
 			SynchronousDestinationTestRule.INSTANCE);
 
 	@Test
-	public void testDoesNotSendAMessageToTheMessageBusIfAlreadyEnabled()
-		throws Exception {
-
+	public void testDisableAllConfigurationEntries() throws Exception {
 		AdaptiveMediaImageConfigurationHelper
 			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
@@ -69,34 +65,6 @@ public class AdaptiveMediaImageEnableConfigurationTest
 			addAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
-
-		List<Message> messages = collectConfigurationMessages(
-			() ->
-				adaptiveMediaImageConfigurationHelper.
-					enableAdaptiveMediaImageConfigurationEntry(
-						TestPropsValues.getCompanyId(), "1"));
-
-		Assert.assertEquals(messages.toString(), 0, messages.size());
-	}
-
-	@Test
-	public void testEnableAllConfigurationEntries() throws Exception {
-		AdaptiveMediaImageConfigurationHelper
-			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
-
-		Map<String, String> properties = new HashMap<>();
-
-		properties.put("max-height", "100");
-		properties.put("max-width", "100");
-
-		adaptiveMediaImageConfigurationHelper.
-			addAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
-				properties);
-
-		adaptiveMediaImageConfigurationHelper.
-			disableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
 
 		properties = new HashMap<>();
 
@@ -108,6 +76,9 @@ public class AdaptiveMediaImageEnableConfigurationTest
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
+		adaptiveMediaImageConfigurationHelper.
+			disableAdaptiveMediaImageConfigurationEntry(
+				TestPropsValues.getCompanyId(), "1");
 		adaptiveMediaImageConfigurationHelper.
 			disableAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "2");
@@ -127,31 +98,10 @@ public class AdaptiveMediaImageEnableConfigurationTest
 						TestPropsValues.getCompanyId(), "2");
 
 		assertDisabled(secondConfigurationEntryOptional);
-
-		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
-		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "2");
-
-		firstConfigurationEntryOptional =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "1");
-
-		assertEnabled(firstConfigurationEntryOptional);
-
-		secondConfigurationEntryOptional =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "2");
-
-		assertEnabled(secondConfigurationEntryOptional);
 	}
 
 	@Test
-	public void testEnableConfigurationEntryWithExistingDisabledConfiguration()
+	public void testDisableConfigurationWithExistingDisabledConfiguration()
 		throws Exception {
 
 		AdaptiveMediaImageConfigurationHelper
@@ -185,17 +135,13 @@ public class AdaptiveMediaImageEnableConfigurationTest
 			disableAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "2");
 
-		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
-
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			configurationEntryOptional =
 				adaptiveMediaImageConfigurationHelper.
 					getAdaptiveMediaImageConfigurationEntry(
 						TestPropsValues.getCompanyId(), "1");
 
-		assertEnabled(configurationEntryOptional);
+		assertDisabled(configurationEntryOptional);
 
 		configurationEntryOptional =
 			adaptiveMediaImageConfigurationHelper.
@@ -206,7 +152,7 @@ public class AdaptiveMediaImageEnableConfigurationTest
 	}
 
 	@Test
-	public void testEnableEnabledConfigurationEntry() throws Exception {
+	public void testDisableDisabledConfigurationEntry() throws Exception {
 		AdaptiveMediaImageConfigurationHelper
 			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
@@ -219,16 +165,20 @@ public class AdaptiveMediaImageEnableConfigurationTest
 			addAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
+		adaptiveMediaImageConfigurationHelper.
+			disableAdaptiveMediaImageConfigurationEntry(
+				TestPropsValues.getCompanyId(), "1");
+
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			configurationEntryOptional =
 				adaptiveMediaImageConfigurationHelper.
 					getAdaptiveMediaImageConfigurationEntry(
 						TestPropsValues.getCompanyId(), "1");
 
-		assertEnabled(configurationEntryOptional);
+		assertDisabled(configurationEntryOptional);
 
 		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
+			disableAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		configurationEntryOptional =
@@ -236,11 +186,11 @@ public class AdaptiveMediaImageEnableConfigurationTest
 				getAdaptiveMediaImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
-		assertEnabled(configurationEntryOptional);
+		assertDisabled(configurationEntryOptional);
 	}
 
 	@Test
-	public void testEnableFirstConfigurationEntry() throws Exception {
+	public void testDisableFirstConfigurationEntry() throws Exception {
 		AdaptiveMediaImageConfigurationHelper
 			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
@@ -254,10 +204,6 @@ public class AdaptiveMediaImageEnableConfigurationTest
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
-		adaptiveMediaImageConfigurationHelper.
-			disableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
-
 		properties = new HashMap<>();
 
 		properties.put("max-height", "200");
@@ -270,7 +216,7 @@ public class AdaptiveMediaImageEnableConfigurationTest
 
 		adaptiveMediaImageConfigurationHelper.
 			disableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "2");
+				TestPropsValues.getCompanyId(), "1");
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			firstConfigurationEntryOptional =
@@ -286,36 +232,18 @@ public class AdaptiveMediaImageEnableConfigurationTest
 					getAdaptiveMediaImageConfigurationEntry(
 						TestPropsValues.getCompanyId(), "2");
 
-		assertDisabled(secondConfigurationEntryOptional);
-
-		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
-
-		firstConfigurationEntryOptional =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "1");
-
-		assertEnabled(firstConfigurationEntryOptional);
-
-		secondConfigurationEntryOptional =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "2");
-
-		assertDisabled(secondConfigurationEntryOptional);
+		assertEnabled(secondConfigurationEntryOptional);
 	}
 
 	@Test
-	public void testEnableNonExistantConfigurationEntry() throws Exception {
+	public void testDisableNonExistantConfigurationEntry() throws Exception {
 		AdaptiveMediaImageConfigurationHelper
 			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
 		String uuid = StringUtil.randomString();
 
 		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
+			disableAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), uuid);
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
@@ -328,7 +256,7 @@ public class AdaptiveMediaImageEnableConfigurationTest
 	}
 
 	@Test
-	public void testEnableSecondConfigurationEntry() throws Exception {
+	public void testDisableSecondConfigurationEntry() throws Exception {
 		AdaptiveMediaImageConfigurationHelper
 			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
@@ -341,10 +269,6 @@ public class AdaptiveMediaImageEnableConfigurationTest
 			addAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
-
-		adaptiveMediaImageConfigurationHelper.
-			disableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
 
 		properties = new HashMap<>();
 
@@ -366,7 +290,7 @@ public class AdaptiveMediaImageEnableConfigurationTest
 					getAdaptiveMediaImageConfigurationEntry(
 						TestPropsValues.getCompanyId(), "1");
 
-		assertDisabled(firstConfigurationEntryOptional);
+		assertEnabled(firstConfigurationEntryOptional);
 
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			secondConfigurationEntryOptional =
@@ -375,28 +299,10 @@ public class AdaptiveMediaImageEnableConfigurationTest
 						TestPropsValues.getCompanyId(), "2");
 
 		assertDisabled(secondConfigurationEntryOptional);
-
-		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "2");
-
-		firstConfigurationEntryOptional =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "1");
-
-		assertDisabled(firstConfigurationEntryOptional);
-
-		secondConfigurationEntryOptional =
-			adaptiveMediaImageConfigurationHelper.
-				getAdaptiveMediaImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "2");
-
-		assertEnabled(secondConfigurationEntryOptional);
 	}
 
 	@Test
-	public void testEnableUniqueConfigurationEntry() throws Exception {
+	public void testDisableUniqueConfigurationEntry() throws Exception {
 		AdaptiveMediaImageConfigurationHelper
 			adaptiveMediaImageConfigurationHelper = serviceTracker.getService();
 
@@ -409,20 +315,16 @@ public class AdaptiveMediaImageEnableConfigurationTest
 			addAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
-		adaptiveMediaImageConfigurationHelper.
-			disableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
-
 		Optional<AdaptiveMediaImageConfigurationEntry>
 			configurationEntryOptional =
 				adaptiveMediaImageConfigurationHelper.
 					getAdaptiveMediaImageConfigurationEntry(
 						TestPropsValues.getCompanyId(), "1");
 
-		assertDisabled(configurationEntryOptional);
+		assertEnabled(configurationEntryOptional);
 
 		adaptiveMediaImageConfigurationHelper.
-			enableAdaptiveMediaImageConfigurationEntry(
+			disableAdaptiveMediaImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		configurationEntryOptional =
@@ -430,7 +332,7 @@ public class AdaptiveMediaImageEnableConfigurationTest
 				getAdaptiveMediaImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
-		assertEnabled(configurationEntryOptional);
+		assertDisabled(configurationEntryOptional);
 	}
 
 	@Test
@@ -448,14 +350,10 @@ public class AdaptiveMediaImageEnableConfigurationTest
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
-		adaptiveMediaImageConfigurationHelper.
-			disableAdaptiveMediaImageConfigurationEntry(
-				TestPropsValues.getCompanyId(), "1");
-
 		List<Message> messages = collectConfigurationMessages(
 			() ->
 				adaptiveMediaImageConfigurationHelper.
-					enableAdaptiveMediaImageConfigurationEntry(
+					disableAdaptiveMediaImageConfigurationEntry(
 						TestPropsValues.getCompanyId(), "1"));
 
 		Assert.assertEquals(messages.toString(), 1, messages.size());
