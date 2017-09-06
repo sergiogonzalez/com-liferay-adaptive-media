@@ -46,10 +46,10 @@ public class AMImageOptimizerUtil {
 		Set<String> modelClassNames = _serviceTrackerMap.keySet();
 
 		for (String modelClassName : modelClassNames) {
-			AdaptiveMediaImageOptimizer adaptiveMediaImageOptimizer =
-				_serviceTrackerMap.getService(modelClassName);
+			AMImageOptimizer amImageOptimizer = _serviceTrackerMap.getService(
+				modelClassName);
 
-			adaptiveMediaImageOptimizer.optimize(companyId);
+			amImageOptimizer.optimize(companyId);
 		}
 	}
 
@@ -67,19 +67,17 @@ public class AMImageOptimizerUtil {
 		Set<String> modelClassNames = _serviceTrackerMap.keySet();
 
 		for (String modelClassName : modelClassNames) {
-			AdaptiveMediaImageOptimizer adaptiveMediaImageOptimizer =
-				_serviceTrackerMap.getService(modelClassName);
+			AMImageOptimizer amImageOptimizer = _serviceTrackerMap.getService(
+				modelClassName);
 
-			adaptiveMediaImageOptimizer.optimize(
-				companyId, configurationEntryUuid);
+			amImageOptimizer.optimize(companyId, configurationEntryUuid);
 		}
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, AdaptiveMediaImageOptimizer.class,
-			"adaptive.media.key");
+			bundleContext, AMImageOptimizer.class, "adaptive.media.key");
 	}
 
 	@Deactivate
@@ -92,7 +90,7 @@ public class AMImageOptimizerUtil {
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMImageOptimizerUtil.class);
 
-	private static ServiceTrackerMap<String, AdaptiveMediaImageOptimizer>
+	private static ServiceTrackerMap<String, AMImageOptimizer>
 		_serviceTrackerMap;
 
 }
