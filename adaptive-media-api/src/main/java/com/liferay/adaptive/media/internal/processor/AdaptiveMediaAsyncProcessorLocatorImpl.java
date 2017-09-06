@@ -30,7 +30,7 @@ public class AdaptiveMediaAsyncProcessorLocatorImpl
 
 	@Override
 	public <M> AMAsyncProcessor<M, ?> locateForClass(Class<M> clazz) {
-		return new AdaptiveMediaAsyncProcessorImpl<>(clazz, _messageBus);
+		return new AMAsyncProcessorImpl<>(clazz, _messageBus);
 	}
 
 	@Reference

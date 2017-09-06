@@ -33,12 +33,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * @author Sergio González
  */
-public final class AdaptiveMediaAsyncProcessorImpl<M, T>
+public final class AMAsyncProcessorImpl<M, T>
 	implements AMAsyncProcessor<M, T> {
 
-	public AdaptiveMediaAsyncProcessorImpl(
-		Class<M> clazz, MessageBus messageBus) {
-
+	public AMAsyncProcessorImpl(Class<M> clazz, MessageBus messageBus) {
 		_clazz = clazz;
 		_messageBus = messageBus;
 	}
@@ -155,7 +153,7 @@ public final class AdaptiveMediaAsyncProcessorImpl<M, T>
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaAsyncProcessorImpl.class);
+		AMAsyncProcessorImpl.class);
 
 	private static final Map<AdaptiveMediaProcessorCommand, List<String>>
 		_modelIds = new ConcurrentHashMap<>();
