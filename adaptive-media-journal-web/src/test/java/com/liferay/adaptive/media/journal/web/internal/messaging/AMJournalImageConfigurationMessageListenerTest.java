@@ -14,38 +14,45 @@
 
 package com.liferay.adaptive.media.journal.web.internal.messaging;
 
-import com.liferay.adaptive.media.image.constants.AMImageDestinationNames;
 import com.liferay.journal.util.JournalContent;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageListener;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @author Alejandro Tardín
  */
-@Component(
-	immediate = true,
-	property = {
-		"destination.name=" + AMImageDestinationNames.AM_IMAGE_CONFIGURATION
-	},
-	service = MessageListener.class
-)
-public class AdaptiveMediaJournalImageConfigurationMessageListener
-	extends BaseMessageListener {
+@RunWith(MockitoJUnitRunner.class)
+public class AMJournalImageConfigurationMessageListenerTest {
 
-	@Override
-	protected void doReceive(Message message) throws Exception {
-		_journalContent.clearCache();
+	@Before
+	public void setUp() {
+		_amJournalImageConfigurationMessageListener.setJournalContent(
+			_journalContent);
 	}
 
-	@Reference(unbind = "-")
-	protected void setJournalContent(JournalContent journalContent) {
-		_journalContent = journalContent;
+	@Test
+	public void testClearsTheCacheOnAMessageToTheConfigurationDestination()
+		throws Exception {
+
+		_amJournalImageConfigurationMessageListener.doReceive(new Message());
+
+		Mockito.verify(
+			_journalContent, Mockito.times(1)
+		).clearCache();
 	}
 
+	private final AMJournalImageConfigurationMessageListener
+		_amJournalImageConfigurationMessageListener =
+			new AMJournalImageConfigurationMessageListener();
+
+	@Mock
 	private JournalContent _journalContent;
 
 }
