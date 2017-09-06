@@ -30,7 +30,7 @@ import com.liferay.adaptive.media.image.internal.processor.AdaptiveMediaImage;
 import com.liferay.adaptive.media.image.internal.util.Tuple;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageAttribute;
 import com.liferay.adaptive.media.image.processor.AdaptiveMediaImageProcessor;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
+import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessorLocator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -517,9 +517,8 @@ public class AdaptiveMediaImageRequestHandlerTest {
 		);
 	}
 
-	private final AdaptiveMediaAsyncProcessor<FileVersion, ?>
-		_adaptiveMediaAsyncProcessor = Mockito.mock(
-			AdaptiveMediaAsyncProcessor.class);
+	private final AMAsyncProcessor<FileVersion, ?>
+		_adaptiveMediaAsyncProcessor = Mockito.mock(AMAsyncProcessor.class);
 	private final AdaptiveMediaAsyncProcessorLocator
 		_adaptiveMediaAsyncProcessorLocator = Mockito.mock(
 			AdaptiveMediaAsyncProcessorLocator.class);

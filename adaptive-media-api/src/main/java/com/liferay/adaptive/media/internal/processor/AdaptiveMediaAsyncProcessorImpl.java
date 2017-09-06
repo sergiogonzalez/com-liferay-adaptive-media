@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.internal.processor;
 
 import com.liferay.adaptive.media.internal.constants.AdaptiveMediaDestinationNames;
 import com.liferay.adaptive.media.internal.messaging.AdaptiveMediaProcessorCommand;
-import com.liferay.adaptive.media.processor.AdaptiveMediaAsyncProcessor;
+import com.liferay.adaptive.media.processor.AMAsyncProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -34,7 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Sergio González
  */
 public final class AdaptiveMediaAsyncProcessorImpl<M, T>
-	implements AdaptiveMediaAsyncProcessor<M, T> {
+	implements AMAsyncProcessor<M, T> {
 
 	public AdaptiveMediaAsyncProcessorImpl(
 		Class<M> clazz, MessageBus messageBus) {

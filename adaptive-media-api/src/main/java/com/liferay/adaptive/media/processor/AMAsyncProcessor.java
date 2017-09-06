@@ -36,7 +36,7 @@ import com.liferay.portal.kernel.exception.PortalException;
  * @author Sergio González
  */
 @ProviderType
-public interface AdaptiveMediaAsyncProcessor<M, T> {
+public interface AMAsyncProcessor<M, T> {
 
 	/**
 	 * Removes the specified model from the given commmand's queue of execution.
