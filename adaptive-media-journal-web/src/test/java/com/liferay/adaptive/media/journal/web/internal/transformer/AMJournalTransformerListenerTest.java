@@ -35,19 +35,18 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author Alejandro Tardín
  */
 @RunWith(MockitoJUnitRunner.class)
-public class AdaptiveMediaJournalTransformerListenerTest {
+public class AMJournalTransformerListenerTest {
 
 	@Before
 	public void setUp() {
-		_adaptiveMediaJournalTransformerListener.setContentTransformerHandler(
+		_amJournalTransformerListener.setContentTransformerHandler(
 			_contentTransformerHandler);
-		_adaptiveMediaJournalTransformerListener.setJournalContent(
-			_journalContent);
+		_amJournalTransformerListener.setJournalContent(_journalContent);
 	}
 
 	@Test
 	public void testOnActivationClearsJournalCache() throws Exception {
-		_adaptiveMediaJournalTransformerListener.activate();
+		_amJournalTransformerListener.activate();
 
 		Mockito.verify(
 			_journalContent, Mockito.times(1)
@@ -56,7 +55,7 @@ public class AdaptiveMediaJournalTransformerListenerTest {
 
 	@Test
 	public void testOnDeactivationClearsJournalCache() throws Exception {
-		_adaptiveMediaJournalTransformerListener.deactivate();
+		_amJournalTransformerListener.deactivate();
 
 		Mockito.verify(
 			_journalContent, Mockito.times(1)
@@ -75,7 +74,7 @@ public class AdaptiveMediaJournalTransformerListenerTest {
 			transformedOutput
 		);
 
-		String newOutput = _adaptiveMediaJournalTransformerListener.onOutput(
+		String newOutput = _amJournalTransformerListener.onOutput(
 			originalOutput, _LANGUAGE_ID, _tokens);
 
 		Assert.assertSame(transformedOutput, newOutput);
@@ -85,7 +84,7 @@ public class AdaptiveMediaJournalTransformerListenerTest {
 	public void testOnScriptDoesNotModifyTheScript() throws Exception {
 		String originalScript = "some script content";
 
-		String newScript = _adaptiveMediaJournalTransformerListener.onScript(
+		String newScript = _amJournalTransformerListener.onScript(
 			originalScript, _document, _LANGUAGE_ID, _tokens);
 
 		Assert.assertSame(originalScript, newScript);
@@ -95,7 +94,7 @@ public class AdaptiveMediaJournalTransformerListenerTest {
 
 	@Test
 	public void testOnXmlDoesNotModifyTheXml() throws Exception {
-		Document newDocument = _adaptiveMediaJournalTransformerListener.onXml(
+		Document newDocument = _amJournalTransformerListener.onXml(
 			_document, _LANGUAGE_ID, _tokens);
 
 		Assert.assertSame(_document, newDocument);
@@ -105,9 +104,8 @@ public class AdaptiveMediaJournalTransformerListenerTest {
 
 	private static final String _LANGUAGE_ID = "en";
 
-	private final AdaptiveMediaJournalTransformerListener
-		_adaptiveMediaJournalTransformerListener =
-			new AdaptiveMediaJournalTransformerListener();
+	private final AMJournalTransformerListener _amJournalTransformerListener =
+		new AMJournalTransformerListener();
 
 	@Mock
 	private ContentTransformerHandler _contentTransformerHandler;

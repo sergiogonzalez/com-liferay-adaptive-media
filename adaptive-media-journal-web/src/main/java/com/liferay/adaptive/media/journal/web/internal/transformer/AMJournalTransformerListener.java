@@ -36,8 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = "javax.portlet.name=" + JournalPortletKeys.JOURNAL,
 	service = TransformerListener.class
 )
-public class AdaptiveMediaJournalTransformerListener
-	extends BaseTransformerListener {
+public class AMJournalTransformerListener extends BaseTransformerListener {
 
 	@Override
 	public String onOutput(
