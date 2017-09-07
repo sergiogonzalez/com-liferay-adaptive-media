@@ -3,11 +3,11 @@
 
 <service-builder auto-import-default-references="false" auto-namespace-tables="false" package-path="com.liferay.adaptive.media.image">
 	<namespace>AdaptiveMediaImageEntry</namespace>
-	<entity local-service="true" name="AdaptiveMediaImageEntry" remote-service="false" trash-enabled="false" uuid="true">
+	<entity local-service="true" name="AMImageEntry" remote-service="false" trash-enabled="false" uuid="true">
 
 		<!-- PK fields -->
 
-		<column name="adaptiveMediaImageEntryId" primary="true" type="long" />
+		<column name="amImageEntryId" primary="true" type="long" />
 
 		<!-- Group instance -->
 
@@ -45,13 +45,13 @@
 			<finder-column name="companyId" />
 			<finder-column name="configurationUuid" />
 		</finder>
-		<finder name="C_F" return-type="AdaptiveMediaImageEntry" unique="true">
+		<finder name="C_F" return-type="AMImageEntry" unique="true">
 			<finder-column name="configurationUuid" />
 			<finder-column name="fileVersionId" />
 		</finder>
 	</entity>
 	<exceptions>
-		<exception>DuplicateAdaptiveMediaImageEntry</exception>
-		<exception>NoSuchAdaptiveMediaImageEntry</exception>
+		<exception>DuplicateAMImageEntry</exception>
+		<exception>NoSuchAMImageEntry</exception>
 	</exceptions>
 </service-builder>
