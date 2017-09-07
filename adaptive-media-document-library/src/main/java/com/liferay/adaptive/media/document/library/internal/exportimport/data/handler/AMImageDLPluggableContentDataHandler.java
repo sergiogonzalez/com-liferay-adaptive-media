@@ -20,10 +20,10 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntrySerializer;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.adaptive.media.image.util.AMImageSerializer;
 import com.liferay.document.library.exportimport.data.handler.DLPluggableContentDataHandler;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -236,21 +236,19 @@ public class AMImageDLPluggableContentDataHandler
 				continue;
 			}
 
-			AdaptiveMediaImageEntry adaptiveMediaImageEntry =
-				_adaptiveMediaImageEntryLocalService.
-					fetchAdaptiveMediaImageEntry(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId());
+			AMImageEntry amImageEntry =
+				_amImageEntryLocalService.fetchAMImageEntry(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId());
 
-			if (adaptiveMediaImageEntry != null) {
-				_adaptiveMediaImageEntryLocalService.
-					deleteAdaptiveMediaImageEntryFileVersion(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId());
+			if (amImageEntry != null) {
+				_amImageEntryLocalService.deleteAMImageEntryFileVersion(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId());
 			}
 
 			try (InputStream inputStream = adaptiveMedia.getInputStream()) {
-				_adaptiveMediaImageEntryLocalService.addAdaptiveMediaImageEntry(
+				_amImageEntryLocalService.addAMImageEntry(
 					amImageConfigurationEntry, fileVersion, widthOptional.get(),
 					heightOptional.get(), inputStream,
 					contentLengthOptional.get());
@@ -259,15 +257,14 @@ public class AMImageDLPluggableContentDataHandler
 	}
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService;
-
-	@Reference
 	private AMImageConfigurationEntrySerializer
 		_amImageConfigurationEntrySerializer;
 
 	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
+
+	@Reference
+	private AMImageEntryLocalService _amImageEntryLocalService;
 
 	@Reference
 	private AMImageFinder _amImageFinder;

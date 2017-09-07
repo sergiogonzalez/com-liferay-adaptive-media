@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.commands
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AMImageConstants;
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.model.AMImageEntry;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.document.library.kernel.util.DLPreviewableProcessor;
@@ -303,13 +303,12 @@ public class AMThumbnailsOSGiCommands {
 				return;
 			}
 
-			AdaptiveMediaImageEntry adaptiveMediaImageEntry =
-				_adaptiveMediaImageEntryLocalService.
-					fetchAdaptiveMediaImageEntry(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId());
+			AMImageEntry amImageEntry =
+				_amImageEntryLocalService.fetchAMImageEntry(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId());
 
-			if (adaptiveMediaImageEntry != null) {
+			if (amImageEntry != null) {
 				return;
 			}
 
@@ -321,7 +320,7 @@ public class AMThumbnailsOSGiCommands {
 
 			RenderedImage renderedImage = imageBag.getRenderedImage();
 
-			_adaptiveMediaImageEntryLocalService.addAdaptiveMediaImageEntry(
+			_amImageEntryLocalService.addAMImageEntry(
 				amImageConfigurationEntry, fileVersion,
 				renderedImage.getWidth(), renderedImage.getHeight(),
 				new UnsyncByteArrayInputStream(bytes), bytes.length);
@@ -335,11 +334,10 @@ public class AMThumbnailsOSGiCommands {
 		AMThumbnailsOSGiCommands.class);
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference
-	private AMImageConfigurationHelper _amImageConfigurationHelper;
+	private AMImageEntryLocalService _amImageEntryLocalService;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;

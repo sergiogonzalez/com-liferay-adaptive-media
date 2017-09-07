@@ -172,9 +172,9 @@ PortletURL portletURL = renderResponse.createRenderURL();
 						String rowId = row.getRowId();
 						String uuid = String.valueOf(amImageConfigurationEntry.getUUID());
 
-						int adaptedImages = AdaptiveMediaImageEntryLocalServiceUtil.getAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId(), amImageConfigurationEntry.getUUID());
+						int adaptedImages = AMImageEntryLocalServiceUtil.getAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId(), amImageConfigurationEntry.getUUID());
 
-						int totalImages = AdaptiveMediaImageEntryLocalServiceUtil.getExpectedAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId());
+						int totalImages = AMImageEntryLocalServiceUtil.getExpectedAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId());
 						%>
 
 						<div id="<portlet:namespace />AdaptRemaining_<%= rowId %>"></div>

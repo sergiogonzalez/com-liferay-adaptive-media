@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.exception.AMImageConfigurationException.Invali
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.test.util.DestinationReplacer;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalServiceUtil;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalServiceUtil;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
@@ -200,10 +200,9 @@ public class AMImageDeleteConfigurationTest
 			FileVersion fileVersion = fileEntry.getFileVersion();
 
 			Assert.assertNotNull(
-				AdaptiveMediaImageEntryLocalServiceUtil.
-					fetchAdaptiveMediaImageEntry(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId()));
+				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId()));
 
 			amImageConfigurationHelper.disableAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(),
@@ -214,10 +213,9 @@ public class AMImageDeleteConfigurationTest
 				amImageConfigurationEntry.getUUID());
 
 			Assert.assertNull(
-				AdaptiveMediaImageEntryLocalServiceUtil.
-					fetchAdaptiveMediaImageEntry(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId()));
+				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId()));
 		}
 	}
 
@@ -544,20 +542,18 @@ public class AMImageDeleteConfigurationTest
 			FileVersion fileVersion = fileEntry.getFileVersion();
 
 			Assert.assertNotNull(
-				AdaptiveMediaImageEntryLocalServiceUtil.
-					fetchAdaptiveMediaImageEntry(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId()));
+				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId()));
 
 			amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(),
 				amImageConfigurationEntry.getUUID());
 
 			Assert.assertNull(
-				AdaptiveMediaImageEntryLocalServiceUtil.
-					fetchAdaptiveMediaImageEntry(
-						amImageConfigurationEntry.getUUID(),
-						fileVersion.getFileVersionId()));
+				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+					amImageConfigurationEntry.getUUID(),
+					fileVersion.getFileVersionId()));
 		}
 	}
 

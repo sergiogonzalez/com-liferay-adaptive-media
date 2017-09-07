@@ -92,25 +92,23 @@ public class AMImageEntryLocalServiceImpl
 
 		long imageEntryId = counterLocalService.increment();
 
-		AMImageEntry adaptiveMediaImageEntry = amImageEntryPersistence.create(
+		AMImageEntry amImageEntry = amImageEntryPersistence.create(
 			imageEntryId);
 
-		adaptiveMediaImageEntry.setCompanyId(fileVersion.getCompanyId());
-		adaptiveMediaImageEntry.setGroupId(fileVersion.getGroupId());
-		adaptiveMediaImageEntry.setCreateDate(new Date());
-		adaptiveMediaImageEntry.setFileVersionId(
-			fileVersion.getFileVersionId());
-		adaptiveMediaImageEntry.setMimeType(fileVersion.getMimeType());
-		adaptiveMediaImageEntry.setHeight(height);
-		adaptiveMediaImageEntry.setWidth(width);
-		adaptiveMediaImageEntry.setSize(size);
-		adaptiveMediaImageEntry.setConfigurationUuid(
-			amImageConfigurationEntry.getUUID());
+		amImageEntry.setCompanyId(fileVersion.getCompanyId());
+		amImageEntry.setGroupId(fileVersion.getGroupId());
+		amImageEntry.setCreateDate(new Date());
+		amImageEntry.setFileVersionId(fileVersion.getFileVersionId());
+		amImageEntry.setMimeType(fileVersion.getMimeType());
+		amImageEntry.setHeight(height);
+		amImageEntry.setWidth(width);
+		amImageEntry.setSize(size);
+		amImageEntry.setConfigurationUuid(amImageConfigurationEntry.getUUID());
 
 		imageStorage.save(
 			fileVersion, amImageConfigurationEntry.getUUID(), inputStream);
 
-		return amImageEntryPersistence.update(adaptiveMediaImageEntry);
+		return amImageEntryPersistence.update(amImageEntry);
 	}
 
 	@Override
@@ -157,17 +155,16 @@ public class AMImageEntryLocalServiceImpl
 	public void deleteAMImageEntryFileVersion(FileVersion fileVersion)
 		throws PortalException {
 
-		List<AMImageEntry> adaptiveMediaImageEntries =
+		List<AMImageEntry> amImageEntries =
 			amImageEntryPersistence.findByFileVersionId(
 				fileVersion.getFileVersionId());
 
-		for (AMImageEntry adaptiveMediaImageEntry : adaptiveMediaImageEntries) {
+		for (AMImageEntry amImageEntry : amImageEntries) {
 			try {
-				amImageEntryPersistence.remove(adaptiveMediaImageEntry);
+				amImageEntryPersistence.remove(amImageEntry);
 
 				imageStorage.delete(
-					fileVersion,
-					adaptiveMediaImageEntry.getConfigurationUuid());
+					fileVersion, amImageEntry.getConfigurationUuid());
 			}
 			catch (AMRuntimeException.IOException amreioe) {
 				_log.error(amreioe);
@@ -192,13 +189,12 @@ public class AMImageEntryLocalServiceImpl
 		FileVersion fileVersion = dlAppLocalService.getFileVersion(
 			fileVersionId);
 
-		AMImageEntry adaptiveMediaImageEntry =
-			amImageEntryPersistence.findByC_F(configurationUuid, fileVersionId);
+		AMImageEntry amImageEntry = amImageEntryPersistence.findByC_F(
+			configurationUuid, fileVersionId);
 
-		amImageEntryPersistence.remove(adaptiveMediaImageEntry);
+		amImageEntryPersistence.remove(amImageEntry);
 
-		imageStorage.delete(
-			fileVersion, adaptiveMediaImageEntry.getConfigurationUuid());
+		imageStorage.delete(fileVersion, amImageEntry.getConfigurationUuid());
 	}
 
 	@Override
@@ -321,11 +317,10 @@ public class AMImageEntryLocalServiceImpl
 	private void _checkDuplicates(String configurationUuid, long fileVersionId)
 		throws DuplicateAMImageEntryException {
 
-		AMImageEntry adaptiveMediaImageEntry =
-			amImageEntryPersistence.fetchByC_F(
-				configurationUuid, fileVersionId);
+		AMImageEntry amImageEntry = amImageEntryPersistence.fetchByC_F(
+			configurationUuid, fileVersionId);
 
-		if (adaptiveMediaImageEntry != null) {
+		if (amImageEntry != null) {
 			throw new DuplicateAMImageEntryException();
 		}
 	}

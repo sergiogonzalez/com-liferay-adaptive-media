@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -59,13 +59,11 @@ public class AdaptedImagesPercentageMVCResourceCommand
 
 		String entryUuid = ParamUtil.getString(resourceRequest, "entryUuid");
 
-		int entriesCount =
-			_adaptiveMediaImageEntryLocalService.
-				getAdaptiveMediaImageEntriesCount(companyId, entryUuid);
+		int entriesCount = _amImageEntryLocalService.getAMImageEntriesCount(
+			companyId, entryUuid);
 
 		int expectedEntriesCount =
-			_adaptiveMediaImageEntryLocalService.
-				getExpectedAdaptiveMediaImageEntriesCount(companyId);
+			_amImageEntryLocalService.getExpectedAMImageEntriesCount(companyId);
 
 		jsonObject.put(
 			"adaptedImages",
@@ -78,7 +76,6 @@ public class AdaptedImagesPercentageMVCResourceCommand
 	}
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService;
+	private AMImageEntryLocalService _amImageEntryLocalService;
 
 }

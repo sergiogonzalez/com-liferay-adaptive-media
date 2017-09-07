@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.web.internal.portlet.action;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.adaptive.media.web.internal.constants.AMWebKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
@@ -65,11 +65,9 @@ public class EditImageConfigurationEntryMVCRenderCommand
 			AMImageConfigurationEntry amImageConfigurationEntry =
 				amImageConfigurationEntryOptional.get();
 
-			int entriesCount =
-				_adaptiveMediaImageEntryLocalService.
-					getAdaptiveMediaImageEntriesCount(
-						themeDisplay.getCompanyId(),
-						amImageConfigurationEntry.getUUID());
+			int entriesCount = _amImageEntryLocalService.getAMImageEntriesCount(
+				themeDisplay.getCompanyId(),
+				amImageConfigurationEntry.getUUID());
 
 			if (entriesCount != 0) {
 				configurationEntryEditable = false;
@@ -87,10 +85,9 @@ public class EditImageConfigurationEntryMVCRenderCommand
 	}
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference
-	private AMImageConfigurationHelper _amImageConfigurationHelper;
+	private AMImageEntryLocalService _amImageEntryLocalService;
 
 }

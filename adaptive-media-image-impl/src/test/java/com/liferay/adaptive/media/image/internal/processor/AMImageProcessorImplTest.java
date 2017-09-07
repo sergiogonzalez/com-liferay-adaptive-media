@@ -17,11 +17,11 @@ package com.liferay.adaptive.media.image.internal.processor;
 import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.exception.DuplicateAdaptiveMediaImageEntryException;
+import com.liferay.adaptive.media.image.exception.DuplicateAMImageEntryException;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationEntryImpl;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.model.AMImageEntry;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageTool;
 import com.liferay.portal.kernel.image.ImageToolUtil;
@@ -47,8 +47,8 @@ public class AMImageProcessorImplTest {
 
 	@Before
 	public void setUp() {
-		_amImageProcessorImpl.setImageEntryLocalService(
-			_adaptiveMediaImageEntryLocalService);
+		_amImageProcessorImpl.setAMImageEntryLocalService(
+			_amImageEntryLocalService);
 		_amImageProcessorImpl.setImageProcessor(_imageProcessor);
 		_amImageProcessorImpl.setAMImageConfigurationHelper(
 			_amImageConfigurationHelper);
@@ -69,8 +69,8 @@ public class AMImageProcessorImplTest {
 		_amImageProcessorImpl.cleanUp(_fileVersion);
 
 		Mockito.verify(
-			_adaptiveMediaImageEntryLocalService
-		).deleteAdaptiveMediaImageEntryFileVersion(
+			_amImageEntryLocalService
+		).deleteAMImageEntryFileVersion(
 			_fileVersion
 		);
 	}
@@ -86,8 +86,8 @@ public class AMImageProcessorImplTest {
 		Mockito.doThrow(
 			AMRuntimeException.IOException.class
 		).when(
-			_adaptiveMediaImageEntryLocalService
-		).deleteAdaptiveMediaImageEntryFileVersion(
+			_amImageEntryLocalService
+		).deleteAMImageEntryFileVersion(
 			Mockito.any(FileVersion.class)
 		);
 
@@ -105,8 +105,8 @@ public class AMImageProcessorImplTest {
 		Mockito.doThrow(
 			PortalException.class
 		).when(
-			_adaptiveMediaImageEntryLocalService
-		).deleteAdaptiveMediaImageEntryFileVersion(
+			_amImageEntryLocalService
+		).deleteAMImageEntryFileVersion(
 			Mockito.any(FileVersion.class)
 		);
 
@@ -124,14 +124,14 @@ public class AMImageProcessorImplTest {
 		_amImageProcessorImpl.cleanUp(_fileVersion);
 
 		Mockito.verify(
-			_adaptiveMediaImageEntryLocalService, Mockito.never()
-		).deleteAdaptiveMediaImageEntryFileVersion(
+			_amImageEntryLocalService, Mockito.never()
+		).deleteAMImageEntryFileVersion(
 			_fileVersion
 		);
 	}
 
 	@Test
-	public void testProcessConfigurationWhenAdaptiveMediaImageEntryAlreadyExists()
+	public void testProcessConfigurationWhenAMImageEntryAlreadyExists()
 		throws Exception {
 
 		Mockito.when(
@@ -151,10 +151,10 @@ public class AMImageProcessorImplTest {
 		);
 
 		Mockito.when(
-			_adaptiveMediaImageEntryLocalService.fetchAdaptiveMediaImageEntry(
+			_amImageEntryLocalService.fetchAMImageEntry(
 				Mockito.anyString(), Mockito.anyLong())
 		).thenReturn(
-			Mockito.mock(AdaptiveMediaImageEntry.class)
+			Mockito.mock(AMImageEntry.class)
 		);
 
 		_amImageProcessorImpl.process(_fileVersion, StringUtil.randomString());
@@ -187,8 +187,8 @@ public class AMImageProcessorImplTest {
 		_amImageProcessorImpl.process(_fileVersion, StringUtil.randomString());
 
 		Mockito.verify(
-			_adaptiveMediaImageEntryLocalService, Mockito.never()
-		).fetchAdaptiveMediaImageEntry(
+			_amImageEntryLocalService, Mockito.never()
+		).fetchAMImageEntry(
 			Mockito.anyString(), Mockito.anyLong()
 		);
 	}
@@ -211,7 +211,7 @@ public class AMImageProcessorImplTest {
 	}
 
 	@Test(expected = AMRuntimeException.IOException.class)
-	public void testProcessDuplicateAdaptiveMediaImageEntryExceptionInImageService()
+	public void testProcessDuplicateAMImageEntryExceptionInImageService()
 		throws Exception {
 
 		Mockito.when(
@@ -248,10 +248,10 @@ public class AMImageProcessorImplTest {
 		);
 
 		Mockito.doThrow(
-			DuplicateAdaptiveMediaImageEntryException.class
+			DuplicateAMImageEntryException.class
 		).when(
-			_adaptiveMediaImageEntryLocalService
-		).addAdaptiveMediaImageEntry(
+			_amImageEntryLocalService
+		).addAMImageEntry(
 			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(), Mockito.anyInt(),
 			Mockito.any(InputStream.class), Mockito.anyInt()
@@ -304,8 +304,8 @@ public class AMImageProcessorImplTest {
 		);
 
 		Mockito.verify(
-			_adaptiveMediaImageEntryLocalService
-		).addAdaptiveMediaImageEntry(
+			_amImageEntryLocalService
+		).addAMImageEntry(
 			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(), Mockito.anyInt(),
 			Mockito.any(InputStream.class), Mockito.anyInt()
@@ -407,8 +407,8 @@ public class AMImageProcessorImplTest {
 		Mockito.doThrow(
 			AMRuntimeException.IOException.class
 		).when(
-			_adaptiveMediaImageEntryLocalService
-		).addAdaptiveMediaImageEntry(
+			_amImageEntryLocalService
+		).addAMImageEntry(
 			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(), Mockito.anyInt(),
 			Mockito.any(InputStream.class), Mockito.anyInt()
@@ -442,8 +442,8 @@ public class AMImageProcessorImplTest {
 		);
 
 		Mockito.verify(
-			_adaptiveMediaImageEntryLocalService, Mockito.never()
-		).addAdaptiveMediaImageEntry(
+			_amImageEntryLocalService, Mockito.never()
+		).addAMImageEntry(
 			Mockito.any(AMImageConfigurationEntry.class),
 			Mockito.any(FileVersion.class), Mockito.anyInt(),
 			Mockito.any(Integer.class), Mockito.any(InputStream.class),
@@ -468,11 +468,10 @@ public class AMImageProcessorImplTest {
 		);
 	}
 
-	private final AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService = Mockito.mock(
-			AdaptiveMediaImageEntryLocalService.class);
 	private final AMImageConfigurationHelper _amImageConfigurationHelper =
 		Mockito.mock(AMImageConfigurationHelper.class);
+	private final AMImageEntryLocalService _amImageEntryLocalService =
+		Mockito.mock(AMImageEntryLocalService.class);
 	private final AMImageProcessorImpl _amImageProcessorImpl =
 		new AMImageProcessorImpl();
 	private final FileVersion _fileVersion = Mockito.mock(FileVersion.class);

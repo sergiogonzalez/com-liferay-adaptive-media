@@ -20,7 +20,7 @@ import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalServiceUtil;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalServiceUtil;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
@@ -153,8 +153,8 @@ public class AMThumbnailsOSGiCommandsTest {
 
 		FileVersion latestFileVersion = _pngFileEntry.getFileVersion();
 
-		AdaptiveMediaImageEntryLocalServiceUtil.
-			deleteAdaptiveMediaImageEntryFileVersion(latestFileVersion);
+		AMImageEntryLocalServiceUtil.deleteAMImageEntryFileVersion(
+			latestFileVersion);
 
 		GroupLocalServiceUtil.deleteGroup(_group);
 
@@ -430,11 +430,11 @@ public class AMThumbnailsOSGiCommandsTest {
 
 	private static final String _COMMAND_CLASS_NAME =
 		"com.liferay.adaptive.media.document.library.thumbnails.internal." +
-			"commands.AdaptiveMediaThumbnailsOSGiCommands";
+			"commands.AMThumbnailsOSGiCommands";
 
 	private static final String _PROCESSOR_CLASS_NAME =
 		"com.liferay.adaptive.media.document.library.thumbnails.internal." +
-			"AdaptiveMediaImageEntryProcessor";
+			"AMImageEntryProcessor";
 
 	private static final String _THUMBNAIL_CONFIGURATION = "thumbnail";
 

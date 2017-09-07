@@ -19,9 +19,9 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
 import com.liferay.adaptive.media.image.internal.util.RenderedImageUtil;
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.adaptive.media.processor.AMProcessor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
@@ -55,7 +55,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 				return;
 			}
 
-			_imageEntryLocalService.deleteAdaptiveMediaImageEntryFileVersion(
+			_amImageEntryLocalService.deleteAMImageEntryFileVersion(
 				fileVersion);
 		}
 		catch (PortalException pe) {
@@ -97,12 +97,11 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 		AMImageConfigurationEntry amImageConfigurationEntry =
 			amImageConfigurationEntryOptional.get();
 
-		AdaptiveMediaImageEntry imageEntry =
-			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-				amImageConfigurationEntry.getUUID(),
-				fileVersion.getFileVersionId());
+		AMImageEntry amImageEntry = _amImageEntryLocalService.fetchAMImageEntry(
+			amImageConfigurationEntry.getUUID(),
+			fileVersion.getFileVersionId());
 
-		if (imageEntry != null) {
+		if (amImageEntry != null) {
 			return;
 		}
 
@@ -113,7 +112,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 			byte[] bytes = RenderedImageUtil.getRenderedImageContentStream(
 				renderedImage, fileVersion.getMimeType());
 
-			_imageEntryLocalService.addAdaptiveMediaImageEntry(
+			_amImageEntryLocalService.addAMImageEntry(
 				amImageConfigurationEntry, fileVersion,
 				renderedImage.getWidth(), renderedImage.getHeight(),
 				new UnsyncByteArrayInputStream(bytes), bytes.length);
@@ -131,10 +130,10 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 	}
 
 	@Reference(unbind = "-")
-	public void setImageEntryLocalService(
-		AdaptiveMediaImageEntryLocalService imageEntryLocalService) {
+	public void setAMImageEntryLocalService(
+		AMImageEntryLocalService amImageEntryLocalService) {
 
-		_imageEntryLocalService = imageEntryLocalService;
+		_amImageEntryLocalService = amImageEntryLocalService;
 	}
 
 	@Reference(unbind = "-")
@@ -143,7 +142,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 	}
 
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
-	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
+	private AMImageEntryLocalService _amImageEntryLocalService;
 	private ImageProcessor _imageProcessor;
 
 }

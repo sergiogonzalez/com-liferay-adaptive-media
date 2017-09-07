@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.web.internal.portlet.action;
 import com.liferay.adaptive.media.exception.AMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.adaptive.media.web.constants.AMPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -235,10 +235,8 @@ public class EditImageConfigurationEntryMVCActionCommand
 	private boolean _isConfigurationEntryEditable(
 		long companyId, AMImageConfigurationEntry amImageConfigurationEntry) {
 
-		int entriesCount =
-			_adaptiveMediaImageEntryLocalService.
-				getAdaptiveMediaImageEntriesCount(
-					companyId, amImageConfigurationEntry.getUUID());
+		int entriesCount = _amImageEntryLocalService.getAMImageEntriesCount(
+			companyId, amImageConfigurationEntry.getUUID());
 
 		if (entriesCount == 0) {
 			return true;
@@ -248,10 +246,9 @@ public class EditImageConfigurationEntryMVCActionCommand
 	}
 
 	@Reference
-	private AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService;
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference
-	private AMImageConfigurationHelper _amImageConfigurationHelper;
+	private AMImageEntryLocalService _amImageEntryLocalService;
 
 }

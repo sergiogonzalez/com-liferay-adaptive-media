@@ -85,9 +85,9 @@ if (ListUtil.isNotEmpty(selectedAMImageConfigurationEntries)) {
 						<dd class="h6 sidebar-caption">
 
 							<%
-							int adaptedImages = AdaptiveMediaImageEntryLocalServiceUtil.getAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId(), amImageConfigurationEntry.getUUID());
+							int adaptedImages = AMImageEntryLocalServiceUtil.getAMImageEntriesCount(themeDisplay.getCompanyId(), amImageConfigurationEntry.getUUID());
 
-							int totalImages = AdaptiveMediaImageEntryLocalServiceUtil.getExpectedAdaptiveMediaImageEntriesCount(themeDisplay.getCompanyId());
+							int totalImages = AMImageEntryLocalServiceUtil.getExpectedAMImageEntriesCount(themeDisplay.getCompanyId());
 							%>
 
 							<%= Math.min(adaptedImages, totalImages) + "/" + totalImages %>

@@ -20,7 +20,7 @@ import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AMImageDestinationNames;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
@@ -230,7 +230,7 @@ public class AMImageConfigurationHelperImpl
 		AMImageConfigurationEntry amImageConfigurationEntry =
 			amImageConfigurationEntryOptional.get();
 
-		_adaptiveMediaImageEntryLocalService.deleteAdaptiveMediaImageEntries(
+		_amImageEntryLocalService.deleteAMImageEntries(
 			companyId, amImageConfigurationEntry);
 
 		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
@@ -597,11 +597,11 @@ public class AMImageConfigurationHelperImpl
 	private static final Pattern _positiveNumberPattern = Pattern.compile(
 		"\\d*[1-9]\\d*");
 
-	@Reference
-	private AdaptiveMediaImageEntryLocalService
-		_adaptiveMediaImageEntryLocalService;
-
 	private AMImageConfigurationEntryParser _amImageConfigurationEntryParser;
+
+	@Reference
+	private AMImageEntryLocalService _amImageEntryLocalService;
+
 	private final Map<Long, Collection<AMImageConfigurationEntry>>
 		_configurationEntries = new ConcurrentHashMap<>();
 

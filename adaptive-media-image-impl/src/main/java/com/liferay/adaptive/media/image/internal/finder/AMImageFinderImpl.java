@@ -25,10 +25,10 @@ import com.liferay.adaptive.media.image.finder.AMImageQueryBuilder;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
-import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -114,17 +114,17 @@ public class AMImageFinderImpl implements AMImageFinder {
 	}
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaImageEntryLocalService(
-		AdaptiveMediaImageEntryLocalService imageEntryLocalService) {
-
-		_imageEntryLocalService = imageEntryLocalService;
-	}
-
-	@Reference(unbind = "-")
 	public void setAMImageConfigurationHelper(
 		AMImageConfigurationHelper amImageConfigurationHelper) {
 
 		_amImageConfigurationHelper = amImageConfigurationHelper;
+	}
+
+	@Reference(unbind = "-")
+	public void setAMImageEntryLocalService(
+		AMImageEntryLocalService amImageEntryLocalService) {
+
+		_amImageEntryLocalService = amImageEntryLocalService;
 	}
 
 	@Reference(unbind = "-")
@@ -158,47 +158,45 @@ public class AMImageFinderImpl implements AMImageFinder {
 		properties.put(
 			fileNameAMAttribute.getName(), fileVersion.getFileName());
 
-		AdaptiveMediaImageEntry imageEntry =
-			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-				amImageConfigurationEntry.getUUID(),
-				fileVersion.getFileVersionId());
+		AMImageEntry amImageEntry = _amImageEntryLocalService.fetchAMImageEntry(
+			amImageConfigurationEntry.getUUID(),
+			fileVersion.getFileVersionId());
 
-		if (imageEntry != null) {
+		if (amImageEntry != null) {
 			AMAttribute<AMImageProcessor, Integer> imageHeightAMAttribute =
 				AMImageAttribute.IMAGE_HEIGHT;
 
 			properties.put(
 				imageHeightAMAttribute.getName(),
-				String.valueOf(imageEntry.getHeight()));
+				String.valueOf(amImageEntry.getHeight()));
 
 			AMAttribute<AMImageProcessor, Integer> imageWidthAMAttribute =
 				AMImageAttribute.IMAGE_WIDTH;
 
 			properties.put(
 				imageWidthAMAttribute.getName(),
-				String.valueOf(imageEntry.getWidth()));
+				String.valueOf(amImageEntry.getWidth()));
 
 			AMAttribute<Object, String> contentTypeAMAttribute =
 				AMAttribute.getContentTypeAMAttribute();
 
 			properties.put(
-				contentTypeAMAttribute.getName(), imageEntry.getMimeType());
+				contentTypeAMAttribute.getName(), amImageEntry.getMimeType());
 
 			AMAttribute<Object, Integer> contentLengthAMAttribute =
 				AMAttribute.getContentLengthAMAttribute();
 
 			properties.put(
 				contentLengthAMAttribute.getName(),
-				String.valueOf(imageEntry.getSize()));
+				String.valueOf(amImageEntry.getSize()));
 		}
 
 		AMImageAttributeMapping amImageAttributeMapping =
 			AMImageAttributeMapping.fromProperties(properties);
 
 		return new AMImage(
-			() ->
-				_imageEntryLocalService.getAdaptiveMediaImageEntryContentStream(
-					amImageConfigurationEntry, fileVersion),
+			() -> _amImageEntryLocalService.getAMImageEntryContentStream(
+				amImageConfigurationEntry, fileVersion),
 			amImageAttributeMapping,
 			uriFactory.apply(fileVersion, amImageConfigurationEntry));
 	}
@@ -217,12 +215,11 @@ public class AMImageFinderImpl implements AMImageFinder {
 		FileVersion fileVersion,
 		AMImageConfigurationEntry amImageConfigurationEntry) {
 
-		AdaptiveMediaImageEntry imageEntry =
-			_imageEntryLocalService.fetchAdaptiveMediaImageEntry(
-				amImageConfigurationEntry.getUUID(),
-				fileVersion.getFileVersionId());
+		AMImageEntry amImageEntry = _amImageEntryLocalService.fetchAMImageEntry(
+			amImageConfigurationEntry.getUUID(),
+			fileVersion.getFileVersionId());
 
-		if (imageEntry == null) {
+		if (amImageEntry == null) {
 			return false;
 		}
 
@@ -230,8 +227,8 @@ public class AMImageFinderImpl implements AMImageFinder {
 	}
 
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
+	private AMImageEntryLocalService _amImageEntryLocalService;
 	private AMImageURLFactory _amImageURLFactory;
-	private AdaptiveMediaImageEntryLocalService _imageEntryLocalService;
 	private ImageProcessor _imageProcessor;
 
 }
