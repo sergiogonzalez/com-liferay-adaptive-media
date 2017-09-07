@@ -24,9 +24,9 @@ import com.liferay.portal.kernel.xml.Element;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaReferenceExporter {
+public class AMReferenceExporter {
 
-	public AdaptiveMediaReferenceExporter(
+	public AMReferenceExporter(
 		PortletDataContext portletDataContext, StagedModel stagedModel,
 		boolean exportReferencedContent) {
 

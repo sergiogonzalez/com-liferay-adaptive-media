@@ -58,11 +58,10 @@ public class AMBlogsEntryExportImportContentProcessor
 				portletDataContext, stagedModel, content,
 				exportReferencedContent, escapeContent);
 
-		AdaptiveMediaReferenceExporter referenceExporter =
-			new AdaptiveMediaReferenceExporter(
-				portletDataContext, stagedModel, exportReferencedContent);
+		AMReferenceExporter amReferenceExporter = new AMReferenceExporter(
+			portletDataContext, stagedModel, exportReferencedContent);
 
-		return _replace(replacedContent, referenceExporter);
+		return _replace(replacedContent, amReferenceExporter);
 	}
 
 	@Override
@@ -162,30 +161,6 @@ public class AMBlogsEntryExportImportContentProcessor
 	}
 
 	private String _replace(
-			String content, AdaptiveMediaReferenceExporter referenceExporter)
-		throws PortalException {
-
-		Document document = _parseDocument(content);
-
-		for (Element element : document.select("[data-fileEntryId]")) {
-			long fileEntryId = Long.valueOf(element.attr("data-fileEntryId"));
-
-			FileEntry fileEntry = _dlAppLocalService.getFileEntry(fileEntryId);
-
-			referenceExporter.exportReference(fileEntry);
-
-			element.removeAttr("data-fileEntryId");
-			element.attr(
-				_EXPORT_IMPORT_PATH_ATTR,
-				ExportImportPathUtil.getModelPath(fileEntry));
-		}
-
-		Element body = document.body();
-
-		return body.html();
-	}
-
-	private String _replace(
 			String content, AMEmbeddedReferenceSet amEmbeddedReferenceSet)
 		throws PortalException {
 
@@ -225,6 +200,30 @@ public class AMBlogsEntryExportImportContentProcessor
 		}
 
 		return document.body().html();
+	}
+
+	private String _replace(
+			String content, AMReferenceExporter amReferenceExporter)
+		throws PortalException {
+
+		Document document = _parseDocument(content);
+
+		for (Element element : document.select("[data-fileEntryId]")) {
+			long fileEntryId = Long.valueOf(element.attr("data-fileEntryId"));
+
+			FileEntry fileEntry = _dlAppLocalService.getFileEntry(fileEntryId);
+
+			amReferenceExporter.exportReference(fileEntry);
+
+			element.removeAttr("data-fileEntryId");
+			element.attr(
+				_EXPORT_IMPORT_PATH_ATTR,
+				ExportImportPathUtil.getModelPath(fileEntry));
+		}
+
+		Element body = document.body();
+
+		return body.html();
 	}
 
 	private static final String _EXPORT_IMPORT_PATH_ATTR = "export-import-path";
