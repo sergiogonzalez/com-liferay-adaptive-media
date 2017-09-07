@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Ambrin Chaudhary
  */
 @Component(immediate = true, service = DynamicInclude.class)
-public class AdaptiveMediaPictureDynamicInclude extends BaseDynamicInclude {
+public class AMPictureDynamicInclude extends BaseDynamicInclude {
 
 	@Override
 	public void include(
