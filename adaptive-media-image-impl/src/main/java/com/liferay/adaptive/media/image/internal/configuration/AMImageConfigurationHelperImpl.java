@@ -497,8 +497,7 @@ public class AMImageConfigurationHelperImpl
 		try {
 			Settings settings = SettingsFactoryUtil.getSettings(
 				new CompanyServiceSettingsLocator(
-					companyId,
-					AdaptiveMediaImageCompanyConfiguration.class.getName()));
+					companyId, AMImageCompanyConfiguration.class.getName()));
 
 			Optional<String[]> nullableImageVariants =
 				_getNullableImageVariants(settings);
@@ -572,8 +571,7 @@ public class AMImageConfigurationHelperImpl
 		try {
 			Settings settings = SettingsFactoryUtil.getSettings(
 				new CompanyServiceSettingsLocator(
-					companyId,
-					AdaptiveMediaImageCompanyConfiguration.class.getName()));
+					companyId, AMImageCompanyConfiguration.class.getName()));
 
 			ModifiableSettings modifiableSettings =
 				settings.getModifiableSettings();

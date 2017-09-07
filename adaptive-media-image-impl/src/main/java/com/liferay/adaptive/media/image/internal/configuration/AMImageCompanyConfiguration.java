@@ -25,11 +25,11 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 	scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
-	id = "com.liferay.adaptive.media.image.internal.configuration.AdaptiveMediaImageCompanyConfiguration",
+	id = "com.liferay.adaptive.media.image.internal.configuration.AMImageCompanyConfiguration",
 	localization = "content/Language",
 	name = "adaptive-media-image-configuration-name"
 )
-public interface AdaptiveMediaImageCompanyConfiguration {
+public interface AMImageCompanyConfiguration {
 
 	@Meta.AD(required = false)
 	public String[] imageVariants();

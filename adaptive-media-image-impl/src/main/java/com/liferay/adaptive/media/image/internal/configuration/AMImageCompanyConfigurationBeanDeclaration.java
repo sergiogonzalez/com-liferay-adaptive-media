@@ -27,7 +27,7 @@ public class AMImageCompanyConfigurationBeanDeclaration
 
 	@Override
 	public Class<?> getConfigurationBeanClass() {
-		return AdaptiveMediaImageCompanyConfiguration.class;
+		return AMImageCompanyConfiguration.class;
 	}
 
 }
