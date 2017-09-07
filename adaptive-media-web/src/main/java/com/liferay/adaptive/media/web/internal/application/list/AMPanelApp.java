@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = PanelApp.class
 )
-public class AdaptiveMediaPanelApp extends BasePanelApp {
+public class AMPanelApp extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
