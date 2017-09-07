@@ -37,8 +37,7 @@ public class AMServletTest {
 
 	@Before
 	public void setUp() {
-		_amServlet.setAdaptiveMediaRequestHandlerLocator(
-			_amRequestHandlerLocator);
+		_amServlet.setAMRequestHandlerLocator(_amRequestHandlerLocator);
 	}
 
 	@Test

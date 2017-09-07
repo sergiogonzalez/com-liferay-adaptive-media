@@ -81,7 +81,7 @@ public class AMBlogsEditorConfigContributor
 		List<ItemSelectorCriterion> itemSelectorCriteria =
 			_itemSelector.getItemSelectorCriteria(itemSelectorURL);
 
-		boolean adaptiveMediaImageURLItemSelectorReturnTypeAdded = false;
+		boolean amImageURLItemSelectorReturnTypeAdded = false;
 
 		for (ItemSelectorCriterion itemSelectorCriterion :
 				itemSelectorCriteria) {
@@ -91,14 +91,14 @@ public class AMBlogsEditorConfigContributor
 				itemSelectorCriterion instanceof ImageItemSelectorCriterion ||
 				itemSelectorCriterion instanceof UploadItemSelectorCriterion) {
 
-				addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+				addAMImageFileEntryItemSelectorReturnType(
 					itemSelectorCriterion);
 
-				adaptiveMediaImageURLItemSelectorReturnTypeAdded = true;
+				amImageURLItemSelectorReturnTypeAdded = true;
 			}
 		}
 
-		if (!adaptiveMediaImageURLItemSelectorReturnTypeAdded) {
+		if (!amImageURLItemSelectorReturnTypeAdded) {
 			return;
 		}
 
@@ -132,7 +132,7 @@ public class AMBlogsEditorConfigContributor
 		_itemSelector = itemSelector;
 	}
 
-	protected void addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+	protected void addAMImageFileEntryItemSelectorReturnType(
 		ItemSelectorCriterion itemSelectorCriterion) {
 
 		List<ItemSelectorReturnType> desiredItemSelectorReturnTypes =

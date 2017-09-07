@@ -53,17 +53,15 @@ public class DisableImageConfigurationEntryMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String adaptiveMediaImageConfigurationEntryUuid = ParamUtil.getString(
-			actionRequest, "adaptiveMediaImageConfigurationEntryUuid");
+		String amImageConfigurationEntryUuid = ParamUtil.getString(
+			actionRequest, "amImageConfigurationEntryUuid");
 
 		_amImageConfigurationHelper.disableAMImageConfigurationEntry(
-			themeDisplay.getCompanyId(),
-			adaptiveMediaImageConfigurationEntryUuid);
+			themeDisplay.getCompanyId(), amImageConfigurationEntryUuid);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
 			_amImageConfigurationHelper.getAMImageConfigurationEntry(
-				themeDisplay.getCompanyId(),
-				adaptiveMediaImageConfigurationEntryUuid);
+				themeDisplay.getCompanyId(), amImageConfigurationEntryUuid);
 
 		amImageConfigurationEntryOptional.ifPresent(
 			amImageConfigurationEntry -> SessionMessages.add(

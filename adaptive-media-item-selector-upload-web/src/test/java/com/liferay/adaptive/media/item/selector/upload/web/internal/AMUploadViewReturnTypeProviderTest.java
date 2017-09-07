@@ -35,7 +35,7 @@ import org.powermock.api.mockito.PowerMockito;
 public class AMUploadViewReturnTypeProviderTest extends PowerMockito {
 
 	@Test
-	public void testAddAdaptiveMediaImageURLItemSelectorReturnTypeWithEmptyList()
+	public void testAddAMImageURLItemSelectorReturnTypeWithEmptyList()
 		throws Exception {
 
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
@@ -63,7 +63,7 @@ public class AMUploadViewReturnTypeProviderTest extends PowerMockito {
 	}
 
 	@Test
-	public void testAddAdaptiveMediaImageURLItemSelectorReturnTypeWithNonEmptyList()
+	public void testAddAMImageURLItemSelectorReturnTypeWithNonEmptyList()
 		throws Exception {
 
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =

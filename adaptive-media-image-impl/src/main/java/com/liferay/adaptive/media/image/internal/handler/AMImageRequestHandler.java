@@ -75,7 +75,7 @@ public class AMImageRequestHandler
 						tuple.first, tuple.second);
 
 				adaptiveMediaOptional.ifPresent(
-					adaptiveMedia -> _processAdaptiveMediaImage(
+					adaptiveMedia -> _processAMImage(
 						adaptiveMedia, tuple.first, tuple.second));
 
 				return adaptiveMediaOptional;
@@ -308,7 +308,7 @@ public class AMImageRequestHandler
 		}
 	}
 
-	private void _processAdaptiveMediaImage(
+	private void _processAMImage(
 		AdaptiveMedia<AMImageProcessor> adaptiveMedia, FileVersion fileVersion,
 		AMImageAttributeMapping amImageAttributeMapping) {
 

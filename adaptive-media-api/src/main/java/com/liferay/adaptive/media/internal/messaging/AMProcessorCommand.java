@@ -26,10 +26,10 @@ public enum AMProcessorCommand {
 
 		@Override
 		protected <M> void execute(
-				AMProcessor<M, ?> processor, M model, String modelId)
+				AMProcessor<M, ?> amProcessor, M model, String modelId)
 			throws PortalException {
 
-			processor.cleanUp(model);
+			amProcessor.cleanUp(model);
 		}
 
 	},
@@ -38,16 +38,16 @@ public enum AMProcessorCommand {
 
 		@Override
 		protected <M> void execute(
-				AMProcessor<M, ?> processor, M model, String modelId)
+				AMProcessor<M, ?> amProcessor, M model, String modelId)
 			throws PortalException {
 
-			processor.process(model);
+			amProcessor.process(model);
 		}
 
 	};
 
 	protected abstract <M> void execute(
-			AMProcessor<M, ?> processor, M model, String modelId)
+			AMProcessor<M, ?> amProcessor, M model, String modelId)
 		throws PortalException;
 
 }

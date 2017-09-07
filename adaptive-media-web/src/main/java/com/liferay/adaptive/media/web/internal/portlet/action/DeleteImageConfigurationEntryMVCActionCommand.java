@@ -57,7 +57,7 @@ public class DeleteImageConfigurationEntryMVCActionCommand
 
 		String[] deleteAMImageConfigurationEntryUuids =
 			ParamUtil.getStringValues(
-				actionRequest, "rowIdsAdaptiveMediaImageConfigurationEntry");
+				actionRequest, "rowIdsAMImageConfigurationEntry");
 
 		List<AMImageConfigurationEntry> deletedAMImageConfigurationEntries =
 			new ArrayList<>();

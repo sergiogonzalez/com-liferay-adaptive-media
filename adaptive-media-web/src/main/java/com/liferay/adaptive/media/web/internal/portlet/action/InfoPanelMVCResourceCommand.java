@@ -86,14 +86,13 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String[] rowIdsAdaptiveMediaImageConfigurationEntry =
-			ParamUtil.getStringValues(
-				resourceRequest, "rowIdsAdaptiveMediaImageConfigurationEntry");
+		String[] rowIdsAMImageConfigurationEntry = ParamUtil.getStringValues(
+			resourceRequest, "rowIdsAMImageConfigurationEntry");
 
 		List<AMImageConfigurationEntry> amImageConfigurationEntries =
 			new ArrayList<>();
 
-		for (String entryUuid : rowIdsAdaptiveMediaImageConfigurationEntry) {
+		for (String entryUuid : rowIdsAMImageConfigurationEntry) {
 			Optional<AMImageConfigurationEntry>
 				amImageConfigurationEntryOptional =
 					_amImageConfigurationHelper.getAMImageConfigurationEntry(

@@ -107,8 +107,8 @@ public class AMThumbnailsOSGiCommandsTest {
 			_amImageConfigurationHelperServiceReference);
 		_amImageFinder = registry.getService(_amImageFinderServiceReference);
 
-		_disableAdaptiveMediaThumbnails();
-		_disableDocumentLibraryAdaptiveMedia();
+		_disableAMThumbnails();
+		_disableDocumentLibraryAM();
 	}
 
 	@AfterClass
@@ -118,8 +118,8 @@ public class AMThumbnailsOSGiCommandsTest {
 		registry.ungetService(_amImageConfigurationHelperServiceReference);
 		registry.ungetService(_amImageFinderServiceReference);
 
-		_enableDocumentLibraryAdaptiveMedia();
-		_enableAdaptiveMediaThumbnails();
+		_enableDocumentLibraryAM();
+		_enableAMThumbnails();
 	}
 
 	@Before
@@ -257,7 +257,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		}
 	}
 
-	private static void _disableAdaptiveMediaThumbnails() throws Exception {
+	private static void _disableAMThumbnails() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
 		ServiceComponentRuntime serviceComponentRuntime = registry.getService(
@@ -285,9 +285,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		promise.getValue();
 	}
 
-	private static void _disableDocumentLibraryAdaptiveMedia()
-		throws BundleException {
-
+	private static void _disableDocumentLibraryAM() throws BundleException {
 		Bundle bundle = FrameworkUtil.getBundle(
 			AMThumbnailsOSGiCommandsTest.class);
 
@@ -304,7 +302,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		}
 	}
 
-	private static void _enableAdaptiveMediaThumbnails() throws Exception {
+	private static void _enableAMThumbnails() throws Exception {
 		Registry registry = RegistryUtil.getRegistry();
 
 		ServiceComponentRuntime serviceComponentRuntime = registry.getService(
@@ -328,9 +326,7 @@ public class AMThumbnailsOSGiCommandsTest {
 		promise.getValue();
 	}
 
-	private static void _enableDocumentLibraryAdaptiveMedia()
-		throws BundleException {
-
+	private static void _enableDocumentLibraryAM() throws BundleException {
 		Bundle bundle = FrameworkUtil.getBundle(
 			AMThumbnailsOSGiCommandsTest.class);
 

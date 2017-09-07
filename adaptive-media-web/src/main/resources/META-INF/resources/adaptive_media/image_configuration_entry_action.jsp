@@ -65,7 +65,7 @@ String entryUuid = String.valueOf(amImageConfigurationEntry.getUUID());
 		<c:when test="<%= amImageConfigurationEntry.isEnabled() %>">
 			<portlet:actionURL name="/adaptive_media/disable_image_configuration_entry" var="disableImageConfigurationEntryURL">
 				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="adaptiveMediaImageConfigurationEntryUuid" value="<%= entryUuid %>" />
+				<portlet:param name="amImageConfigurationEntryUuid" value="<%= entryUuid %>" />
 			</portlet:actionURL>
 
 			<%
@@ -86,7 +86,7 @@ String entryUuid = String.valueOf(amImageConfigurationEntry.getUUID());
 		<c:otherwise>
 			<portlet:actionURL name="/adaptive_media/enable_image_configuration_entry" var="enableImageConfigurationEntryURL">
 				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="adaptiveMediaImageConfigurationEntryUuid" value="<%= entryUuid %>" />
+				<portlet:param name="amImageConfigurationEntryUuid" value="<%= entryUuid %>" />
 			</portlet:actionURL>
 
 			<liferay-ui:icon

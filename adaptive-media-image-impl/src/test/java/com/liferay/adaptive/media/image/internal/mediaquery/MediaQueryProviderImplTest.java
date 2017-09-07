@@ -689,8 +689,8 @@ public class MediaQueryProviderImplTest {
 	}
 
 	private AdaptiveMedia<AMImageProcessor> _createAdaptiveMedia(
-			String adaptiveMediaImageConfigurationEntryUuid, int height,
-			int width, String url)
+			String amImageConfigurationEntryUuid, int height, int width,
+			String url)
 		throws Exception {
 
 		Map<String, String> properties = new HashMap<>();
@@ -703,7 +703,7 @@ public class MediaQueryProviderImplTest {
 
 		properties.put(
 			AMAttribute.getConfigurationUuidAMAttribute().getName(),
-			adaptiveMediaImageConfigurationEntryUuid);
+			amImageConfigurationEntryUuid);
 
 		return new AMImage(
 			() -> null, AMImageAttributeMapping.fromProperties(properties),

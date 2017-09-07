@@ -56,7 +56,7 @@ import org.osgi.service.component.annotations.Reference;
 public class AMServlet extends HttpServlet {
 
 	@Reference(unbind = "-")
-	public void setAdaptiveMediaRequestHandlerLocator(
+	public void setAMRequestHandlerLocator(
 		AMRequestHandlerLocator amRequestHandlerLocator) {
 
 		_amRequestHandlerLocator = amRequestHandlerLocator;

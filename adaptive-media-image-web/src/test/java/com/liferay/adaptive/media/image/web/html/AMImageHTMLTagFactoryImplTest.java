@@ -43,8 +43,7 @@ public class AMImageHTMLTagFactoryImplTest {
 
 	@Before
 	public void setUp() throws PortalException {
-		_adaptiveMediaImageHTMLTagFactory.setMediaQueryProvider(
-			_mediaQueryProvider);
+		_amImageHTMLTagFactory.setMediaQueryProvider(_mediaQueryProvider);
 
 		Mockito.when(
 			_fileEntry.getFileEntryId()
@@ -68,7 +67,7 @@ public class AMImageHTMLTagFactoryImplTest {
 		expectedSB.append("<img src=\"originalURL\"/>");
 		expectedSB.append("</picture>");
 
-		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+		String pictureTag = _amImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);
 
 		Assert.assertEquals(expectedSB.toString(), pictureTag);
@@ -95,7 +94,7 @@ public class AMImageHTMLTagFactoryImplTest {
 		expectedSB.append("<img src=\"originalURL\"/>");
 		expectedSB.append("</picture>");
 
-		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+		String pictureTag = _amImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);
 
 		Assert.assertEquals(expectedSB.toString(), pictureTag);
@@ -115,7 +114,7 @@ public class AMImageHTMLTagFactoryImplTest {
 		String originalImgTag =
 			"<img src=\"originalURL\" data-fileEntryId=\"1234\"/>";
 
-		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+		String pictureTag = _amImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);
 
 		Assert.assertEquals(expectedSB.toString(), pictureTag);
@@ -130,7 +129,7 @@ public class AMImageHTMLTagFactoryImplTest {
 		String originalImgTag =
 			"<img src=\"originalURL\" data-fileEntryId=\"1234\"/>";
 
-		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+		String pictureTag = _amImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);
 
 		Assert.assertSame(originalImgTag, pictureTag);
@@ -154,7 +153,7 @@ public class AMImageHTMLTagFactoryImplTest {
 		expectedSB.append("<img \nsrc=\"adaptable\"/>");
 		expectedSB.append("</picture>");
 
-		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+		String pictureTag = _amImageHTMLTagFactory.create(
 			originalSB.toString(), _fileEntry);
 
 		Assert.assertEquals(expectedSB.toString(), pictureTag);
@@ -175,7 +174,7 @@ public class AMImageHTMLTagFactoryImplTest {
 		expectedSB.append("<img src=\"originalURL\"/>");
 		expectedSB.append("</picture>");
 
-		String pictureTag = _adaptiveMediaImageHTMLTagFactory.create(
+		String pictureTag = _amImageHTMLTagFactory.create(
 			originalImgTag, _fileEntry);
 
 		Assert.assertEquals(expectedSB.toString(), pictureTag);
@@ -196,7 +195,7 @@ public class AMImageHTMLTagFactoryImplTest {
 			Arrays.asList(new Condition("max-width", width + "px")), url);
 	}
 
-	private final AMImageHTMLTagFactoryImpl _adaptiveMediaImageHTMLTagFactory =
+	private final AMImageHTMLTagFactoryImpl _amImageHTMLTagFactory =
 		new AMImageHTMLTagFactoryImpl();
 
 	@Mock

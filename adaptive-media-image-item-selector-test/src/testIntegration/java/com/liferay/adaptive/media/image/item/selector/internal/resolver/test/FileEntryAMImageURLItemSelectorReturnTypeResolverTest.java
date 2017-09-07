@@ -733,8 +733,8 @@ public class FileEntryAMImageURLItemSelectorReturnTypeResolverTest {
 
 	private static final String _RESOLVER_FILTER =
 		"(objectClass=com.liferay.adaptive.media.image.item.selector." +
-			"internal.resolver.FileEntryAdaptiveMediaImageURLItem" +
-				"SelectorReturnTypeResolver)";
+			"internal.resolver.FileEntryAMImageURLItemSelectorReturnType" +
+				"Resolver)";
 
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private DLAppLocalService _dlAppLocalService;

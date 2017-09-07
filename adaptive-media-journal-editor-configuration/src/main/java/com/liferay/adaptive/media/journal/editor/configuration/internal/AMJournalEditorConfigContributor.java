@@ -80,7 +80,7 @@ public class AMJournalEditorConfigContributor
 		List<ItemSelectorCriterion> itemSelectorCriteria =
 			_itemSelector.getItemSelectorCriteria(itemSelectorURL);
 
-		boolean adaptiveMediaImageURLItemSelectorReturnTypeAdded = false;
+		boolean amImageURLItemSelectorReturnTypeAdded = false;
 
 		for (ItemSelectorCriterion itemSelectorCriterion :
 				itemSelectorCriteria) {
@@ -90,14 +90,14 @@ public class AMJournalEditorConfigContributor
 				itemSelectorCriterion instanceof JournalItemSelectorCriterion ||
 				itemSelectorCriterion instanceof UploadItemSelectorCriterion) {
 
-				addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+				addAMImageFileEntryItemSelectorReturnType(
 					itemSelectorCriterion);
 
-				adaptiveMediaImageURLItemSelectorReturnTypeAdded = true;
+				amImageURLItemSelectorReturnTypeAdded = true;
 			}
 		}
 
-		if (!adaptiveMediaImageURLItemSelectorReturnTypeAdded) {
+		if (!amImageURLItemSelectorReturnTypeAdded) {
 			return;
 		}
 
@@ -131,7 +131,7 @@ public class AMJournalEditorConfigContributor
 		_itemSelector = itemSelector;
 	}
 
-	protected void addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+	protected void addAMImageFileEntryItemSelectorReturnType(
 		ItemSelectorCriterion itemSelectorCriterion) {
 
 		List<ItemSelectorReturnType> desiredItemSelectorReturnTypes =

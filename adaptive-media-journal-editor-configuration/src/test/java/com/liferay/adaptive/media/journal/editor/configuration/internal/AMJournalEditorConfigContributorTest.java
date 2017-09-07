@@ -176,7 +176,7 @@ public class AMJournalEditorConfigContributorTest extends PowerMockito {
 	}
 
 	@Test
-	public void testAddAdaptiveMediaImageFileEntryItemSelectorReturnType()
+	public void testAddAMImageFileEntryItemSelectorReturnType()
 		throws Exception {
 
 		AMJournalEditorConfigContributor amJournalEditorConfigContributor =
@@ -190,7 +190,7 @@ public class AMJournalEditorConfigContributorTest extends PowerMockito {
 				new FileEntryItemSelectorReturnType()));
 
 		amJournalEditorConfigContributor.
-			addAdaptiveMediaImageFileEntryItemSelectorReturnType(
+			addAMImageFileEntryItemSelectorReturnType(
 				blogsItemSelectorCriterion);
 
 		List<ItemSelectorReturnType> desiredItemSelectorReturnTypes =

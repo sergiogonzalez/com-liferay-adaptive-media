@@ -84,7 +84,7 @@ public class AMImageRequestHandlerTest {
 	@Test(expected = AMRuntimeException.class)
 	public void testFinderFailsWithMediaProcessorException() throws Exception {
 		AMImageConfigurationEntry amImageConfigurationEntry =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		HttpServletRequest request = _createRequestFor(
@@ -102,7 +102,7 @@ public class AMImageRequestHandlerTest {
 	@Test(expected = AMRuntimeException.class)
 	public void testFinderFailsWithPortalException() throws Exception {
 		AMImageConfigurationEntry getConfigurationEntryFilter =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		HttpServletRequest request = _createRequestFor(
@@ -159,19 +159,19 @@ public class AMImageRequestHandlerTest {
 		throws Exception {
 
 		AMImageConfigurationEntry getConfigurationEntryFilter =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		AMImageConfigurationEntry closestAMImageConfigurationEntry =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 201, 501);
 
 		AMImageConfigurationEntry fartherAMImageConfigurationEntry =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 301, 501);
 
 		AMImageConfigurationEntry farthestAMImageConfigurationEntry =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 401, 501);
 
 		AdaptiveMedia<AMImageProcessor> closestAdaptiveMedia =
@@ -211,7 +211,7 @@ public class AMImageRequestHandlerTest {
 		throws Exception {
 
 		AMImageConfigurationEntry amImageConfigurationEntry =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		AdaptiveMedia<AMImageProcessor> adaptiveMedia = _createAdaptiveMedia(
@@ -238,7 +238,7 @@ public class AMImageRequestHandlerTest {
 		throws Exception {
 
 		AMImageConfigurationEntry amImageConfigurationEntry =
-			_createAdaptiveMediaImageConfigurationEntry(
+			_createAMImageConfigurationEntry(
 				_fileVersion.getCompanyId(), 200, 500);
 
 		HttpServletRequest request = _createRequestFor(
@@ -339,9 +339,8 @@ public class AMImageRequestHandlerTest {
 			AMImageAttributeMapping.fromProperties(properties), null);
 	}
 
-	private AMImageConfigurationEntry
-		_createAdaptiveMediaImageConfigurationEntry(
-			long companyId, int width, int height) {
+	private AMImageConfigurationEntry _createAMImageConfigurationEntry(
+		long companyId, int width, int height) {
 
 		String uuid = "testUuid" + Math.random();
 

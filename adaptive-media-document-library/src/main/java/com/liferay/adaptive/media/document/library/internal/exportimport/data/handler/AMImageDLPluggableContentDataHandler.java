@@ -142,7 +142,7 @@ public class AMImageDLPluggableContentDataHandler
 			return;
 		}
 
-		String basePath = _getAdaptiveMediaBasePath(
+		String basePath = _getAMBasePath(
 			fileVersion, configurationUuidOptional.get());
 
 		try (InputStream inputStream = adaptiveMedia.getInputStream()) {
@@ -153,9 +153,7 @@ public class AMImageDLPluggableContentDataHandler
 			basePath + ".json", _amImageSerializer.serialize(adaptiveMedia));
 	}
 
-	private String _getAdaptiveMediaBasePath(
-		FileVersion fileVersion, String uuid) {
-
+	private String _getAMBasePath(FileVersion fileVersion, String uuid) {
 		return String.format(
 			"adaptive-media/%s/%s/%s", FileVersion.class.getSimpleName(),
 			fileVersion.getUuid(), uuid);
@@ -172,7 +170,7 @@ public class AMImageDLPluggableContentDataHandler
 		PortletDataContext portletDataContext, FileVersion fileVersion,
 		AMImageConfigurationEntry amImageConfigurationEntry) {
 
-		String basePath = _getAdaptiveMediaBasePath(
+		String basePath = _getAMBasePath(
 			fileVersion, amImageConfigurationEntry.getUUID());
 
 		String serializedAdaptiveMedia = portletDataContext.getZipEntryAsString(

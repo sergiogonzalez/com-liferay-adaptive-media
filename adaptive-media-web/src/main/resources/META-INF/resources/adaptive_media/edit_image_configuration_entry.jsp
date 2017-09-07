@@ -37,13 +37,13 @@ if (amImageConfigurationEntry != null) {
 %>
 
 <div class="container-fluid-1280">
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.DuplicateAdaptiveMediaImageConfigurationNameException.class %>" message="a-configuration-with-this-name-already-exists" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.DuplicateAdaptiveMediaImageConfigurationUuidException.class %>" message="a-configuration-with-this-id-already-exists" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidHeightException.class %>" message="please-enter-a-max-height-value-larger-than-0" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidNameException.class %>" message="please-enter-a-valid-name" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidUuidException.class %>" message="please-enter-a-valid-identifier" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.InvalidWidthException.class %>" message="please-enter-a-max-width-value-larger-than-0" />
-	<liferay-ui:error exception="<%= AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class %>" message="please-enter-a-max-width-or-max-height-value-larger-than-0" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.DuplicateAMImageConfigurationNameException.class %>" message="a-configuration-with-this-name-already-exists" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.DuplicateAMImageConfigurationUuidException.class %>" message="a-configuration-with-this-id-already-exists" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.InvalidHeightException.class %>" message="please-enter-a-max-height-value-larger-than-0" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.InvalidNameException.class %>" message="please-enter-a-valid-name" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.InvalidUuidException.class %>" message="please-enter-a-valid-identifier" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.InvalidWidthException.class %>" message="please-enter-a-max-width-value-larger-than-0" />
+	<liferay-ui:error exception="<%= AMImageConfigurationException.RequiredWidthOrHeightException.class %>" message="please-enter-a-max-width-or-max-height-value-larger-than-0" />
 
 	<portlet:actionURL name="/adaptive_media/edit_image_configuration_entry" var="editImageConfigurationEntryURL">
 		<portlet:param name="mvcRenderCommandName" value="/adaptive_media/edit_image_configuration_entry" />

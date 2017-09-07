@@ -55,7 +55,7 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 			if ((dlFileEntryThumbnailMaxHeight > 0) &&
 				(dlFileEntryThumbnailMaxWidth > 0)) {
 
-				_createAdaptiveMediaDocumentLibraryThumbnailConfiguration(
+				_createAMDocumentLibraryThumbnailConfiguration(
 					dlFileEntryThumbnailMaxHeight,
 					dlFileEntryThumbnailMaxWidth);
 			}
@@ -69,7 +69,7 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 			if ((dlFileEntryThumbnailCustom1MaxHeight > 0) &&
 				(dlFileEntryThumbnailCustom1MaxWidth > 0)) {
 
-				_createAdaptiveMediaDocumentLibraryThumbnailConfiguration(
+				_createAMDocumentLibraryThumbnailConfiguration(
 					dlFileEntryThumbnailCustom1MaxHeight,
 					dlFileEntryThumbnailCustom1MaxWidth);
 			}
@@ -83,14 +83,14 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 			if ((dlFileEntryThumbnailCustom2MaxHeight > 0) &&
 				(dlFileEntryThumbnailCustom2MaxWidth > 0)) {
 
-				_createAdaptiveMediaDocumentLibraryThumbnailConfiguration(
+				_createAMDocumentLibraryThumbnailConfiguration(
 					dlFileEntryThumbnailCustom2MaxHeight,
 					dlFileEntryThumbnailCustom2MaxWidth);
 			}
 		}
 	}
 
-	private void _createAdaptiveMediaDocumentLibraryThumbnailConfiguration(
+	private void _createAMDocumentLibraryThumbnailConfiguration(
 			int maxHeight, int maxWidth)
 		throws AMImageConfigurationException, IOException {
 
