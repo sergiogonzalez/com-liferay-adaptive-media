@@ -17,7 +17,7 @@
 <%@ include file="/adaptive_media/init.jsp" %>
 
 <%
-List<AMImageConfigurationEntry> selectedAMImageConfigurationEntries = (List)request.getAttribute(AdaptiveMediaWebKeys.SELECTED_CONFIGURATION_ENTRIES);
+List<AMImageConfigurationEntry> selectedAMImageConfigurationEntries = (List)request.getAttribute(AMWebKeys.SELECTED_CONFIGURATION_ENTRIES);
 
 AMImageConfigurationEntry amImageConfigurationEntry = null;
 
@@ -144,7 +144,7 @@ if (ListUtil.isNotEmpty(selectedAMImageConfigurationEntries)) {
 						<dd class="h6 sidebar-caption">
 
 							<%
-							List<AMImageConfigurationEntry> configurationEntries = (List)request.getAttribute(AdaptiveMediaWebKeys.CONFIGURATION_ENTRIES_LIST);
+							List<AMImageConfigurationEntry> configurationEntries = (List)request.getAttribute(AMWebKeys.CONFIGURATION_ENTRIES_LIST);
 							%>
 
 							<%= configurationEntries.size() %>

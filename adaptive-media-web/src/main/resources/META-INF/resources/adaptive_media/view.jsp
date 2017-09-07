@@ -29,7 +29,7 @@
 </aui:nav-bar>
 
 <%
-List<AMImageConfigurationEntry> selectedConfigurationEntries = (List)request.getAttribute(AdaptiveMediaWebKeys.CONFIGURATION_ENTRIES_LIST);
+List<AMImageConfigurationEntry> selectedConfigurationEntries = (List)request.getAttribute(AMWebKeys.CONFIGURATION_ENTRIES_LIST);
 %>
 
 <liferay-frontend:management-bar
