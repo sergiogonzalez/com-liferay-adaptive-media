@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.adaptive.media.image.model.AdaptiveMediaImageEntry;
+import com.liferay.adaptive.media.image.model.AMImageEntry;
 
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
@@ -31,14 +31,14 @@ import java.io.ObjectOutput;
 import java.util.Date;
 
 /**
- * The cache model class for representing AdaptiveMediaImageEntry in entity cache.
+ * The cache model class for representing AMImageEntry in entity cache.
  *
  * @author Brian Wing Shun Chan
- * @see AdaptiveMediaImageEntry
+ * @see AMImageEntry
  * @generated
  */
 @ProviderType
-public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMediaImageEntry>,
+public class AMImageEntryCacheModel implements CacheModel<AMImageEntry>,
 	Externalizable {
 	@Override
 	public boolean equals(Object obj) {
@@ -46,13 +46,13 @@ public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMed
 			return true;
 		}
 
-		if (!(obj instanceof AdaptiveMediaImageEntryCacheModel)) {
+		if (!(obj instanceof AMImageEntryCacheModel)) {
 			return false;
 		}
 
-		AdaptiveMediaImageEntryCacheModel adaptiveMediaImageEntryCacheModel = (AdaptiveMediaImageEntryCacheModel)obj;
+		AMImageEntryCacheModel amImageEntryCacheModel = (AMImageEntryCacheModel)obj;
 
-		if (adaptiveMediaImageEntryId == adaptiveMediaImageEntryCacheModel.adaptiveMediaImageEntryId) {
+		if (amImageEntryId == amImageEntryCacheModel.amImageEntryId) {
 			return true;
 		}
 
@@ -61,7 +61,7 @@ public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMed
 
 	@Override
 	public int hashCode() {
-		return HashUtil.hash(0, adaptiveMediaImageEntryId);
+		return HashUtil.hash(0, amImageEntryId);
 	}
 
 	@Override
@@ -70,8 +70,8 @@ public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMed
 
 		sb.append("{uuid=");
 		sb.append(uuid);
-		sb.append(", adaptiveMediaImageEntryId=");
-		sb.append(adaptiveMediaImageEntryId);
+		sb.append(", amImageEntryId=");
+		sb.append(amImageEntryId);
 		sb.append(", groupId=");
 		sb.append(groupId);
 		sb.append(", companyId=");
@@ -96,57 +96,57 @@ public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMed
 	}
 
 	@Override
-	public AdaptiveMediaImageEntry toEntityModel() {
-		AdaptiveMediaImageEntryImpl adaptiveMediaImageEntryImpl = new AdaptiveMediaImageEntryImpl();
+	public AMImageEntry toEntityModel() {
+		AMImageEntryImpl amImageEntryImpl = new AMImageEntryImpl();
 
 		if (uuid == null) {
-			adaptiveMediaImageEntryImpl.setUuid(StringPool.BLANK);
+			amImageEntryImpl.setUuid(StringPool.BLANK);
 		}
 		else {
-			adaptiveMediaImageEntryImpl.setUuid(uuid);
+			amImageEntryImpl.setUuid(uuid);
 		}
 
-		adaptiveMediaImageEntryImpl.setAdaptiveMediaImageEntryId(adaptiveMediaImageEntryId);
-		adaptiveMediaImageEntryImpl.setGroupId(groupId);
-		adaptiveMediaImageEntryImpl.setCompanyId(companyId);
+		amImageEntryImpl.setAmImageEntryId(amImageEntryId);
+		amImageEntryImpl.setGroupId(groupId);
+		amImageEntryImpl.setCompanyId(companyId);
 
 		if (createDate == Long.MIN_VALUE) {
-			adaptiveMediaImageEntryImpl.setCreateDate(null);
+			amImageEntryImpl.setCreateDate(null);
 		}
 		else {
-			adaptiveMediaImageEntryImpl.setCreateDate(new Date(createDate));
+			amImageEntryImpl.setCreateDate(new Date(createDate));
 		}
 
 		if (configurationUuid == null) {
-			adaptiveMediaImageEntryImpl.setConfigurationUuid(StringPool.BLANK);
+			amImageEntryImpl.setConfigurationUuid(StringPool.BLANK);
 		}
 		else {
-			adaptiveMediaImageEntryImpl.setConfigurationUuid(configurationUuid);
+			amImageEntryImpl.setConfigurationUuid(configurationUuid);
 		}
 
-		adaptiveMediaImageEntryImpl.setFileVersionId(fileVersionId);
+		amImageEntryImpl.setFileVersionId(fileVersionId);
 
 		if (mimeType == null) {
-			adaptiveMediaImageEntryImpl.setMimeType(StringPool.BLANK);
+			amImageEntryImpl.setMimeType(StringPool.BLANK);
 		}
 		else {
-			adaptiveMediaImageEntryImpl.setMimeType(mimeType);
+			amImageEntryImpl.setMimeType(mimeType);
 		}
 
-		adaptiveMediaImageEntryImpl.setHeight(height);
-		adaptiveMediaImageEntryImpl.setWidth(width);
-		adaptiveMediaImageEntryImpl.setSize(size);
+		amImageEntryImpl.setHeight(height);
+		amImageEntryImpl.setWidth(width);
+		amImageEntryImpl.setSize(size);
 
-		adaptiveMediaImageEntryImpl.resetOriginalValues();
+		amImageEntryImpl.resetOriginalValues();
 
-		return adaptiveMediaImageEntryImpl;
+		return amImageEntryImpl;
 	}
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		uuid = objectInput.readUTF();
 
-		adaptiveMediaImageEntryId = objectInput.readLong();
+		amImageEntryId = objectInput.readLong();
 
 		groupId = objectInput.readLong();
 
@@ -174,7 +174,7 @@ public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMed
 			objectOutput.writeUTF(uuid);
 		}
 
-		objectOutput.writeLong(adaptiveMediaImageEntryId);
+		objectOutput.writeLong(amImageEntryId);
 
 		objectOutput.writeLong(groupId);
 
@@ -205,7 +205,7 @@ public class AdaptiveMediaImageEntryCacheModel implements CacheModel<AdaptiveMed
 	}
 
 	public String uuid;
-	public long adaptiveMediaImageEntryId;
+	public long amImageEntryId;
 	public long groupId;
 	public long companyId;
 	public long createDate;

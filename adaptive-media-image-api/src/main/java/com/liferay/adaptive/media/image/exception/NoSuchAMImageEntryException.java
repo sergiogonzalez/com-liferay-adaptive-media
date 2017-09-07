@@ -11,7 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 package com.liferay.adaptive.media.image.exception;
 
 import aQute.bnd.annotation.ProviderType;
@@ -22,21 +21,20 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
  * @author Brian Wing Shun Chan
  */
 @ProviderType
-public class NoSuchAdaptiveMediaImageEntryException
-	extends NoSuchModelException {
+public class NoSuchAMImageEntryException extends NoSuchModelException {
 
-	public NoSuchAdaptiveMediaImageEntryException() {
+	public NoSuchAMImageEntryException() {
 	}
 
-	public NoSuchAdaptiveMediaImageEntryException(String msg) {
+	public NoSuchAMImageEntryException(String msg) {
 		super(msg);
 	}
 
-	public NoSuchAdaptiveMediaImageEntryException(String msg, Throwable cause) {
+	public NoSuchAMImageEntryException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public NoSuchAdaptiveMediaImageEntryException(Throwable cause) {
+	public NoSuchAMImageEntryException(Throwable cause) {
 		super(cause);
 	}
 

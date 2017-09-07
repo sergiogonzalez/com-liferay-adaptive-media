@@ -29,13 +29,12 @@ import java.util.List;
  * @generated
  */
 @ProviderType
-public class AdaptiveMediaImageEntrySoap implements Serializable {
-	public static AdaptiveMediaImageEntrySoap toSoapModel(
-		AdaptiveMediaImageEntry model) {
-		AdaptiveMediaImageEntrySoap soapModel = new AdaptiveMediaImageEntrySoap();
+public class AMImageEntrySoap implements Serializable {
+	public static AMImageEntrySoap toSoapModel(AMImageEntry model) {
+		AMImageEntrySoap soapModel = new AMImageEntrySoap();
 
 		soapModel.setUuid(model.getUuid());
-		soapModel.setAdaptiveMediaImageEntryId(model.getAdaptiveMediaImageEntryId());
+		soapModel.setAmImageEntryId(model.getAmImageEntryId());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setCreateDate(model.getCreateDate());
@@ -49,9 +48,8 @@ public class AdaptiveMediaImageEntrySoap implements Serializable {
 		return soapModel;
 	}
 
-	public static AdaptiveMediaImageEntrySoap[] toSoapModels(
-		AdaptiveMediaImageEntry[] models) {
-		AdaptiveMediaImageEntrySoap[] soapModels = new AdaptiveMediaImageEntrySoap[models.length];
+	public static AMImageEntrySoap[] toSoapModels(AMImageEntry[] models) {
+		AMImageEntrySoap[] soapModels = new AMImageEntrySoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -60,15 +58,14 @@ public class AdaptiveMediaImageEntrySoap implements Serializable {
 		return soapModels;
 	}
 
-	public static AdaptiveMediaImageEntrySoap[][] toSoapModels(
-		AdaptiveMediaImageEntry[][] models) {
-		AdaptiveMediaImageEntrySoap[][] soapModels = null;
+	public static AMImageEntrySoap[][] toSoapModels(AMImageEntry[][] models) {
+		AMImageEntrySoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new AdaptiveMediaImageEntrySoap[models.length][models[0].length];
+			soapModels = new AMImageEntrySoap[models.length][models[0].length];
 		}
 		else {
-			soapModels = new AdaptiveMediaImageEntrySoap[0][0];
+			soapModels = new AMImageEntrySoap[0][0];
 		}
 
 		for (int i = 0; i < models.length; i++) {
@@ -78,26 +75,25 @@ public class AdaptiveMediaImageEntrySoap implements Serializable {
 		return soapModels;
 	}
 
-	public static AdaptiveMediaImageEntrySoap[] toSoapModels(
-		List<AdaptiveMediaImageEntry> models) {
-		List<AdaptiveMediaImageEntrySoap> soapModels = new ArrayList<AdaptiveMediaImageEntrySoap>(models.size());
+	public static AMImageEntrySoap[] toSoapModels(List<AMImageEntry> models) {
+		List<AMImageEntrySoap> soapModels = new ArrayList<AMImageEntrySoap>(models.size());
 
-		for (AdaptiveMediaImageEntry model : models) {
+		for (AMImageEntry model : models) {
 			soapModels.add(toSoapModel(model));
 		}
 
-		return soapModels.toArray(new AdaptiveMediaImageEntrySoap[soapModels.size()]);
+		return soapModels.toArray(new AMImageEntrySoap[soapModels.size()]);
 	}
 
-	public AdaptiveMediaImageEntrySoap() {
+	public AMImageEntrySoap() {
 	}
 
 	public long getPrimaryKey() {
-		return _adaptiveMediaImageEntryId;
+		return _amImageEntryId;
 	}
 
 	public void setPrimaryKey(long pk) {
-		setAdaptiveMediaImageEntryId(pk);
+		setAmImageEntryId(pk);
 	}
 
 	public String getUuid() {
@@ -108,12 +104,12 @@ public class AdaptiveMediaImageEntrySoap implements Serializable {
 		_uuid = uuid;
 	}
 
-	public long getAdaptiveMediaImageEntryId() {
-		return _adaptiveMediaImageEntryId;
+	public long getAmImageEntryId() {
+		return _amImageEntryId;
 	}
 
-	public void setAdaptiveMediaImageEntryId(long adaptiveMediaImageEntryId) {
-		_adaptiveMediaImageEntryId = adaptiveMediaImageEntryId;
+	public void setAmImageEntryId(long amImageEntryId) {
+		_amImageEntryId = amImageEntryId;
 	}
 
 	public long getGroupId() {
@@ -189,7 +185,7 @@ public class AdaptiveMediaImageEntrySoap implements Serializable {
 	}
 
 	private String _uuid;
-	private long _adaptiveMediaImageEntryId;
+	private long _amImageEntryId;
 	private long _groupId;
 	private long _companyId;
 	private Date _createDate;

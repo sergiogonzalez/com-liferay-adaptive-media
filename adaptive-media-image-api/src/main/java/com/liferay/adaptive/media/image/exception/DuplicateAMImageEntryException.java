@@ -11,19 +11,31 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-package com.liferay.adaptive.media.image.model.impl;
+package com.liferay.adaptive.media.image.exception;
 
 import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Brian Wing Shun Chan
  */
 @ProviderType
-public class AdaptiveMediaImageEntryImpl
-	extends AdaptiveMediaImageEntryBaseImpl {
+public class DuplicateAMImageEntryException extends PortalException {
 
-	public AdaptiveMediaImageEntryImpl() {
+	public DuplicateAMImageEntryException() {
+	}
+
+	public DuplicateAMImageEntryException(String msg) {
+		super(msg);
+	}
+
+	public DuplicateAMImageEntryException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public DuplicateAMImageEntryException(Throwable cause) {
+		super(cause);
 	}
 
 }
