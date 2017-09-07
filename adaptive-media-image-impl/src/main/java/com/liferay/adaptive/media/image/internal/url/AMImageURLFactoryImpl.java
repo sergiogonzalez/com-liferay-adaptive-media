@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.image.internal.url;
 
 import com.liferay.adaptive.media.AMURIResolver;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.url.AMImageURLFactory;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -72,8 +72,7 @@ public class AMImageURLFactoryImpl implements AMImageURLFactory {
 			return URLEncoder.encode(s, StandardCharsets.UTF_8.name());
 		}
 		catch (UnsupportedEncodingException uee) {
-			throw new AdaptiveMediaRuntimeException.
-				UnsupportedEncodingException(uee);
+			throw new AMRuntimeException.UnsupportedEncodingException(uee);
 		}
 	}
 

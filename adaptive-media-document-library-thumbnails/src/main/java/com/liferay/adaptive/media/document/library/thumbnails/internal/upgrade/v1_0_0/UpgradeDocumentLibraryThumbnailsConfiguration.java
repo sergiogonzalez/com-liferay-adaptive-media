@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.document.library.thumbnails.internal.upgrade.v1_0_0;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -92,7 +92,7 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 
 	private void _createAdaptiveMediaDocumentLibraryThumbnailConfiguration(
 			int maxHeight, int maxWidth)
-		throws AdaptiveMediaImageConfigurationException, IOException {
+		throws AMImageConfigurationException, IOException {
 
 		Map<String, String> properties = new HashMap<>();
 

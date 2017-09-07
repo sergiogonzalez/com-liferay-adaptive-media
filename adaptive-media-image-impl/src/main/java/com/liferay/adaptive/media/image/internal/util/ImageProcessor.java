@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.util;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.internal.processor.util.TiffOrientationTransformer;
@@ -63,7 +63,7 @@ public class ImageProcessor {
 			return ImageToolUtil.scale(renderedImage, maxHeight, maxWidth);
 		}
 		catch (PortalException pe) {
-			throw new AdaptiveMediaRuntimeException.IOException(pe);
+			throw new AMRuntimeException.IOException(pe);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class ImageProcessor {
 			return fileVersion.getContentStream(false);
 		}
 		catch (PortalException pe) {
-			throw new AdaptiveMediaRuntimeException.IOException(pe);
+			throw new AMRuntimeException.IOException(pe);
 		}
 	}
 

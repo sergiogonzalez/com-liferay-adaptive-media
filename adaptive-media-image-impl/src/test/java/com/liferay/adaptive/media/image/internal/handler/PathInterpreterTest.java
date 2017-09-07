@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.handler;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageConfigurationHelperImpl;
@@ -88,7 +88,7 @@ public class PathInterpreterTest {
 		).getUUID();
 	}
 
-	@Test(expected = AdaptiveMediaRuntimeException.class)
+	@Test(expected = AMRuntimeException.class)
 	public void testFileEntryPathDLAppFailure() throws Exception {
 		Mockito.when(
 			_dlAppService.getFileEntry(0)
@@ -99,7 +99,7 @@ public class PathInterpreterTest {
 		_pathInterpreter.interpretPath("/image/0/x/foo.jpg");
 	}
 
-	@Test(expected = AdaptiveMediaRuntimeException.class)
+	@Test(expected = AMRuntimeException.class)
 	public void testFileEntryPathGetFileVersionFailure() throws Exception {
 		Mockito.when(
 			_dlAppService.getFileEntry(0)
@@ -158,7 +158,7 @@ public class PathInterpreterTest {
 		).getUUID();
 	}
 
-	@Test(expected = AdaptiveMediaRuntimeException.class)
+	@Test(expected = AMRuntimeException.class)
 	public void testFileVersionPathDLAppFailure() throws Exception {
 		Mockito.when(
 			_dlAppService.getFileVersion(1)

@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.test;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException.InvalidStateAdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException.InvalidStateAMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.test.util.DestinationReplacer;
@@ -262,7 +262,7 @@ public class AMImageDeleteConfigurationTest
 		Assert.assertFalse(amImageConfigurationEntryOptional.isPresent());
 	}
 
-	@Test(expected = InvalidStateAdaptiveMediaImageConfigurationException.class)
+	@Test(expected = InvalidStateAMImageConfigurationException.class)
 	public void testDeleteEnabledConfigurationEntry() throws Exception {
 		AMImageConfigurationHelper amImageConfigurationHelper =
 			serviceTracker.getService();

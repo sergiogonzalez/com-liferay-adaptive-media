@@ -19,20 +19,20 @@ import com.liferay.portal.kernel.exception.SystemException;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaRuntimeException extends SystemException {
+public class AMRuntimeException extends SystemException {
 
-	public AdaptiveMediaRuntimeException() {
+	public AMRuntimeException() {
 	}
 
-	public AdaptiveMediaRuntimeException(String s) {
+	public AMRuntimeException(String s) {
 		super(s);
 	}
 
-	public AdaptiveMediaRuntimeException(String s, Throwable throwable) {
+	public AMRuntimeException(String s, Throwable throwable) {
 		super(s, throwable);
 	}
 
-	public AdaptiveMediaRuntimeException(Throwable throwable) {
+	public AMRuntimeException(Throwable throwable) {
 		super(throwable);
 	}
 
@@ -40,23 +40,21 @@ public class AdaptiveMediaRuntimeException extends SystemException {
 	 * This exception is thrown when a value serialized as a
 	 * <code>String</code> cannot be converted by an {@link AMAttribute}.
 	 */
-	public static final class AdaptiveMediaAttributeFormatException
-		extends AdaptiveMediaRuntimeException {
+	public static final class AMAttributeFormatException
+		extends AMRuntimeException {
 
-		public AdaptiveMediaAttributeFormatException() {
+		public AMAttributeFormatException() {
 		}
 
-		public AdaptiveMediaAttributeFormatException(String s) {
+		public AMAttributeFormatException(String s) {
 			super(s);
 		}
 
-		public AdaptiveMediaAttributeFormatException(
-			String s, Throwable throwable) {
-
+		public AMAttributeFormatException(String s, Throwable throwable) {
 			super(s, throwable);
 		}
 
-		public AdaptiveMediaAttributeFormatException(Throwable throwable) {
+		public AMAttributeFormatException(Throwable throwable) {
 			super(throwable);
 		}
 
@@ -65,8 +63,7 @@ public class AdaptiveMediaRuntimeException extends SystemException {
 	/**
 	 * This exception is thrown when there is a processor configuration error.
 	 */
-	public static final class InvalidConfiguration
-		extends AdaptiveMediaRuntimeException {
+	public static final class InvalidConfiguration extends AMRuntimeException {
 
 		public InvalidConfiguration() {
 		}
@@ -90,8 +87,7 @@ public class AdaptiveMediaRuntimeException extends SystemException {
 	 * is a system error, it is reasonable to wrap it inside a runtime
 	 * exception.
 	 */
-	public static final class IOException
-		extends AdaptiveMediaRuntimeException {
+	public static final class IOException extends AMRuntimeException {
 
 		public IOException() {
 		}
@@ -116,7 +112,7 @@ public class AdaptiveMediaRuntimeException extends SystemException {
 	 * inside a runtime exception.
 	 */
 	public static final class UnsupportedEncodingException
-		extends AdaptiveMediaRuntimeException {
+		extends AMRuntimeException {
 
 		public UnsupportedEncodingException() {
 		}

@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.demo.data.creator.internal;
 
 import com.liferay.adaptive.media.demo.data.creator.AMImageConfigurationDemoDataCreator;
 import com.liferay.adaptive.media.demo.data.creator.DemoAMImageConfigurationVariant;
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.portal.kernel.log.Log;
@@ -79,7 +79,7 @@ public class AMImageConfigurationDemoDataCreatorImpl
 			_addConfigurationUuid(
 				companyId, amImageConfigurationEntry.getUUID());
 		}
-		catch (AdaptiveMediaImageConfigurationException amice) {
+		catch (AMImageConfigurationException amice) {
 			_log.error(
 				"Unable to add image adaptive media configuration", amice);
 		}

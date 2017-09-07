@@ -19,48 +19,43 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Sergio González
  */
-public class AdaptiveMediaImageConfigurationException extends PortalException {
+public class AMImageConfigurationException extends PortalException {
 
-	public AdaptiveMediaImageConfigurationException() {
+	public AMImageConfigurationException() {
 	}
 
-	public AdaptiveMediaImageConfigurationException(String s) {
+	public AMImageConfigurationException(String s) {
 		super(s);
 	}
 
-	public AdaptiveMediaImageConfigurationException(
-		String s, Throwable throwable) {
-
+	public AMImageConfigurationException(String s, Throwable throwable) {
 		super(s, throwable);
 	}
 
-	public AdaptiveMediaImageConfigurationException(Throwable throwable) {
+	public AMImageConfigurationException(Throwable throwable) {
 		super(throwable);
 	}
 
 	/**
 	 * This exception is raised when a configuration with the same name already exists.
 	 */
-	public static final class
-		DuplicateAdaptiveMediaImageConfigurationNameException
-			extends AdaptiveMediaImageConfigurationException {
+	public static final class DuplicateAMImageConfigurationNameException
+		extends AMImageConfigurationException {
 
-		public DuplicateAdaptiveMediaImageConfigurationNameException() {
+		public DuplicateAMImageConfigurationNameException() {
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationNameException(String s) {
+		public DuplicateAMImageConfigurationNameException(String s) {
 			super(s);
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationNameException(
+		public DuplicateAMImageConfigurationNameException(
 			String s, Throwable throwable) {
 
 			super(s, throwable);
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationNameException(
-			Throwable throwable) {
-
+		public DuplicateAMImageConfigurationNameException(Throwable throwable) {
 			super(throwable);
 		}
 
@@ -69,26 +64,23 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	/**
 	 * This exception is raised when a configuration with the same uuid already exists.
 	 */
-	public static final class
-		DuplicateAdaptiveMediaImageConfigurationUuidException
-			extends AdaptiveMediaImageConfigurationException {
+	public static final class DuplicateAMImageConfigurationUuidException
+		extends AMImageConfigurationException {
 
-		public DuplicateAdaptiveMediaImageConfigurationUuidException() {
+		public DuplicateAMImageConfigurationUuidException() {
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationUuidException(String s) {
+		public DuplicateAMImageConfigurationUuidException(String s) {
 			super(s);
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationUuidException(
+		public DuplicateAMImageConfigurationUuidException(
 			String s, Throwable throwable) {
 
 			super(s, throwable);
 		}
 
-		public DuplicateAdaptiveMediaImageConfigurationUuidException(
-			Throwable throwable) {
-
+		public DuplicateAMImageConfigurationUuidException(Throwable throwable) {
 			super(throwable);
 		}
 
@@ -98,7 +90,7 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	 * This exception is raised when the height value is not valid.
 	 */
 	public static final class InvalidHeightException
-		extends AdaptiveMediaImageConfigurationException {
+		extends AMImageConfigurationException {
 
 		public InvalidHeightException() {
 		}
@@ -121,7 +113,7 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	 * This exception is raised when the name of the configuration is not valid.
 	 */
 	public static final class InvalidNameException
-		extends AdaptiveMediaImageConfigurationException {
+		extends AMImageConfigurationException {
 
 		public InvalidNameException() {
 		}
@@ -140,26 +132,23 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 
 	}
 
-	public static final class
-		InvalidStateAdaptiveMediaImageConfigurationException
-			extends AdaptiveMediaImageConfigurationException {
+	public static final class InvalidStateAMImageConfigurationException
+		extends AMImageConfigurationException {
 
-		public InvalidStateAdaptiveMediaImageConfigurationException() {
+		public InvalidStateAMImageConfigurationException() {
 		}
 
-		public InvalidStateAdaptiveMediaImageConfigurationException(String s) {
+		public InvalidStateAMImageConfigurationException(String s) {
 			super(s);
 		}
 
-		public InvalidStateAdaptiveMediaImageConfigurationException(
+		public InvalidStateAMImageConfigurationException(
 			String s, Throwable throwable) {
 
 			super(s, throwable);
 		}
 
-		public InvalidStateAdaptiveMediaImageConfigurationException(
-			Throwable throwable) {
-
+		public InvalidStateAMImageConfigurationException(Throwable throwable) {
 			super(throwable);
 		}
 
@@ -169,7 +158,7 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	 * This exception is raised when the uuid of the configuration is not valid.
 	 */
 	public static final class InvalidUuidException
-		extends AdaptiveMediaImageConfigurationException {
+		extends AMImageConfigurationException {
 
 		public InvalidUuidException() {
 		}
@@ -192,7 +181,7 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	 * This exception is raised when the height value is not valid.
 	 */
 	public static final class InvalidWidthException
-		extends AdaptiveMediaImageConfigurationException {
+		extends AMImageConfigurationException {
 
 		public InvalidWidthException() {
 		}
@@ -214,26 +203,23 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	/**
 	 * This exception is raised when a configuration does not exist.
 	 */
-	public static final class
-		NoSuchAdaptiveMediaImageConfigurationException
-			extends AdaptiveMediaImageConfigurationException {
+	public static final class NoSuchAMImageConfigurationException
+		extends AMImageConfigurationException {
 
-		public NoSuchAdaptiveMediaImageConfigurationException() {
+		public NoSuchAMImageConfigurationException() {
 		}
 
-		public NoSuchAdaptiveMediaImageConfigurationException(String s) {
+		public NoSuchAMImageConfigurationException(String s) {
 			super(s);
 		}
 
-		public NoSuchAdaptiveMediaImageConfigurationException(
+		public NoSuchAMImageConfigurationException(
 			String s, Throwable throwable) {
 
 			super(s, throwable);
 		}
 
-		public NoSuchAdaptiveMediaImageConfigurationException(
-			Throwable throwable) {
-
+		public NoSuchAMImageConfigurationException(Throwable throwable) {
 			super(throwable);
 		}
 
@@ -244,7 +230,7 @@ public class AdaptiveMediaImageConfigurationException extends PortalException {
 	 * valid height value nor a valid width value.
 	 */
 	public static final class RequiredWidthOrHeightException
-		extends AdaptiveMediaImageConfigurationException {
+		extends AMImageConfigurationException {
 
 		public RequiredWidthOrHeightException() {
 		}

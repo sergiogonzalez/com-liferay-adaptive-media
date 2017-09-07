@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.test;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
@@ -185,7 +185,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithBlankMaxHeightOnly()
 		throws Exception {
@@ -251,7 +251,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithBlankMaxWidthAndBlankMaxHeight()
 		throws Exception {
@@ -278,7 +278,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithBlankMaxWidthAndZeroMaxHeight()
 		throws Exception {
@@ -305,7 +305,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithBlankMaxWidthOnly()
 		throws Exception {
@@ -330,9 +330,7 @@ public class AMImageUpdateConfigurationTest
 			properties);
 	}
 
-	@Test(
-		expected = AdaptiveMediaImageConfigurationException.InvalidNameException.class
-	)
+	@Test(expected = AMImageConfigurationException.InvalidNameException.class)
 	public void testUpdateConfigurationEntryWithBlankName() throws Exception {
 		AMImageConfigurationHelper amImageConfigurationHelper =
 			serviceTracker.getService();
@@ -356,9 +354,7 @@ public class AMImageUpdateConfigurationTest
 			amImageConfigurationEntry1.getProperties());
 	}
 
-	@Test(
-		expected = AdaptiveMediaImageConfigurationException.InvalidUuidException.class
-	)
+	@Test(expected = AMImageConfigurationException.InvalidUuidException.class)
 	public void testUpdateConfigurationEntryWithBlankUuid() throws Exception {
 		AMImageConfigurationHelper amImageConfigurationHelper =
 			serviceTracker.getService();
@@ -523,9 +519,7 @@ public class AMImageUpdateConfigurationTest
 		Assert.assertEquals("200", actualProperties.get("max-width"));
 	}
 
-	@Test(
-		expected = AdaptiveMediaImageConfigurationException.InvalidHeightException.class
-	)
+	@Test(expected = AMImageConfigurationException.InvalidHeightException.class)
 	public void testUpdateConfigurationEntryWithNegativeNumberMaxHeight()
 		throws Exception {
 
@@ -549,9 +543,7 @@ public class AMImageUpdateConfigurationTest
 			properties);
 	}
 
-	@Test(
-		expected = AdaptiveMediaImageConfigurationException.InvalidWidthException.class
-	)
+	@Test(expected = AMImageConfigurationException.InvalidWidthException.class)
 	public void testUpdateConfigurationEntryWithNegativeNumberMaxWidth()
 		throws Exception {
 
@@ -575,9 +567,7 @@ public class AMImageUpdateConfigurationTest
 			properties);
 	}
 
-	@Test(
-		expected = AdaptiveMediaImageConfigurationException.InvalidHeightException.class
-	)
+	@Test(expected = AMImageConfigurationException.InvalidHeightException.class)
 	public void testUpdateConfigurationEntryWithNotNumberMaxHeight()
 		throws Exception {
 
@@ -601,9 +591,7 @@ public class AMImageUpdateConfigurationTest
 			properties);
 	}
 
-	@Test(
-		expected = AdaptiveMediaImageConfigurationException.InvalidWidthException.class
-	)
+	@Test(expected = AMImageConfigurationException.InvalidWidthException.class)
 	public void testUpdateConfigurationEntryWithNotNumberMaxWidth()
 		throws Exception {
 
@@ -628,7 +616,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithoutMaxHeightNorMaxWidth()
 		throws Exception {
@@ -692,7 +680,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithZeroMaxHeightOnly()
 		throws Exception {
@@ -758,7 +746,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithZeroMaxWidthAndBlankMaxHeight()
 		throws Exception {
@@ -785,7 +773,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithZeroMaxWidthAndZeroMaxHeight()
 		throws Exception {
@@ -812,7 +800,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.RequiredWidthOrHeightException.class
+		expected = AMImageConfigurationException.RequiredWidthOrHeightException.class
 	)
 	public void testUpdateConfigurationEntryWithZeroMaxWidthOnly()
 		throws Exception {
@@ -893,7 +881,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.DuplicateAdaptiveMediaImageConfigurationNameException.class
+		expected = AMImageConfigurationException.DuplicateAMImageConfigurationNameException.class
 	)
 	public void testUpdateDuplicateConfigurationEntryName() throws Exception {
 		AMImageConfigurationHelper amImageConfigurationHelper =
@@ -923,7 +911,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.DuplicateAdaptiveMediaImageConfigurationUuidException.class
+		expected = AMImageConfigurationException.DuplicateAMImageConfigurationUuidException.class
 	)
 	public void testUpdateDuplicateConfigurationEntryUuid() throws Exception {
 		AMImageConfigurationHelper amImageConfigurationHelper =
@@ -1221,7 +1209,7 @@ public class AMImageUpdateConfigurationTest
 	}
 
 	@Test(
-		expected = AdaptiveMediaImageConfigurationException.NoSuchAdaptiveMediaImageConfigurationException.class
+		expected = AMImageConfigurationException.NoSuchAMImageConfigurationException.class
 	)
 	public void testUpdateNonExistingConfiguration() throws Exception {
 		AMImageConfigurationHelper amImageConfigurationHelper =

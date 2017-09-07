@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.util;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.internal.configuration.AMImageAttributeMapping;
 import com.liferay.adaptive.media.image.internal.processor.AMImage;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
@@ -74,7 +74,7 @@ public class AMImageSerializerImpl implements AMImageSerializer {
 				URI.create(uri));
 		}
 		catch (JSONException jsone) {
-			throw new AdaptiveMediaRuntimeException(jsone);
+			throw new AMRuntimeException(jsone);
 		}
 	}
 

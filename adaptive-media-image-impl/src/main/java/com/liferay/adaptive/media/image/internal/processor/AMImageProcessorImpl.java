@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.image.internal.processor;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.internal.util.ImageProcessor;
@@ -59,7 +59,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 				fileVersion);
 		}
 		catch (PortalException pe) {
-			throw new AdaptiveMediaRuntimeException.IOException(pe);
+			throw new AMRuntimeException.IOException(pe);
 		}
 	}
 
@@ -119,7 +119,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 				new UnsyncByteArrayInputStream(bytes), bytes.length);
 		}
 		catch (IOException | PortalException e) {
-			throw new AdaptiveMediaRuntimeException.IOException(e);
+			throw new AMRuntimeException.IOException(e);
 		}
 	}
 

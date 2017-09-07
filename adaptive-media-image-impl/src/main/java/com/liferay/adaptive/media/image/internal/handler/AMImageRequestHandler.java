@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.handler;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.handler.AMRequestHandler;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
@@ -137,7 +137,7 @@ public class AMImageRequestHandler
 					return fileVersion.getContentStream(false);
 				}
 				catch (PortalException pe) {
-					throw new AdaptiveMediaRuntimeException(pe);
+					throw new AMRuntimeException(pe);
 				}
 			},
 			AMImageAttributeMapping.fromProperties(properties), null);
@@ -184,7 +184,7 @@ public class AMImageRequestHandler
 			return Optional.of(_createRawAdaptiveMedia(fileVersion));
 		}
 		catch (PortalException pe) {
-			throw new AdaptiveMediaRuntimeException(pe);
+			throw new AMRuntimeException(pe);
 		}
 	}
 
@@ -217,7 +217,7 @@ public class AMImageRequestHandler
 			).findFirst();
 		}
 		catch (PortalException pe) {
-			throw new AdaptiveMediaRuntimeException(pe);
+			throw new AMRuntimeException(pe);
 		}
 	}
 
@@ -301,7 +301,7 @@ public class AMImageRequestHandler
 
 			return Optional.of(Tuple.of(fileVersion, amImageAttributeMapping));
 		}
-		catch (AdaptiveMediaRuntimeException | NumberFormatException e) {
+		catch (AMRuntimeException | NumberFormatException e) {
 			_log.error(e);
 
 			return Optional.empty();

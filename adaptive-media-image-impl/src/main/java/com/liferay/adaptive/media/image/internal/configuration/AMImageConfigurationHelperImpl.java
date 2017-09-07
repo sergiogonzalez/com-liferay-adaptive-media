@@ -14,9 +14,9 @@
 
 package com.liferay.adaptive.media.image.internal.configuration;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException.InvalidStateAdaptiveMediaImageConfigurationException;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException.InvalidStateAMImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.constants.AMImageDestinationNames;
@@ -69,7 +69,7 @@ public class AMImageConfigurationHelperImpl
 	public AMImageConfigurationEntry addAMImageConfigurationEntry(
 			long companyId, String name, String description, String uuid,
 			Map<String, String> properties)
-		throws AdaptiveMediaImageConfigurationException, IOException {
+		throws AMImageConfigurationException, IOException {
 
 		_checkName(name);
 		_checkProperties(properties);
@@ -110,8 +110,7 @@ public class AMImageConfigurationHelperImpl
 
 	@Override
 	public void deleteAMImageConfigurationEntry(long companyId, String uuid)
-		throws InvalidStateAdaptiveMediaImageConfigurationException,
-			IOException {
+		throws InvalidStateAMImageConfigurationException, IOException {
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
 			getAMImageConfigurationEntry(companyId, uuid);
@@ -124,7 +123,7 @@ public class AMImageConfigurationHelperImpl
 			amImageConfigurationEntryOptional.get();
 
 		if (amImageConfigurationEntry.isEnabled()) {
-			throw new InvalidStateAdaptiveMediaImageConfigurationException();
+			throw new InvalidStateAMImageConfigurationException();
 		}
 
 		forceDeleteAMImageConfigurationEntry(companyId, uuid);
@@ -300,7 +299,7 @@ public class AMImageConfigurationHelperImpl
 	public AMImageConfigurationEntry updateAMImageConfigurationEntry(
 			long companyId, String oldUuid, String name, String description,
 			String newUuid, Map<String, String> properties)
-		throws AdaptiveMediaImageConfigurationException, IOException {
+		throws AMImageConfigurationException, IOException {
 
 		_checkName(name);
 		_checkProperties(properties);
@@ -328,8 +327,8 @@ public class AMImageConfigurationHelperImpl
 		AMImageConfigurationEntry oldAMImageConfigurationEntry =
 			oldAMImageConfigurationEntryOptional.orElseThrow(
 				() ->
-					new AdaptiveMediaImageConfigurationException.
-						NoSuchAdaptiveMediaImageConfigurationException(
+					new AMImageConfigurationException.
+						NoSuchAMImageConfigurationException(
 							"{uuid=" + oldUuid + "}"));
 
 		if (!name.equals(oldAMImageConfigurationEntry.getName())) {
@@ -399,7 +398,7 @@ public class AMImageConfigurationHelperImpl
 	private void _checkDuplicatesName(
 			Collection<AMImageConfigurationEntry> amImageConfigurationEntries,
 			String name)
-		throws AdaptiveMediaImageConfigurationException {
+		throws AMImageConfigurationException {
 
 		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
 			amImageConfigurationEntries.stream();
@@ -412,15 +411,15 @@ public class AMImageConfigurationHelperImpl
 				).findFirst();
 
 		if (duplicateNameAMImageConfigurationEntryOptional.isPresent()) {
-			throw new AdaptiveMediaImageConfigurationException.
-				DuplicateAdaptiveMediaImageConfigurationNameException();
+			throw new AMImageConfigurationException.
+				DuplicateAMImageConfigurationNameException();
 		}
 	}
 
 	private void _checkDuplicatesUuid(
 			Collection<AMImageConfigurationEntry> amImageConfigurationEntries,
 			String uuid)
-		throws AdaptiveMediaImageConfigurationException {
+		throws AMImageConfigurationException {
 
 		Stream<AMImageConfigurationEntry> amImageConfigurationEntryStream =
 			amImageConfigurationEntries.stream();
@@ -433,22 +432,19 @@ public class AMImageConfigurationHelperImpl
 				).findFirst();
 
 		if (duplicateUuidAMImageConfigurationEntryOptional.isPresent()) {
-			throw new AdaptiveMediaImageConfigurationException.
-				DuplicateAdaptiveMediaImageConfigurationUuidException();
+			throw new AMImageConfigurationException.
+				DuplicateAMImageConfigurationUuidException();
 		}
 	}
 
-	private void _checkName(String name)
-		throws AdaptiveMediaImageConfigurationException {
-
+	private void _checkName(String name) throws AMImageConfigurationException {
 		if (Validator.isNull(name)) {
-			throw new AdaptiveMediaImageConfigurationException.
-				InvalidNameException();
+			throw new AMImageConfigurationException.InvalidNameException();
 		}
 	}
 
 	private void _checkProperties(Map<String, String> properties)
-		throws AdaptiveMediaImageConfigurationException {
+		throws AMImageConfigurationException {
 
 		String maxHeightString = properties.get("max-height");
 
@@ -456,8 +452,7 @@ public class AMImageConfigurationHelperImpl
 			!maxHeightString.equals("0") &&
 			!_isPositiveNumber(maxHeightString)) {
 
-			throw new AdaptiveMediaImageConfigurationException.
-				InvalidHeightException();
+			throw new AMImageConfigurationException.InvalidHeightException();
 		}
 
 		String maxWidthString = properties.get("max-width");
@@ -465,25 +460,21 @@ public class AMImageConfigurationHelperImpl
 		if (Validator.isNotNull(maxWidthString) &&
 			!maxWidthString.equals("0") && !_isPositiveNumber(maxWidthString)) {
 
-			throw new AdaptiveMediaImageConfigurationException.
-				InvalidWidthException();
+			throw new AMImageConfigurationException.InvalidWidthException();
 		}
 
 		if ((Validator.isNull(maxHeightString) ||
 			 maxHeightString.equals("0")) &&
 			(Validator.isNull(maxWidthString) || maxWidthString.equals("0"))) {
 
-			throw new AdaptiveMediaImageConfigurationException.
+			throw new AMImageConfigurationException.
 				RequiredWidthOrHeightException();
 		}
 	}
 
-	private void _checkUuid(String uuid)
-		throws AdaptiveMediaImageConfigurationException {
-
+	private void _checkUuid(String uuid) throws AMImageConfigurationException {
 		if (Validator.isNull(uuid)) {
-			throw new AdaptiveMediaImageConfigurationException.
-				InvalidUuidException();
+			throw new AMImageConfigurationException.InvalidUuidException();
 		}
 	}
 
@@ -519,7 +510,7 @@ public class AMImageConfigurationHelperImpl
 			return amImageConfigurationEntries.stream();
 		}
 		catch (SettingsException se) {
-			throw new AdaptiveMediaRuntimeException.InvalidConfiguration(se);
+			throw new AMRuntimeException.InvalidConfiguration(se);
 		}
 	}
 
@@ -599,7 +590,7 @@ public class AMImageConfigurationHelperImpl
 				amImageConfigurationEntryStream.collect(Collectors.toList()));
 		}
 		catch (SettingsException | ValidatorException e) {
-			throw new AdaptiveMediaRuntimeException.InvalidConfiguration(e);
+			throw new AMRuntimeException.InvalidConfiguration(e);
 		}
 	}
 

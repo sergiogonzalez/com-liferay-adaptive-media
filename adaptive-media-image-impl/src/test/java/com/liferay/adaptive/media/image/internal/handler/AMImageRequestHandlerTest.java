@@ -16,8 +16,8 @@ package com.liferay.adaptive.media.image.internal.handler;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.exception.AdaptiveMediaException;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
@@ -81,7 +81,7 @@ public class AMImageRequestHandlerTest {
 			_amImageConfigurationHelper);
 	}
 
-	@Test(expected = AdaptiveMediaRuntimeException.class)
+	@Test(expected = AMRuntimeException.class)
 	public void testFinderFailsWithMediaProcessorException() throws Exception {
 		AMImageConfigurationEntry amImageConfigurationEntry =
 			_createAdaptiveMediaImageConfigurationEntry(
@@ -93,13 +93,13 @@ public class AMImageRequestHandlerTest {
 		Mockito.when(
 			_amImageFinder.getAdaptiveMediaStream(Mockito.any(Function.class))
 		).thenThrow(
-			AdaptiveMediaException.class
+			AMException.class
 		);
 
 		_amImageRequestHandler.handleRequest(request);
 	}
 
-	@Test(expected = AdaptiveMediaRuntimeException.class)
+	@Test(expected = AMRuntimeException.class)
 	public void testFinderFailsWithPortalException() throws Exception {
 		AMImageConfigurationEntry getConfigurationEntryFilter =
 			_createAdaptiveMediaImageConfigurationEntry(
@@ -143,7 +143,7 @@ public class AMImageRequestHandlerTest {
 		Mockito.when(
 			_pathInterpreter.interpretPath(Mockito.anyString())
 		).thenThrow(
-			AdaptiveMediaRuntimeException.class
+			AMRuntimeException.class
 		);
 
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
@@ -333,7 +333,7 @@ public class AMImageRequestHandlerTest {
 					return fileVersion.getContentStream(false);
 				}
 				catch (PortalException pe) {
-					throw new AdaptiveMediaRuntimeException(pe);
+					throw new AMRuntimeException(pe);
 				}
 			},
 			AMImageAttributeMapping.fromProperties(properties), null);

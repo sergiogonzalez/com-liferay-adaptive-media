@@ -19,41 +19,40 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Adolfo Pérez
  */
-public class AdaptiveMediaException extends PortalException {
+public class AMException extends PortalException {
 
-	public AdaptiveMediaException() {
+	public AMException() {
 	}
 
-	public AdaptiveMediaException(String s) {
+	public AMException(String s) {
 		super(s);
 	}
 
-	public AdaptiveMediaException(String s, Throwable throwable) {
+	public AMException(String s, Throwable throwable) {
 		super(s, throwable);
 	}
 
-	public AdaptiveMediaException(Throwable throwable) {
+	public AMException(Throwable throwable) {
 		super(throwable);
 	}
 
 	/**
 	 * This exception is raised when a requested media type or instance is not found.
 	 */
-	public static final class AdaptiveMediaNotFound
-		extends AdaptiveMediaException {
+	public static final class AMNotFound extends AMException {
 
-		public AdaptiveMediaNotFound() {
+		public AMNotFound() {
 		}
 
-		public AdaptiveMediaNotFound(String s) {
+		public AMNotFound(String s) {
 			super(s);
 		}
 
-		public AdaptiveMediaNotFound(String s, Throwable throwable) {
+		public AMNotFound(String s, Throwable throwable) {
 			super(s, throwable);
 		}
 
-		public AdaptiveMediaNotFound(Throwable throwable) {
+		public AMNotFound(Throwable throwable) {
 			super(throwable);
 		}
 

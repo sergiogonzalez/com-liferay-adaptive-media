@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.web.internal.portlet.action;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.service.AdaptiveMediaImageEntryLocalService;
@@ -173,7 +173,7 @@ public class EditImageConfigurationEntryMVCActionCommand
 				}
 			}
 		}
-		catch (AdaptiveMediaImageConfigurationException amice) {
+		catch (AMImageConfigurationException amice) {
 			SessionErrors.add(actionRequest, amice.getClass());
 		}
 	}
@@ -182,7 +182,7 @@ public class EditImageConfigurationEntryMVCActionCommand
 			_addHighResolutionConfigurationEntry(
 				long companyId,
 				AMImageConfigurationEntry amImageConfigurationEntry)
-		throws AdaptiveMediaImageConfigurationException, IOException {
+		throws AMImageConfigurationException, IOException {
 
 		Map<String, String> properties =
 			amImageConfigurationEntry.getProperties();

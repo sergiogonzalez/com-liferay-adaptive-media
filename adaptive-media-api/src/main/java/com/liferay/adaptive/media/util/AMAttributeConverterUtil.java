@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.util;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 
 /**
  * Provides a set of functions for converting data into {@link AMAttribute}
@@ -22,7 +22,7 @@ import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
  *
  * <p>
  * These functions should throw an {@link
- * AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException} if they
+ * AMRuntimeException.AMAttributeFormatException} if they
  * cannot convert the String.
  * </p>
  *
@@ -31,16 +31,13 @@ import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
 public class AMAttributeConverterUtil {
 
 	public static Integer parseInt(String value)
-		throws
-			AdaptiveMediaRuntimeException.
-				AdaptiveMediaAttributeFormatException {
+		throws AMRuntimeException.AMAttributeFormatException {
 
 		try {
 			return Integer.parseInt(value);
 		}
 		catch (NumberFormatException nfe) {
-			throw new AdaptiveMediaRuntimeException.
-				AdaptiveMediaAttributeFormatException(nfe);
+			throw new AMRuntimeException.AMAttributeFormatException(nfe);
 		}
 	}
 

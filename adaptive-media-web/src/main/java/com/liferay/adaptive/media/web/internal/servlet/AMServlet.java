@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.web.internal.servlet;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.exception.AdaptiveMediaException;
+import com.liferay.adaptive.media.exception.AMException;
 import com.liferay.adaptive.media.handler.AMRequestHandler;
 import com.liferay.adaptive.media.web.internal.constants.AMWebConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -83,7 +83,7 @@ public class AMServlet extends HttpServlet {
 				amRequestHandler.handleRequest(request);
 
 			AdaptiveMedia<?> adaptiveMedia = adaptiveMediaOptional.orElseThrow(
-				AdaptiveMediaException.AdaptiveMediaNotFound::new);
+				AMException.AMNotFound::new);
 
 			Optional<Integer> contentLengthOptional =
 				adaptiveMedia.getValueOptional(
@@ -117,7 +117,7 @@ public class AMServlet extends HttpServlet {
 					contentLength, contentType);
 			}
 		}
-		catch (AdaptiveMediaException.AdaptiveMediaNotFound amnf) {
+		catch (AMException.AMNotFound amnf) {
 			response.sendError(
 				HttpServletResponse.SC_NOT_FOUND, request.getRequestURI());
 		}

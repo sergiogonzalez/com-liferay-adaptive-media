@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.portal.kernel.security.RandomUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -57,9 +57,7 @@ public class AMAttributeTest {
 		Assert.assertEquals(value, configurationUuidAMAttribute.convert(value));
 	}
 
-	@Test(
-		expected = AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException.class
-	)
+	@Test(expected = AMRuntimeException.AMAttributeFormatException.class)
 	public void testContentLengthFailsForNonIntegers() {
 		AMAttribute<?, Integer> contentLengthAMAttribute =
 			AMAttribute.getContentLengthAMAttribute();

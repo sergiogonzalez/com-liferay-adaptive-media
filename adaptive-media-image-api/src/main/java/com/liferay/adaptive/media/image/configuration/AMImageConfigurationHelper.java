@@ -16,8 +16,8 @@ package com.liferay.adaptive.media.image.configuration;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
-import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException.InvalidStateAdaptiveMediaImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException;
+import com.liferay.adaptive.media.exception.AMImageConfigurationException.InvalidStateAMImageConfigurationException;
 
 import java.io.IOException;
 
@@ -46,15 +46,15 @@ public interface AMImageConfigurationHelper {
 	 * @param  properties a set of properties with additional information about
 	 *         how the adaptive media image will be generated
 	 * @return the image configuration entry
-	 * @throws AdaptiveMediaImageConfigurationException if there was an issue
-	 *         with the values of the new configuration entry
+	 * @throws AMImageConfigurationException if there was an issue with the
+	 *         values of the new configuration entry
 	 * @throws IOException if there was an issue when persisting the new image
 	 *         configuration entry in the store
 	 */
 	public AMImageConfigurationEntry addAMImageConfigurationEntry(
 			long companyId, String name, String description, String uuid,
 			Map<String, String> properties)
-		throws AdaptiveMediaImageConfigurationException, IOException;
+		throws AMImageConfigurationException, IOException;
 
 	/**
 	 * Deletes an existing and disabled image configuration entry. If no image
@@ -63,14 +63,13 @@ public interface AMImageConfigurationHelper {
 	 *
 	 * @param  companyId the primary key of the company
 	 * @param  uuid the image configuration entry's UUID
-	 * @throws InvalidStateAdaptiveMediaImageConfigurationException if the image
+	 * @throws InvalidStateAMImageConfigurationException if the image
 	 *         configuration entry to delete was not disabled
 	 * @throws IOException if there was an issue when deleting the image
 	 *         configuration entry from the store
 	 */
 	public void deleteAMImageConfigurationEntry(long companyId, String uuid)
-		throws InvalidStateAdaptiveMediaImageConfigurationException,
-			IOException;
+		throws InvalidStateAMImageConfigurationException, IOException;
 
 	/**
 	 * Disables an existing and enabled image configuration entry. If there is
@@ -156,14 +155,14 @@ public interface AMImageConfigurationHelper {
 	 * @param  properties the new set of properties with additional information
 	 *         about how the adaptive media image will be generated
 	 * @return the updated image configuration entry
-	 * @throws AdaptiveMediaImageConfigurationException if there was an issue
-	 *         with the values of the new configuration entry
+	 * @throws AMImageConfigurationException if there was an issue with the
+	 *         values of the new configuration entry
 	 * @throws IOException if there was an issue when persisting the new image
 	 *         configuration entry in the store
 	 */
 	public AMImageConfigurationEntry updateAMImageConfigurationEntry(
 			long companyId, String oldUuid, String name, String description,
 			String newUuid, Map<String, String> properties)
-		throws AdaptiveMediaImageConfigurationException, IOException;
+		throws AMImageConfigurationException, IOException;
 
 }

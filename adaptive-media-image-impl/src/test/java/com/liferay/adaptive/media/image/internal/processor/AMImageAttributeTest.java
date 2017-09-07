@@ -15,7 +15,7 @@
 package com.liferay.adaptive.media.image.internal.processor;
 
 import com.liferay.adaptive.media.AMAttribute;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 
 import java.util.Arrays;
@@ -48,9 +48,7 @@ public class AMImageAttributeTest {
 		Assert.assertTrue(allowedAMAttributes.containsAll(publicAMAttributes));
 	}
 
-	@Test(
-		expected = AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException.class
-	)
+	@Test(expected = AMRuntimeException.AMAttributeFormatException.class)
 	public void testImageHeightFailsForNonIntegers() {
 		AMImageAttribute.IMAGE_HEIGHT.convert("xyz");
 	}
@@ -62,9 +60,7 @@ public class AMImageAttributeTest {
 		Assert.assertEquals(42, result);
 	}
 
-	@Test(
-		expected = AdaptiveMediaRuntimeException.AdaptiveMediaAttributeFormatException.class
-	)
+	@Test(expected = AMRuntimeException.AMAttributeFormatException.class)
 	public void testImageWidthFailsForNonIntegers() {
 		AMImageAttribute.IMAGE_WIDTH.convert("xyz");
 	}

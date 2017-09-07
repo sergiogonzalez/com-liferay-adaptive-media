@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.image.internal.finder;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.exception.AdaptiveMediaRuntimeException;
+import com.liferay.adaptive.media.exception.AMRuntimeException;
 import com.liferay.adaptive.media.finder.AMQuery;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
@@ -487,13 +487,13 @@ public class AMImageFinderImplTest {
 		_amImageFinderImpl.getAdaptiveMediaStream(amImageQueryBuilder -> null);
 	}
 
-	@Test(expected = AdaptiveMediaRuntimeException.InvalidConfiguration.class)
+	@Test(expected = AMRuntimeException.InvalidConfiguration.class)
 	public void testGetMediaConfigurationError() throws Exception {
 		Mockito.when(
 			_amImageConfigurationHelper.getAMImageConfigurationEntries(
 				Mockito.anyLong(), Mockito.any(Predicate.class))
 		).thenThrow(
-			AdaptiveMediaRuntimeException.InvalidConfiguration.class
+			AMRuntimeException.InvalidConfiguration.class
 		);
 
 		Mockito.when(
