@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Adolfo Pérez
  */
 @Component
-public class AdaptiveMediaImageCompanyConfigurationBeanDeclaration
+public class AMImageCompanyConfigurationBeanDeclaration
 	implements ConfigurationBeanDeclaration {
 
 	@Override
