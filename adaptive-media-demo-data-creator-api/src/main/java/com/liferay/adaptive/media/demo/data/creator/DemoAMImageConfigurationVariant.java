@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @author Alejandro Hernández
  */
-public enum DemoAdaptiveMediaImageConfigurationVariant {
+public enum DemoAMImageConfigurationVariant {
 
 	XS("Extra small demo size", "", "demo-xsmall", 50, 50),
 	S("Small demo size", "", "demo-small", 100, 100),
@@ -49,7 +49,7 @@ public enum DemoAdaptiveMediaImageConfigurationVariant {
 		return _uuid;
 	}
 
-	private DemoAdaptiveMediaImageConfigurationVariant(
+	private DemoAMImageConfigurationVariant(
 		String name, String description, String uuid, int maxHeight,
 		int maxWidth) {
 

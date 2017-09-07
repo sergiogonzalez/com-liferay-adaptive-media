@@ -25,12 +25,11 @@ import java.util.Collection;
  *
  * @author Alejandro Hernández
  */
-public interface AdaptiveMediaImageConfigurationDemoDataCreator {
+public interface AMImageConfigurationDemoDataCreator {
 
 	/**
 	 * Creates a collection of {@link AMImageConfigurationEntry}
-	 * configurations based on the {@link
-	 * DemoAdaptiveMediaImageConfigurationVariant} enum
+	 * configurations based on the {@link DemoAMImageConfigurationVariant} enum
 	 *
 	 * @param  companyId ID of the company where the configurations will be
 	 *         created
@@ -44,14 +43,12 @@ public interface AdaptiveMediaImageConfigurationDemoDataCreator {
 	 *
 	 * @param  companyId ID of the company where the configuration will be
 	 *         created
-	 * @param  demoAdaptiveMediaImageConfigurationVariant the configuration to
-	 *         create
+	 * @param  demoAMImageConfigurationVariant the configuration to create
 	 * @return the configuration
 	 */
 	public AMImageConfigurationEntry create(
 			long companyId,
-			DemoAdaptiveMediaImageConfigurationVariant
-				demoAdaptiveMediaImageConfigurationVariant)
+			DemoAMImageConfigurationVariant demoAMImageConfigurationVariant)
 		throws IOException;
 
 	/**

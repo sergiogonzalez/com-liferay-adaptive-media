@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.demo.internal;
 
-import com.liferay.adaptive.media.demo.data.creator.AdaptiveMediaImageConfigurationDemoDataCreator;
+import com.liferay.adaptive.media.demo.data.creator.AMImageConfigurationDemoDataCreator;
 import com.liferay.document.library.demo.data.creator.FileEntryDemoDataCreator;
 import com.liferay.document.library.demo.data.creator.RootFolderDemoDataCreator;
 import com.liferay.portal.instance.lifecycle.BasePortalInstanceLifecycleListener;
@@ -41,8 +41,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @Component(immediate = true, service = PortalInstanceLifecycleListener.class)
-public class AdaptiveMediaImageDemo
-	extends BasePortalInstanceLifecycleListener {
+public class AMImageDemo extends BasePortalInstanceLifecycleListener {
 
 	@Override
 	public void portalInstanceRegistered(Company company) throws Exception {
@@ -66,8 +65,7 @@ public class AdaptiveMediaImageDemo
 			}
 		}
 
-		_adaptiveMediaImageConfigurationDemoDataCreator.create(
-			company.getCompanyId());
+		_amImageConfigurationDemoDataCreator.create(company.getCompanyId());
 
 		Folder adaptiveMediaFolder = _rootFolderDemoDataCreator.create(
 			user.getUserId(), guestGroup.getGroupId(), "Adaptive Media");
@@ -86,7 +84,7 @@ public class AdaptiveMediaImageDemo
 
 	@Deactivate
 	protected void deactivate() throws IOException, PortalException {
-		_adaptiveMediaImageConfigurationDemoDataCreator.delete();
+		_amImageConfigurationDemoDataCreator.delete();
 		_fileEntryDemoDataCreator.delete();
 		_rootFolderDemoDataCreator.delete();
 		_omniAdminUserDemoDataCreator.delete();
@@ -97,12 +95,11 @@ public class AdaptiveMediaImageDemo
 		ModuleServiceLifecycle moduleServiceLifecycle) {
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaImageDemo.class);
+	private static final Log _log = LogFactoryUtil.getLog(AMImageDemo.class);
 
 	@Reference
-	private AdaptiveMediaImageConfigurationDemoDataCreator
-		_adaptiveMediaImageConfigurationDemoDataCreator;
+	private AMImageConfigurationDemoDataCreator
+		_amImageConfigurationDemoDataCreator;
 
 	@Reference
 	private FileEntryDemoDataCreator _fileEntryDemoDataCreator;

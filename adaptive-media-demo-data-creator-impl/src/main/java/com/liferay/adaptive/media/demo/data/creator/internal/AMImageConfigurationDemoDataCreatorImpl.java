@@ -14,8 +14,8 @@
 
 package com.liferay.adaptive.media.demo.data.creator.internal;
 
-import com.liferay.adaptive.media.demo.data.creator.AdaptiveMediaImageConfigurationDemoDataCreator;
-import com.liferay.adaptive.media.demo.data.creator.DemoAdaptiveMediaImageConfigurationVariant;
+import com.liferay.adaptive.media.demo.data.creator.AMImageConfigurationDemoDataCreator;
+import com.liferay.adaptive.media.demo.data.creator.DemoAMImageConfigurationVariant;
 import com.liferay.adaptive.media.exception.AdaptiveMediaImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
@@ -37,9 +37,9 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alejandro Hernández
  */
-@Component(service = AdaptiveMediaImageConfigurationDemoDataCreator.class)
-public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
-	implements AdaptiveMediaImageConfigurationDemoDataCreator {
+@Component(service = AMImageConfigurationDemoDataCreator.class)
+public class AMImageConfigurationDemoDataCreatorImpl
+	implements AMImageConfigurationDemoDataCreator {
 
 	@Override
 	public Collection<AMImageConfigurationEntry> create(long companyId)
@@ -48,12 +48,11 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
 			new ArrayList<>();
 
-		for (DemoAdaptiveMediaImageConfigurationVariant
-				demoConfigurationVariant :
-					DemoAdaptiveMediaImageConfigurationVariant.values()) {
+		for (DemoAMImageConfigurationVariant demoAMImageConfigurationVariant :
+				DemoAMImageConfigurationVariant.values()) {
 
 			AMImageConfigurationEntry amImageConfigurationEntry = create(
-				companyId, demoConfigurationVariant);
+				companyId, demoAMImageConfigurationVariant);
 
 			amImageConfigurationEntries.add(amImageConfigurationEntry);
 		}
@@ -64,8 +63,7 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 	@Override
 	public AMImageConfigurationEntry create(
 			long companyId,
-			DemoAdaptiveMediaImageConfigurationVariant
-				demoAdaptiveMediaImageConfigurationVariant)
+			DemoAMImageConfigurationVariant demoAMImageConfigurationVariant)
 		throws IOException {
 
 		AMImageConfigurationEntry amImageConfigurationEntry = null;
@@ -73,11 +71,10 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 		try {
 			amImageConfigurationEntry =
 				_amImageConfigurationHelper.addAMImageConfigurationEntry(
-					companyId,
-					demoAdaptiveMediaImageConfigurationVariant.getName(),
-					demoAdaptiveMediaImageConfigurationVariant.getDescription(),
-					demoAdaptiveMediaImageConfigurationVariant.getUuid(),
-					demoAdaptiveMediaImageConfigurationVariant.getProperties());
+					companyId, demoAMImageConfigurationVariant.getName(),
+					demoAMImageConfigurationVariant.getDescription(),
+					demoAMImageConfigurationVariant.getUuid(),
+					demoAMImageConfigurationVariant.getProperties());
 
 			_addConfigurationUuid(
 				companyId, amImageConfigurationEntry.getUUID());
@@ -114,7 +111,7 @@ public class AdaptiveMediaImageConfigurationDemoDataCreatorImpl
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		AdaptiveMediaImageConfigurationDemoDataCreatorImpl.class);
+		AMImageConfigurationDemoDataCreatorImpl.class);
 
 	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
