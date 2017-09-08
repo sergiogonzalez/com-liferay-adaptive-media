@@ -146,7 +146,7 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 
 					dlFileVersionDynamicQuery.add(
 						mimeTypeProperty.in(
-                            _amImageConfiguration.supportedMimeTypes()));
+							_amImageConfiguration.supportedMimeTypes()));
 
 					Property statusProperty = PropertyFactoryUtil.forName(
 						"status");

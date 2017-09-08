@@ -48,6 +48,13 @@ public class DLAMImageCounter implements AMImageCounter {
 			_getTrashedFileEntriesCount(companyId);
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_amImageConfiguration = ConfigurableUtil.createConfigurable(
+			AMImageConfiguration.class, properties);
+	}
+
 	private int _getFileEntriesCount(long companyId) {
 		DynamicQuery dlFileEntryEntryDynamicQuery =
 			_dlFileEntryLocalService.dynamicQuery();
@@ -71,15 +78,6 @@ public class DLAMImageCounter implements AMImageCounter {
 		return (int)_dlFileEntryLocalService.dynamicQueryCount(
 			dlFileEntryEntryDynamicQuery);
 	}
-
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_amImageConfiguration = ConfigurableUtil.createConfigurable(
-            AMImageConfiguration.class, properties);
-	}
-
-	private volatile AMImageConfiguration _amImageConfiguration;
 
 	private int _getTrashedFileEntriesCount(long companyId) {
 		DynamicQuery dlFileVersionDynamicQuery =
@@ -112,6 +110,8 @@ public class DLAMImageCounter implements AMImageCounter {
 		return (int)_dlFileEntryLocalService.dynamicQueryCount(
 			dlFileVersionDynamicQuery);
 	}
+
+	private volatile AMImageConfiguration _amImageConfiguration;
 
 	@Reference
 	private DLFileEntryLocalService _dlFileEntryLocalService;
