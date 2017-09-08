@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.adaptive.media.image.configuration;
+package com.liferay.adaptive.media.image.internal.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
 
@@ -23,7 +23,7 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
  */
 @ExtendedObjectClassDefinition(category = "collaboration")
 @Meta.OCD(
-	id = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
+	id = "com.liferay.adaptive.media.image.internal.configuration.AMImageConfiguration",
 	localization = "content/Language",
 	name = "adaptive-media-image-configuration-name"
 )

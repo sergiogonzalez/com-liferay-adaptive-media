@@ -14,15 +14,14 @@
 
 package com.liferay.adaptive.media.document.library.thumbnails.internal.commands;
 
-import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
+import com.liferay.adaptive.media.image.mime.type.AMImageMimeTypeProvider;
 import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.document.library.kernel.util.DLPreviewableProcessor;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
@@ -45,22 +44,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adolfo Pérez
  */
 @Component(
-	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
 	immediate = true,
 	property = {
 		"osgi.command.function=check", "osgi.command.function=cleanUp",
@@ -197,13 +192,6 @@ public class AMThumbnailsOSGiCommands {
 		}
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_amImageConfiguration = ConfigurableUtil.createConfigurable(
-			AMImageConfiguration.class, properties);
-	}
-
 	private Iterable<Long> _getCompanyIds(String... companyIds) {
 		if (companyIds.length == 0) {
 			List<Company> companies = _companyLocalService.getCompanies();
@@ -281,7 +269,7 @@ public class AMThumbnailsOSGiCommands {
 
 	private boolean _isMimeTypeSupported(FileVersion fileVersion) {
 		return ArrayUtil.contains(
-			_amImageConfiguration.supportedMimeTypes(),
+			_amImageMimeTypeProvider.getSupportedMimeTypes(),
 			fileVersion.getMimeType());
 	}
 
@@ -344,13 +332,14 @@ public class AMThumbnailsOSGiCommands {
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMThumbnailsOSGiCommands.class);
 
-	private volatile AMImageConfiguration _amImageConfiguration;
-
 	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 	@Reference
 	private AMImageEntryLocalService _amImageEntryLocalService;
+
+	@Reference
+	private AMImageMimeTypeProvider _amImageMimeTypeProvider;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;

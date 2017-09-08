@@ -16,15 +16,14 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
+import com.liferay.adaptive.media.image.mime.type.AMImageMimeTypeProvider;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.document.library.kernel.model.DLProcessorConstants;
 import com.liferay.document.library.kernel.util.DLProcessor;
 import com.liferay.document.library.kernel.util.ImageProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -41,21 +40,17 @@ import java.io.InputStream;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adolfo Pérez
  */
 @Component(
-	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
 	immediate = true, property = {"service.ranking:Integer=100"},
 	service = {AMImageEntryProcessor.class, DLProcessor.class}
 )
@@ -93,7 +88,7 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 	@Override
 	public Set<String> getImageMimeTypes() {
 		return new HashSet<>(
-			Arrays.asList(_amImageConfiguration.supportedMimeTypes()));
+			Arrays.asList(_amImageMimeTypeProvider.getSupportedMimeTypes()));
 	}
 
 	@Override
@@ -222,13 +217,6 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 		FileVersion sourceFileVersion, FileVersion destinationFileVersion) {
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_amImageConfiguration = ConfigurableUtil.createConfigurable(
-			AMImageConfiguration.class, properties);
-	}
-
 	private Stream<AdaptiveMedia<AMImageProcessor>>
 			_getThumbnailAdaptiveMedia(FileVersion fileVersion)
 		throws PortalException {
@@ -249,16 +237,17 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	private boolean _isMimeTypeSupported(String mimeType) {
 		return ArrayUtil.contains(
-			_amImageConfiguration.supportedMimeTypes(), mimeType);
+			_amImageMimeTypeProvider.getSupportedMimeTypes(), mimeType);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMImageEntryProcessor.class);
 
-	private volatile AMImageConfiguration _amImageConfiguration;
-
 	@Reference
 	private AMImageFinder _amImageFinder;
+
+	@Reference
+	private AMImageMimeTypeProvider _amImageMimeTypeProvider;
 
 	private final ImageProcessor _imageProcessor = new ImageProcessorImpl();
 

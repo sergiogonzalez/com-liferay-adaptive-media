@@ -15,10 +15,9 @@
 package com.liferay.adaptive.media.image.internal.util;
 
 import com.liferay.adaptive.media.exception.AMRuntimeException;
-import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.internal.processor.util.TiffOrientationTransformer;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.adaptive.media.image.mime.type.AMImageMimeTypeProvider;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -31,23 +30,18 @@ import java.io.InputStream;
 
 import java.util.Map;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adolfo Pérez
  */
-@Component(
-	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
-	immediate = true, service = ImageProcessor.class
-)
+@Component(immediate = true, service = ImageProcessor.class)
 public class ImageProcessor {
 
 	public boolean isMimeTypeSupported(String mimeType) {
 		return ArrayUtil.contains(
-			_amImageConfiguration.supportedMimeTypes(), mimeType);
+			_amImageMimeTypeProvider.getSupportedMimeTypes(), mimeType);
 	}
 
 	public RenderedImage scaleImage(
@@ -71,13 +65,6 @@ public class ImageProcessor {
 		}
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_amImageConfiguration = ConfigurableUtil.createConfigurable(
-			AMImageConfiguration.class, properties);
-	}
-
 	private InputStream _getInputStream(FileVersion fileVersion) {
 		try {
 			return fileVersion.getContentStream(false);
@@ -87,7 +74,8 @@ public class ImageProcessor {
 		}
 	}
 
-	private volatile AMImageConfiguration _amImageConfiguration;
+	@Reference
+	private AMImageMimeTypeProvider _amImageMimeTypeProvider;
 
 	@Reference
 	private TiffOrientationTransformer _tiffOrientationTransformer;
