@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.documentlibrary.util.ImageProcessorImpl;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import java.util.Arrays;
@@ -118,11 +117,14 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 		Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
 			adaptiveMediaStream.findFirst();
 
-		return adaptiveMediaOptional.map(
-			AdaptiveMedia::getInputStream
-		).orElse(
-			new ByteArrayInputStream(new byte[0])
-		);
+		Optional<InputStream> inputStreamOptional = adaptiveMediaOptional.map(
+			AdaptiveMedia::getInputStream);
+
+		if (inputStreamOptional.isPresent()) {
+			return inputStreamOptional.get();
+		}
+
+		return fileVersion.getContentStream(false);
 	}
 
 	@Override
@@ -138,8 +140,10 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 		return adaptiveMediaOptional.flatMap(
 			mediaMedia -> mediaMedia.getValueOptional(
 				AMAttribute.getContentLengthAMAttribute())
+		).map(
+			Integer::longValue
 		).orElse(
-			0
+			fileVersion.getSize()
 		);
 	}
 
@@ -155,26 +159,7 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	@Override
 	public boolean hasImages(FileVersion fileVersion) {
-		try {
-			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
-				_getThumbnailAdaptiveMedia(fileVersion);
-
-			Optional<AdaptiveMedia<AMImageProcessor>> adaptiveMediaOptional =
-				adaptiveMediaStream.findFirst();
-
-			if (adaptiveMediaOptional.isPresent()) {
-				return true;
-			}
-
-			return false;
-		}
-		catch (PortalException pe) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(pe);
-			}
-
-			return false;
-		}
+		return true;
 	}
 
 	@Override
