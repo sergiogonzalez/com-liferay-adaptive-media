@@ -204,7 +204,7 @@ public class AMImageRequestHandler
 		try {
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 						fileVersion
 					).with(
 						AMImageAttribute.IMAGE_WIDTH, configurationWidth
@@ -227,7 +227,7 @@ public class AMImageRequestHandler
 		throws PortalException {
 
 		return _amImageFinder.getAdaptiveMediaStream(amImageQueryBuilder ->
-			amImageQueryBuilder.forVersion(
+			amImageQueryBuilder.forFileVersion(
 				fileVersion
 			).forConfiguration(
 				amImageConfigurationEntry.getUUID()

@@ -31,13 +31,9 @@ import java.util.function.Predicate;
 public interface AMImageQueryBuilder
 	extends AMQueryBuilder<FileVersion, AMImageProcessor> {
 
-	public InitialStep allForFileEntry(FileEntry fileEntry);
-
-	public InitialStep allForVersion(FileVersion fileVersion);
-
 	public InitialStep forFileEntry(FileEntry fileEntry);
 
-	public InitialStep forVersion(FileVersion fileVersion);
+	public InitialStep forFileVersion(FileVersion fileVersion);
 
 	public enum ConfigurationStatus {
 

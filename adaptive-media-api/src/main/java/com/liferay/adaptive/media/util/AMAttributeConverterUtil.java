@@ -22,8 +22,8 @@ import com.liferay.adaptive.media.exception.AMRuntimeException;
  *
  * <p>
  * These functions should throw an {@link
- * AMRuntimeException.AMAttributeFormatException} if they
- * cannot convert the String.
+ * AMRuntimeException.AMAttributeFormatException} if they cannot convert the
+ * String.
  * </p>
  *
  * @author Alejandro Hernández

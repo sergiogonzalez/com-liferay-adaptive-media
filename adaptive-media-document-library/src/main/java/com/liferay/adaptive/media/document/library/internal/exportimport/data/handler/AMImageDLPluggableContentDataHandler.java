@@ -114,7 +114,7 @@ public class AMImageDLPluggableContentDataHandler
 		for (FileVersion fileVersion : fileVersions) {
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 						fileVersion
 					).done());
 

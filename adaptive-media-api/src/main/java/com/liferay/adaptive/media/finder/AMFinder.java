@@ -21,8 +21,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * An {@link AMFinder} is responsible for locating and returning
- * media related to a model.
+ * An {@link AMFinder} is responsible for locating and returning media related
+ * to a model.
  *
  * <p>
  * All media matching the query is sorted by score and returned. Better matches
@@ -36,12 +36,12 @@ public interface AMFinder<B extends AMQueryBuilder<M, T>, M, T> {
 	/**
 	 * Returns all {@link AdaptiveMedia} instances for the model that matches
 	 * the query. The function is invoked with an instance of an implementation
-	 * dependent {@link AMQueryBuilder}, that callers must use to
-	 * create the query.
+	 * dependent {@link AMQueryBuilder}, that callers must use to create the
+	 * query.
 	 *
 	 * @param  amQueryBuilderFunction a function to be invoked with an {@link
-	 *         AMQueryBuilder} argument. The query builder provides
-	 *         operations to filter and sort the returned media.
+	 *         AMQueryBuilder} argument. The query builder provides operations
+	 *         to filter and sort the returned media.
 	 * @return a non-<code>null</code>, possibly empty stream of all media
 	 *         instances matching the query ordered by score: better matches are
 	 *         prioritized first

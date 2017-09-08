@@ -379,7 +379,7 @@ public class AMThumbnailsOSGiCommandsTest {
 	private long _getAdaptiveMediaCount(FileEntry fileEntry) throws Exception {
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinder.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 					fileEntry
 				).done());
 

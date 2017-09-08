@@ -98,7 +98,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 					_fileEntry
 				).done());
 
@@ -159,7 +159,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 					_fileEntry
 				).done());
 
@@ -214,7 +214,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).done());
 
@@ -317,7 +317,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).orderBy(
 					AMImageAttribute.IMAGE_WIDTH,
@@ -433,7 +433,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).orderBy(
 					AMImageAttribute.IMAGE_WIDTH,
@@ -496,7 +496,7 @@ public class AMImageFinderImplTest {
 		);
 
 		_amImageFinderImpl.getAdaptiveMediaStream(
-			amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 				_fileVersion
 			).done());
 	}
@@ -558,7 +558,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).done());
 
@@ -622,7 +622,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).done());
 
@@ -708,7 +708,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).with(
 					AMImageAttribute.IMAGE_HEIGHT, 100
@@ -798,7 +798,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).with(
 					AMImageAttribute.IMAGE_HEIGHT, 200
@@ -888,7 +888,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).with(
 					AMImageAttribute.IMAGE_HEIGHT, 200
@@ -978,7 +978,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).forConfiguration(
 					"small"
@@ -1080,7 +1080,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).withConfigurationStatus(
 					AMImageQueryBuilder.ConfigurationStatus.ENABLED
@@ -1104,7 +1104,7 @@ public class AMImageFinderImplTest {
 		Assert.assertEquals("small", adaptiveMedia0Optional.get());
 
 		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
-			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 				_fileVersion
 			).withConfigurationStatus(
 				AMImageQueryBuilder.ConfigurationStatus.ANY
@@ -1125,7 +1125,7 @@ public class AMImageFinderImplTest {
 		Assert.assertEquals("small", adaptiveMedia0Optional.get());
 
 		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
-			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 				_fileVersion
 			).withConfigurationStatus(
 				AMImageQueryBuilder.ConfigurationStatus.DISABLED
@@ -1227,7 +1227,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).withConfigurationStatus(
 					enabledConfigurationStatus
@@ -1248,7 +1248,7 @@ public class AMImageFinderImplTest {
 		Assert.assertEquals("1", adaptiveMedia0ConfigurationUuidOptional.get());
 
 		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
-			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 				_fileVersion
 			).withConfigurationStatus(
 				disabledConfigurationStatus
@@ -1267,7 +1267,7 @@ public class AMImageFinderImplTest {
 		Assert.assertEquals("2", adaptiveMedia0ConfigurationUuidOptional.get());
 
 		adaptiveMediaStream = _amImageFinderImpl.getAdaptiveMediaStream(
-			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 				_fileVersion
 			).withConfigurationStatus(
 				allConfigurationStatus
@@ -1359,7 +1359,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).with(
 					AMImageAttribute.IMAGE_WIDTH, 100
@@ -1395,7 +1395,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).done());
 
@@ -1460,7 +1460,7 @@ public class AMImageFinderImplTest {
 
 		Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 			_amImageFinderImpl.getAdaptiveMediaStream(
-				amImageQueryBuilder -> amImageQueryBuilder.allForVersion(
+				amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 					_fileVersion
 				).done());
 

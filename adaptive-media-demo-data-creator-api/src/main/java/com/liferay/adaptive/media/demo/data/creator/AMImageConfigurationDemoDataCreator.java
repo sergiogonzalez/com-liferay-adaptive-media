@@ -28,8 +28,8 @@ import java.util.Collection;
 public interface AMImageConfigurationDemoDataCreator {
 
 	/**
-	 * Creates a collection of {@link AMImageConfigurationEntry}
-	 * configurations based on the {@link DemoAMImageConfigurationVariant} enum
+	 * Creates a collection of {@link AMImageConfigurationEntry} configurations
+	 * based on the {@link DemoAMImageConfigurationVariant} enum
 	 *
 	 * @param  companyId ID of the company where the configurations will be
 	 *         created

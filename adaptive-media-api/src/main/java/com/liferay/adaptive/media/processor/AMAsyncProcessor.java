@@ -23,8 +23,8 @@ import com.liferay.portal.kernel.exception.PortalException;
  * Generates a specific type of media asynchronously.
  *
  * <p>
- * This processor delegates the generation of the media in {@link
- * AMProcessor} by invoking it in an asynchronous manner.
+ * This processor delegates the generation of the media in {@link AMProcessor}
+ * by invoking it in an asynchronous manner.
  * </p>
  *
  * <p>
@@ -41,7 +41,8 @@ public interface AMAsyncProcessor<M, T> {
 	/**
 	 * Removes the specified model from the given commmand's queue of execution.
 	 *
-	 * @param amProcessorCommand the command that is pending execution on the model
+	 * @param amProcessorCommand the command that is pending execution on the
+	 *        model
 	 * @param modelId the model ID to remove from the queue
 	 */
 	public void cleanQueue(

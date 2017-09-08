@@ -47,28 +47,6 @@ public class AMImageQueryBuilderImpl
 		};
 
 	@Override
-	public InitialStep allForFileEntry(FileEntry fileEntry) {
-		if (fileEntry == null) {
-			throw new IllegalArgumentException("File entry cannot be null");
-		}
-
-		_fileEntry = fileEntry;
-
-		return this;
-	}
-
-	@Override
-	public InitialStep allForVersion(FileVersion fileVersion) {
-		if (fileVersion == null) {
-			throw new IllegalArgumentException("File version cannot be null");
-		}
-
-		_fileVersion = fileVersion;
-
-		return this;
-	}
-
-	@Override
 	public AMQuery<FileVersion, AMImageProcessor> done() {
 		return AM_QUERY;
 	}
@@ -97,7 +75,7 @@ public class AMImageQueryBuilderImpl
 	}
 
 	@Override
-	public InitialStep forVersion(FileVersion fileVersion) {
+	public InitialStep forFileVersion(FileVersion fileVersion) {
 		if (fileVersion == null) {
 			throw new IllegalArgumentException("File version cannot be null");
 		}

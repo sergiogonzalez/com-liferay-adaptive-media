@@ -218,7 +218,7 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 		throws PortalException {
 
 		return _amImageFinder.getAdaptiveMediaStream(
-			amImageQueryBuilder -> amImageQueryBuilder.forVersion(
+			amImageQueryBuilder -> amImageQueryBuilder.forFileVersion(
 				fileVersion
 			).with(
 				AMImageAttribute.IMAGE_WIDTH,

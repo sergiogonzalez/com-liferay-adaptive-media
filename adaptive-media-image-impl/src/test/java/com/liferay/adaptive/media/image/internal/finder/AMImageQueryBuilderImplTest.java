@@ -43,7 +43,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testFileEntryQueryReturnsLatestFileVersion() throws Exception {
 		FileEntry fileEntry = Mockito.mock(FileEntry.class);
 
-		_amImageQueryBuilderImpl.allForFileEntry(fileEntry);
+		_amImageQueryBuilderImpl.forFileEntry(fileEntry);
 
 		Assert.assertEquals(
 			fileEntry.getFileVersion(),
@@ -69,7 +69,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testMatchingConfigurationAttributeQuery() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).forConfiguration(
 			"small"
@@ -90,7 +90,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testNonMatchingConfigurationAttributeQuery() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).forConfiguration(
 			"small"
@@ -111,7 +111,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testNonNullOptionalAttributeQuery() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).with(
 			AMImageAttribute.IMAGE_HEIGHT, Optional.of(100)
@@ -128,7 +128,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testNullAttributeFailsWhenOrderingByIt() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).orderBy(
 			null, AMImageQueryBuilder.SortOrder.DESC
@@ -139,7 +139,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testNullAttributeValueFailsWhenQueryingAttributes() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).with(
 			AMImageAttribute.IMAGE_HEIGHT, (Integer)null
@@ -155,7 +155,7 @@ public class AMImageQueryBuilderImplTest {
 	public void testNullConfigurationUUIDFailsWhenQueryingAttributes() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).forConfiguration(
 			null
@@ -164,7 +164,7 @@ public class AMImageQueryBuilderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileEntryFailsWhenQueryingAll() {
-		_amImageQueryBuilderImpl.allForFileEntry(null);
+		_amImageQueryBuilderImpl.forFileEntry(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -174,19 +174,19 @@ public class AMImageQueryBuilderImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileVersionFailsWhenQueryingAll() {
-		_amImageQueryBuilderImpl.allForVersion(null);
+		_amImageQueryBuilderImpl.forFileVersion(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullFileVersionFailsWhenQueryingAttributes() {
-		_amImageQueryBuilderImpl.forVersion(null);
+		_amImageQueryBuilderImpl.forFileVersion(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullOptionalAttributeValueFailsWhenQueryingAttributes() {
 		FileVersion fileVersion = Mockito.mock(FileVersion.class);
 
-		_amImageQueryBuilderImpl.forVersion(
+		_amImageQueryBuilderImpl.forFileVersion(
 			fileVersion
 		).with(
 			AMImageAttribute.IMAGE_HEIGHT, (Optional<Integer>)null

@@ -27,9 +27,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * Manages and fetches an {@link AMImageConfigurationEntry}. This
- * interface is the preferred mechanism to interact with image configuration
- * entries.
+ * Manages and fetches an {@link AMImageConfigurationEntry}. This interface is
+ * the preferred mechanism to interact with image configuration entries.
  *
  * @author Alejandro Hernández
  */

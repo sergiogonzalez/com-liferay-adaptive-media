@@ -15,8 +15,8 @@
 package com.liferay.adaptive.media.finder;
 
 /**
- * A marker interface that {@link AMQueryBuilder} implementations
- * must return to indicate valid or final results.
+ * A marker interface that {@link AMQueryBuilder} implementations must return to
+ * indicate valid or final results.
  *
  * @author Adolfo Pérez
  */

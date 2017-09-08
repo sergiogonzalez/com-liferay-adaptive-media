@@ -33,8 +33,8 @@ import java.util.Optional;
 public class AMImageAttributeMapping {
 
 	/**
-	 * Returns an {@link AMImageAttributeMapping} that uses the map
-	 * as the underlying attribute storage.
+	 * Returns an {@link AMImageAttributeMapping} that uses the map as the
+	 * underlying attribute storage.
 	 *
 	 * @param  properties the map to get the properties from
 	 * @return a non-<code>null</code> mapping that provides type-safe access to

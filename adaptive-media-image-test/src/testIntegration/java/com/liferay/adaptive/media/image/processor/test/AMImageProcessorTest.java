@@ -125,7 +125,7 @@ public class AMImageProcessorTest {
 
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 						fileEntry
 					).done());
 
@@ -147,7 +147,7 @@ public class AMImageProcessorTest {
 
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 						fileEntry
 					).done());
 
@@ -171,7 +171,7 @@ public class AMImageProcessorTest {
 
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 						fileEntry
 					).done());
 
@@ -194,7 +194,7 @@ public class AMImageProcessorTest {
 
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 						fileEntry
 					).done());
 
@@ -217,7 +217,7 @@ public class AMImageProcessorTest {
 
 			Stream<AdaptiveMedia<AMImageProcessor>> adaptiveMediaStream =
 				_amImageFinder.getAdaptiveMediaStream(
-					amImageQueryBuilder -> amImageQueryBuilder.allForFileEntry(
+					amImageQueryBuilder -> amImageQueryBuilder.forFileEntry(
 						fileEntry
 					).done());
 
