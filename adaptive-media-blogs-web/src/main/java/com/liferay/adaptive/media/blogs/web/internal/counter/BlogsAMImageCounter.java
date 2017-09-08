@@ -14,22 +14,28 @@
 
 package com.liferay.adaptive.media.blogs.web.internal.counter;
 
-import com.liferay.adaptive.media.image.constants.AMImageConstants;
+import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 
+import java.util.Map;
+
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Sergio González
  */
 @Component(
+	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
 	immediate = true, property = {"adaptive.media.key=blogs"},
 	service = AMImageCounter.class
 )
@@ -54,10 +60,19 @@ public class BlogsAMImageCounter implements AMImageCounter {
 		Property mimeTypeProperty = PropertyFactoryUtil.forName("mimeType");
 
 		dynamicQuery.add(
-			mimeTypeProperty.in(AMImageConstants.getSupportedMimeTypes()));
+			mimeTypeProperty.in(_amImageConfiguration.supportedMimeTypes()));
 
 		return (int)_dlFileEntryLocalService.dynamicQueryCount(dynamicQuery);
 	}
+
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_amImageConfiguration = ConfigurableUtil.createConfigurable(
+			AMImageConfiguration.class, properties);
+	}
+
+	private volatile AMImageConfiguration _amImageConfiguration;
 
 	@Reference
 	private ClassNameLocalService _classNameLocalService;

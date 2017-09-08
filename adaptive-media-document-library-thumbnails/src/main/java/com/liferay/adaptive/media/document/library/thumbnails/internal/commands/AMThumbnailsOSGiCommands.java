@@ -14,14 +14,15 @@
 
 package com.liferay.adaptive.media.document.library.thumbnails.internal.commands;
 
+import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.document.library.kernel.util.DLPreviewableProcessor;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
@@ -31,6 +32,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -43,19 +45,22 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adolfo Pérez
  */
 @Component(
+	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
 	immediate = true,
 	property = {
 		"osgi.command.function=check", "osgi.command.function=cleanUp",
@@ -192,6 +197,13 @@ public class AMThumbnailsOSGiCommands {
 		}
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_amImageConfiguration = ConfigurableUtil.createConfigurable(
+			AMImageConfiguration.class, properties);
+	}
+
 	private Iterable<Long> _getCompanyIds(String... companyIds) {
 		if (companyIds.length == 0) {
 			List<Company> companies = _companyLocalService.getCompanies();
@@ -268,10 +280,9 @@ public class AMThumbnailsOSGiCommands {
 	}
 
 	private boolean _isMimeTypeSupported(FileVersion fileVersion) {
-		Set<String> supportedMimeTypes =
-			AMImageConstants.getSupportedMimeTypes();
-
-		return supportedMimeTypes.contains(fileVersion.getMimeType());
+		return ArrayUtil.contains(
+			_amImageConfiguration.supportedMimeTypes(),
+			fileVersion.getMimeType());
 	}
 
 	private boolean _isValidConfigurationEntries(
@@ -332,6 +343,8 @@ public class AMThumbnailsOSGiCommands {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		AMThumbnailsOSGiCommands.class);
+
+	private volatile AMImageConfiguration _amImageConfiguration;
 
 	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;

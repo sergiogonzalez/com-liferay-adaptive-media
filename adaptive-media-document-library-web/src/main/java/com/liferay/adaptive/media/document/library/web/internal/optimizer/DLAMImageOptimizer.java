@@ -14,9 +14,9 @@
 
 package com.liferay.adaptive.media.document.library.web.internal.optimizer;
 
+import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
@@ -24,6 +24,7 @@ import com.liferay.adaptive.media.web.constants.OptimizeImagesBackgroundTaskCons
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.document.library.kernel.service.DLFileVersionLocalService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusMessageSender;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
@@ -43,15 +44,19 @@ import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.trash.kernel.service.TrashEntryLocalService;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Sergio González
  */
 @Component(
+	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
 	immediate = true, property = {"adaptive.media.key=document-library"},
 	service = AMImageOptimizer.class
 )
@@ -87,6 +92,13 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 		_optimize(companyId, configurationEntryUuid, total, atomiCounter);
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_amImageConfiguration = ConfigurableUtil.createConfigurable(
+			AMImageConfiguration.class, properties);
+	}
+
 	private void _optimize(
 		long companyId, String configurationEntryUuid, int total,
 		AtomicInteger atomicCounter) {
@@ -117,7 +129,7 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 
 					dynamicQuery.add(
 						mimeTypeProperty.in(
-							AMImageConstants.getSupportedMimeTypes()));
+							_amImageConfiguration.supportedMimeTypes()));
 
 					DynamicQuery dlFileVersionDynamicQuery =
 						_dlFileVersionLocalService.dynamicQuery();
@@ -134,7 +146,7 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 
 					dlFileVersionDynamicQuery.add(
 						mimeTypeProperty.in(
-							AMImageConstants.getSupportedMimeTypes()));
+                            _amImageConfiguration.supportedMimeTypes()));
 
 					Property statusProperty = PropertyFactoryUtil.forName(
 						"status");
@@ -207,6 +219,8 @@ public class DLAMImageOptimizer implements AMImageOptimizer {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DLAMImageOptimizer.class);
+
+	private volatile AMImageConfiguration _amImageConfiguration;
 
 	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;

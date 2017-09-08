@@ -14,9 +14,9 @@
 
 package com.liferay.adaptive.media.blogs.web.internal.optimizer;
 
+import com.liferay.adaptive.media.image.configuration.AMImageConfiguration;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
@@ -24,6 +24,7 @@ import com.liferay.adaptive.media.web.constants.OptimizeImagesBackgroundTaskCons
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusMessageSender;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
@@ -40,15 +41,19 @@ import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Sergio González
  */
 @Component(
+	configurationPid = "com.liferay.adaptive.media.image.configuration.AMImageConfiguration",
 	immediate = true, property = {"adaptive.media.key=blogs"},
 	service = AMImageOptimizer.class
 )
@@ -84,6 +89,13 @@ public class BlogsAMImageOptimizer implements AMImageOptimizer {
 		_optimize(companyId, configurationEntryUuid, total, atomicCounter);
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_amImageConfiguration = ConfigurableUtil.createConfigurable(
+			AMImageConfiguration.class, properties);
+	}
+
 	private void _optimize(
 		long companyId, String configurationEntryUuid, int total,
 		AtomicInteger atomicCounter) {
@@ -114,7 +126,7 @@ public class BlogsAMImageOptimizer implements AMImageOptimizer {
 
 					dynamicQuery.add(
 						mimeTypeProperty.in(
-							AMImageConstants.getSupportedMimeTypes()));
+							_amImageConfiguration.supportedMimeTypes()));
 				}
 
 			});
@@ -176,6 +188,8 @@ public class BlogsAMImageOptimizer implements AMImageOptimizer {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BlogsAMImageOptimizer.class);
+
+	private volatile AMImageConfiguration _amImageConfiguration;
 
 	@Reference
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
