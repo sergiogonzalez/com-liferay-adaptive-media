@@ -163,10 +163,6 @@ def getClientDeployDir() {
 	return "${rootDir}/${project.property('com.liferay.adaptive.media.deploy.dir')}"
 }
 
-def getClientOsgiDir() {
-	return "${rootDir}/${project.property('com.liferay.adaptive.media.osgi.dir')}"
-}
-
 task runDocker(type: Exec) {
 	dependsOn subprojects.findAll {!it.childProjects}.copyJacocoAgent
 
@@ -189,6 +185,7 @@ task runDocker(type: Exec) {
 			'-p', '11311:11311',
 			'-v', "${rootDir}/build/jacoco:/jacoco",
 			'-v', "${getClientDeployDir()}:/liferay/deploy",
+			'-d',
 			'--name', "com-liferay-adaptive-media",
 			getImageNameWithUserAndVersion()
 
