@@ -13,8 +13,6 @@ before_script:
 
     # Quick checks
 
-    - ./gradlew pmdMain pmdTest pmdTestIntegration test
-
    # Check deployed structure
 
     - ./gradlew deploy
