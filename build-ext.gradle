@@ -189,7 +189,6 @@ task runDocker(type: Exec) {
 			'-p', '11311:11311',
 			'-v', "${rootDir}/build/jacoco:/jacoco",
 			'-v', "${getClientDeployDir()}:/liferay/deploy",
-			'-v', "${getClientOsgiDir()}:/liferay/osgi",
 			'--name', "com-liferay-adaptive-media",
 			getImageNameWithUserAndVersion()
 
