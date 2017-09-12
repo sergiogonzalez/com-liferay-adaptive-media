@@ -16,8 +16,8 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal;
 
 import com.liferay.adaptive.media.AMAttribute;
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.image.constants.AMImageConstants;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
+import com.liferay.adaptive.media.image.mime.type.AMImageMimeTypeProvider;
 import com.liferay.adaptive.media.image.processor.AMImageAttribute;
 import com.liferay.adaptive.media.image.processor.AMImageProcessor;
 import com.liferay.document.library.kernel.model.DLProcessorConstants;
@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.xml.Element;
@@ -37,6 +38,8 @@ import com.liferay.portlet.documentlibrary.util.ImageProcessorImpl;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -84,7 +87,8 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	@Override
 	public Set<String> getImageMimeTypes() {
-		return AMImageConstants.getSupportedMimeTypes();
+		return new HashSet<>(
+			Arrays.asList(_amImageMimeTypeProvider.getSupportedMimeTypes()));
 	}
 
 	@Override
@@ -232,10 +236,8 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 	}
 
 	private boolean _isMimeTypeSupported(String mimeType) {
-		Set<String> supportedMimeTypes =
-			AMImageConstants.getSupportedMimeTypes();
-
-		return supportedMimeTypes.contains(mimeType);
+		return ArrayUtil.contains(
+			_amImageMimeTypeProvider.getSupportedMimeTypes(), mimeType);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -243,6 +245,9 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 
 	@Reference
 	private AMImageFinder _amImageFinder;
+
+	@Reference
+	private AMImageMimeTypeProvider _amImageMimeTypeProvider;
 
 	private final ImageProcessor _imageProcessor = new ImageProcessorImpl();
 

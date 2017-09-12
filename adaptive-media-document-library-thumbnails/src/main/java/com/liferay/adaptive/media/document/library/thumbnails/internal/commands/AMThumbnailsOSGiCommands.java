@@ -16,7 +16,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.commands
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.constants.AMImageConstants;
+import com.liferay.adaptive.media.image.mime.type.AMImageMimeTypeProvider;
 import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -44,7 +45,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -268,10 +268,9 @@ public class AMThumbnailsOSGiCommands {
 	}
 
 	private boolean _isMimeTypeSupported(FileVersion fileVersion) {
-		Set<String> supportedMimeTypes =
-			AMImageConstants.getSupportedMimeTypes();
-
-		return supportedMimeTypes.contains(fileVersion.getMimeType());
+		return ArrayUtil.contains(
+			_amImageMimeTypeProvider.getSupportedMimeTypes(),
+			fileVersion.getMimeType());
 	}
 
 	private boolean _isValidConfigurationEntries(
@@ -338,6 +337,9 @@ public class AMThumbnailsOSGiCommands {
 
 	@Reference
 	private AMImageEntryLocalService _amImageEntryLocalService;
+
+	@Reference
+	private AMImageMimeTypeProvider _amImageMimeTypeProvider;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
