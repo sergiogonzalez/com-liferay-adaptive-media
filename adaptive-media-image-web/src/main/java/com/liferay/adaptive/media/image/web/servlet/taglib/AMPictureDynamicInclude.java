@@ -56,7 +56,7 @@ public class AMPictureDynamicInclude extends BaseDynamicInclude {
 			sb.append(themeDisplay.getPortalURL());
 			sb.append(_portal.getPathProxy());
 			sb.append(_servletContext.getContextPath());
-			sb.append("/picturefill.js\" ");
+			sb.append("/picturefill.min.js\" ");
 			sb.append("type= \"text/javascript\">");
 			sb.append("</script>");
 
