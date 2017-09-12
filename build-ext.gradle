@@ -194,8 +194,6 @@ task runDocker(type: Exec) {
 			'--name', "com-liferay-adaptive-media",
 			getImageNameWithUserAndVersion()
 
-	commandLine 'docker', 'logs', '-f'
-
 	finalizedBy checkDocker
 }
 
