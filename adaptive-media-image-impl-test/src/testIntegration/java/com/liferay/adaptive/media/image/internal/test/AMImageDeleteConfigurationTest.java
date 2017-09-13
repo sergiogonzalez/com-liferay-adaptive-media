@@ -17,7 +17,6 @@ package com.liferay.adaptive.media.image.internal.test;
 import com.liferay.adaptive.media.exception.AMImageConfigurationException.InvalidStateAMImageConfigurationException;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
-import com.liferay.adaptive.media.image.internal.test.util.DestinationReplacer;
 import com.liferay.adaptive.media.image.service.AMImageEntryLocalServiceUtil;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
@@ -179,44 +178,39 @@ public class AMImageDeleteConfigurationTest
 
 	@Test
 	public void testDeleteConfigurationEntryWithImages() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/am_processor")) {
+		AMImageConfigurationHelper amImageConfigurationHelper =
+			serviceTracker.getService();
 
-			AMImageConfigurationHelper amImageConfigurationHelper =
-				serviceTracker.getService();
+		Map<String, String> properties = new HashMap<>();
 
-			Map<String, String> properties = new HashMap<>();
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
 
-			properties.put("max-height", "100");
-			properties.put("max-width", "100");
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationHelper.addAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
-			AMImageConfigurationEntry amImageConfigurationEntry =
-				amImageConfigurationHelper.addAMImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "one", "desc", "1",
-					properties);
+		FileEntry fileEntry = _addFileEntry();
 
-			FileEntry fileEntry = _addFileEntry();
+		FileVersion fileVersion = fileEntry.getFileVersion();
 
-			FileVersion fileVersion = fileEntry.getFileVersion();
+		Assert.assertNotNull(
+			AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId()));
 
-			Assert.assertNotNull(
-				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
-					amImageConfigurationEntry.getUUID(),
-					fileVersion.getFileVersionId()));
+		amImageConfigurationHelper.disableAMImageConfigurationEntry(
+			TestPropsValues.getCompanyId(),
+			amImageConfigurationEntry.getUUID());
 
-			amImageConfigurationHelper.disableAMImageConfigurationEntry(
-				TestPropsValues.getCompanyId(),
-				amImageConfigurationEntry.getUUID());
+		amImageConfigurationHelper.deleteAMImageConfigurationEntry(
+			TestPropsValues.getCompanyId(),
+			amImageConfigurationEntry.getUUID());
 
-			amImageConfigurationHelper.deleteAMImageConfigurationEntry(
-				TestPropsValues.getCompanyId(),
-				amImageConfigurationEntry.getUUID());
-
-			Assert.assertNull(
-				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
-					amImageConfigurationEntry.getUUID(),
-					fileVersion.getFileVersionId()));
-		}
+		Assert.assertNull(
+			AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId()));
 	}
 
 	@Test
@@ -521,40 +515,35 @@ public class AMImageDeleteConfigurationTest
 
 	@Test
 	public void testForceDeleteConfigurationEntryWithImages() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				"liferay/am_processor")) {
+		AMImageConfigurationHelper amImageConfigurationHelper =
+			serviceTracker.getService();
 
-			AMImageConfigurationHelper amImageConfigurationHelper =
-				serviceTracker.getService();
+		Map<String, String> properties = new HashMap<>();
 
-			Map<String, String> properties = new HashMap<>();
+		properties.put("max-height", "100");
+		properties.put("max-width", "100");
 
-			properties.put("max-height", "100");
-			properties.put("max-width", "100");
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			amImageConfigurationHelper.addAMImageConfigurationEntry(
+				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
-			AMImageConfigurationEntry amImageConfigurationEntry =
-				amImageConfigurationHelper.addAMImageConfigurationEntry(
-					TestPropsValues.getCompanyId(), "one", "desc", "1",
-					properties);
+		FileEntry fileEntry = _addFileEntry();
 
-			FileEntry fileEntry = _addFileEntry();
+		FileVersion fileVersion = fileEntry.getFileVersion();
 
-			FileVersion fileVersion = fileEntry.getFileVersion();
+		Assert.assertNotNull(
+			AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId()));
 
-			Assert.assertNotNull(
-				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
-					amImageConfigurationEntry.getUUID(),
-					fileVersion.getFileVersionId()));
+		amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+			TestPropsValues.getCompanyId(),
+			amImageConfigurationEntry.getUUID());
 
-			amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
-				TestPropsValues.getCompanyId(),
-				amImageConfigurationEntry.getUUID());
-
-			Assert.assertNull(
-				AMImageEntryLocalServiceUtil.fetchAMImageEntry(
-					amImageConfigurationEntry.getUUID(),
-					fileVersion.getFileVersionId()));
-		}
+		Assert.assertNull(
+			AMImageEntryLocalServiceUtil.fetchAMImageEntry(
+				amImageConfigurationEntry.getUUID(),
+				fileVersion.getFileVersionId()));
 	}
 
 	@Test
