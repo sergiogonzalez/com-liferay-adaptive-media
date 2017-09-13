@@ -259,8 +259,7 @@ public class AMImageProcessorTest {
 	private byte[] _getImageBytes() throws Exception {
 		return FileUtil.getBytes(
 			AMImageProcessorTest.class,
-			"/com/liferay/adaptive/media/image/processor/test/dependencies" +
-				"/image.jpg");
+			"/com/liferay/adaptive/media/image/dependencies/image.jpg");
 	}
 
 	private byte[] _getNonImageBytes() {
