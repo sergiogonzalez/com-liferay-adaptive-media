@@ -449,6 +449,64 @@ public class AMImageEntryLocalServiceImplTest {
 				amImageEntryConfiguration2FileVersion2.getAmImageEntryId()));
 	}
 
+	@Test
+	public void testGetAMImageEntriesCount() throws Exception {
+		AMImageConfigurationEntry amImageConfigurationEntry1 =
+			_addAMImageConfigurationEntry("uuid1", 100, 200);
+
+		AMImageConfigurationEntry amImageConfigurationEntry2 =
+			_addAMImageConfigurationEntry("uuid2", 300, 400);
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(_group.getGroupId());
+
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		byte[] bytes = FileUtil.getBytes(
+			AMImageEntryLocalServiceImplTest.class,
+			"com/liferay/adaptive/media/image/dependencies/image.jpg");
+
+		FileEntry fileEntry1 = DLAppLocalServiceUtil.addFileEntry(
+			TestPropsValues.getUserId(), _group.getGroupId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "image1.jpg",
+			"image/jpg", bytes, serviceContext);
+
+		AMImageEntryLocalServiceUtil.addAMImageEntry(
+			amImageConfigurationEntry1, fileEntry1.getFileVersion(), 300, 100,
+			classLoader.getResourceAsStream(
+				"com/liferay/adaptive/media/image/dependencies/image.jpg"),
+			12345);
+		AMImageEntryLocalServiceUtil.addAMImageEntry(
+			amImageConfigurationEntry2, fileEntry1.getFileVersion(), 500, 300,
+			classLoader.getResourceAsStream(
+				"com/liferay/adaptive/media/image/dependencies/image.jpg"),
+			123456);
+
+		FileEntry fileEntry2 = DLAppLocalServiceUtil.addFileEntry(
+			TestPropsValues.getUserId(), _group.getGroupId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "image2.jpg",
+			"image/jpg", bytes, serviceContext);
+
+		AMImageEntryLocalServiceUtil.addAMImageEntry(
+			amImageConfigurationEntry1, fileEntry2.getFileVersion(), 300, 100,
+			classLoader.getResourceAsStream(
+				"com/liferay/adaptive/media/image/dependencies/image.jpg"),
+			12345);
+
+		Assert.assertEquals(
+			2,
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry1.getUUID()));
+		Assert.assertEquals(
+			1,
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
+				TestPropsValues.getCompanyId(),
+				amImageConfigurationEntry2.getUUID()));
+	}
+
 	protected void deleteAllConfigurationEntries()
 		throws IOException, PortalException {
 
