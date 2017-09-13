@@ -30,8 +30,11 @@ import java.util.function.Predicate;
  * images. This builder lets you specify the requirements for the adaptive media
  * images using the given methods.
  *
+ * <p>
  * It's recommended that you use this interface by chaining those methods to
- * create the query with the requirements. These methods can either be:
+ * create the query with the requirements. These methods can either be
+ * </p>
+ *
  * <ul>
  * <li>
  * Initial: must be invoked as the first method in the chain. They can be
@@ -43,10 +46,9 @@ import java.util.function.Predicate;
  * </li>
  * <li>
  * Terminal: can be chained to both initial or intermediate methods, but they
- * don't accept any more chaining.
+ * don't accept additional chaining.
  * </li>
  * </ul>
- *
  *
  * @author Adolfo Pérez
  */
@@ -57,17 +59,15 @@ public interface AMImageQueryBuilder
 	 * An initial method that specifies that only adaptive media images that
 	 * belong to a specific file entry should be returned.
 	 *
-	 * @param fileEntry the file entry of the adaptive media images.
-	 *
+	 * @param fileEntry the adaptive media images' file entry
 	 */
 	public InitialStep forFileEntry(FileEntry fileEntry);
 
 	/**
-	 * An initial method that specifies the file version of the adaptive media 
+	 * An initial method that specifies the file version of the adaptive media
 	 * images.
 	 *
-	 * @param fileVersion the file version of the adaptive media images
-	 *
+	 * @param fileVersion the adaptive media images' file version
 	 */
 	public InitialStep forFileVersion(FileVersion fileVersion);
 
@@ -96,23 +96,20 @@ public interface AMImageQueryBuilder
 	public interface ConfigurationStep {
 
 		/**
-		 * A terminal method that specifies that only adaptive media images with the
-		 * given configuration should be returned.
+		 * A terminal method that specifies that only adaptive media images with
+		 * the given configuration should be returned.
 		 *
-		 * @param configurationUuid the configuration uuid of the adaptive media 
-		 * images
-		 *
+		 * @param configurationUuid the adaptive media images' configuration
+		 *        UUID
 		 */
-
 		public FinalStep forConfiguration(String configurationUuid);
 
 		/**
 		 * An intermediate method that specifies that only adaptive media images
 		 * with the given configuration status should be returned.
 		 *
-		 * @param configurationStatus the configuration status of the adaptive media
-		 *        images
-		 *
+		 * @param configurationStatus the adaptive media images' configuration
+		 *        status
 		 */
 		public InitialStep withConfigurationStatus(
 			ConfigurationStatus configurationStatus);
@@ -122,13 +119,10 @@ public interface AMImageQueryBuilder
 	public interface FinalStep {
 
 		/**
-		 * Creates and returns the query.
-		 *
-		 * This method can be invoked after any initial, intermediate, or terminal
-		 * method.
+		 * Creates and returns the query. This method can be invoked after any
+		 * initial, intermediate, or terminal method.
 		 *
 		 * @return the adaptive media query
-		 *
 		 */
 		public AMQuery<FileVersion, AMImageProcessor> done();
 
@@ -137,61 +131,91 @@ public interface AMImageQueryBuilder
 	public interface FuzzySortStep extends FinalStep {
 
 		/**
-		 * An intermediate method that sorts the adaptive media based on specific
-		 * attribute values. Sorting is done using a distance comparator that
-		 * returns the adaptive media images that are a closer match first.
+		 * An intermediate method that sorts the adaptive media based on
+		 * specific attribute values. Sorting is done using a distance
+		 * comparator that returns the adaptive media images that are a closer
+		 * match first.
 		 *
+		 * <p>
 		 * The distance comparator is implemented based on the value returned by
-		 * the method {@link AMAttribute#distance(Object, Object)}.
+		 * the method {@link
+		 * com.liferay.adaptive.media.AMAttribute#distance(Object, Object)}.
+		 * </p>
 		 *
-		 * If the method {@link StrictSortStep#orderBy(AMAttribute, SortOrder)} is
-		 * invoked in the same query builder it takes precedence, and this method
-		 * has no effect.
+		 * <p>
+		 * If the method {@link StrictSortStep#orderBy(AMAttribute, SortOrder)}
+		 * is invoked in the same query builder, it takes precedence and this
+		 * method has no effect.
+		 * </p>
 		 *
+		 * <p>
 		 * If this method is invoked with multiple attributes, they will be used
 		 * in the following order:
+		 * </p>
 		 *
-		 * 1. The first attribute sorts all the adaptive media images.
-		 * 2. if two or more adaptive media images are located at the same distance,
-		 * the second attribute is used to sort those elements.
-		 * 3. If the second attribute doesn't resolve all the cases, the third
+		 * <ol>
+		 * <li>
+		 * The first attribute sorts all the adaptive media images.
+		 * </li>
+		 * <li>
+		 * If two or more adaptive media images are located at the same
+		 * distance, the second attribute is used to sort those elements.
+		 * </li>
+		 * <li>
+		 * If the second attribute doesn't resolve all the cases, the third
 		 * attribute is used, and so on.
+		 * </li>
+		 * </ol>
 		 *
 		 * @param amAttribute the attribute used to sort the adaptive media
 		 *        images
 		 * @param valueOptional a non-<code>null</code> optional value for the
 		 *        attribute
-		 *
 		 */
 		public <V> FuzzySortStep with(
 			AMAttribute<AMImageProcessor, V> amAttribute,
 			Optional<V> valueOptional);
 
 		/**
-		 * An intermediate method that sorts the adaptive media based on specific
-		 * attribute values. Sorting is done using a distance comparator that
-		 * returns the adaptive media images that are a closer match first.
+		 * An intermediate method that sorts the adaptive media based on
+		 * specific attribute values. Sorting is done using a distance
+		 * comparator that returns the adaptive media images that are a closer
+		 * match first.
 		 *
+		 * <p>
 		 * The distance comparator is implemented based on the value returned by
-		 * the method {@link AMAttribute#distance(Object, Object)}.
+		 * the method {@link
+		 * com.liferay.adaptive.mediaAMAttribute#distance(Object, Object)}.
+		 * </p>
 		 *
-		 * If the method {@link StrictSortStep#orderBy(AMAttribute, SortOrder)} is
-		 * invoked in the same query builder it takes precedence, and this method
-		 * has no effect.
+		 * <p>
+		 * If the method {@link StrictSortStep#orderBy(AMAttribute, SortOrder)}
+		 * is invoked in the same query builder, it takes precedence and this
+		 * method has no effect.
+		 * </p>
 		 *
+		 * <p>
 		 * If this method is invoked with multiple attributes, they will be used
 		 * in the following order:
+		 * </p>
 		 *
-		 * 1. The first attribute sorts all the adaptive media images.
-		 * 2. if two or more adaptive media images are located at the same distance,
-		 * the second attribute is used to sort those elements.
-		 * 3. If the second attribute doesn't resolve all the cases, the third
+		 * <ol>
+		 * <li>
+		 * The first attribute sorts all the adaptive media images.
+		 * </li>
+		 * <li>
+		 * If two or more adaptive media images are located at the same
+		 * distance, the second attribute is used to sort those elements.
+		 * </li>
+		 * <li>
+		 * If the second attribute doesn't resolve all the cases, the third
 		 * attribute is used, and so on.
+		 * </li>
+		 * </ol>
 		 *
 		 * @param amAttribute the attribute used to sort the adaptive media
 		 *        images
 		 * @param value the attribute's value
-		 *
 		 */
 		public <V> FuzzySortStep with(
 			AMAttribute<AMImageProcessor, V> amAttribute, V value);
@@ -229,30 +253,43 @@ public interface AMImageQueryBuilder
 	public interface StrictSortStep extends FinalStep {
 
 		/**
-		 * An intermediate method that sorts the adaptive media based on a specific
-		 * attribute.
+		 * An intermediate method that sorts the adaptive media based on a
+		 * specific attribute.
 		 *
+		 * <p>
 		 * This method takes precedence over the methods
 		 * {@link FuzzySortStep#with(AMAttribute, Optional)} and
-		 * {@link FuzzySortStep#with(AMAttribute, Object)}
+		 * {@link FuzzySortStep#with(AMAttribute, Object)}.
+		 * </p>
 		 *
-		 * If the method {@link StrictSortStep#orderBy(AMAttribute, SortOrder)} is
-		 * invoked in the same query builder it takes precedence, and this method
-		 * has no effect.
+		 * <p>
+		 * If the method {@link StrictSortStep#orderBy(AMAttribute, SortOrder)}
+		 * is invoked in the same query builder, it takes precedence and this
+		 * method has no effect.
+		 * </p>
 		 *
+		 * <p>
 		 * If this method is invoked with multiple attributes, they will be used
 		 * in the following order:
+		 * </p>
 		 *
-		 * 1. The first attribute sorts all the adaptive media images.
-		 * 2. if two or more adaptive media images are located at the same distance,
-		 * the second attribute is used to sort those elements.
-		 * 3. If the second attribute doesn't resolve all the cases, the third
+		 * <ol>
+		 * <li>
+		 * The first attribute sorts all the adaptive media images.
+		 * </li>
+		 * <li>
+		 * If two or more adaptive media images are located at the same
+		 * distance, the second attribute is used to sort those elements.
+		 * </li>
+		 * <li>
+		 * If the second attribute doesn't resolve all the cases, the third
 		 * attribute is used, and so on.
+		 * </li>
+		 * </ol>
 		 *
 		 * @param amAttribute the attribute used to sort the adaptive media
 		 *        images
-		 * @param  sortOrder the order used to sort the adaptive media images
-		 *
+		 * @param sortOrder the order used to sort the adaptive media images
 		 */
 		public <V> StrictSortStep orderBy(
 			AMAttribute<AMImageProcessor, V> amAttribute, SortOrder sortOrder);
