@@ -103,6 +103,13 @@ appDocker {
     inputDir "adaptive-media-docker"
 }
 
+docker {
+	registryCredentials {
+		username = System.getenv().get("DOCKER_USER")
+		password = System.getenv().get("DOCKER_PWD")
+	}
+}
+
 buildAppDockerImage {
     buildAppDockerImage.dependsOn subprojects.findAll{!it.childProjects}.deploy
 }
