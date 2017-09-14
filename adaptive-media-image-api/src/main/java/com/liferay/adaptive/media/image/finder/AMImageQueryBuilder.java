@@ -139,7 +139,7 @@ public interface AMImageQueryBuilder
 		 * <p>
 		 * The distance comparator is implemented based on the value returned by
 		 * the method {@link
-		 * com.liferay.adaptive.media.AMAttribute#distance(Object, Object)}.
+		 * AMAttribute#distance(Object, Object)}.
 		 * </p>
 		 *
 		 * <p>
