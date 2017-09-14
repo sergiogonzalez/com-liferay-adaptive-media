@@ -40,7 +40,9 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = {"destination.name=" + AMDestinationNames.AM_PROCESSOR},
+	property = {
+		"destination.name=" + AMDestinationNames.ADAPTIVE_MEDIA_PROCESSOR
+	},
 	service = MessageListener.class
 )
 public class AMMessageListener extends BaseMessageListener {

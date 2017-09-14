@@ -396,8 +396,6 @@ public class AMThumbnailsOSGiCommandsTest {
 			(Object)new String[] {String.valueOf(_company.getCompanyId())});
 	}
 
-	private static final String _AM_PROCESSOR = "liferay/am_processor";
-
 	private static final String _BUNDLE_SYMBOLIC_NAME =
 		"com.liferay.adaptive.media.document.library";
 
