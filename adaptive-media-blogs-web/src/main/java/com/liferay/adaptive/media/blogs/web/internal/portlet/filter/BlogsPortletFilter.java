@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.adaptive.media.blogs.web.internal.filter;
+package com.liferay.adaptive.media.blogs.web.internal.portlet.filter;
 
 import com.liferay.adaptive.media.content.transformer.ContentTransformerHandler;
 import com.liferay.adaptive.media.content.transformer.constants.ContentTransformerContentTypes;

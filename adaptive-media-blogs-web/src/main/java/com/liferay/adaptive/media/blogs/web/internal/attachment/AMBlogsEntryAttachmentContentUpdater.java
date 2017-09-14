@@ -15,11 +15,12 @@
 package com.liferay.adaptive.media.blogs.web.internal.attachment;
 
 import com.liferay.blogs.util.BlogsEntryAttachmentContentUpdater;
-import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.StringPool;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Tardín
@@ -31,16 +32,28 @@ import org.osgi.service.component.annotations.Component;
 public class AMBlogsEntryAttachmentContentUpdater
 	extends BlogsEntryAttachmentContentUpdater {
 
+	public AMBlogsEntryAttachmentContentUpdater() {
+	}
+
+	protected AMBlogsEntryAttachmentContentUpdater(
+		PortletFileRepository portletFileRepository) {
+
+		_portletFileRepository = portletFileRepository;
+	}
+
 	@Override
 	protected String getBlogsEntryAttachmentFileEntryImgTag(
 		FileEntry blogsEntryAttachmentFileEntry) {
 
-		String fileEntryURL = PortletFileRepositoryUtil.getPortletFileEntryURL(
+		String fileEntryURL = _portletFileRepository.getPortletFileEntryURL(
 			null, blogsEntryAttachmentFileEntry, StringPool.BLANK);
 
 		return "<img data-fileEntryId=\"" +
 			blogsEntryAttachmentFileEntry.getFileEntryId() + "\" src=\"" +
 				fileEntryURL + "\" />";
 	}
+
+	@Reference
+	private PortletFileRepository _portletFileRepository;
 
 }

@@ -97,7 +97,7 @@ public final class AMAsyncProcessorImpl<M, T>
 		TransactionCommitCallbackUtil.registerCallback(
 			() -> {
 				_messageBus.sendMessage(
-					AMDestinationNames.AM_PROCESSOR, message);
+					AMDestinationNames.ADAPTIVE_MEDIA_PROCESSOR, message);
 
 				return null;
 			});
@@ -143,7 +143,7 @@ public final class AMAsyncProcessorImpl<M, T>
 		TransactionCommitCallbackUtil.registerCallback(
 			() -> {
 				_messageBus.sendMessage(
-					AMDestinationNames.AM_PROCESSOR, message);
+					AMDestinationNames.ADAPTIVE_MEDIA_PROCESSOR, message);
 
 				return null;
 			});

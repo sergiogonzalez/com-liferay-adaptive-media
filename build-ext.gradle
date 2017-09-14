@@ -104,10 +104,10 @@ appDocker {
 }
 
 docker {
-    registryCredentials {
-        username = System.getenv().get("DOCKER_USER")
-        password = System.getenv().get("DOCKER_PWD")
-    }
+	registryCredentials {
+		username = System.getenv().get("DOCKER_USER")
+		password = System.getenv().get("DOCKER_PWD")
+	}
 }
 
 buildAppDockerImage {

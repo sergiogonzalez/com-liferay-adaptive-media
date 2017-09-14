@@ -15,7 +15,6 @@
 package com.liferay.adaptive.media.document.library.thumbnails.internal.commands.test;
 
 import com.liferay.adaptive.media.AdaptiveMedia;
-import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.DestinationReplacer;
 import com.liferay.adaptive.media.document.library.thumbnails.internal.test.util.PropsValuesReplacer;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.finder.AMImageFinder;
@@ -26,7 +25,6 @@ import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.document.library.kernel.util.DLPreviewableProcessor;
-import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -165,66 +163,48 @@ public class AMThumbnailsOSGiCommandsTest {
 
 	@Test
 	public void testCleanUpDeletesImageThumbnails() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_AM_PROCESSOR)) {
+		int count = _getThumbnailCount();
 
-			int count = _getThumbnailCount();
+		_addPNGFileEntry();
 
-			_addPNGFileEntry();
+		Assert.assertEquals(count + 1, _getThumbnailCount());
 
-			Assert.assertEquals(count + 1, _getThumbnailCount());
+		_cleanUp();
 
-			_cleanUp();
-
-			Assert.assertEquals(count, _getThumbnailCount());
-		}
+		Assert.assertEquals(count, _getThumbnailCount());
 	}
 
 	@Test
 	public void testCleanUpDeletesOnlyImageThumbnails() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_AM_PROCESSOR)) {
+		int count = _getThumbnailCount();
 
-			int count = _getThumbnailCount();
+		_addPDFFileEntry();
+		_addPNGFileEntry();
 
-			_addPDFFileEntry();
-			_addPNGFileEntry();
+		Assert.assertEquals(count + 2, _getThumbnailCount());
 
-			Assert.assertEquals(count + 2, _getThumbnailCount());
+		_cleanUp();
 
-			_cleanUp();
-
-			Assert.assertEquals(count + 1, _getThumbnailCount());
-		}
+		Assert.assertEquals(count + 1, _getThumbnailCount());
 	}
 
 	@Test
 	public void testMigrateDoesNotRemoveThumbnails() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_AM_PROCESSOR)) {
+		int count = _getThumbnailCount();
 
-			int count = _getThumbnailCount();
+		_addPDFFileEntry();
+		_addPNGFileEntry();
 
-			_addPDFFileEntry();
-			_addPNGFileEntry();
+		Assert.assertEquals(count + 2, _getThumbnailCount());
 
-			Assert.assertEquals(count + 2, _getThumbnailCount());
+		_migrate();
 
-			_migrate();
-
-			Assert.assertEquals(count + 2, _getThumbnailCount());
-		}
+		Assert.assertEquals(count + 2, _getThumbnailCount());
 	}
 
 	@Test
 	public void testMigrateOnlyProcessesImages() throws Exception {
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_AM_PROCESSOR);
-			PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
+		try (PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT", 100);
 			PropsValuesReplacer propsValuesReplacer2 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH", 100)) {
@@ -243,10 +223,7 @@ public class AMThumbnailsOSGiCommandsTest {
 	public void testMigrateThrowsExceptionWhenNoValidConfiguration()
 		throws Exception {
 
-		try (DestinationReplacer destinationReplacer = new DestinationReplacer(
-				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
-				_AM_PROCESSOR);
-			PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
+		try (PropsValuesReplacer propsValuesReplacer1 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT", 999);
 			PropsValuesReplacer propsValuesReplacer2 = new PropsValuesReplacer(
 				"DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT", 999)) {
@@ -418,8 +395,6 @@ public class AMThumbnailsOSGiCommandsTest {
 			service,
 			(Object)new String[] {String.valueOf(_company.getCompanyId())});
 	}
-
-	private static final String _AM_PROCESSOR = "liferay/am_processor";
 
 	private static final String _BUNDLE_SYMBOLIC_NAME =
 		"com.liferay.adaptive.media.document.library";

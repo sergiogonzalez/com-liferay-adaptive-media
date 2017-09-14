@@ -42,7 +42,6 @@ public class AMBlogsItemSelectorViewReturnTypeProvider
 
 		supportedItemSelectorReturnTypes.add(
 			new AMImageFileEntryItemSelectorReturnType());
-
 		supportedItemSelectorReturnTypes.add(
 			new AMImageURLItemSelectorReturnType());
 

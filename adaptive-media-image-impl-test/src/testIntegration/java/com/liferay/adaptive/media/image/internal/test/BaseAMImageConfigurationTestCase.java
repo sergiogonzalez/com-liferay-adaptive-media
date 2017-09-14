@@ -118,21 +118,21 @@ public abstract class BaseAMImageConfigurationTestCase {
 			CheckedRunnable runnable)
 		throws Exception {
 
-		String destinationName = AMImageDestinationNames.AM_IMAGE_CONFIGURATION;
-
 		List<Message> messages = new ArrayList<>();
 
 		MessageListener messageListener = messages::add;
 
 		MessageBusUtil.registerMessageListener(
-			destinationName, messageListener);
+			AMImageDestinationNames.ADAPTIVE_MEDIA_IMAGE_CONFIGURATION,
+			messageListener);
 
 		try {
 			runnable.run();
 		}
 		finally {
 			MessageBusUtil.unregisterMessageListener(
-				destinationName, messageListener);
+				AMImageDestinationNames.ADAPTIVE_MEDIA_IMAGE_CONFIGURATION,
+				messageListener);
 		}
 
 		return messages;

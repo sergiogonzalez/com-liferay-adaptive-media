@@ -451,14 +451,14 @@ public class AMBlogsEditorConfigContributorTest extends PowerMockito {
 	private List<ItemSelectorCriterion>
 		_getAudioItemSelectorCriterionFileEntryItemSelectorReturnType() {
 
+		List<ItemSelectorCriterion> itemSelectorCriteria = new ArrayList<>();
+
 		AudioItemSelectorCriterion audioItemSelectorCriterion =
 			new AudioItemSelectorCriterion();
 
 		audioItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
-
-		List<ItemSelectorCriterion> itemSelectorCriteria = new ArrayList<>();
 
 		itemSelectorCriteria.add(audioItemSelectorCriterion);
 
@@ -468,14 +468,14 @@ public class AMBlogsEditorConfigContributorTest extends PowerMockito {
 	private List<ItemSelectorCriterion>
 		_getBlogsItemSelectorCriterionFileEntryItemSelectorReturnType() {
 
+		List<ItemSelectorCriterion> itemSelectorCriteria = new ArrayList<>();
+
 		BlogsItemSelectorCriterion blogsItemSelectorCriterion =
 			new BlogsItemSelectorCriterion();
 
 		blogsItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
-
-		List<ItemSelectorCriterion> itemSelectorCriteria = new ArrayList<>();
 
 		itemSelectorCriteria.add(blogsItemSelectorCriterion);
 
@@ -485,14 +485,14 @@ public class AMBlogsEditorConfigContributorTest extends PowerMockito {
 	private List<ItemSelectorCriterion>
 		_getFileItemSelectorCriterionFileEntryItemSelectorReturnType() {
 
+		List<ItemSelectorCriterion> itemSelectorCriteria = new ArrayList<>();
+
 		FileItemSelectorCriterion fileItemSelectorCriterion =
 			new FileItemSelectorCriterion();
 
 		fileItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
-
-		List<ItemSelectorCriterion> itemSelectorCriteria = new ArrayList<>();
 
 		itemSelectorCriteria.add(fileItemSelectorCriterion);
 
