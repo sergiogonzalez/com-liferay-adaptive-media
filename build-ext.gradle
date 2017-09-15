@@ -111,10 +111,6 @@ docker {
 	}
 }
 
-buildAppDockerImage {
-	buildAppDockerImage.dependsOn subprojects.findAll{!it.childProjects}.deploy
-}
-
 allprojects {
 	ext {
 		dockerDestinationDir = prepareAppDockerImageInputDir.destinationDir
