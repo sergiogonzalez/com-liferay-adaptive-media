@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Adaptive Media Performance
+Bundle-SymbolicName: com.liferay.adaptive.media.performance
+Bundle-Version: 1.0.0
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title: Adaptive Media
+-dsannotations-options: inherit
