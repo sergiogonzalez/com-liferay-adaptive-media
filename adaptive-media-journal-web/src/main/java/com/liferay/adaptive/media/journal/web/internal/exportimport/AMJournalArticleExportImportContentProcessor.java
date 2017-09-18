@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.adaptive.media.blogs.internal.exportimport.content.processor;
+package com.liferay.adaptive.media.journal.web.internal.exportimport;
 
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -23,16 +23,15 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Adolfo Pérez
+ * @author Alejandro Tardín
  */
 @Component(
 	property = {
-		"model.class.name=com.liferay.blogs.kernel.model.BlogsEntry",
-		"model.class.name=com.liferay.blogs.model.BlogsEntry",
+		"model.class.name=com.liferay.journal.model.JournalArticle",
 		"service.ranking:Integer=100"
 	}
 )
-public class AMBlogsEntryExportImportContentProcessor
+public class AMJournalArticleExportImportContentProcessor
 	implements ExportImportContentProcessor<String> {
 
 	@Override
@@ -47,10 +46,12 @@ public class AMBlogsEntryExportImportContentProcessor
 				portletDataContext, stagedModel, content,
 				exportReferencedContent, escapeContent);
 
-		return _amHTMLExportImportContentProcessor.
-			replaceExportContentReferences(
-				portletDataContext, stagedModel, replacedContent,
-				exportReferencedContent, escapeContent);
+		return _amJournalArticleContentHTMLReplacer.replace(
+			replacedContent,
+			html -> _amHTMLExportImportContentProcessor.
+				replaceExportContentReferences(
+					portletDataContext, stagedModel, html,
+					exportReferencedContent, escapeContent));
 	}
 
 	@Override
@@ -63,9 +64,11 @@ public class AMBlogsEntryExportImportContentProcessor
 			_exportImportContentProcessor.replaceImportContentReferences(
 				portletDataContext, stagedModel, content);
 
-		return _amHTMLExportImportContentProcessor.
-			replaceImportContentReferences(
-				portletDataContext, stagedModel, replacedContent);
+		return _amJournalArticleContentHTMLReplacer.replace(
+			replacedContent,
+			html -> _amHTMLExportImportContentProcessor.
+				replaceImportContentReferences(
+					portletDataContext, stagedModel, html));
 	}
 
 	@Override
@@ -75,24 +78,32 @@ public class AMBlogsEntryExportImportContentProcessor
 		_exportImportContentProcessor.validateContentReferences(
 			groupId, content);
 
-		_amHTMLExportImportContentProcessor.validateContentReferences(
-			groupId, content);
-	}
+		try {
+			_amJournalArticleContentHTMLReplacer.replace(
+				content,
+				html -> {
+					_amHTMLExportImportContentProcessor.
+						validateContentReferences(groupId, html);
 
-	@Reference(
-		target = "(objectClass=com.liferay.blogs.internal.exportimport.content.processor.BlogsEntryExportImportContentProcessor)",
-		unbind = "-"
-	)
-	protected void setExportImportContentProcessor(
-		ExportImportContentProcessor<String> exportImportContentProcessor) {
-
-		_exportImportContentProcessor = exportImportContentProcessor;
+					return html;
+				});
+		}
+		catch (Exception e) {
+			throw new PortalException(e);
+		}
 	}
 
 	@Reference(target = "(adaptive.media.format=html)")
 	private ExportImportContentProcessor<String>
 		_amHTMLExportImportContentProcessor;
 
+	private final AMJournalArticleContentHTMLReplacer
+		_amJournalArticleContentHTMLReplacer =
+			new AMJournalArticleContentHTMLReplacer();
+
+	@Reference(
+		target = "(objectClass=com.liferay.journal.internal.exportimport.content.processor.JournalArticleExportImportContentProcessor)"
+	)
 	private ExportImportContentProcessor<String> _exportImportContentProcessor;
 
 }
