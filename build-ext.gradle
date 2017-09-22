@@ -81,18 +81,6 @@ configure(subprojects.findAll {!it.childProjects}) {
 			showStackTraces true
 		}
 	}
-
-	setUpTestableTomcat {
-		enabled = false
-	}
-
-	startTestableTomcat {
-		enabled = false
-	}
-
-	stopTestableTomcat {
-		enabled = false
-	}
 }
 
 apply plugin: AppDockerPlugin
