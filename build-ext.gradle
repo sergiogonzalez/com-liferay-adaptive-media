@@ -123,17 +123,6 @@ if (System.getenv('TRAVIS')) {
 		}
 	}
 
-	// This avoids the plugin building the image again on push
-
-	pushAppDockerImage.dependsOn = []
-
-	afterEvaluate {
-		for (DockerTagImage dockerTagImage in tasks.withType(DockerTagImage)) {
-			dockerTagImage.dependsOn = []
-			dockerTagImage.imageId = "${appDocker.imageUser}/${appDocker.imageName}"
-		}
-	}
-
 	task checkDocker() {
 		doLast {
 			def url = "http://localhost:8080"
