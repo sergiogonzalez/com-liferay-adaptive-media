@@ -21,30 +21,28 @@ import java.util.Comparator;
  * them. The meaning of this distance is dependent on the kind of value.
  *
  * @author Adolfo Pérez
- * @review
  */
 @FunctionalInterface
 public interface AMDistanceComparator<T> {
 
 	/**
 	 * Compare the two given values, returning a long value representing how far
-	 * they are from each other. The meaning of this distance is dependent on
-	 * the attribute kind.
+	 * they are from each other. The meaning of this distance depends on the kind
+	 * of attribute.
 	 *
 	 * @param  value1 the first value
 	 * @param  value2 the second value
 	 * @return The distance between the two values
-	 * @review
 	 */
 	public long compare(T value1, T value2);
 
 	/**
 	 * Return a comparator that is equivalent to this AMDistanceComparator.
 	 * Implementations of this interface must use saturated arithmetic,
-	 * guaranteeing the following condition:
+	 * guaranteeing the following conditions:
 	 *
 	 * <code>
-	 *     if amDistanceComparator.compare(a, b> < 0 then
+	 *     if amDistanceComparator.compare(a, b) < 0 then
 	 *         amDistanceComparator.toComparator().compare(a, b) < 0
 	 *
 	 *     if amDistanceComparator.compare(a, b) > 0 then
@@ -55,7 +53,6 @@ public interface AMDistanceComparator<T> {
 	 * </code>
 	 *
 	 * @return A {@link Comparator} equivalent to this AMDistanceComparator
-	 * @review
 	 */
 	public default Comparator<T> toComparator() {
 		return (value1, value2) -> (int)Math.max(
