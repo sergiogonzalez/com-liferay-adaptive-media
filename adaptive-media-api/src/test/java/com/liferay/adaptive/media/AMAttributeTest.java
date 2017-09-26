@@ -42,7 +42,7 @@ public class AMAttributeTest {
 
 	@Test(expected = AMRuntimeException.AMAttributeFormatException.class)
 	public void testContentLengthFailsForNonintegers() {
-		AMAttribute<?, Integer> contentLengthAMAttribute =
+		AMAttribute<?, Long> contentLengthAMAttribute =
 			AMAttribute.getContentLengthAMAttribute();
 
 		contentLengthAMAttribute.convert(StringUtil.randomString());
@@ -50,13 +50,14 @@ public class AMAttributeTest {
 
 	@Test
 	public void testContentLengthRecognizesIntegers() {
-		AMAttribute<?, Integer> contentLengthAMAttribute =
+		AMAttribute<?, Long> contentLengthAMAttribute =
 			AMAttribute.getContentLengthAMAttribute();
 
-		Integer value = RandomUtil.nextInt(Integer.MAX_VALUE);
+		long value = RandomUtil.nextInt(Integer.MAX_VALUE);
 
 		Assert.assertEquals(
-			value, contentLengthAMAttribute.convert(String.valueOf(value)));
+			value,
+			(long)contentLengthAMAttribute.convert(String.valueOf(value)));
 	}
 
 	@Test
