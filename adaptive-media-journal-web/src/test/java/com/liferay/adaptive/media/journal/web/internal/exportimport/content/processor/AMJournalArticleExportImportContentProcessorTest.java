@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.adaptive.media.journal.web.internal.exportimport;
+package com.liferay.adaptive.media.journal.web.internal.exportimport.content.processor;
 
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
