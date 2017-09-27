@@ -42,13 +42,14 @@ public class AMJournalArticleExportImportContentProcessor
 		throws Exception {
 
 		String replacedContent =
-			_exportImportContentProcessor.replaceExportContentReferences(
-				portletDataContext, stagedModel, content,
-				exportReferencedContent, escapeContent);
+			_journalArticleExportImportContentProcessor.
+				replaceExportContentReferences(
+					portletDataContext, stagedModel, content,
+					exportReferencedContent, escapeContent);
 
 		return _amJournalArticleContentHTMLReplacer.replace(
 			replacedContent,
-			html -> _amHTMLExportImportContentProcessor.
+			html -> _htmlExportImportContentProcessor.
 				replaceExportContentReferences(
 					portletDataContext, stagedModel, html,
 					exportReferencedContent, escapeContent));
@@ -61,12 +62,13 @@ public class AMJournalArticleExportImportContentProcessor
 		throws Exception {
 
 		String replacedContent =
-			_exportImportContentProcessor.replaceImportContentReferences(
-				portletDataContext, stagedModel, content);
+			_journalArticleExportImportContentProcessor.
+				replaceImportContentReferences(
+					portletDataContext, stagedModel, content);
 
 		return _amJournalArticleContentHTMLReplacer.replace(
 			replacedContent,
-			html -> _amHTMLExportImportContentProcessor.
+			html -> _htmlExportImportContentProcessor.
 				replaceImportContentReferences(
 					portletDataContext, stagedModel, html));
 	}
@@ -75,15 +77,15 @@ public class AMJournalArticleExportImportContentProcessor
 	public void validateContentReferences(long groupId, String content)
 		throws PortalException {
 
-		_exportImportContentProcessor.validateContentReferences(
+		_journalArticleExportImportContentProcessor.validateContentReferences(
 			groupId, content);
 
 		try {
 			_amJournalArticleContentHTMLReplacer.replace(
 				content,
 				html -> {
-					_amHTMLExportImportContentProcessor.
-						validateContentReferences(groupId, html);
+					_htmlExportImportContentProcessor.validateContentReferences(
+						groupId, html);
 
 					return html;
 				});
@@ -91,13 +93,6 @@ public class AMJournalArticleExportImportContentProcessor
 		catch (Exception e) {
 			throw new PortalException(e);
 		}
-	}
-
-	@Reference(target = "(adaptive.media.format=html)", unbind = "-")
-	protected void setAMHTMLExportImportContentProcessor(
-		ExportImportContentProcessor<String> exportImportContentProcessor) {
-
-		_amHTMLExportImportContentProcessor = exportImportContentProcessor;
 	}
 
 	@Reference(unbind = "-")
@@ -109,20 +104,30 @@ public class AMJournalArticleExportImportContentProcessor
 			amJournalArticleContentHTMLReplacer;
 	}
 
+	@Reference(target = "(adaptive.media.format=html)", unbind = "-")
+	protected void setHTMLExportImportContentProcessor(
+		ExportImportContentProcessor<String> htmlExportImportContentProcessor) {
+
+		_htmlExportImportContentProcessor = htmlExportImportContentProcessor;
+	}
+
 	@Reference(
 		target = "(objectClass=com.liferay.journal.internal.exportimport.content.processor.JournalArticleExportImportContentProcessor)",
 		unbind = "-"
 	)
 	protected void setJournalArticleExportImportContentProcessor(
-		ExportImportContentProcessor<String> exportImportContentProcessor) {
+		ExportImportContentProcessor<String>
+			journalArticleExportImportContentProcessor) {
 
-		_exportImportContentProcessor = exportImportContentProcessor;
+		_journalArticleExportImportContentProcessor =
+			journalArticleExportImportContentProcessor;
 	}
 
-	private ExportImportContentProcessor<String>
-		_amHTMLExportImportContentProcessor;
 	private AMJournalArticleContentHTMLReplacer
 		_amJournalArticleContentHTMLReplacer;
-	private ExportImportContentProcessor<String> _exportImportContentProcessor;
+	private ExportImportContentProcessor<String>
+		_htmlExportImportContentProcessor;
+	private ExportImportContentProcessor<String>
+		_journalArticleExportImportContentProcessor;
 
 }

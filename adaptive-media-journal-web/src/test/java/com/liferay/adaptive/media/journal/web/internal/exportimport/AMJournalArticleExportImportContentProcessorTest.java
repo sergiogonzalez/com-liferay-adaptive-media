@@ -18,6 +18,7 @@ import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import org.junit.Assert;
@@ -37,8 +38,8 @@ public class AMJournalArticleExportImportContentProcessorTest {
 			setAMJournalArticleContentHTMLReplacer(
 				_amJournalArticleContentHTMLReplacer);
 		_amJournalArticleExportImportContentProcessor.
-			setAMHTMLExportImportContentProcessor(
-				_amHTMLExportImportContentProcessor);
+			setHTMLExportImportContentProcessor(
+				_htmlExportImportContentProcessor);
 		_amJournalArticleExportImportContentProcessor.
 			setJournalArticleExportImportContentProcessor(
 				_journalArticleExportImportContentProcessor);
@@ -60,62 +61,73 @@ public class AMJournalArticleExportImportContentProcessorTest {
 	}
 
 	@Test
-	public void testExportCallsJournalAndAmHTMLContentProcessors()
+	public void testExportCallsBothExportImportContentProcessors()
 		throws Exception {
 
 		String originalContent = StringUtil.randomString();
-		String journalReplacedContent = StringUtil.randomString();
-		String finalContent = StringUtil.randomString();
+		String journalArticleReplacedContent = StringUtil.randomString();
 
 		Mockito.doReturn(
-			journalReplacedContent
+			journalArticleReplacedContent
 		).when(
 			_journalArticleExportImportContentProcessor
 		).replaceExportContentReferences(
 			_portletDataContext, _journalArticle, originalContent, false, false
 		);
 
+		String adaptiveMediaReplacedContent = StringUtil.randomString();
+
 		Mockito.doReturn(
-			finalContent
+			adaptiveMediaReplacedContent
 		).when(
-			_amHTMLExportImportContentProcessor
+			_htmlExportImportContentProcessor
 		).replaceExportContentReferences(
-			_portletDataContext, _journalArticle, journalReplacedContent, false,
-			false
+			_portletDataContext, _journalArticle, journalArticleReplacedContent,
+			false, false
 		);
 
-		Assert.assertEquals(finalContent, _export(originalContent));
+		Assert.assertEquals(
+			adaptiveMediaReplacedContent,
+			_amJournalArticleExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _journalArticle, originalContent,
+					false, false));
 	}
 
 	@Test
-	public void testImportCallsJournalAndAmHTMLContentProcessors()
+	public void testImportCallsBothExportImportContentProcessors()
 		throws Exception {
 
 		String originalContent = StringUtil.randomString();
-		String journalReplacedContent = StringUtil.randomString();
-		String finalContent = StringUtil.randomString();
+		String journalArticleReplacedContent = StringUtil.randomString();
 
 		Mockito.doReturn(
-			journalReplacedContent
+			journalArticleReplacedContent
 		).when(
 			_journalArticleExportImportContentProcessor
 		).replaceImportContentReferences(
 			_portletDataContext, _journalArticle, originalContent
 		);
 
+		String adaptiveMediaReplacedContent = StringUtil.randomString();
+
 		Mockito.doReturn(
-			finalContent
+			adaptiveMediaReplacedContent
 		).when(
-			_amHTMLExportImportContentProcessor
+			_htmlExportImportContentProcessor
 		).replaceImportContentReferences(
-			_portletDataContext, _journalArticle, journalReplacedContent
+			_portletDataContext, _journalArticle, journalArticleReplacedContent
 		);
 
-		Assert.assertEquals(finalContent, _import(originalContent));
+		Assert.assertEquals(
+			adaptiveMediaReplacedContent,
+			_amJournalArticleExportImportContentProcessor.
+				replaceImportContentReferences(
+					_portletDataContext, _journalArticle, originalContent));
 	}
 
 	@Test(expected = PortalException.class)
-	public void testValidateContentFailsWhAMHTMLProcessorFails()
+	public void testValidateContentFailsWhenHTMLExportImportContentProcessorFails()
 		throws Exception {
 
 		String content = StringUtil.randomString();
@@ -123,17 +135,17 @@ public class AMJournalArticleExportImportContentProcessorTest {
 		Mockito.doThrow(
 			PortalException.class
 		).when(
-			_amHTMLExportImportContentProcessor
+			_htmlExportImportContentProcessor
 		).validateContentReferences(
 			Mockito.anyLong(), Mockito.anyString()
 		);
 
 		_amJournalArticleExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), content);
 	}
 
 	@Test(expected = PortalException.class)
-	public void testValidateContentFailsWhenJournalProcessorFails()
+	public void testValidateContentFailsWhenJournalArticleExportImportContentProcessorFails()
 		throws Exception {
 
 		String content = StringUtil.randomString();
@@ -147,38 +159,26 @@ public class AMJournalArticleExportImportContentProcessorTest {
 		);
 
 		_amJournalArticleExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), content);
 	}
 
 	@Test
-	public void testValidateContentSucceedsWhenBothProcessorsSucceed()
+	public void testValidateContentSucceedsWhenBothExportImportContentProcessorsSucceed()
 		throws Exception {
 
 		_amJournalArticleExportImportContentProcessor.validateContentReferences(
-			1, StringUtil.randomString());
+			RandomTestUtil.randomLong(), StringUtil.randomString());
 	}
 
-	private String _export(String content) throws Exception {
-		return _amJournalArticleExportImportContentProcessor.
-			replaceExportContentReferences(
-				_portletDataContext, _journalArticle, content, false, false);
-	}
-
-	private String _import(String exportedContent) throws Exception {
-		return _amJournalArticleExportImportContentProcessor.
-			replaceImportContentReferences(
-				_portletDataContext, _journalArticle, exportedContent);
-	}
-
-	private final ExportImportContentProcessor<String>
-		_amHTMLExportImportContentProcessor = Mockito.mock(
-			ExportImportContentProcessor.class);
 	private final AMJournalArticleContentHTMLReplacer
 		_amJournalArticleContentHTMLReplacer = Mockito.mock(
 			AMJournalArticleContentHTMLReplacer.class);
 	private final AMJournalArticleExportImportContentProcessor
 		_amJournalArticleExportImportContentProcessor =
 			new AMJournalArticleExportImportContentProcessor();
+	private final ExportImportContentProcessor<String>
+		_htmlExportImportContentProcessor = Mockito.mock(
+			ExportImportContentProcessor.class);
 	private final JournalArticle _journalArticle = Mockito.mock(
 		JournalArticle.class);
 	private final ExportImportContentProcessor<String>

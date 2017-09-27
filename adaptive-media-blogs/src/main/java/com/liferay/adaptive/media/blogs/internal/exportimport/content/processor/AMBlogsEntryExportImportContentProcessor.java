@@ -43,14 +43,14 @@ public class AMBlogsEntryExportImportContentProcessor
 		throws Exception {
 
 		String replacedContent =
-			_exportImportContentProcessor.replaceExportContentReferences(
-				portletDataContext, stagedModel, content,
-				exportReferencedContent, escapeContent);
+			_blogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					portletDataContext, stagedModel, content,
+					exportReferencedContent, escapeContent);
 
-		return _amHTMLExportImportContentProcessor.
-			replaceExportContentReferences(
-				portletDataContext, stagedModel, replacedContent,
-				exportReferencedContent, escapeContent);
+		return _htmlExportImportContentProcessor.replaceExportContentReferences(
+			portletDataContext, stagedModel, replacedContent,
+			exportReferencedContent, escapeContent);
 	}
 
 	@Override
@@ -60,44 +60,47 @@ public class AMBlogsEntryExportImportContentProcessor
 		throws Exception {
 
 		String replacedContent =
-			_exportImportContentProcessor.replaceImportContentReferences(
-				portletDataContext, stagedModel, content);
+			_blogsEntryExportImportContentProcessor.
+				replaceImportContentReferences(
+					portletDataContext, stagedModel, content);
 
-		return _amHTMLExportImportContentProcessor.
-			replaceImportContentReferences(
-				portletDataContext, stagedModel, replacedContent);
+		return _htmlExportImportContentProcessor.replaceImportContentReferences(
+			portletDataContext, stagedModel, replacedContent);
 	}
 
 	@Override
 	public void validateContentReferences(long groupId, String content)
 		throws PortalException {
 
-		_exportImportContentProcessor.validateContentReferences(
+		_blogsEntryExportImportContentProcessor.validateContentReferences(
 			groupId, content);
 
-		_amHTMLExportImportContentProcessor.validateContentReferences(
+		_htmlExportImportContentProcessor.validateContentReferences(
 			groupId, content);
-	}
-
-	@Reference(target = "(adaptive.media.format=html)", unbind = "-")
-	protected void setAMHTMLExportImportContentProcessor(
-		ExportImportContentProcessor<String> exportImportContentProcessor) {
-
-		_amHTMLExportImportContentProcessor = exportImportContentProcessor;
 	}
 
 	@Reference(
 		target = "(objectClass=com.liferay.blogs.internal.exportimport.content.processor.BlogsEntryExportImportContentProcessor)",
 		unbind = "-"
 	)
-	protected void setBlogsExportImportContentProcessor(
-		ExportImportContentProcessor<String> exportImportContentProcessor) {
+	protected void setBlogsEntryExportImportContentProcessor(
+		ExportImportContentProcessor<String>
+			blogsEntryExportImportContentProcessor) {
 
-		_exportImportContentProcessor = exportImportContentProcessor;
+		_blogsEntryExportImportContentProcessor =
+			blogsEntryExportImportContentProcessor;
+	}
+
+	@Reference(target = "(adaptive.media.format=html)", unbind = "-")
+	protected void setHTMLExportImportContentProcessor(
+		ExportImportContentProcessor<String> htmlExportImportContentProcessor) {
+
+		_htmlExportImportContentProcessor = htmlExportImportContentProcessor;
 	}
 
 	private ExportImportContentProcessor<String>
-		_amHTMLExportImportContentProcessor;
-	private ExportImportContentProcessor<String> _exportImportContentProcessor;
+		_blogsEntryExportImportContentProcessor;
+	private ExportImportContentProcessor<String>
+		_htmlExportImportContentProcessor;
 
 }

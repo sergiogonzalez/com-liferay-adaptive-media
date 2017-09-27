@@ -18,6 +18,7 @@ import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import org.junit.Assert;
@@ -34,69 +35,82 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 	@Before
 	public void setUp() throws Exception {
 		_amBlogsEntryExportImportContentProcessor.
-			setAMHTMLExportImportContentProcessor(
-				_amHTMLExportImportContentProcessor);
+			setHTMLExportImportContentProcessor(
+				_htmlExportImportContentProcessor);
 		_amBlogsEntryExportImportContentProcessor.
-			setBlogsExportImportContentProcessor(
-				_blogsExportImportContentProcessor);
+			setBlogsEntryExportImportContentProcessor(
+				_blogsEntryExportImportContentProcessor);
 	}
 
 	@Test
-	public void testExportCallsBlogsAndAmHTMLContentProcessors()
+	public void testExportCallsBothExportImportContentProcessors()
 		throws Exception {
 
 		String originalContent = StringUtil.randomString();
-		String blogsReplacedContent = StringUtil.randomString();
-		String finalContent = StringUtil.randomString();
+		String blogsEntryReplacedContent = StringUtil.randomString();
 
 		Mockito.doReturn(
-			blogsReplacedContent
+			blogsEntryReplacedContent
 		).when(
-			_blogsExportImportContentProcessor
+			_blogsEntryExportImportContentProcessor
 		).replaceExportContentReferences(
 			_portletDataContext, _blogsEntry, originalContent, false, false
 		);
 
+		String adaptiveMediaReplacedContent = StringUtil.randomString();
+
 		Mockito.doReturn(
-			finalContent
+			adaptiveMediaReplacedContent
 		).when(
-			_amHTMLExportImportContentProcessor
+			_htmlExportImportContentProcessor
 		).replaceExportContentReferences(
-			_portletDataContext, _blogsEntry, blogsReplacedContent, false, false
+			_portletDataContext, _blogsEntry, blogsEntryReplacedContent, false,
+			false
 		);
 
-		Assert.assertEquals(finalContent, _export(originalContent));
+		Assert.assertEquals(
+			adaptiveMediaReplacedContent,
+			_amBlogsEntryExportImportContentProcessor.
+				replaceExportContentReferences(
+					_portletDataContext, _blogsEntry, originalContent, false,
+					false));
 	}
 
 	@Test
-	public void testImportCallsBlogsAndAmHTMLContentProcessors()
+	public void testImportCallsBothExportImportContentProcessors()
 		throws Exception {
 
 		String originalContent = StringUtil.randomString();
-		String blogsReplacedContent = StringUtil.randomString();
-		String finalContent = StringUtil.randomString();
+
+		String blogsEntryReplacedContent = StringUtil.randomString();
 
 		Mockito.doReturn(
-			blogsReplacedContent
+			blogsEntryReplacedContent
 		).when(
-			_blogsExportImportContentProcessor
+			_blogsEntryExportImportContentProcessor
 		).replaceImportContentReferences(
 			_portletDataContext, _blogsEntry, originalContent
 		);
 
+		String adaptiveMediaReplacedContent = StringUtil.randomString();
+
 		Mockito.doReturn(
-			finalContent
+			adaptiveMediaReplacedContent
 		).when(
-			_amHTMLExportImportContentProcessor
+			_htmlExportImportContentProcessor
 		).replaceImportContentReferences(
-			_portletDataContext, _blogsEntry, blogsReplacedContent
+			_portletDataContext, _blogsEntry, blogsEntryReplacedContent
 		);
 
-		Assert.assertEquals(finalContent, _import(originalContent));
+		Assert.assertEquals(
+			adaptiveMediaReplacedContent,
+			_amBlogsEntryExportImportContentProcessor.
+				replaceImportContentReferences(
+					_portletDataContext, _blogsEntry, originalContent));
 	}
 
 	@Test(expected = PortalException.class)
-	public void testValidateContentFailsWhAMHTMLProcessorFails()
+	public void testValidateContentFailsWhenBlogsEntryExportImportContentProcessorProcessorFails()
 		throws Exception {
 
 		String content = StringUtil.randomString();
@@ -104,17 +118,17 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		Mockito.doThrow(
 			PortalException.class
 		).when(
-			_amHTMLExportImportContentProcessor
+			_blogsEntryExportImportContentProcessor
 		).validateContentReferences(
 			Mockito.anyLong(), Mockito.anyString()
 		);
 
 		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), content);
 	}
 
 	@Test(expected = PortalException.class)
-	public void testValidateContentFailsWhenBlogsProcessorFails()
+	public void testValidateContentFailsWhenHTMLExportImportContentProcessorFails()
 		throws Exception {
 
 		String content = StringUtil.randomString();
@@ -122,44 +136,32 @@ public class AMBlogsEntryExportImportContentProcessorTest {
 		Mockito.doThrow(
 			PortalException.class
 		).when(
-			_blogsExportImportContentProcessor
+			_htmlExportImportContentProcessor
 		).validateContentReferences(
 			Mockito.anyLong(), Mockito.anyString()
 		);
 
 		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), content);
 	}
 
 	@Test
-	public void testValidateContentSucceedsWhenBothProcessorsSucceed()
+	public void testValidateContentSucceedsWhenBothExportImportContentProcessorsSucceed()
 		throws Exception {
 
 		_amBlogsEntryExportImportContentProcessor.validateContentReferences(
-			1, StringUtil.randomString());
-	}
-
-	private String _export(String content) throws Exception {
-		return _amBlogsEntryExportImportContentProcessor.
-			replaceExportContentReferences(
-				_portletDataContext, _blogsEntry, content, false, false);
-	}
-
-	private String _import(String exportedContent) throws Exception {
-		return _amBlogsEntryExportImportContentProcessor.
-			replaceImportContentReferences(
-				_portletDataContext, _blogsEntry, exportedContent);
+			RandomTestUtil.randomLong(), StringUtil.randomString());
 	}
 
 	private final AMBlogsEntryExportImportContentProcessor
 		_amBlogsEntryExportImportContentProcessor =
 			new AMBlogsEntryExportImportContentProcessor();
-	private final ExportImportContentProcessor<String>
-		_amHTMLExportImportContentProcessor = Mockito.mock(
-			ExportImportContentProcessor.class);
 	private final BlogsEntry _blogsEntry = Mockito.mock(BlogsEntry.class);
 	private final ExportImportContentProcessor<String>
-		_blogsExportImportContentProcessor = Mockito.mock(
+		_blogsEntryExportImportContentProcessor = Mockito.mock(
+			ExportImportContentProcessor.class);
+	private final ExportImportContentProcessor<String>
+		_htmlExportImportContentProcessor = Mockito.mock(
 			ExportImportContentProcessor.class);
 	private final PortletDataContext _portletDataContext = Mockito.mock(
 		PortletDataContext.class);
