@@ -31,7 +31,6 @@ public interface AMConfiguration {
 
 	/**
 	 * Sets the maximum size of workers to process adaptive media.
-	 *
 	 */
 	@Meta.AD(
 		deflt = "10", description = "workers-max-size-key-description",
@@ -41,7 +40,6 @@ public interface AMConfiguration {
 
 	/**
 	 * Sets the size of core workers to process adaptive media.
-	 *
 	 */
 	@Meta.AD(
 		deflt = "5", description = "workers-core-size-key-description",
