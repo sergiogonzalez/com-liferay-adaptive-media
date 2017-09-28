@@ -56,7 +56,7 @@ public interface AMDistanceComparator<T> {
 	 * </pre>
 	 * </p>
 	 *
-	 * @return A {@link Comparator} equivalent to this
+	 * @return a {@link Comparator} equivalent to this
 	 *         <code>AMDistanceComparator</code>
 	 */
 	public default Comparator<T> toComparator() {
