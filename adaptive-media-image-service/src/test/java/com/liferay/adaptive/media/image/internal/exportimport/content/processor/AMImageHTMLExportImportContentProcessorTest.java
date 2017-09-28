@@ -22,6 +22,7 @@ import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -72,10 +73,10 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		PowerMockito.mockStatic(ExportImportPathUtil.class);
 
-		_defineFileEntryToExport(1, _fileEntry1);
-		_defineFileEntryToImport(1, _fileEntry1);
-		_defineFileEntryToExport(2, _fileEntry2);
-		_defineFileEntryToImport(2, _fileEntry2);
+		_setUpFileEntryToExport(_fileEntryId1, _fileEntry1);
+		_setUpFileEntryToImport(_fileEntryId1, _fileEntry1);
+		_setUpFileEntryToExport(_fileEntryId2, _fileEntry2);
+		_setUpFileEntryToImport(_fileEntryId2, _fileEntry2);
 	}
 
 	@Test
@@ -96,22 +97,31 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 	@Test
 	public void testExportContentWithReferenceDoesNotEscape() throws Exception {
-		String content = "&<img data-fileentryid=\"1\" src=\"url\" />&";
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("&<img data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\" src=\"");
+		sb.append(StringUtil.randomString());
+		sb.append("\" />&");
 
 		Assert.assertEquals(
 			_amImageHTMLExportImportContentProcessor.
 				replaceExportContentReferences(
-					_portletDataContext, _stagedModel, content, false, false),
+					_portletDataContext, _stagedModel, sb.toString(), false,
+					false),
 			_amImageHTMLExportImportContentProcessor.
 				replaceExportContentReferences(
-					_portletDataContext, _stagedModel, content, false, true));
+					_portletDataContext, _stagedModel, sb.toString(), false,
+					true));
 	}
 
 	@Test
 	public void testExportContentWithStaticReferenceDoesNotEscape()
 		throws Exception {
 
-		String content = "&<picture data-fileentryid=\"1\"></picture>&";
+		String content =
+			"&<picture data-fileentryid=\"" + _fileEntryId1 + "\"></picture>&";
 
 		Assert.assertEquals(
 			_amImageHTMLExportImportContentProcessor.
@@ -126,67 +136,94 @@ public class AMImageHTMLExportImportContentProcessorTest {
 	public void testExportImportContentWithMultipleReferences()
 		throws Exception {
 
-		StringBundler sb = new StringBundler(4);
-
 		String prefix = StringUtil.randomString();
-
-		sb.append(prefix);
-
-		sb.append("<img src=\"url1\" data-fileEntryId=\"1\" />");
-
 		String infix = StringUtil.randomString();
-
-		sb.append(infix);
-
-		sb.append("<img src=\"url2\" data-fileEntryId=\"2\" />");
-
 		String suffix = StringUtil.randomString();
 
+		String urlFileEntry1 = StringUtil.randomString();
+		String urlFileEntry2 = StringUtil.randomString();
+
+		StringBundler expectedSB = new StringBundler(13);
+
+		expectedSB.append(prefix);
+		expectedSB.append("<img src=\"");
+		expectedSB.append(urlFileEntry1);
+		expectedSB.append("\" data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId1);
+		expectedSB.append("\" />");
+		expectedSB.append(infix);
+		expectedSB.append("<img src=\"");
+		expectedSB.append(urlFileEntry2);
+		expectedSB.append("\" data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId2);
+		expectedSB.append("\" />");
+		expectedSB.append(suffix);
+
+		StringBundler sb = new StringBundler(13);
+
+		sb.append(prefix);
+		sb.append("<img data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\" src=\"");
+		sb.append(urlFileEntry1);
+		sb.append("\" />");
+		sb.append(infix);
+		sb.append("<img data-fileentryid=\"");
+		sb.append(_fileEntryId2);
+		sb.append("\" src=\"");
+		sb.append(urlFileEntry2);
+		sb.append("\" />");
 		sb.append(suffix);
 
-		String content =
-			prefix + "<img data-fileentryid=\"1\" src=\"url1\" />" + infix +
-				"<img data-fileentryid=\"2\" src=\"url2\" />" + suffix;
-
-		String importedContent = _import(_export(content));
-
-		Assert.assertEquals(sb.toString(), importedContent);
+		Assert.assertEquals(
+			expectedSB.toString(), _import(_export(sb.toString())));
 	}
 
 	@Test
 	public void testExportImportContentWithMultipleStaticReferences()
 		throws Exception {
 
-		StringBundler sb = new StringBundler();
-
 		String prefix = StringUtil.randomString();
-
-		sb.append(prefix);
-
-		sb.append("<picture data-fileEntryId=\"1\">");
-		sb.append("<source /><img src=\"url1\" />");
-		sb.append("</picture>");
-
 		String infix = StringUtil.randomString();
-
-		sb.append(infix);
-
-		sb.append("<picture data-fileEntryId=\"2\">");
-		sb.append("<source /><img src=\"url2\" />");
-		sb.append("</picture>");
-
 		String suffix = StringUtil.randomString();
 
+		String urlFileEntry1 = StringUtil.randomString();
+		String urlFileEntry2 = StringUtil.randomString();
+
+		StringBundler expectedSB = new StringBundler(13);
+
+		expectedSB.append(prefix);
+		expectedSB.append("<picture data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId1);
+		expectedSB.append("\"><source /><img src=\"");
+		expectedSB.append(urlFileEntry1);
+		expectedSB.append("\" /></picture>");
+		expectedSB.append(infix);
+		expectedSB.append("<picture data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId2);
+		expectedSB.append("\"><source /><img src=\"");
+		expectedSB.append(urlFileEntry2);
+		expectedSB.append("\" /></picture>");
+		expectedSB.append(suffix);
+
+		StringBundler sb = new StringBundler(13);
+
+		sb.append(prefix);
+		sb.append("<picture data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\"><img src=\"");
+		sb.append(urlFileEntry1);
+		sb.append("\" /></picture>");
+		sb.append(infix);
+		sb.append("<picture data-fileentryid=\"");
+		sb.append(_fileEntryId2);
+		sb.append("\"><img src=\"");
+		sb.append(urlFileEntry2);
+		sb.append("\" /></picture>");
 		sb.append(suffix);
 
-		String content =
-			prefix + "<picture data-fileentryid=\"1\"><img src=\"url1\" />" +
-				"</picture>" + infix + "<picture data-fileentryid=\"2\">" +
-					"<img src=\"url2\" /></picture>" + suffix;
-
-		String importedContent = _import(_export(content));
-
-		Assert.assertEquals(sb.toString(), importedContent);
+		Assert.assertEquals(
+			expectedSB.toString(), _import(_export(sb.toString())));
 	}
 
 	@Test
@@ -203,15 +240,30 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		String prefix = StringUtil.randomString();
 		String suffix = StringUtil.randomString();
 
-		String content =
-			prefix + "<img data-fileentryid=\"1\" src=\"url\" />" + suffix;
+		StringBundler expectedSB = new StringBundler(7);
 
-		String importedContent = _import(_export(content));
+		String urlFileEntry1 = StringUtil.randomString();
+
+		expectedSB.append(prefix);
+		expectedSB.append("<img src=\"");
+		expectedSB.append(urlFileEntry1);
+		expectedSB.append("\" data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId1);
+		expectedSB.append("\" />");
+		expectedSB.append(suffix);
+
+		StringBundler sb = new StringBundler(7);
+
+		sb.append(prefix);
+		sb.append("<img data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\" src=\"");
+		sb.append(urlFileEntry1);
+		sb.append("\" />");
+		sb.append(suffix);
 
 		Assert.assertEquals(
-			prefix + "<img src=\"url\" data-fileEntryId=\"1\" />" +
-				suffix,
-			importedContent);
+			expectedSB.toString(), _import(_export(sb.toString())));
 	}
 
 	@Test
@@ -221,16 +273,30 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		String prefix = StringUtil.randomString();
 		String suffix = StringUtil.randomString();
 
-		String content =
-			prefix + "<img attr1=\"1\" data-fileentryid=\"1\" attr2=\"2\" " +
-				"src=\"url\" attr3=\"3\"/>" + suffix;
+		String urlFileEntry1 = StringUtil.randomString();
 
-		String importedContent = _import(_export(content));
+		StringBundler expectedSB = new StringBundler(7);
+
+		expectedSB.append(prefix);
+		expectedSB.append("<img attr1=\"1\" attr2=\"2\" src=\"");
+		expectedSB.append(urlFileEntry1);
+		expectedSB.append("\" attr3=\"3\" data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId1);
+		expectedSB.append("\" />");
+		expectedSB.append(suffix);
+
+		StringBundler sb = new StringBundler(7);
+
+		sb.append(prefix);
+		sb.append("<img attr1=\"1\" data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\" attr2=\"2\" src=\"");
+		sb.append(urlFileEntry1);
+		sb.append("\" attr3=\"3\"/>");
+		sb.append(suffix);
 
 		Assert.assertEquals(
-			prefix + "<img attr1=\"1\" attr2=\"2\" src=\"url\" attr3=\"3\" " +
-				"data-fileEntryId=\"1\" />" + suffix,
-			importedContent);
+			expectedSB.toString(), _import(_export(sb.toString())));
 	}
 
 	@Test
@@ -238,52 +304,76 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		String prefix = StringUtil.randomString();
 		String suffix = StringUtil.randomString();
 
-		String content =
-			prefix + "<picture data-fileentryid=\"1\">" +
-				"<img src=\"url\" /></picture>" + suffix;
+		String urlFileEntry1 = StringUtil.randomString();
 
-		String importedContent = _import(_export(content));
+		StringBundler expectedSB = new StringBundler(7);
+
+		expectedSB.append(prefix);
+		expectedSB.append("<picture data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId1);
+		expectedSB.append("\"><source /><img src=\"");
+		expectedSB.append(urlFileEntry1);
+		expectedSB.append("\" /></picture>");
+		expectedSB.append(suffix);
+
+		StringBundler sb = new StringBundler(7);
+
+		sb.append(prefix);
+		sb.append("<picture data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\"><img src=\"");
+		sb.append(urlFileEntry1);
+		sb.append("\" /></picture>");
+		sb.append(suffix);
 
 		Assert.assertEquals(
-			prefix + "<picture data-fileEntryId=\"1\"><source />" +
-				"<img src=\"url\" /></picture>" + suffix,
-			importedContent);
+			expectedSB.toString(), _import(_export(sb.toString())));
 	}
 
 	@Test
 	public void testExportImportContentWithStaticReferenceContainingImageWithAttributes()
 		throws Exception {
 
-		String content =
-			"<picture data-fileentryid=\"1\"><img src=\"url\" " +
-				"class=\"pretty\" /></picture>";
+		String urlFileEntry1 = StringUtil.randomString();
 
-		String importedContent = _import(_export(content));
+		StringBundler expectedSB = new StringBundler(5);
+
+		expectedSB.append("<picture data-fileEntryId=\"");
+		expectedSB.append(_fileEntryId1);
+		expectedSB.append("\"><source /><img src=\"");
+		expectedSB.append(urlFileEntry1);
+		expectedSB.append("\" class=\"pretty\" /></picture>");
+
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("<picture data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\"><img src=\"");
+		sb.append(urlFileEntry1);
+		sb.append("\" class=\"pretty\" /></picture>");
 
 		Assert.assertEquals(
-			"<picture data-fileEntryId=\"1\"><source /><img src=\"url\" " +
-				"class=\"pretty\" /></picture>",
-			importedContent);
+			expectedSB.toString(), _import(_export(sb.toString())));
 	}
 
 	@Test
 	public void testImportContentIgnoresInvalidReferences() throws Exception {
-		String content = "<img export-import-path=\"PATH_1\" />";
-
 		Mockito.doThrow(
 			PortalException.class
 		).when(
 			_dlAppLocalService
 		).getFileEntry(
-			1
+			_fileEntryId1
 		);
 
-		String replacedContent =
+		String content =
+			"<img export-import-path=\"PATH_" + _fileEntryId1 + "\" />";
+
+		Assert.assertEquals(
+			content,
 			_amImageHTMLExportImportContentProcessor.
 				replaceImportContentReferences(
-					_portletDataContext, _stagedModel, content);
-
-		Assert.assertEquals(content, replacedContent);
+					_portletDataContext, _stagedModel, content));
 	}
 
 	@Test
@@ -292,12 +382,11 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		String content = "<picture export-import-path=\"#@¢∞\"></picture>";
 
-		String replacedContent =
+		Assert.assertEquals(
+			content,
 			_amImageHTMLExportImportContentProcessor.
 				replaceImportContentReferences(
-					_portletDataContext, _stagedModel, content);
-
-		Assert.assertEquals(content, replacedContent);
+					_portletDataContext, _stagedModel, content));
 	}
 
 	@Test
@@ -306,63 +395,89 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		String content = "<img export-import-path=\"#@¢∞\" />";
 
-		String replacedContent =
+		Assert.assertEquals(
+			content,
 			_amImageHTMLExportImportContentProcessor.
 				replaceImportContentReferences(
-					_portletDataContext, _stagedModel, content);
-
-		Assert.assertEquals(content, replacedContent);
+					_portletDataContext, _stagedModel, content));
 	}
 
 	@Test(expected = NoSuchFileEntryException.class)
 	public void testValidateContentFailsWithInvalidReferences()
 		throws Exception {
 
-		String content = "<img data-fileentryid=\"0\" src=\"PATH_1\" />";
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("<img data-fileentryid=\"");
+		sb.append(RandomTestUtil.randomLong());
+		sb.append("\" src=\"PATH_");
+		sb.append(_fileEntryId1);
+		sb.append("\" />");
 
 		_amImageHTMLExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), sb.toString());
 	}
 
 	@Test(expected = NoSuchFileEntryException.class)
 	public void testValidateContentFailsWithInvalidStaticReferences()
 		throws Exception {
 
-		String content = "<picture data-fileentryid=\"0\"></picture>";
+		String content =
+			"<picture data-fileentryid=\"" + RandomTestUtil.randomLong() +
+				"\"></picture>";
 
 		_amImageHTMLExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), content);
 	}
 
 	@Test
 	public void testValidateContentSucceedsWhenAllReferencesAreValid()
 		throws Exception {
 
-		String content = "<img data-fileentryid=\"1\" src=\"PATH_1\" />";
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("<img data-fileentryid=\"");
+		sb.append(_fileEntryId1);
+		sb.append("\" src=\"PATH_");
+		sb.append(_fileEntryId1);
+		sb.append("\" />");
 
 		_amImageHTMLExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), sb.toString());
 	}
 
 	@Test
 	public void testValidateContentSucceedsWhenAllStaticReferencesAreValid()
 		throws Exception {
 
-		String content = "<picture data-fileentryid=\"1\"></picture>";
-
 		Mockito.doReturn(
 			_fileEntry1
 		).when(
 			_dlAppLocalService
 		).getFileEntry(
-			Mockito.anyLong()
+			_fileEntryId1
 		);
 
+		String content =
+			"<picture data-fileentryid=\"" + _fileEntryId1 + "\"></picture>";
+
 		_amImageHTMLExportImportContentProcessor.validateContentReferences(
-			1, content);
+			RandomTestUtil.randomLong(), content);
 	}
 
-	private void _defineFileEntryToExport(long fileEntryId, FileEntry fileEntry)
+	private String _export(String content) throws Exception {
+		return _amImageHTMLExportImportContentProcessor.
+			replaceExportContentReferences(
+				_portletDataContext, _stagedModel, content, false, false);
+	}
+
+	private String _import(String exportedContent) throws Exception {
+		return _amImageHTMLExportImportContentProcessor.
+			replaceImportContentReferences(
+				_portletDataContext, _stagedModel, exportedContent);
+	}
+
+	private void _setUpFileEntryToExport(long fileEntryId, FileEntry fileEntry)
 		throws PortalException {
 
 		Mockito.doReturn(
@@ -380,7 +495,7 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		);
 	}
 
-	private void _defineFileEntryToImport(long fileEntryId, FileEntry fileEntry)
+	private void _setUpFileEntryToImport(long fileEntryId, FileEntry fileEntry)
 		throws Exception {
 
 		Mockito.doReturn(
@@ -419,17 +534,8 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		);
 	}
 
-	private String _export(String content) throws Exception {
-		return _amImageHTMLExportImportContentProcessor.
-			replaceExportContentReferences(
-				_portletDataContext, _stagedModel, content, false, false);
-	}
-
-	private String _import(String exportedContent) throws Exception {
-		return _amImageHTMLExportImportContentProcessor.
-			replaceImportContentReferences(
-				_portletDataContext, _stagedModel, exportedContent);
-	}
+	private static final long _fileEntryId1 = RandomTestUtil.randomLong();
+	private static final long _fileEntryId2 = RandomTestUtil.randomLong();
 
 	private final AMEmbeddedReferenceSet _amEmbeddedReferenceSet = Mockito.mock(
 		AMEmbeddedReferenceSet.class);
