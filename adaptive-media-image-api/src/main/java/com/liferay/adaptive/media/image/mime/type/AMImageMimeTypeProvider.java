@@ -22,10 +22,9 @@ package com.liferay.adaptive.media.image.mime.type;
 public interface AMImageMimeTypeProvider {
 
 	/**
-	 * Returns the supported mime types that can generate adaptive media images.
+	 * Returns the supported mime types that generate adaptive media images.
 	 *
-	 * @return the supported mime types that can generate Adaptive Media images.
-	 *
+	 * @return the supported mime types that generate adaptive media images
 	 */
 	public String[] getSupportedMimeTypes();
 
