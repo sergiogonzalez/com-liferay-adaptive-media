@@ -92,18 +92,14 @@ public final class AMAttribute<T, V> {
 	 * Creates a new attribute. All attributes live in the same global
 	 * namespace.
 	 *
-	 * @param name a human-readable value that uniquely identifies this
-	 *        attribute
-	 * @param converter a function that can convert a <code>String</code> to a
+	 * @param name a value that uniquely identifies the attribute
+	 * @param converter a function that converts a <code>String</code> to a
 	 *        value of the correct type; this function should throw an {@link
 	 *        com.liferay.adaptive.media.exception.AMRuntimeException.AMAttributeFormatException}
-	 *        if it cannot convert the String.
-	 * @param amDistanceComparator compares its two arguments for order
-	 *        considering the distance between their values; it should return a
+	 *        if it cannot convert the <code>String</code>
+	 * @param amDistanceComparator the comparator to order the two arguments
+	 *        based on the distance between their values; it should return a
 	 *        value between {@link Long#MIN_VALUE} and {@link Long#MAX_VALUE}
-	 *        based on the distance of the values.
-	 *
-	 * @review
 	 */
 	public AMAttribute(
 		String name, Function<String, V> converter,
@@ -115,17 +111,13 @@ public final class AMAttribute<T, V> {
 	}
 
 	/**
-	 * Compares its two arguments for order. Returns a negative long, zero, or a
-	 * positive long depending on whether the first argument is less than, equal
-	 * to, or greater than the second argument respectively.
+	 * Compares the two arguments for order.
 	 *
-	 * @param  value1 The first value to be compared
-	 * @param  value2 The second value to be compared
-	 * @return a negative long, zero, or a positive long depending on whether
-	 *         the first argument is less than, equal to, or greater than the
-	 *         second argument respectively.
-	 *
-	 * @review
+	 * @param  value1 the first value to compare
+	 * @param  value2 the second value to compare
+	 * @return a negative long, zero, or positive long, depending on whether the
+	 *         first argument is less than, equal to, or greater than the second
+	 *         argument
 	 */
 	public long compare(V value1, V value2) {
 		return _amDistanceComparator.compare(value1, value2);
@@ -146,9 +138,8 @@ public final class AMAttribute<T, V> {
 	 *
 	 * @param  value1 the first value
 	 * @param  value2 the second value
-	 * @return a value between 0 and {@link Long#MAX_VALUE} representing the
+	 * @return a value between 0 and {@link Long#MAX_VALUE}, representing the
 	 *         distance between the two values
-	 * @review
 	 */
 	public long distance(V value1, V value2) {
 		return Math.abs(_amDistanceComparator.compare(value1, value2));
