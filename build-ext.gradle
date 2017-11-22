@@ -166,8 +166,8 @@ if (System.getenv('TRAVIS')) {
 		'-p', '8099:8099',
 		'-p', '8778:8778',
 		'-p', '11311:11311',
-		'-v', "${rootDir}/build/jacoco:/jacoco",
-		'-v', "${getClientDeployDir()}:/liferay/deploy",
+		'-v', "${rootDir}/build/jacoco:/usr/local/liferay-ce-portal-7.0-ga5/jacoco",
+		'-v', "${getClientDeployDir()}:/usr/local/liferay-ce-portal-7.0-ga5/deploy",
 		'-d',
 		'--name', "com-liferay-adaptive-media",
 		getImageNameWithUserAndVersion()
