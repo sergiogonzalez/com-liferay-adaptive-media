@@ -51,11 +51,14 @@ public final class AMAsyncProcessorImpl<M, T>
 		modelIds.remove(modelId);
 
 		if (_log.isInfoEnabled()) {
-			_log.info(
-				StringBundler.concat(
-					"Cleaned queue for model ID ", modelId,
-					" and adaptive media processor command ",
-					String.valueOf(amProcessorCommand)));
+			StringBundler sb = new StringBundler(4);
+
+			sb.append("Cleaned queue for model ID ");
+			sb.append(modelId);
+			sb.append(" and adaptive media processor command ");
+			sb.append(String.valueOf(amProcessorCommand));
+
+			_log.info(sb.toString());
 		}
 	}
 

@@ -49,10 +49,16 @@ public class AMBlogsEntryAttachmentContentUpdater
 		String fileEntryURL = _portletFileRepository.getPortletFileEntryURL(
 			null, blogsEntryAttachmentFileEntry, StringPool.BLANK);
 
-		return StringBundler.concat(
-			"<img data-fileEntryId=\"",
-			String.valueOf(blogsEntryAttachmentFileEntry.getFileEntryId()),
-			"\" src=\"", fileEntryURL, "\" />");
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<img data-fileEntryId=\"");
+		sb.append(
+			String.valueOf(blogsEntryAttachmentFileEntry.getFileEntryId()));
+		sb.append("\" src=\"");
+		sb.append(fileEntryURL);
+		sb.append("\" />");
+
+		return sb.toString();
 	}
 
 	@Reference
