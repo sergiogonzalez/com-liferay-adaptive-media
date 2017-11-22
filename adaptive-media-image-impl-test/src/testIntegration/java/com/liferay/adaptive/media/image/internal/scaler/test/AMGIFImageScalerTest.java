@@ -35,8 +35,9 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.test.ServiceTestUtil;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,21 +67,27 @@ public class AMGIFImageScalerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Assume.assumeTrue(_amImageScaler.isEnabled());
+		AMImageConfigurationHelper amImageConfigurationHelper = _getService(
+			AMImageConfigurationHelper.class);
+
+		AMImageScaler amImageScaler = _getService(
+			AMImageScaler.class, "(mime.type=image/gif)");
+
+		Assume.assumeTrue(amImageScaler.isEnabled());
 
 		_group = GroupTestUtil.addGroup();
 
 		ServiceTestUtil.setUser(TestPropsValues.getUser());
 
 		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
-			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+			amImageConfigurationHelper.getAMImageConfigurationEntries(
 				TestPropsValues.getCompanyId(),
 				amImageConfigurationEntry -> true);
 
 		for (AMImageConfigurationEntry amImageConfigurationEntry :
 				amImageConfigurationEntries) {
 
-			_amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
+			amImageConfigurationHelper.forceDeleteAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(),
 				amImageConfigurationEntry.getUUID());
 		}
@@ -90,6 +97,9 @@ public class AMGIFImageScalerTest {
 
 	@Test
 	public void testAMGIFImageScaler() throws Exception {
+		AMImageScaler amImageScaler = _getService(
+			AMImageScaler.class, "(mime.type=image/gif)");
+
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
@@ -97,7 +107,7 @@ public class AMGIFImageScalerTest {
 
 		FileEntry fileEntry = _addFileEntry();
 
-		AMImageScaledImage amImageScaledImage = _amImageScaler.scaleImage(
+		AMImageScaledImage amImageScaledImage = amImageScaler.scaleImage(
 			fileEntry.getFileVersion(), _amImageConfigurationEntry);
 
 		Assert.assertEquals(25, amImageScaledImage.getHeight());
@@ -119,14 +129,41 @@ public class AMGIFImageScalerTest {
 	}
 
 	private AMImageConfigurationEntry _addTestVariant() throws Exception {
+		AMImageConfigurationHelper amImageConfigurationHelper = _getService(
+			AMImageConfigurationHelper.class);
+
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		return _amImageConfigurationHelper.addAMImageConfigurationEntry(
+		return amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "small", StringPool.BLANK, "0",
 			properties);
+	}
+
+	private <T> T _getService(Class<T> clazz) {
+		try {
+			Registry registry = RegistryUtil.getRegistry();
+
+			return registry.getService(clazz);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private <T> T _getService(Class<T> clazz, String filter) {
+		try {
+			Registry registry = RegistryUtil.getRegistry();
+
+			Collection<T> services = registry.getServices(clazz, filter);
+
+			return services.iterator().next();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static final String _FILE_PATH_GIF_IMAGE =
@@ -138,12 +175,6 @@ public class AMGIFImageScalerTest {
 			"/dependencies/scaled.gif";
 
 	private AMImageConfigurationEntry _amImageConfigurationEntry;
-
-	@Inject
-	private AMImageConfigurationHelper _amImageConfigurationHelper;
-
-	@Inject(filter = "mime.type=image/gif", type = AMImageScaler.class)
-	private AMImageScaler _amImageScaler;
 
 	@DeleteAfterTestRun
 	private Group _group;
