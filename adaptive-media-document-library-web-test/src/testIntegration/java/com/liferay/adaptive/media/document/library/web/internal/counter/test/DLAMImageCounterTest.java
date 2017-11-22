@@ -19,8 +19,8 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.blogs.constants.BlogsConstants;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
-import com.liferay.document.library.kernel.service.DLAppLocalService;
-import com.liferay.document.library.kernel.service.DLTrashLocalService;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLTrashLocalServiceUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -39,8 +39,11 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+
+import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -65,6 +68,9 @@ public class DLAMImageCounterTest {
 
 	@Before
 	public void setUp() throws Exception {
+		_amImageCounter = _getService(
+			AMImageCounter.class, "(adaptive.media.key=document-library)");
+
 		_company1 = CompanyTestUtil.addCompany();
 
 		_user1 = UserTestUtil.getAdminUser(_company1.getCompanyId());
@@ -95,7 +101,7 @@ public class DLAMImageCounterTest {
 			ServiceContextTestUtil.getServiceContext(
 				_group1, _user1.getUserId());
 
-		_dlAppLocalService.addFileEntry(
+		DLAppLocalServiceUtil.addFileEntry(
 			_user1.getUserId(), _group1.getGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
@@ -131,7 +137,7 @@ public class DLAMImageCounterTest {
 			ServiceContextTestUtil.getServiceContext(
 				_group1, _user1.getUserId());
 
-		_dlAppLocalService.addFileEntry(
+		DLAppLocalServiceUtil.addFileEntry(
 			_user1.getUserId(), _group1.getGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
@@ -167,7 +173,7 @@ public class DLAMImageCounterTest {
 			ServiceContextTestUtil.getServiceContext(
 				_group1, _user1.getUserId());
 
-		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
+		FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(
 			_user1.getUserId(), _group1.getGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
@@ -178,7 +184,7 @@ public class DLAMImageCounterTest {
 			_amImageCounter.countExpectedAMImageEntries(
 				_company1.getCompanyId()));
 
-		_dlTrashLocalService.moveFileEntryToTrash(
+		DLTrashLocalServiceUtil.moveFileEntryToTrash(
 			_user1.getUserId(), _group1.getGroupId(),
 			fileEntry.getFileEntryId());
 
@@ -201,13 +207,13 @@ public class DLAMImageCounterTest {
 			ServiceContextTestUtil.getServiceContext(
 				_group1, _user1.getUserId());
 
-		_dlAppLocalService.addFileEntry(
+		DLAppLocalServiceUtil.addFileEntry(
 			_user1.getUserId(), _group1.getGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
 			_getImageBytes(), serviceContext);
 
-		_dlAppLocalService.addFileEntry(
+		DLAppLocalServiceUtil.addFileEntry(
 			_user1.getUserId(), _group1.getGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString(),
@@ -227,10 +233,19 @@ public class DLAMImageCounterTest {
 				"/counter/test/dependencies/image.jpg");
 	}
 
-	@Inject(
-		filter = "adaptive.media.key=document-library",
-		type = AMImageCounter.class
-	)
+	private <T> T _getService(Class<T> clazz, String filter) {
+		try {
+			Registry registry = RegistryUtil.getRegistry();
+
+			Collection<T> services = registry.getServices(clazz, filter);
+
+			return services.iterator().next();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private AMImageCounter _amImageCounter;
 
 	@DeleteAfterTestRun
@@ -238,12 +253,6 @@ public class DLAMImageCounterTest {
 
 	@DeleteAfterTestRun
 	private Company _company2;
-
-	@Inject
-	private DLAppLocalService _dlAppLocalService;
-
-	@Inject
-	private DLTrashLocalService _dlTrashLocalService;
 
 	private Group _group1;
 	private Group _group2;

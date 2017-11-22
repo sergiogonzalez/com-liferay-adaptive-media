@@ -33,7 +33,7 @@ import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
-import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -49,7 +49,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -440,7 +439,7 @@ public class AMImageEntryLocalServiceTest {
 		finally {
 			_unregisterAMImageCounter(amImageCounterServiceRegistration);
 
-			_companyLocalService.deleteCompany(company);
+			CompanyLocalServiceUtil.deleteCompany(company);
 		}
 	}
 
@@ -470,7 +469,7 @@ public class AMImageEntryLocalServiceTest {
 			_unregisterAMImageCounter(amImageCounterServiceRegistration1);
 			_unregisterAMImageCounter(amImageCounterServiceRegistration2);
 
-			_companyLocalService.deleteCompany(company);
+			CompanyLocalServiceUtil.deleteCompany(company);
 		}
 	}
 
@@ -516,7 +515,7 @@ public class AMImageEntryLocalServiceTest {
 		finally {
 			_unregisterAMImageCounter(amImageCounterServiceRegistration);
 
-			_companyLocalService.deleteCompany(company);
+			CompanyLocalServiceUtil.deleteCompany(company);
 		}
 	}
 
@@ -569,7 +568,7 @@ public class AMImageEntryLocalServiceTest {
 		finally {
 			_unregisterAMImageCounter(amImageCounterServiceRegistration);
 
-			_companyLocalService.deleteCompany(company);
+			CompanyLocalServiceUtil.deleteCompany(company);
 		}
 	}
 
@@ -589,7 +588,7 @@ public class AMImageEntryLocalServiceTest {
 					amImageConfigurationEntry1.getUUID()));
 		}
 		finally {
-			_companyLocalService.deleteCompany(company);
+			CompanyLocalServiceUtil.deleteCompany(company);
 		}
 	}
 
@@ -684,9 +683,6 @@ public class AMImageEntryLocalServiceTest {
 
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
 	private BundleContext _bundleContext;
-
-	@Inject
-	private CompanyLocalService _companyLocalService;
 
 	@DeleteAfterTestRun
 	private Group _group;

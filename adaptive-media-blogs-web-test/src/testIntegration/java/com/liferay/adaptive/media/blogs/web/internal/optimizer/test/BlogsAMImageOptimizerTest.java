@@ -17,12 +17,12 @@ package com.liferay.adaptive.media.blogs.web.internal.optimizer.test;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.adaptive.media.image.optimizer.AMImageOptimizer;
-import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
+import com.liferay.adaptive.media.image.service.AMImageEntryLocalServiceUtil;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.blogs.model.BlogsEntry;
-import com.liferay.blogs.service.BlogsEntryLocalService;
+import com.liferay.blogs.kernel.model.BlogsEntry;
+import com.liferay.blogs.kernel.service.BlogsEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
-import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -41,8 +41,9 @@ import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
 
 import java.util.Collection;
 import java.util.Date;
@@ -73,6 +74,12 @@ public class BlogsAMImageOptimizerTest {
 
 	@Before
 	public void setUp() throws Exception {
+		_amImageConfigurationHelper = _getService(
+			AMImageConfigurationHelper.class);
+
+		_amImageOptimizer = _getService(
+			AMImageOptimizer.class, "(adaptive.media.key=blogs)");
+
 		_company1 = CompanyTestUtil.addCompany();
 
 		_user1 = UserTestUtil.getAdminUser(_company1.getCompanyId());
@@ -109,12 +116,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 
@@ -122,12 +129,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 	}
@@ -146,12 +153,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company2.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 
@@ -159,12 +166,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company2.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 
@@ -172,12 +179,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company2.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 	}
@@ -195,12 +202,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 
@@ -209,12 +216,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			0,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 
@@ -223,12 +230,12 @@ public class BlogsAMImageOptimizerTest {
 
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry1.getUUID()));
 		Assert.assertEquals(
 			1,
-			_amImageEntryLocalService.getAMImageEntriesCount(
+			AMImageEntryLocalServiceUtil.getAMImageEntriesCount(
 				_company1.getCompanyId(),
 				amImageConfigurationEntry2.getUUID()));
 	}
@@ -260,12 +267,12 @@ public class BlogsAMImageOptimizerTest {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(groupId, userId);
 
-		_dlAppLocalService.addFileEntry(
+		DLAppLocalServiceUtil.addFileEntry(
 			userId, groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString() + ".jpg", ContentTypes.IMAGE_JPEG,
 			_getImageBytes(), serviceContext);
 
-		BlogsEntry blogsEntry = _blogsEntryLocalService.addEntry(
+		BlogsEntry blogsEntry = BlogsEntryLocalServiceUtil.addEntry(
 			userId, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), new Date(), serviceContext);
 
@@ -273,10 +280,10 @@ public class BlogsAMImageOptimizerTest {
 			_getImageBytes(), RandomTestUtil.randomString() + ".jpg",
 			ContentTypes.IMAGE_JPEG, IMAGE_CROP_REGION);
 
-		_blogsEntryLocalService.addCoverImage(
+		BlogsEntryLocalServiceUtil.addCoverImage(
 			blogsEntry.getEntryId(), imageSelector);
 
-		return _blogsEntryLocalService.getEntry(blogsEntry.getEntryId());
+		return BlogsEntryLocalServiceUtil.getEntry(blogsEntry.getEntryId());
 	}
 
 	private void _deleteAllAMImageConfigurationEntries(long companyId)
@@ -301,26 +308,38 @@ public class BlogsAMImageOptimizerTest {
 				"/dependencies/image.jpg");
 	}
 
-	@Inject
+	private <T> T _getService(Class<T> clazz) {
+		try {
+			Registry registry = RegistryUtil.getRegistry();
+
+			return registry.getService(clazz);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private <T> T _getService(Class<T> clazz, String filter) {
+		try {
+			Registry registry = RegistryUtil.getRegistry();
+
+			Collection<T> services = registry.getServices(clazz, filter);
+
+			return services.iterator().next();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
-
-	@Inject
-	private AMImageEntryLocalService _amImageEntryLocalService;
-
-	@Inject(filter = "adaptive.media.key=blogs", type = AMImageOptimizer.class)
 	private AMImageOptimizer _amImageOptimizer;
-
-	@Inject
-	private BlogsEntryLocalService _blogsEntryLocalService;
 
 	@DeleteAfterTestRun
 	private Company _company1;
 
 	@DeleteAfterTestRun
 	private Company _company2;
-
-	@Inject
-	private DLAppLocalService _dlAppLocalService;
 
 	private Group _group1;
 	private Group _group2;
