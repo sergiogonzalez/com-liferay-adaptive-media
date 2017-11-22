@@ -17,7 +17,7 @@ package com.liferay.adaptive.media.document.library.web.internal.counter.test;
 import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.blogs.constants.BlogsConstants;
-import com.liferay.blogs.model.BlogsEntry;
+import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLTrashLocalServiceUtil;

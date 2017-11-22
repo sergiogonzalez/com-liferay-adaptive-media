@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	property = {
 		"model.class.name=com.liferay.blogs.kernel.model.BlogsEntry",
-		"model.class.name=com.liferay.blogs.model.BlogsEntry",
 		"service.ranking:Integer=100"
 	}
 )
