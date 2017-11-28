@@ -65,6 +65,7 @@ public class AMImageDeleteConfigurationTest
 			SynchronousDestinationTestRule.INSTANCE);
 
 	@Before
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
