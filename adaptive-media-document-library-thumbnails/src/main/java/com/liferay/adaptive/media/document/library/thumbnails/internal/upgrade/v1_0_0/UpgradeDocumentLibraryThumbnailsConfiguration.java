@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.upgrade.
 
 import com.liferay.adaptive.media.document.library.thumbnails.internal.util.AMCompanyThumbnailConfigurationInitializer;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.LoggingTimer;
@@ -41,9 +42,12 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 			AMCompanyThumbnailConfigurationInitializer
 				amCompanyThumbnailConfigurationInitializer =
 					new AMCompanyThumbnailConfigurationInitializer(
-						_amImageConfigurationHelper, _companyLocalService);
+						_amImageConfigurationHelper);
 
-			amCompanyThumbnailConfigurationInitializer.initializeCompany();
+			for (Company company : _companyLocalService.getCompanies()) {
+				amCompanyThumbnailConfigurationInitializer.initializeCompany(
+					company);
+			}
 		}
 	}
 
