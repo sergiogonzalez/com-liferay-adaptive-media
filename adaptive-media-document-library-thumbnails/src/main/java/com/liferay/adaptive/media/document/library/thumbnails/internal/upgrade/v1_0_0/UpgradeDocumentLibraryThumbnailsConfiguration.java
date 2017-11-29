@@ -16,6 +16,9 @@ package com.liferay.adaptive.media.document.library.thumbnails.internal.upgrade.
 
 import com.liferay.adaptive.media.document.library.thumbnails.internal.util.AMCompanyThumbnailConfigurationInitializer;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -44,12 +47,26 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 					new AMCompanyThumbnailConfigurationInitializer(
 						_amImageConfigurationHelper);
 
-			for (Company company : _companyLocalService.getCompanies()) {
-				amCompanyThumbnailConfigurationInitializer.initializeCompany(
-					company);
-			}
+			ActionableDynamicQuery actionableDynamicQuery =
+				_companyLocalService.getActionableDynamicQuery();
+
+			actionableDynamicQuery.setPerformActionMethod(
+				(Company company) -> {
+					try {
+						amCompanyThumbnailConfigurationInitializer.
+							initializeCompany(company);
+					}
+					catch (Exception e) {
+						_log.error(e, e);
+					}
+				});
+
+			actionableDynamicQuery.performActions();
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		UpgradeDocumentLibraryThumbnailsConfiguration.class);
 
 	private final AMImageConfigurationHelper _amImageConfigurationHelper;
 	private final CompanyLocalService _companyLocalService;
