@@ -15,7 +15,6 @@
 package com.liferay.adaptive.media.document.library.thumbnails.internal.upgrade.v1_0_0;
 
 import com.liferay.adaptive.media.document.library.thumbnails.internal.util.AMCompanyThumbnailConfigurationInitializer;
-import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,29 +30,25 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 	extends UpgradeProcess {
 
 	public UpgradeDocumentLibraryThumbnailsConfiguration(
-		AMImageConfigurationHelper
-			amImageConfigurationHelper,
+		AMCompanyThumbnailConfigurationInitializer
+			amCompanyThumbnailConfigurationInitializer,
 		CompanyLocalService companyLocalService) {
 
-		_amImageConfigurationHelper = amImageConfigurationHelper;
+		_amCompanyThumbnailConfigurationInitializer =
+			amCompanyThumbnailConfigurationInitializer;
 		_companyLocalService = companyLocalService;
 	}
 
 	@Override
 	protected void doUpgrade() throws Exception {
 		try (LoggingTimer loggingTimer = new LoggingTimer()) {
-			AMCompanyThumbnailConfigurationInitializer
-				amCompanyThumbnailConfigurationInitializer =
-					new AMCompanyThumbnailConfigurationInitializer(
-						_amImageConfigurationHelper);
-
 			ActionableDynamicQuery actionableDynamicQuery =
 				_companyLocalService.getActionableDynamicQuery();
 
 			actionableDynamicQuery.setPerformActionMethod(
 				(Company company) -> {
 					try {
-						amCompanyThumbnailConfigurationInitializer.
+						_amCompanyThumbnailConfigurationInitializer.
 							initializeCompany(company);
 					}
 					catch (Exception e) {
@@ -68,7 +63,8 @@ public class UpgradeDocumentLibraryThumbnailsConfiguration
 	private static final Log _log = LogFactoryUtil.getLog(
 		UpgradeDocumentLibraryThumbnailsConfiguration.class);
 
-	private final AMImageConfigurationHelper _amImageConfigurationHelper;
+	private final AMCompanyThumbnailConfigurationInitializer
+		_amCompanyThumbnailConfigurationInitializer;
 	private final CompanyLocalService _companyLocalService;
 
 }
