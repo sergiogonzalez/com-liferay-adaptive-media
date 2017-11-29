@@ -25,16 +25,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Adolfo Pérez
  */
+@Component(
+	immediate = true, service = AMCompanyThumbnailConfigurationInitializer.class
+)
 public class AMCompanyThumbnailConfigurationInitializer {
-
-	public AMCompanyThumbnailConfigurationInitializer(
-		AMImageConfigurationHelper amImageConfigurationHelper) {
-
-		_amImageConfigurationHelper = amImageConfigurationHelper;
-	}
 
 	public void initializeCompany(Company company)
 		throws AMImageConfigurationException, IOException {
@@ -96,6 +96,7 @@ public class AMCompanyThumbnailConfigurationInitializer {
 			"This image resolution was automatically added.", name, properties);
 	}
 
-	private final AMImageConfigurationHelper _amImageConfigurationHelper;
+	@Reference
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 }
