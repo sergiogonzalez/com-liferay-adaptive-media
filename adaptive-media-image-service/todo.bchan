@@ -1,3 +1,0 @@
-Can you fix the method signature of
-
-AMImageEntryLocalServiceImpl#* to match the order in service.xml? (int width, int height,) vs. height, width

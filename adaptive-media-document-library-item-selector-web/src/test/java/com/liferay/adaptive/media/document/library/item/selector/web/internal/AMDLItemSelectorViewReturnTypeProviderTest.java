@@ -38,16 +38,16 @@ public class AMDLItemSelectorViewReturnTypeProviderTest extends PowerMockito {
 	public void testAddAMImageItemSelectorReturnTypesWithNonemptyList()
 		throws Exception {
 
+		ItemSelectorViewReturnTypeProvider
+			amDLItemSelectorViewReturnTypeProvider =
+				new AMDLItemSelectorViewReturnTypeProvider();
+
 		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
 			new ArrayList<>();
 
 		supportedItemSelectorReturnTypes.add(
 			new FileEntryItemSelectorReturnType());
 		supportedItemSelectorReturnTypes.add(new URLItemSelectorReturnType());
-
-		ItemSelectorViewReturnTypeProvider
-			amDLItemSelectorViewReturnTypeProvider =
-				new AMDLItemSelectorViewReturnTypeProvider();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
 			amDLItemSelectorViewReturnTypeProvider.
@@ -75,12 +75,12 @@ public class AMDLItemSelectorViewReturnTypeProviderTest extends PowerMockito {
 	public void testAddAMImagetemSelectorReturnTypesWithEmptyList()
 		throws Exception {
 
-		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
-			new ArrayList<>();
-
 		ItemSelectorViewReturnTypeProvider
 			amDLItemSelectorViewReturnTypeProvider =
 				new AMDLItemSelectorViewReturnTypeProvider();
+
+		List<ItemSelectorReturnType> supportedItemSelectorReturnTypes =
+			new ArrayList<>();
 
 		List<ItemSelectorReturnType> itemSelectorReturnTypes =
 			amDLItemSelectorViewReturnTypeProvider.

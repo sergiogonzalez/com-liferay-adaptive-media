@@ -247,8 +247,8 @@ public class AMImageDLPluggableContentDataHandler
 
 			try (InputStream inputStream = adaptiveMedia.getInputStream()) {
 				_amImageEntryLocalService.addAMImageEntry(
-					amImageConfigurationEntry, fileVersion, widthOptional.get(),
-					heightOptional.get(), inputStream,
+					amImageConfigurationEntry, fileVersion,
+					heightOptional.get(), widthOptional.get(), inputStream,
 					contentLengthOptional.get());
 			}
 		}

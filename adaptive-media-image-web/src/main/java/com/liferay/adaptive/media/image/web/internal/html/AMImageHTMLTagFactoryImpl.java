@@ -57,7 +57,7 @@ public class AMImageHTMLTagFactoryImpl implements AMImageHTMLTagFactory {
 
 		sourceElements.forEach(sb::append);
 
-		Matcher matcher = _ATTR_PATTERN.matcher(originalImgTag);
+		Matcher matcher = _pattern.matcher(originalImgTag);
 
 		sb.append(matcher.replaceAll(""));
 
@@ -136,7 +136,7 @@ public class AMImageHTMLTagFactoryImpl implements AMImageHTMLTagFactory {
 		);
 	}
 
-	private static final Pattern _ATTR_PATTERN = Pattern.compile(
+	private static final Pattern _pattern = Pattern.compile(
 		"\\s*data-fileEntryId=\"(\\d+)\"", Pattern.CASE_INSENSITIVE);
 
 	private MediaQueryProvider _mediaQueryProvider;
