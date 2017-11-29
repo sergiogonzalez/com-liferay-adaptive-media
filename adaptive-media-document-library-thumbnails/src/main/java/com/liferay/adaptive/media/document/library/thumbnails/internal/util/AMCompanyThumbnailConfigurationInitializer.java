@@ -36,7 +36,9 @@ public class AMCompanyThumbnailConfigurationInitializer {
 		_amImageConfigurationHelper = amImageConfigurationHelper;
 	}
 
-	public void initializeCompany(Company company) throws Exception {
+	public void initializeCompany(Company company)
+		throws AMImageConfigurationException, IOException {
+
 		int dlFileEntryThumbnailMaxHeight = PrefsPropsUtil.getInteger(
 			PropsKeys.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT);
 		int dlFileEntryThumbnailMaxWidth = PrefsPropsUtil.getInteger(
