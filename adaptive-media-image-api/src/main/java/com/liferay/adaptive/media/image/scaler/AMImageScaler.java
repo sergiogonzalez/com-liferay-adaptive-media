@@ -18,7 +18,7 @@ import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 
 /**
- * Scales an image to fit the characteristics specified by the image 
+ * Scales an image to fit the characteristics specified by the image
  * configuration entry.
  *
  * <p>
@@ -56,9 +56,8 @@ public interface AMImageScaler {
 	 * Generates a scaled image for the file version that fits the
 	 * characteristics specified by the image configuration entry.
 	 *
-	 * @param fileVersion the file version of the image to scale
-	 * @param amImageConfigurationEntry the image configuration entry
-	 *
+	 * @param  fileVersion the file version of the image to scale
+	 * @param  amImageConfigurationEntry the image configuration entry
 	 * @return the scaled image
 	 */
 	public AMImageScaledImage scaleImage(

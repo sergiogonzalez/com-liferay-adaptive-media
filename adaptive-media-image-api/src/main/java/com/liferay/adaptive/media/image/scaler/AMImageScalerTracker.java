@@ -25,15 +25,15 @@ package com.liferay.adaptive.media.image.scaler;
  *
  * <p>
  * The image scalers are grouped by <code>mime.type</code> and ordered by the
- * <code>service.ranking</code> property. The image scaler returns the first 
+ * <code>service.ranking</code> property. The image scaler returns the first
  * image scaler of the group whose {@link AMImageScaler#isEnabled()} method
- * returns true.
+ * returns <code>true</code>.
  * </p>
  *
  * <p>
  * If no enabled image scalers are registered for the specific MIME type, it
- * searches for the enabled image scaler with the highest 
- * <code>service.ranking</code> that's registered with the <code>*</code> MIME 
+ * searches for the enabled image scaler with the highest
+ * <code>service.ranking</code> that's registered with the <code>*</code> MIME
  * type. If no enabled image scalers are registered for the <code>*</code> MIME
  * type, it returns <code>null</code>.
  * </p>
