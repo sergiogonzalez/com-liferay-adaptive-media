@@ -49,7 +49,7 @@ public class AMBlogsEntryAttachmentContentUpdater
 		String fileEntryURL = _portletFileRepository.getPortletFileEntryURL(
 			null, blogsEntryAttachmentFileEntry, StringPool.BLANK);
 
-		StringBundler sb = new StringBundler(4);
+		StringBundler sb = new StringBundler(5);
 
 		sb.append("<img data-fileEntryId=\"");
 		sb.append(

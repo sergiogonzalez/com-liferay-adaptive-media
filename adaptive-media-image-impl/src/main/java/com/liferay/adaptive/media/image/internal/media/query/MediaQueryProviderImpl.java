@@ -255,7 +255,7 @@ public class MediaQueryProviderImpl implements MediaQueryProvider {
 			Optional<AdaptiveMedia<AMImageProcessor>> hdAdaptiveMediaOptional)
 		throws PortalException {
 
-		StringBundler src = new StringBundler(3);
+		StringBundler src = new StringBundler(4);
 
 		List<Condition> conditions = _getConditions(
 			adaptiveMedia, previousAdaptiveMedia);
