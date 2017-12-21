@@ -36,8 +36,8 @@ public class AMAttributeDistanceComparatorTest {
 
 	@Before
 	public void setUp() {
-		Map<
-			AMAttribute<AMImageProcessor, ?>,
+		Map
+			<AMAttribute<AMImageProcessor, ?>,
 				AMImageQueryBuilder.SortOrder> amAttributes = new HashMap<>();
 
 		amAttributes.put(
