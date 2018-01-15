@@ -182,8 +182,8 @@ public class EditImageConfigurationEntryMVCActionCommand
 			long companyId, AMImageConfigurationEntry amImageConfigurationEntry)
 		throws AMImageConfigurationException, IOException {
 
-Map<String, String> properties =
-		amImageConfigurationEntry.getProperties();
+		Map<String, String> properties =
+			amImageConfigurationEntry.getProperties();
 
 		int doubleMaxHeight =
 			GetterUtil.getInteger(properties.get("max-height")) * 2;
