@@ -111,7 +111,7 @@ public class AMImageHTMLTagFactoryImpl implements AMImageHTMLTagFactory {
 				sb.append(mediaQueryString);
 				sb.append("\" srcset=\"");
 				sb.append(mediaQuery.getSrc());
-				sb.append("\"/>");
+				sb.append("\" />");
 
 			});
 
